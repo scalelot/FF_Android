@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.PaymentActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_125"
+        android:background="@color/darkturquoise">
+
+        <ImageView
+            android:id="@+id/ic_back_btn"
+            android:layout_width="@dimen/sp_35"
+            android:layout_height="@dimen/sp_35"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:padding="@dimen/margin_6"
+            android:src="@drawable/backarrow"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/total_payment"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_20" />
+
+        <TextView
+            android:id="@+id/txt_total_payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/total_payment_price"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_24" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_20"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/card_details"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_20" />
+
+    <EditText
+        android:id="@+id/edt_card_holder_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_45"
+        android:layout_below="@+id/txt_title"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_20"
+        android:background="@drawable/edt_bg"
+        android:hint="@string/card_holder_name"
+        android:imeOptions="actionNext"
+        android:paddingLeft="@dimen/margin_15"
+        android:paddingRight="@dimen/margin_15"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_14" />
+
+    <EditText
+        android:id="@+id/edt_card_number"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_45"
+        android:layout_below="@+id/edt_card_holder_name"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_20"
+        android:background="@drawable/edt_bg"
+        android:hint="@string/card_number"
+        android:imeOptions="actionNext"
+        android:paddingLeft="@dimen/margin_15"
+        android:paddingRight="@dimen/margin_15"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_14" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_card_number"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_20"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/edt_expiry_date"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_45"
+            android:layout_below="@+id/txt_title"
+            android:layout_weight="1"
+            android:background="@drawable/edt_bg"
+            android:hint="@string/expiry_date"
+            android:imeOptions="actionNext"
+            android:paddingLeft="@dimen/margin_15"
+            android:paddingRight="@dimen/margin_15"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_14" />
+
+        <View
+            android:layout_width="@dimen/sp_10"
+            android:layout_height="match_parent" />
+
+        <EditText
+            android:id="@+id/edt_cvv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_45"
+            android:layout_below="@+id/edt_card_holder_name"
+            android:layout_weight="1"
+            android:background="@drawable/edt_bg"
+            android:hint="@string/cvv"
+            android:imeOptions="actionNext"
+            android:paddingLeft="@dimen/margin_15"
+            android:paddingRight="@dimen/margin_15"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_14" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_pay_now"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_50"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin_20"
+        android:background="@drawable/login_btn_bg"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/pay_btn"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16" />
+
+</RelativeLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:padding="@dimen/margin_20">
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="@dimen/sp_25"
+        android:layout_height="@dimen/sp_25"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/margin_5"
+        android:src="@drawable/ic_baseline_close_20" />
+
+    <ImageView
+        android:id="@+id/d_img"
+        android:layout_width="@dimen/sp_65"
+        android:layout_height="@dimen/sp_65"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_10"
+        android:src="@drawable/ic_help"
+        app:tint="@color/darkturquoise" />
+
+    <TextView
+        android:id="@+id/cerate_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/d_img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_20"
+        android:fontFamily="@font/roboto_bold"
+        android:lineSpacingExtra="@dimen/sp_5"
+        android:text="@string/ch_dialog"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_20" />
+
+    <TextView
+        android:id="@+id/dis_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cerate_txt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_15"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/ch_dis"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/text_14" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_40"
+        android:layout_below="@+id/dis_txt"
+        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_no"
+            android:layout_width="@dimen/sp_130"
+            android:layout_height="@dimen/margin_40"
+            android:background="@drawable/button_boder"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/no"
+            android:textColor="@color/darkturquoise"
+            android:textSize="@dimen/text_12" />
+
+        <View
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="match_parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_yes"
+            android:layout_width="@dimen/sp_130"
+            android:layout_height="@dimen/margin_40"
+            android:background="@drawable/rectangle_150"
+            android:backgroundTint="@color/darkturquoise"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/yes"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_12" />
+    </LinearLayout>
+</RelativeLayout>

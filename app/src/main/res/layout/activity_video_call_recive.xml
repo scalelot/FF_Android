@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activity.VideoCallReciveActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:id="@+id/cPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/cPreview1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_70"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_15"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/ll_message"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="@dimen/sp_50"
+                android:background="@drawable/icon_bg"
+                android:backgroundTint="@color/bg_grey"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
+                    android:src="@drawable/ic_message_icon"
+                    app:tint="@color/grey" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/ll_videoCall"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="@dimen/sp_50"
+                android:background="@drawable/icon_bg"
+                android:backgroundTint="@color/bg_grey"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
+                    android:src="@drawable/ic_video_call_icon"
+                    app:tint="@color/grey" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/ll_switch_camera"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="@dimen/sp_50"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_bg"
+                android:backgroundTint="@color/bg_grey"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_swich_camera"
+                    app:tint="@color/grey" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/ll_mute"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="@dimen/sp_50"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_bg"
+                android:backgroundTint="@color/bg_grey"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
+                    android:src="@drawable/ic_mute_icon"
+                    app:tint="@color/grey" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/ll_videoCall_cut"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="@dimen/sp_50"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_bg"
+                android:backgroundTint="@color/red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
+                    android:src="@drawable/ic_call_cut_icon" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activity.UpcomingCallActivity">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_56">
+
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_width="@dimen/sp_35"
+            android:layout_height="@dimen/sp_35"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:padding="@dimen/margin_6"
+            android:src="@drawable/backarrow" />
+    </RelativeLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/upcomingcall_user_img"
+        android:layout_width="@dimen/sp_120"
+        android:layout_height="@dimen/sp_120"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/sp_80"
+        android:src="@drawable/ic_user_img" />
+
+    <TextView
+        android:id="@+id/upcoming_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upcomingcall_user_img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_20"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_18" />
+
+    <TextView
+        android:id="@+id/upcoming_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upcoming_username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_10"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/calling"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/sp_16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_60"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_100"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_call_cut"
+            android:layout_width="@dimen/sp_60"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/margin_50"
+            android:background="@drawable/icon_bg"
+            android:backgroundTint="@color/red"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/sp_30"
+                android:layout_height="@dimen/sp_30"
+                android:src="@drawable/ic_call_cut_icon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_call_recive"
+            android:layout_width="@dimen/sp_60"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/margin_50"
+            android:background="@drawable/icon_bg"
+            android:backgroundTint="@color/green"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/sp_30"
+                android:layout_height="@dimen/sp_30"
+                android:src="@drawable/ic_call_icon" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

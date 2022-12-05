@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:padding="@dimen/margin_20">
+
+    <ImageView
+        android:id="@+id/dialog_close"
+        android:layout_width="@dimen/sp_25"
+        android:layout_height="@dimen/sp_25"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/margin_5"
+        android:src="@drawable/ic_baseline_close_20" />
+
+    <ImageView
+        android:id="@+id/d_img"
+        android:layout_width="@dimen/sp_200"
+        android:layout_height="@dimen/sp_170"
+        android:layout_below="@+id/dialog_close"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_profileimage" />
+
+    <TextView
+        android:id="@+id/cerate_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/d_img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_25"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/create_your_profile"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_20" />
+
+    <TextView
+        android:id="@+id/dis_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cerate_txt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_20"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/dis_txt"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/text_12" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dis_txt"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_skip"
+            android:layout_width="@dimen/margin_130"
+            android:layout_height="@dimen/sp_40"
+            android:layout_margin="@dimen/margin_10"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/margin_30"
+            android:paddingRight="@dimen/margin_30"
+            android:background="@drawable/button_boder"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/skip_now"
+            android:textColor="@color/darkturquoise"
+            android:textSize="@dimen/text_14" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_continue"
+            android:layout_width="@dimen/margin_130"
+            android:layout_height="@dimen/sp_40"
+            android:layout_margin="@dimen/margin_10"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/margin_30"
+            android:paddingRight="@dimen/margin_30"
+            android:background="@drawable/rectangle_150"
+            android:backgroundTint="@color/darkturquoise"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/continue_btn"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14" />
+    </LinearLayout>
+
+
+</RelativeLayout>

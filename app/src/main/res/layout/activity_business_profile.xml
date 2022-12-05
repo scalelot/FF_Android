@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Activity.BusinessProfileActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_56">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle_8">
+
+            <ImageView
+                android:id="@+id/ic_back"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:padding="@dimen/margin_6"
+                android:src="@drawable/backarrow" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/ic_back"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/create_business_profile"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_18" />
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/user_image"
+                android:layout_width="@dimen/sp_110"
+                android:layout_height="@dimen/sp_110"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_15"
+                android:background="@drawable/ellipse_bodar">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/business_profile_image"
+                    android:layout_width="@dimen/sp_110"
+                    android:layout_height="@dimen/sp_110"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/ic_img" />
+
+                <RelativeLayout
+                    android:id="@+id/edt_img"
+                    android:layout_width="@dimen/sp_30"
+                    android:layout_height="@dimen/sp_30"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/circle">
+
+                    <ImageView
+                        android:layout_width="@dimen/sp_16"
+                        android:layout_height="@dimen/sp_16"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_edit"
+                        app:tint="@color/white" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/edt_bussiness_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/business_name"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <EditText
+                android:id="@+id/edt_category"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/category"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <EditText
+                android:id="@+id/edt_subcategory"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/business_subcategory"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <EditText
+                android:id="@+id/edt_description"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_90"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="top"
+                android:hint="@string/descirition"
+                android:imeOptions="actionDone"
+                android:padding="@dimen/sp_15"
+                android:paddingLeft="@dimen/margin_15"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <RelativeLayout
+                android:id="@+id/rl_add_brochur"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/edt_brochure"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sp_45"
+                    android:layout_toLeftOf="@+id/btn_change"
+                    android:background="@drawable/edt_bg"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/margin_15"
+                    android:singleLine="true"
+                    android:text="@string/brochure"
+                    android:textColorHint="@color/edt_hint"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_change"
+                    android:layout_width="@dimen/sp_70"
+                    android:layout_height="@dimen/sp_25"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:background="@drawable/edt_bg"
+                    android:backgroundTint="@color/darkturquoise"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/change"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_10" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_upload"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_85"
+                android:layout_below="@+id/description"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/upload_img_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/sp_3"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/lin_add_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/sp_16"
+                        android:layout_height="@dimen/sp_16"
+                        android:src="@drawable/ic_upload_img" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/upload_brochure"
+                        android:textColor="@color/medium_grey"
+                        android:textSize="@dimen/text_14" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_add_brochure"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/txt_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/business_lo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_14" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/edt_business_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sp_45"
+                    android:layout_marginRight="@dimen/margin_6"
+                    android:layout_toLeftOf="@id/iv_location"
+                    android:background="@null"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="@string/business_address"
+                    android:imeOptions="actionNext"
+                    android:paddingLeft="@dimen/margin_15"
+                    android:paddingRight="@dimen/margin_15"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/edt_hint"
+                    android:textSize="@dimen/sp_14" />
+
+                <ImageView
+                    android:id="@+id/iv_location"
+                    android:layout_width="@dimen/margin_35"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/sp_5"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/darkturquoise" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_map"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_85"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_20">
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sp_100dp"
+                    android:apiKey="@string/google_maps_key"
+                    android:visibility="visible" />
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sp_100dp"
+                    android:visibility="visible"
+                    tools:context=".MapLocationActivity" />
+
+                <RelativeLayout
+                    android:id="@+id/relative_busi_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="@dimen/margin_10"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/google_map"
+                    android:textColor="@color/darkturquoise"
+                    android:textSize="@dimen/text_14" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/edt_interested_category"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/interested_business_category"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <EditText
+                android:id="@+id/edt_interested_subcategory"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/interested_business_subcategory"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_50"
+                android:layout_below="@+id/seekbar_age"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:backgroundTint="@color/darkturquoise"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_16" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_50"
+                android:layout_below="@+id/seekbar_age"
+                android:layout_margin="@dimen/margin_20"
+                android:background="@drawable/edt_bg"
+                android:backgroundTint="@color/darkturquoise"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_16"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

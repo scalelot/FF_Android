@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/margin_250"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/margin_20"
+    android:layout_marginTop="@dimen/margin_5"
+    android:layout_marginBottom="@dimen/margin_5"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rel_name"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cir_profile_pic"
+            android:layout_width="@dimen/dp20"
+            android:layout_centerVertical="true"
+            android:layout_height="@dimen/dp20"
+            android:src="@drawable/girl_image"/>
+
+        <TextView
+            android:id="@+id/nameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toRightOf="@id/cir_profile_pic"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="@dimen/text_12"
+            android:text="@string/name"
+            android:textColor="@color/darkturquoise"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rel_top"
+        android:layout_width="@dimen/margin_250"
+        android:layout_height="@dimen/margin_250"
+        android:layout_below="@id/rel_name"
+        android:background="@drawable/chat_txt_left_bg">
+
+<!--        <TextView-->
+<!--            android:id="@+id/nameTxt"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="@dimen/margin_4"-->
+<!--            android:fontFamily="@font/roboto_bold"-->
+<!--            android:text="@string/name"-->
+<!--            android:visibility="gone" />-->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/margin_230"
+            android:layout_height="@dimen/margin_230"
+            android:layout_centerInParent="true"
+            android:padding="@dimen/margin_10"
+            app:cardCornerRadius="@dimen/margin_5">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/margin_230"
+                android:layout_height="@dimen/margin_230"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_user_img" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rel_top"
+        android:layout_marginTop="@dimen/margin_8">
+
+        <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/sp_10" />
+
+    </RelativeLayout>
+</RelativeLayout>

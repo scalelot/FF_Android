@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.PublishDateTimeActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_56">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle_8">
+
+            <ImageView
+                android:id="@+id/ic_back"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:padding="@dimen/margin_6"
+                android:src="@drawable/backarrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/ic_back"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/promotion"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_18" />
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appbar_layout">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_15"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/publish_date_time"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_20" />
+
+        <RelativeLayout
+            android:id="@+id/rl_date"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_45"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_20"
+            android:background="@drawable/edt_bg">
+
+            <EditText
+                android:id="@+id/txt_select_date"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_toLeftOf="@+id/img_select_date"
+                android:background="@android:color/transparent"
+                android:cursorVisible="false"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
+                android:hint="@string/select_date"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/img_select_date"
+                android:layout_width="@dimen/sp_18"
+                android:layout_height="@dimen/sp_18"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_15"
+                android:cursorVisible="false"
+                android:src="@drawable/ic_date_picker_icon" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_time"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_45"
+            android:layout_below="@+id/rl_date"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_20"
+            android:background="@drawable/edt_bg">
+
+            <EditText
+                android:id="@+id/edt_select_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_45"
+                android:layout_toLeftOf="@+id/img_select_time"
+                android:background="@android:color/transparent"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center_vertical"
+                android:hint="@string/select_time"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt_hint"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/img_select_time"
+                android:layout_width="@dimen/sp_18"
+                android:layout_height="@dimen/sp_18"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_15"
+                android:src="@drawable/ic_time_picker_icon" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txt_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_time"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/select_category"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_20" />
+
+        <LinearLayout
+            android:id="@+id/ll_chk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_category"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_15"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/chk_notification"
+                style="@style/Category_chk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="@dimen/margin_10"
+                android:text="@string/notification"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <CheckBox
+                android:id="@+id/chk_email"
+                style="@style/Category_chk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_15"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="@dimen/margin_10"
+                android:text="@string/email"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <CheckBox
+                android:id="@+id/chk_sms"
+                style="@style/Category_chk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_15"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingLeft="@dimen/margin_10"
+                android:text="@string/sms"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_ads"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_78"
+            android:layout_below="@+id/ll_chk"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_60"
+            android:layout_marginRight="@dimen/margin_20"
+            android:background="@mipmap/ads" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_continue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/margin_20"
+            android:background="@drawable/login_btn_bg"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/continue_btn"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16" />
+    </RelativeLayout>
+
+</RelativeLayout>

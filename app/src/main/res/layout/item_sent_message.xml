@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/margin_20"
+    android:layout_marginTop="@dimen/margin_5"
+    android:layout_marginBottom="@dimen/margin_5"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/sentTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/chat_txt_right_bg"
+        android:maxWidth="@dimen/margin_250"
+        android:padding="@dimen/margin_10"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_14" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_below="@id/sentTxt">
+
+        <TextView
+            android:id="@+id/txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/sp_10" />
+
+        <ImageView
+            android:id="@+id/iv_seen"
+            android:layout_width="@dimen/sp_16"
+            android:layout_height="@dimen/sp_16"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toRightOf="@id/txt_time"
+            android:src="@drawable/ic_unseen" />
+    </RelativeLayout>
+</RelativeLayout>

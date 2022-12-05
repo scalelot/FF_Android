@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.PromotionPlanActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_56">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle_8">
+
+            <ImageView
+                android:id="@+id/ic_back"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:padding="@dimen/margin_6"
+                android:src="@drawable/backarrow" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/ic_back"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/promotion"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_18" />
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbar_layout"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_15"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/promotion_plan"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_20" />
+
+    <TextView
+        android:id="@+id/txt_dis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_title"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_10"
+        android:fontFamily="@font/roboto_regular"
+        android:lineSpacingExtra="@dimen/margin_5"
+        android:text="@string/plan_description"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/text_14" />
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_dis"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20">
+
+        <ImageView
+            android:id="@+id/bell"
+            android:layout_width="@dimen/sp_20"
+            android:layout_height="@dimen/sp_20"
+            android:src="@drawable/ic_notification_bell"
+            app:tint="@color/darkturquoise" />
+
+        <TextView
+            android:id="@+id/txt_noti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_toRightOf="@+id/bell"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/notification"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_noti"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/sp_5"
+            android:layout_toRightOf="@+id/bell"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/noti_plan"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_14" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_20">
+
+        <ImageView
+            android:id="@+id/meassage"
+            android:layout_width="@dimen/sp_20"
+            android:layout_height="@dimen/sp_20"
+            android:src="@drawable/ic_email_icon"
+            app:tint="@color/darkturquoise" />
+
+        <TextView
+            android:id="@+id/txt_mess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_toRightOf="@+id/meassage"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/email"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_mess"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/sp_5"
+            android:layout_toRightOf="@+id/meassage"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/rupee_email"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_14" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl1"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20">
+
+        <ImageView
+            android:id="@+id/sms"
+            android:layout_width="@dimen/sp_20"
+            android:layout_height="@dimen/sp_20"
+            android:src="@drawable/ic_conversation_icon"
+            app:tint="@color/darkturquoise" />
+
+        <TextView
+            android:id="@+id/txt_sms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_toRightOf="@+id/sms"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/sms"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_sms"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/sp_5"
+            android:layout_toRightOf="@+id/sms"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/rupee_sms"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_14" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_ads"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_78"
+        android:layout_below="@+id/rl3"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_60"
+        android:layout_marginRight="@dimen/margin_20"
+        android:background="@mipmap/ads" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_create_notification"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_50"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_20"
+        android:background="@drawable/login_btn_bg"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/start_promotion"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16" />
+
+</RelativeLayout>

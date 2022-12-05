@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/rl_item"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/margin_20"
+    android:paddingRight="@dimen/margin_20"
+    android:paddingTop="@dimen/margin_10">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/group_img"
+        android:layout_width="@dimen/sp_50"
+        android:layout_height="@dimen/sp_50"
+        android:src="@drawable/ic_user_img" />
+
+    <TextView
+        android:id="@+id/txt_group_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_toRightOf="@+id/group_img"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_16" />
+
+    <TextView
+        android:id="@+id/txt_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_group_username"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_toRightOf="@+id/group_img"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/user_name"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/text_12" />
+
+    <LinearLayout
+        android:id="@+id/ll_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/icon_bg"
+        android:backgroundTint="@color/light_sky"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:padding="@dimen/margin_5"
+            android:text="@string/admin"
+            android:textColor="@color/darkturquoise"
+            android:textSize="@dimen/text_12" />
+    </LinearLayout>
+</RelativeLayout>

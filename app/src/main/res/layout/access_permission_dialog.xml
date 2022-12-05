@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:padding="@dimen/margin_20">
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="@dimen/sp_25"
+        android:layout_height="@dimen/sp_25"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/margin_5"
+        android:src="@drawable/ic_baseline_close_20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_reject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/access_permission"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_20" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_user"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/user_accept_dialog" />
+
+            <TextView
+                android:id="@+id/txt_package"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_user"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/full_name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_package"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_user"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/select_package"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/name_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_call"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/ic_audio_call"
+                app:tint="@color/darkturquoise" />
+
+            <TextView
+                android:id="@+id/txt_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_call"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/phone_number"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_ph_mo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_call"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_call"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/number"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/number_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_mail"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/ic_email_icon"
+                app:tint="@color/darkturquoise" />
+
+            <TextView
+                android:id="@+id/txt_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_mail"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/email"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_mail"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_mail"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/mail"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/email_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_media"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/ic_copy_link"
+                app:tint="@color/darkturquoise" />
+
+            <TextView
+                android:id="@+id/media"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_media"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/social_media"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_media"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/media"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_media"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/privacy_security"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/media_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_video"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/ic_video_call_icon"
+                app:tint="@color/darkturquoise" />
+
+            <TextView
+                android:id="@+id/video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_video"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/video_call"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/video"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_video"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/privacy_security"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/video_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_audio"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/ic_audio_call"
+                app:tint="@color/darkturquoise" />
+
+            <TextView
+                android:id="@+id/audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_audio"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/audio_call"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/audio"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_audio"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/number"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/audio_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginTop="@dimen/margin_20">
+
+            <ImageView
+                android:id="@+id/image_mute"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:src="@drawable/ic_mute_notification"
+                app:tint="@color/darkturquoise" />
+
+            <TextView
+                android:id="@+id/mute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/image_mute"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/mute_notifi"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/txt_mute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mute"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_toRightOf="@+id/image_mute"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/privacy_security"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/mute_switch"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/text_10"
+                app:kswBackDrawable="@drawable/switch_back_drawable"
+                app:kswTextAdjust="-2dp"
+                app:kswTextExtra="@dimen/margin_8"
+                app:kswTextOff="Off"
+                app:kswTextOn="ON"
+                app:kswThumbColor="#ffffff"
+                app:kswThumbDrawable="@drawable/switch_thumb_selector" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

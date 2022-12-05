@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_56"
+        android:background="@drawable/rectangle_8">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_img"
+            android:layout_width="@dimen/sp_30"
+            android:layout_height="@dimen/sp_30"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:src="@drawable/ic_user_profile" />
+
+        <TextView
+            android:id="@+id/hi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_toRightOf="@+id/user_img"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/hiiiii"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginRight="@dimen/sp_10"
+            android:layout_toLeftOf="@+id/iv_likes"
+            android:layout_toRightOf="@+id/hi"
+            android:ellipsize="end"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingRight="@dimen/margin_10"
+            android:singleLine="true"
+            android:text="@string/user_name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <ImageView
+            android:id="@+id/iv_likes"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_toLeftOf="@id/iv_promotion"
+            android:padding="@dimen/margin_3"
+            android:src="@drawable/ic_fav"
+            android:visibility="visible"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/iv_promotion"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_toLeftOf="@id/iv_business_account"
+            android:padding="@dimen/margin_3"
+            android:src="@drawable/ic_promotion"
+            android:visibility="visible"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/iv_business_account"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_5"
+            android:layout_toLeftOf="@id/popup_btn"
+            android:padding="@dimen/margin_3"
+            android:src="@drawable/ic_business_acimg"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/popup_btn"
+            android:layout_width="@dimen/sp_30"
+            android:layout_height="@dimen/sp_30"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:tint="@color/black" />
+
+        <TextView
+            android:id="@+id/noti_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="25dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/noti_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="25dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/custom_tab" />
+
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+</LinearLayout>
+

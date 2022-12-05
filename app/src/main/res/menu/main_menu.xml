@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/new_broadcast"
+        android:title="@string/new_brodcas" />
+    <item
+        android:id="@+id/new_group"
+        android:title="@string/new_group"/>
+    <item
+        android:id="@+id/requests"
+        android:title="@string/requests" />
+    <item
+        android:id="@+id/setting"
+        android:title="@string/setting"/>
+</menu>

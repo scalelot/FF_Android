@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/request_image"
+        android:layout_width="@dimen/sp_50"
+        android:layout_height="@dimen/sp_50"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_15"
+        android:src="@drawable/ic_user"
+        app:civ_circle_background_color="@color/bg_grey" />
+
+    <TextView
+        android:id="@+id/text_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_toRightOf="@+id/request_image"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/create_profile"
+        android:textColor="@color/black"
+        android:textSize="@dimen/margin_16" />
+
+    <TextView
+        android:id="@+id/recive_text_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_20"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/time"
+        android:textSize="@dimen/margin_12" />
+
+    <TextView
+        android:id="@+id/text_dis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_username"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginTop="@dimen/sp_5"
+        android:layout_marginRight="@dimen/margin_20"
+        android:layout_toRightOf="@+id/request_image"
+        android:lineSpacingExtra="@dimen/margin_5"
+        android:maxLines="3"
+        android:text="@string/dis"
+        android:textSize="@dimen/text_14" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_accept"
+        android:layout_width="@dimen/sp_100dp"
+        android:layout_height="@dimen/sp_30"
+        android:layout_below="@+id/text_dis"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_20"
+        android:background="@drawable/login_btn_bg"
+        android:text="@string/accept"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_12" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_reject"
+        android:layout_width="@dimen/margin_100"
+        android:layout_height="@dimen/sp_30"
+        android:layout_below="@+id/text_dis"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_15"
+        android:layout_toLeftOf="@+id/btn_accept"
+        android:background="@drawable/ic_reject"
+        android:text="@string/reject"
+        android:textColor="@color/red"
+        android:textSize="@dimen/sp_12" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_1"
+        android:layout_below="@+id/btn_reject"
+        android:layout_marginTop="@dimen/margin_15"
+        android:background="@color/bg_grey" />
+
+</RelativeLayout>

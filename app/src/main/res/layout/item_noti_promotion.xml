@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/margin_10"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/notification_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_10">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_175"
+            app:cardCornerRadius="@dimen/margin_5">
+
+            <ImageView
+                android:id="@+id/notification_img"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_175"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_1" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/notification_txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card"
+            android:layout_marginTop="@dimen/margin_10"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_14" />
+
+        <TextView
+            android:id="@+id/notification_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notification_txt_name"
+            android:layout_marginTop="@dimen/margin_5"
+            android:fontFamily="@font/roboto_regular"
+            android:lineSpacingExtra="@dimen/margin_5"
+            android:text="@string/noti_des"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_12" />
+
+        <TextView
+            android:id="@+id/notification_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notification_des"
+            android:layout_marginTop="@dimen/margin_5"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/url"
+            android:textColor="@color/darkturquoise"
+            android:textSize="@dimen/text_12" />
+
+        <LinearLayout
+            android:id="@+id/ll_promotion"
+            android:layout_width="@dimen/sp_90"
+            android:layout_height="@dimen/sp_30"
+            android:layout_below="@+id/notification_link"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/login_btn_bg"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/sp_5"
+                android:src="@drawable/ic_noti_promotion" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/promotion"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_10" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_edit_promotion"
+            android:layout_width="@dimen/sp_103dp"
+            android:layout_height="@dimen/sp_30"
+            android:layout_below="@+id/notification_link"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginRight="@dimen/sp_10"
+            android:layout_toLeftOf="@+id/ll_promotion"
+            android:background="@drawable/button_boder"
+            android:text="@string/edit_notification"
+            android:textColor="@color/darkturquoise"
+            android:textSize="@dimen/sp_10" />
+    </RelativeLayout>
+</RelativeLayout>

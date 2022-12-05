@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:behavior_peekHeight="@dimen/sp_0"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="@dimen/sp_60"
+            android:layout_height="@dimen/sp_5"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/ic_dialog_view" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/filter_option"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/filter_opti"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_20" />
+
+            <ImageView
+                android:id="@+id/dialog_close"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_baseline_close_20" />
+
+            <CheckBox
+                android:id="@+id/check_contact_fnd"
+                style="@style/CustomCheckbox02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_15"
+                android:layout_below="@+id/filter_option"
+                android:layout_marginBottom="@dimen/margin_15"
+                android:drawablePadding="@dimen/margin_15"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/contact_fri"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <CheckBox
+                android:id="@+id/check_app_fnd"
+                style="@style/CustomCheckbox02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/check_contact_fnd"
+                android:layout_marginBottom="@dimen/margin_15"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/app_friend"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+            <CheckBox
+                android:id="@+id/check_excel_fnd"
+                style="@style/CustomCheckbox02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_20"
+                android:layout_below="@+id/check_app_fnd"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/excel_file_fr"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_14" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/check_excel_fnd"
+                android:layout_marginBottom="@dimen/margin_30"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="@dimen/sp_155"
+                    android:layout_height="@dimen/margin_40"
+                    android:layout_marginRight="@dimen/margin_13"
+                    android:layout_weight="1"
+                    android:background="@drawable/grey_rectangle_bg"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/clear"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/text_14" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_apply"
+                    android:layout_width="@dimen/sp_155"
+                    android:layout_height="@dimen/margin_40"
+                    android:layout_marginLeft="@dimen/margin_13"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle_150"
+                    android:backgroundTint="@color/darkturquoise"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/apply"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_14" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

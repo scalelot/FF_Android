@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ConversationActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_56">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle_8">
+
+            <ImageView
+                android:id="@+id/ic_back"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:padding="@dimen/margin_6"
+                android:src="@drawable/backarrow" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/ic_back"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/conversation"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_18" />
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rel_bottom"
+        android:layout_below="@id/appbar_layout" />
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="@dimen/sp_166"
+        android:layout_height="@dimen/sp_40"
+        android:layout_above="@+id/rel_bottom"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin_20"
+        android:background="@drawable/grey_boader_btn">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/complain_about_payment"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_12" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="@dimen/sp_166"
+        android:layout_height="@dimen/sp_40"
+        android:layout_above="@+id/rl"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/sp_10"
+        android:background="@drawable/grey_boader_btn">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/complain_about_payment"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_12" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_20"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/rl_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_toLeftOf="@+id/btn_send"
+            android:background="@drawable/type_here_bg">
+
+            <EditText
+                android:id="@+id/edt_conversation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_40"
+                android:background="@null"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/typing_here"
+                android:maxHeight="400dp"
+                android:paddingLeft="@dimen/margin_15"
+                android:paddingRight="@dimen/margin_15"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_12" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_send"
+            android:layout_width="@dimen/sp_40"
+            android:layout_height="@dimen/sp_40"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/cricle_send_btn">
+
+            <ImageView
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_send_vector" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
