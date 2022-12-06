@@ -223,7 +223,7 @@
 
                 <LinearLayout
                     android:id="@+id/ll_upload_file"
-                    android:layout_width="@dimen/sp_100dp"
+                    android:layout_width="@dimen/sp_100"
                     android:layout_height="@dimen/sp_25"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/edt_bg"

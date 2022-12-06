@@ -164,7 +164,7 @@ public class DisplayAllProductActivity extends BaseActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("LLL_add_pro_dis-->", response.toString());
+                    Log.e("DisAllProduct=>", response.toString());
                     loaderLay.setVisibility(View.GONE);
                     productDetailsModelArrayList.clear();
                     try {
@@ -178,8 +178,6 @@ public class DisplayAllProductActivity extends BaseActivity {
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
                         }
-
-                        Log.e("LLL_product_listsize-->", String.valueOf(productDetailsModelArrayList.size()));
 
                         if (!productDetailsModelArrayList.isEmpty()) {
                             emptyLay.setVisibility(View.GONE);
@@ -195,13 +193,11 @@ public class DisplayAllProductActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("LLL_pro_Error", error.toString());
+                    Log.e("DisAllProduct_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -223,22 +219,14 @@ public class DisplayAllProductActivity extends BaseActivity {
     private void filter(String text) {
         ArrayList<ProductDetailsModel> filteredlist = new ArrayList<ProductDetailsModel>();
 
-        // running a for loop to compare elements.
         for (ProductDetailsModel item : productDetailsModelArrayList) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.getName().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
                 filteredlist.add(item);
             }
         }
         if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
             Toast.makeText(getApplicationContext(), "No Data Found..", Toast.LENGTH_SHORT).show();
         } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
             productDisplayAdapter.filterList(filteredlist);
         }
     }

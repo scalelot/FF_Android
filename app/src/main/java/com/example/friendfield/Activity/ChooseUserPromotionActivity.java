@@ -51,7 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-    public class ChooseUserPromotionActivity extends BaseActivity {
+public class ChooseUserPromotionActivity extends BaseActivity {
 
     CheckBox chk_exiting_user, chk_app_user;
     AppCompatButton btn_continue;
@@ -99,7 +99,7 @@ import java.util.ArrayList;
         String package_txt = intent.getStringExtra("package_name");
         txt_user.setText(package_txt);
 
-        sharedPreferences = getSharedPreferences("myPlan",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("myPlan", MODE_PRIVATE);
 
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,25 +153,25 @@ import java.util.ArrayList;
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (chk_exiting_user.isChecked()){
+                if (chk_exiting_user.isChecked()) {
                     select_text = chk_exiting_user.getText().toString();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("star_promotion",select_text);
+                    editor.putString("star_promotion", select_text);
                     editor.apply();
                     editor.commit();
                     Intent intent = new Intent(ChooseUserPromotionActivity.this, PublishDateTimeActivity.class);
                     startActivity(intent);
                     finish();
-                }else if (chk_app_user.isChecked()){
+                } else if (chk_app_user.isChecked()) {
                     select_text = chk_app_user.getText().toString();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("star_promotion",select_text);
+                    editor.putString("star_promotion", select_text);
                     editor.apply();
                     editor.commit();
                     Intent intent = new Intent(ChooseUserPromotionActivity.this, PublishDateTimeActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
+                } else {
                     Toast.makeText(ChooseUserPromotionActivity.this, "Select User Promotion", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -227,10 +227,7 @@ import java.util.ArrayList;
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, user);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-//        spin.setOnItemSelectedListener(this);
 
-
-        //Location
         if (Const.b_longitude != null) {
             if (Const.mCurrLocationMarker != null) {
                 Const.mCurrLocationMarker.remove();
@@ -284,9 +281,9 @@ import java.util.ArrayList;
                             cursor = this.getContentResolver().query(uri, null, null, null, null);
                             if (cursor != null && cursor.moveToFirst()) {
                                 displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                                Log.e("nameeeee>>>>", displayName);
+                                Log.e("ExcelUpload=>", displayName);
                                 txt_file_name.setText(displayName);
-                                txt_file_name.setPaintFlags(txt_file_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG );
+                                txt_file_name.setPaintFlags(txt_file_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                                 ll_txt.setVisibility(View.VISIBLE);
                                 ll_phone_email.setVisibility(View.VISIBLE);
                                 ll_sample_txt.setVisibility(View.GONE);
@@ -298,7 +295,7 @@ import java.util.ArrayList;
                         }
                     } else if (uriString.startsWith("file://")) {
                         displayName = myFile.getName();
-                        Log.d("nameeeee>>>>  ", displayName);
+                        Log.d("ExcelUpload=>", displayName);
                     }
 
 

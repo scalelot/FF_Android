@@ -11,7 +11,7 @@
     android:layout_marginBottom="@dimen/margin_10"
     android:background="@color/white"
     app:cardBackgroundColor="@color/darkturquoise"
-    app:cardCornerRadius="@dimen/dp5"
+    app:cardCornerRadius="@dimen/sp_5"
     app:cardElevation="@dimen/sp_2">
 
     <LinearLayout

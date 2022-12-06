@@ -80,43 +80,24 @@ public class BuyPlanAdapter extends RecyclerView.Adapter<BuyPlanAdapter.ViewHold
                 if (position == selectedPosition) {
                     holder.chk_select_user.setChecked(false);
                     selectedPosition = -1;
-                    clickListener.onItemClick("",false);
+                    clickListener.onItemClick("", false);
                 } else {
                     selectedPosition = position;
                     notifyDataSetChanged();
-                    System.out.println("count "+plan_name[position]);
-                    clickListener.onItemClick(plan_name[position],true);
+                    System.out.println("count " + plan_name[position]);
+                    clickListener.onItemClick(plan_name[position], true);
 
                 }
             }
         });
-
-//        holder.chk_select_user.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                selectedPosition = holder.getAdapterPosition();
-//                notifyDataSetChanged();
-//
-//            }
-//        });
-//
-//        if (selectedPosition==position){
-//            holder.chk_select_user.setChecked(true);
-//        }
-//        else {
-//            holder.chk_select_user.setChecked(false);
-//        }
-
-
     }
-
 
     @Override
     public int getItemCount() {
         return plan_name.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txt_noti, txt_sms, txt_email, txt_all;
         CheckBox chk_select_user;
         RelativeLayout rl_plan;

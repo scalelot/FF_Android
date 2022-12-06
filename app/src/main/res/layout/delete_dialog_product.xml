@@ -71,8 +71,8 @@
                 android:layout_marginRight="@dimen/margin_8"
                 android:background="@drawable/grey_rectangle_bg"
                 android:fontFamily="@font/roboto_medium"
-                android:paddingLeft="@dimen/dp38"
-                android:paddingRight="@dimen/dp38"
+                android:paddingLeft="@dimen/sp_38"
+                android:paddingRight="@dimen/sp_38"
                 android:text="@string/cancel"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/sp_14" />
@@ -84,8 +84,8 @@
                 android:layout_marginLeft="@dimen/margin_8"
                 android:background="@drawable/ic_pro_offer_bg"
                 android:fontFamily="@font/roboto_medium"
-                android:paddingLeft="@dimen/dp38"
-                android:paddingRight="@dimen/dp38"
+                android:paddingLeft="@dimen/sp_38"
+                android:paddingRight="@dimen/sp_38"
                 android:text="@string/delete"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_14" />

@@ -73,7 +73,6 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.MyDataHolder> 
             user_name.addAll(arraylist);
         } else {
             for (String wp : arraylist) {
-//                if (wp.getAnimalName().toLowerCase(Locale.getDefault()).contains(charText)) {
                 if (wp.toLowerCase(Locale.getDefault()).contains(charText)) {
                     user_name.add(wp);
                 }

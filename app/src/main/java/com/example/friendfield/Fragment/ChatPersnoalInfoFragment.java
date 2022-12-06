@@ -1,6 +1,7 @@
 package com.example.friendfield.Fragment;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
@@ -28,24 +29,34 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.friendfield.Adapter.TagAdapter;
+import com.example.friendfield.Model.ChatUserProfile.ChatUserProfileTokenModel;
+import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Const;
 import com.example.friendfield.Utils.Constans;
+import com.example.friendfield.Utils.FileUtils;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.kyleduo.switchbutton.SwitchButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ChatPersnoalInfoFragment extends Fragment {
 
-    TextView txt_about, txt_email, txt_number;
+    TextView txt_about, text_birth, text_gender, txt_email, txt_number;
     RelativeLayout rl_authorized, clear_chats, block_hunter, report_hunter;
     RecyclerView recy_tag;
     String str, strIds;
+    boolean nameData, numData, emailData, dobData, genderData, mediaData, videoData, audioData;
+    SwitchButton name_switch, number_switch, email_switch, birthday_switch, gender_switch, media_switch, video_switch, audio_switch;
+    public static ArrayList<String> taglist = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +64,8 @@ public class ChatPersnoalInfoFragment extends Fragment {
         View inflate = inflater.inflate(R.layout.fragment_chat_persnoal_info, container, false);
 
         txt_about = inflate.findViewById(R.id.txt_about);
+        text_birth = inflate.findViewById(R.id.text_birth);
+        text_gender = inflate.findViewById(R.id.text_gender);
         txt_email = inflate.findViewById(R.id.txt_email);
         txt_number = inflate.findViewById(R.id.txt_number);
         rl_authorized = inflate.findViewById(R.id.rl_authorized);
@@ -61,7 +74,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
         report_hunter = inflate.findViewById(R.id.report_hunter);
         recy_tag = inflate.findViewById(R.id.recy_tag);
 
-        strIds = getActivity().getSharedPreferences("UserIds", 0).getString("ids", null);
+        strIds = getActivity().getSharedPreferences("ToUserIds", 0).getString("ids", null);
         recy_tag.setLayoutManager(new FlexboxLayoutManager(getContext()));
 
         if (Const.tag_str != null && !Const.tag_str.isEmpty()) {
@@ -91,8 +104,6 @@ public class ChatPersnoalInfoFragment extends Fragment {
             }
         });
 
-//        getApiCalling();
-
         return inflate;
     }
 
@@ -106,25 +117,127 @@ public class ChatPersnoalInfoFragment extends Fragment {
         InsetDrawable insetDrawable = new InsetDrawable(colorDrawable, 80);
         dialog.getWindow().setBackgroundDrawable(insetDrawable);
 
+        dialog.setCanceledOnTouchOutside(false);
+
         ImageView btn_close = dialog.findViewById(R.id.btn_close);
 
         TextView txt_user = dialog.findViewById(R.id.txt_user);
         TextView txt_ph_mo = dialog.findViewById(R.id.txt_ph_mo);
         TextView txt_email = dialog.findViewById(R.id.txt_email);
 
-        SwitchButton name_switch = dialog.findViewById(R.id.name_switch);
-        SwitchButton number_switch = dialog.findViewById(R.id.number_switch);
-        SwitchButton email_switch = dialog.findViewById(R.id.email_switch);
-        SwitchButton media_switch = dialog.findViewById(R.id.media_switch);
+        name_switch = dialog.findViewById(R.id.name_switch);
+        number_switch = dialog.findViewById(R.id.number_switch);
+        email_switch = dialog.findViewById(R.id.email_switch);
+        birthday_switch = dialog.findViewById(R.id.birthday_switch);
+        gender_switch = dialog.findViewById(R.id.gender_switch);
+        media_switch = dialog.findViewById(R.id.media_switch);
+        video_switch = dialog.findViewById(R.id.video_switch);
+        audio_switch = dialog.findViewById(R.id.audio_switch);
 
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setauthorizedDialog(strIds);
                 dialog.dismiss();
             }
         });
 
         dialog.show();
+    }
+
+    private void setauthorizedDialog(String strIds) {
+        JSONObject js = new JSONObject();
+        try {
+            js.put("friendid", strIds);
+
+            JSONObject jsonobject_one = new JSONObject();
+
+            if (name_switch.isChecked()) {
+                nameData = true;
+                jsonobject_one.put("fullname", nameData);
+            } else {
+                nameData = false;
+                jsonobject_one.put("fullname", nameData);
+            }
+
+            if (number_switch.isChecked()) {
+                numData = true;
+                jsonobject_one.put("contactnumber", numData);
+            } else {
+                numData = false;
+                jsonobject_one.put("contactnumber", numData);
+            }
+
+            if (email_switch.isChecked()) {
+                emailData = true;
+                jsonobject_one.put("email", emailData);
+            } else {
+                emailData = false;
+                jsonobject_one.put("email", emailData);
+            }
+
+            if (birthday_switch.isChecked()) {
+                dobData = true;
+                jsonobject_one.put("dob", dobData);
+            } else {
+                dobData = false;
+                jsonobject_one.put("dob", dobData);
+            }
+
+            if (gender_switch.isChecked()) {
+                genderData = true;
+                jsonobject_one.put("gender", genderData);
+            } else {
+                genderData = false;
+                jsonobject_one.put("gender", genderData);
+            }
+
+            if (media_switch.isChecked()) {
+                mediaData = true;
+                jsonobject_one.put("socialmedia", mediaData);
+            } else {
+                mediaData = false;
+                jsonobject_one.put("socialmedia", mediaData);
+            }
+
+            if (video_switch.isChecked()) {
+                videoData = true;
+                jsonobject_one.put("videocall", videoData);
+            } else {
+                videoData = false;
+                jsonobject_one.put("videocall", videoData);
+            }
+
+            if (audio_switch.isChecked()) {
+                audioData = true;
+                jsonobject_one.put("audiocall", audioData);
+            } else {
+                audioData = false;
+                jsonobject_one.put("audiocall", audioData);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = null;
+        try {
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_authorized_permissions, js, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("set_auth_permission:--", response.toString());
+                    Toast.makeText(getContext(), "Authorized Permission Done", Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("set_auth_per_error:--", error.toString());
+                }
+            });
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void set_unfriendorblock(String strIds, String str) {
@@ -138,14 +251,14 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("unfriends_block:--", response.toString());
-
+                    Toast.makeText(getContext(), "Block Successfully!!!", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     System.out.println("unfriends_error:--" + error);
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
@@ -158,58 +271,10 @@ public class ChatPersnoalInfoFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-//    private void getApiCalling() {
-//
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    Log.e("ChatUserProfile" ,response.toString());
-//                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
-//                    ChatUserProfileTokenModel chatUserProfileTokenModel = new Gson().fromJson(response.toString(),ChatUserProfileTokenModel.class);
-//
-//                    Double latitiude = chatUserProfileTokenModel.getChatUserProfileModel().getLatitude();
-//                    Double logitude = chatUserProfileTokenModel.getChatUserProfileModel().getLongitude();
-//
-//                    LatLng latLng = new LatLng(latitiude, logitude);
-//
-//                    txt_number.setText(chatUserProfileTokenModel.getChatUserProfileModel().getContactNo());
-//                    txt_email.setText(chatUserProfileTokenModel.getChatUserProfileModel().getEmailId());
-//                    text_location.setText(FileUtils.getAddressFromLatLng(getContext(),latLng));
-//                    text_rage.setText(chatUserProfileTokenModel.getChatUserProfileModel().getAreaRange().toString());
-//                    text_gender.setText(chatUserProfileTokenModel.getChatUserProfileModel().getGender());
-//                    text_age.setText(chatUserProfileTokenModel.getChatUserProfileModel().getTargetAudienceAgeMin()  + "-" +  chatUserProfileTokenModel.getChatUserProfileModel().getTargetAudienceAgeMax());
-//
-//
-//                }catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }){
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<>();
-//                map.put("Content-Type", "application/json");
-//                map.put("auth-token", MyApplication.getAuthToken(getContext()));
-//                return map;
-//            }
-//        };
-//
-//        RequestQueue referenceQueue = Volley.newRequestQueue(getContext());
-//        referenceQueue.add(jsonObjectRequest);
-//    }
 
     @Override
     public void onResume() {
         super.onResume();
-//        getApiCalling();
     }
 }

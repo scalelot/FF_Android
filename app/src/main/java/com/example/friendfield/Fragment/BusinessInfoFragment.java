@@ -133,7 +133,7 @@ public class BusinessInfoFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     if (response != null) {
-                        Log.e("BusinessInfo", response.toString());
+                        Log.e("BusinessInfo=>", response.toString());
                         BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
                         Double longitude = businessInfoRegisterModel.getData().getLocation().getCoordinates().get(0);
@@ -156,7 +156,7 @@ public class BusinessInfoFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Error", error.toString());
+                    Log.e("BusinessInfo_Error=>", error.toString());
                 }
             }) {
                 @Override

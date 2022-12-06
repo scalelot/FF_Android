@@ -38,7 +38,6 @@ public class MarketingNotificationActivity extends BaseActivity {
         hp_back_arrow = findViewById(R.id.hp_back_arrow);
         img_user = findViewById(R.id.img_user);
 
-
         int adPos = 0;
         for (int i = 0; i < txt_userName.length; i++) {
             if(adPos == 1) {
@@ -48,7 +47,6 @@ public class MarketingNotificationActivity extends BaseActivity {
             arraylist.add(txt_userName[i]);
             adPos++;
         }
-
 
         notificationManager = NotificationManagerCompat.from(MarketingNotificationActivity.this);
 
@@ -81,7 +79,6 @@ public class MarketingNotificationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         startActivity(new Intent(MarketingNotificationActivity.this, MainActivity.class));
         finish();
     }

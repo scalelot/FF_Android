@@ -12,74 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/sp_50"
-            android:layout_marginLeft="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_15"
-            android:layout_marginRight="@dimen/margin_20"
+            android:layout_margin="@dimen/margin_20"
             android:background="@drawable/back_tabs"
             android:backgroundTint="@color/white"
-            android:elevation="@dimen/margin_10">
-
-            <ImageView
-                android:id="@+id/map_backarrow"
-                android:layout_width="@dimen/sp_22"
-                android:layout_height="@dimen/sp_16"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/sp_16"
-                android:src="@drawable/backarrow"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/margin_10"
-                android:layout_toLeftOf="@id/rel_right"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:hint="@string/search_user_area"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:lines="1"
-                android:paddingLeft="@dimen/margin_15"
-                android:paddingRight="@dimen/margin_8"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/edt_hint"
-                android:textSize="@dimen/text_14" />
-
-            <RelativeLayout
-                android:id="@+id/rel_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_10">
-
-                <ImageView
-                    android:id="@+id/iv_search"
-                    android:layout_width="@dimen/sp_25"
-                    android:layout_height="@dimen/sp_25"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:adjustViewBounds="true"
-                    android:padding="@dimen/margin_2"
-                    android:src="@drawable/ic_baseline_search_24" />
-
-                <ImageView
-                    android:id="@+id/iv_clear_text"
-                    android:layout_width="@dimen/sp_25"
-                    android:layout_height="@dimen/sp_25"
-                    android:layout_centerInParent="true"
-                    android:adjustViewBounds="true"
-                    android:padding="@dimen/margin_2"
-                    android:src="@drawable/ic_close1"
-                    android:visibility="gone"
-                    app:tint="@color/edt_hint" />
-            </RelativeLayout>
-        </RelativeLayout>
+            android:elevation="5dp"
+            android:layoutDirection="rtl"
+            android:theme="@style/AppSearchView"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="@string/search_user_area" />
 
         <TextView
             android:id="@+id/latlng"

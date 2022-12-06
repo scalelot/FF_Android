@@ -198,90 +198,6 @@ public class CreateNotificationActivity extends BaseActivity {
         }
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == GALLERY_REQUEST) {
-//            if (resultCode == RESULT_OK) {
-//                if (data != null) {
-//                    uri = data.getData();
-//                    BitmapFactory.Options options = new BitmapFactory.Options();
-//                    options.inJustDecodeBounds = true;
-//                    try {
-//                        BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-//                        options.inSampleSize = calculateInSampleSize(options, 100, 100);
-//                        options.inJustDecodeBounds = false;
-//                        Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-//                        add_image.setImageBitmap(image);
-//                        img = add_image;
-//                        if (img != null) {
-//                            status = true;
-//                            ic_edit_img.setVisibility(View.VISIBLE);
-//                        } else {
-//                            status = false;
-//                            ic_edit_img.setVisibility(View.GONE);
-//                        }
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Cancelled",
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//            } else if (resultCode == RESULT_CANCELED) {
-//                Toast.makeText(getApplicationContext(), "Cancelled",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        } else if (requestCode == CAMERA_REQUEST) {
-//            if (resultCode == RESULT_OK) {
-//                if (data.hasExtra("data")) {
-//                    bitmap = (Bitmap) data.getExtras().get("data");
-//                    uri = getImageUri(CreateNotificationActivity.this, bitmap);
-//                    File finalFile = new File(getRealPathFromUri(uri));
-//                    add_image.setImageBitmap(bitmap);
-//                } else if (data.getExtras() == null) {
-//
-//                    Toast.makeText(getApplicationContext(),
-//                                    "No extras to retrieve!", Toast.LENGTH_SHORT)
-//                            .show();
-//
-//                    BitmapDrawable thumbnail = new BitmapDrawable(
-//                            getResources(), data.getData().getPath());
-////                    pet_pic.setImageDrawable(thumbnail);
-//
-//                }
-//
-//            } else if (resultCode == RESULT_CANCELED) {
-//                Toast.makeText(getApplicationContext(), "Cancelled",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        } else if (requestCode == PICK_IMAGE) {
-//            if (resultCode == RESULT_OK) {
-//                Uri selectedImageUri;
-//                try {
-//                    selectedImageUri = data.getData();
-//                    Bitmap bitmap = null;
-//                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-//                    add_image.setImageBitmap(bitmap);
-//
-//                    File file = new File(selectedImageUri.getPath());
-//                    uploadImage(file);
-////                FileUtils.personalProfileImageUpload(getApplicationContext(),file);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }else {
-//                Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-//            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
     public void uploadImage(File file) {
         AndroidNetworking.upload(Constans.set_notification_banner)
                 .addMultipartFile("file", file)
@@ -292,20 +208,16 @@ public class CreateNotificationActivity extends BaseActivity {
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                        // do anything with progress
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
                         try {
-                            Log.e("LLL_N_image_up--->", response.toString());
+                            Log.e("NotiBanner=>", response.toString());
                             ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
 
                             image_url = productImagesModel.getData().getKey();
-
-
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
@@ -313,8 +225,7 @@ public class CreateNotificationActivity extends BaseActivity {
 
                     @Override
                     public void onError(ANError error) {
-                        // handle error
-                        Log.e("LLL_N_image_err--->", error.toString());
+                        Log.e("NotiBanner_Error=>", error.toString());
 
                     }
                 });
@@ -336,7 +247,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_noti_res-->", response.toString());
+                    Log.e("CreateNotification=>", response.toString());
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
 
@@ -347,7 +258,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(getApplicationContext());
-                    System.out.println("LLL_noti_err--> " + error.toString());
+                    System.out.println("CreateNoti_Error=>" + error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -389,7 +300,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_noti_res-->", response.toString());
+                    Log.e("UpdateNoti=>", response.toString());
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
 
@@ -400,7 +311,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(getApplicationContext());
-                    System.out.println("LLL_noti_err--> " + error.toString());
+                    System.out.println("UpdateNoti_Error=>" + error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -430,7 +341,7 @@ public class CreateNotificationActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_notification + "?nid=" + id, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-
+                    Log.e("SingleNotification=>", response.toString());
                     NotificationModel notificationModel = new Gson().fromJson(response.toString(), NotificationModel.class);
 
                     edt_notification_title.setText(notificationModel.getNotificationDetailsModel().getTitle());
@@ -447,13 +358,12 @@ public class CreateNotificationActivity extends BaseActivity {
                         Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + notificationModel.getNotificationDetailsModel().getImageUrl()).into(add_image);
 
                     }
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(CreateNotificationActivity.this);
-                    System.out.println("LLL_product---> " + error.toString());
+                    System.out.println("SingleNoti_Error=>" + error.toString());
                 }
             }) {
                 @Override
@@ -469,48 +379,6 @@ public class CreateNotificationActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private String getRealPathFromUri(Uri tempUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = this.getContentResolver().query(tempUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    private Uri getImageUri(CreateNotificationActivity youractivity, Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        String path = MediaStore.Images.Media.insertImage(youractivity.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
     }
 
     @Override

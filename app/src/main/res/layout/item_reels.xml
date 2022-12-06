@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/margin_5"
-    app:cardCornerRadius="@dimen/dp5"
+    app:cardCornerRadius="@dimen/sp_5"
     app:cardElevation="@dimen/sp_2">
 
     <ImageView

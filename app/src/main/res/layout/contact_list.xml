@@ -10,8 +10,8 @@
         android:layout_height="@dimen/sp_50"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_10"
-        android:layout_marginBottom="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_10"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -23,9 +23,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/margin_15"
             android:layout_weight="1"
-            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -59,7 +59,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_invite"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp25"
+            android:layout_height="@dimen/sp_25"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/margin_13"
             android:layout_weight="1.8"
@@ -68,7 +68,7 @@
             android:fontFamily="@font/roboto_medium"
             android:text="@string/invite"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp10"
+            android:textSize="@dimen/text_10"
             android:visibility="visible" />
     </LinearLayout>
 

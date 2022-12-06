@@ -1,16 +1,12 @@
 package com.example.friendfield.Fragment;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LOCATION_SERVICE;
 
 import android.animation.FloatEvaluator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -19,14 +15,13 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,11 +30,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
@@ -58,7 +51,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -101,6 +93,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -109,25 +102,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class MapsFragment extends Fragment {
 
     TextView txt_location, latlng, map_username;
     TextInputEditText textInputEditText;
-    ImageView map_backarrow, iv_search, iv_clear_text;
+    ImageView iv_search;
     RelativeLayout mMapViewRoot;
     GoogleMap mGoogleMap;
     Marker marker;
     View view_marker, transparentView, viewdialog, view;
     PopupWindow popview;
     private static final int DURATION = 3000;
-    Place place;
     Double latitude, longitude;
-    int AUTOCOMPLETE_REQUEST_CODE = 1;
     String apiKeys = "AIzaSyAP9ViAFSCQHr4i_DjkbKcj0Lj2BarZNIk";
     List<Place.Field> fields;
-    String TAG = "MapActivity";
-    EditText textView;
+    SearchView searchView;
     LatLng m3;
     String userIds;
     SupportMapFragment mapFragment;
@@ -135,9 +126,12 @@ public class MapsFragment extends Fragment {
     List<String> nameList;
     List<String> profileimgList;
     List<String> userIdList;
+    List<String> longList;
+    List<String> latList;
     FindFriendsModel findFriendsModel;
     Bitmap result;
     int i, areakm = 0;
+    Address address;
 
     @Nullable
     @Override
@@ -146,50 +140,77 @@ public class MapsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_maps, container, false);
 
-        //InfoWindow Layout View
         viewdialog = LayoutInflater.from(getActivity()).inflate(R.layout.map_request_dialog, null);
 
-        map_backarrow = view.findViewById(R.id.map_backarrow);
         txt_location = view.findViewById(R.id.txt_location);
-        textView = view.findViewById(R.id.text);
+        searchView = view.findViewById(R.id.searchView);
         latlng = view.findViewById(R.id.latlng);
         iv_search = view.findViewById(R.id.iv_search);
-        iv_clear_text = view.findViewById(R.id.iv_clear_text);
 
         queue = Volley.newRequestQueue(getContext());
 
         MapsInitializer.initialize(getActivity());
         Places.initialize(getContext(), apiKeys);
 
-        PlacesClient placesClient = Places.createClient(getContext());
-
         fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
 
-        textView.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Autocomplete.IntentBuilder(
-                        AutocompleteActivityMode.OVERLAY, fields)
-                        .build(getActivity());
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            public boolean onQueryTextSubmit(String query) {
+                String location = searchView.getQuery().toString();
 
+                List<Address> addressList = null;
+                if (location != null || location.equals("")) {
+                    Geocoder geocoder = new Geocoder(MapsFragment.this.getContext());
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    address = addressList.get(0);
+
+                    latitude = address.getLatitude();
+                    longitude = address.getLongitude();
+                    findLocationorName(latitude, longitude);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    if (latLng != null) {
+                        showRipples(latLng);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showRipples(latLng);
+                            }
+                        }, DURATION - 500);
+
+                        fetchgetApi();
+
+                    } else {
+                        Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
+
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
+                }
+                return false;
             }
-        });
 
-        iv_clear_text.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                textView.setText("");
-                iv_clear_text.setVisibility(View.GONE);
-                iv_search.setVisibility(View.VISIBLE);
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
 
         mMapViewRoot = (RelativeLayout) view.findViewById(R.id.mapview_root);
-        transparentView = View.inflate(getContext(), R.layout.transparent_layout, mMapViewRoot);
+        transparentView = View.inflate(
+
+                getContext(), R.layout.transparent_layout, mMapViewRoot);
 
         view_marker = transparentView.findViewById(R.id.view_marker);
-        if (getActivity() != null) {
+        if (
+
+                getActivity() != null) {
             mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
                     .findFragmentById(R.id.mapFragment);
             if (mapFragment != null) {
@@ -198,7 +219,9 @@ public class MapsFragment extends Fragment {
         }
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        if (Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (Objects.requireNonNull(locationManager).
+
+                isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             txt_location.setText(getResources().getString(R.string.location_ust_be_on));
             Toast.makeText(getActivity(), "GPS is Enabled in your device", Toast.LENGTH_SHORT).show();
         } else {
@@ -235,42 +258,6 @@ public class MapsFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + "," + place.getLatLng());
-                Log.i(TAG, "LatLng: " + place.getLatLng());
-                latitude = place.getLatLng().latitude;
-                longitude = place.getLatLng().longitude;
-                textView.setText(place.getAddress());
-
-                findLocationorName(latitude, longitude);
-
-                LatLng latLng = new LatLng(latitude, longitude);
-
-                if (latLng != null) {
-                    showRipples(latLng);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showRipples(latLng);
-                        }
-                    }, DURATION - 500);
-
-                    fetchgetApi();
-
-                }
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-            }
-        }
-    }
-
     public void findLocationorName(Double latitude, Double longitude) {
         HashMap<String, String> maplatlog = new HashMap<>();
         maplatlog.put("latitude", String.valueOf(latitude));
@@ -289,12 +276,16 @@ public class MapsFragment extends Fragment {
                     profileimgList = new ArrayList<>();
                     nameList = new ArrayList<>();
                     userIdList = new ArrayList<>();
+                    longList = new ArrayList<>();
+                    latList = new ArrayList<>();
 
                     for (i = 0; i < findFriendsModel.getData().size(); i++) {
 
                         profileimgList.add(findFriendsModel.getData().get(i).getProfileimage());
                         nameList.add(findFriendsModel.getData().get(i).getFullName());
                         userIdList.add(findFriendsModel.getData().get(i).getId());
+                        longList.add(String.valueOf(findFriendsModel.getData().get(i).getLocation().getCoordinates().get(0)));
+                        latList.add(String.valueOf(findFriendsModel.getData().get(i).getLocation().getCoordinates().get(1)));
 
                         Double longitude = findFriendsModel.getData().get(i).getLocation().getCoordinates().get(0);
                         Double latitude = findFriendsModel.getData().get(i).getLocation().getCoordinates().get(1);
@@ -387,6 +378,8 @@ public class MapsFragment extends Fragment {
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                     areakm = profileRegisterModel.getData().getAreaRange();
+                    longitude = profileRegisterModel.getData().getLocationModel().getCoordinates().get(0);
+                    latitude = profileRegisterModel.getData().getLocationModel().getCoordinates().get(1);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -576,5 +569,12 @@ public class MapsFragment extends Fragment {
         });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        fetchgetApi();
+//        findLocationorName(latitude, longitude);
     }
 }

@@ -43,12 +43,11 @@ public class BlockedContactActivity extends BaseActivity {
     ImageView ic_back;
     NestedScrollView nestedScroll;
     RelativeLayout emptyLay, loaderLay;
+    ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
     int page = 1, limit = 10;
     String searchData = "";
-    ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blocked_contact);
@@ -100,7 +99,7 @@ public class BlockedContactActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     loaderLay.setVisibility(View.GONE);
-                    Log.e("all_block_friends:--", response.toString());
+                    Log.e("AllBlockFriends=>", response.toString());
                     blockedFriendRegisterModels.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -113,8 +112,6 @@ public class BlockedContactActivity extends BaseActivity {
                             BlockedFriendRegisterModel blockedFriendRegisterModel = new Gson().fromJson(jsonObject.toString(), BlockedFriendRegisterModel.class);
                             blockedFriendRegisterModels.add(blockedFriendRegisterModel);
                         }
-
-                        Log.e("friends_request_all-->", String.valueOf(blockedFriendRegisterModels.size()));
 
                         if (!blockedFriendRegisterModels.isEmpty()) {
                             emptyLay.setVisibility(View.GONE);
@@ -138,7 +135,7 @@ public class BlockedContactActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("all_block_friends_error" + error.toString());
+                    System.out.println("AllBlockFriends_error=>" + error.toString());
                 }
             }) {
                 @Override

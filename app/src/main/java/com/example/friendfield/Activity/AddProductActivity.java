@@ -63,13 +63,8 @@ public class AddProductActivity extends BaseActivity {
     ImageView ic_back;
     LinearLayout lin_add_images;
     ImageView img_add_image, img_product1, img_product2, img_product3;
-    EditText edt_pro_name;
-    EditText edt_pro_price;
-    EditText edt_pro_des;
-    EditText edt_offer;
-    EditText edt_pro_code;
-    EditText edt_category;
-    EditText edt_subcategory;
+    EditText edt_pro_name, edt_pro_price, edt_pro_des, edt_offer;
+    EditText edt_pro_code, edt_category, edt_subcategory;
     Button btn_save_product;
     RequestQueue queue;
     Context context;
@@ -91,7 +86,6 @@ public class AddProductActivity extends BaseActivity {
 
         context = this;
         queue = Volley.newRequestQueue(AddProductActivity.this);
-
 
         ic_back = findViewById(R.id.ic_back);
         lin_add_images = findViewById(R.id.lin_add_images);
@@ -134,7 +128,6 @@ public class AddProductActivity extends BaseActivity {
             public void onClick(View v) {
                 ImagePicker.Companion.with(AddProductActivity.this)
                         .crop()
-//                        .galleryOnly()
                         .maxResultSize(1080, 1080)
                         .start(PICK_IMAGE);
             }
@@ -144,7 +137,6 @@ public class AddProductActivity extends BaseActivity {
             public void onClick(View v) {
                 ImagePicker.Companion.with(AddProductActivity.this)
                         .crop()
-//                        .galleryOnly()
                         .maxResultSize(1080, 1080)
                         .start(PICK_IMAGE1);
             }
@@ -154,7 +146,6 @@ public class AddProductActivity extends BaseActivity {
             public void onClick(View v) {
                 ImagePicker.Companion.with(AddProductActivity.this)
                         .crop()
-//                        .galleryOnly()
                         .maxResultSize(1080, 1080)
                         .start(PICK_IMAGE2);
             }
@@ -164,13 +155,10 @@ public class AddProductActivity extends BaseActivity {
             public void onClick(View v) {
                 ImagePicker.Companion.with(AddProductActivity.this)
                         .crop()
-//                        .galleryOnly()
                         .maxResultSize(1080, 1080)
                         .start(PICK_IMAGE3);
             }
         });
-
-//        edt_pro_price.addTextChangedListener(new NumberTextWatcher(edt_pro_price, "#,###"));
 
         btn_save_product.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,15 +285,13 @@ public class AddProductActivity extends BaseActivity {
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                        // do anything with progress
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
                         try {
-                            Log.e("LLL_p_image_up--->", response.toString());
+                            Log.e("ProUploadImages=>", response.toString());
                             ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
                             if (edit_pro != null) {
                                 if (pos >= imagesArrayList.size() || pos < 0) {
@@ -316,8 +302,6 @@ public class AddProductActivity extends BaseActivity {
                             } else {
                                 imagesArrayList.add(productImagesModel.getData().getKey());
                             }
-
-
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
@@ -325,8 +309,7 @@ public class AddProductActivity extends BaseActivity {
 
                     @Override
                     public void onError(ANError error) {
-                        // handle error
-                        Log.e("LLL_p_image_err--->", error.toString());
+                        Log.e("ProUploadImagesError=>", error.toString());
 
                     }
                 });
@@ -361,7 +344,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_add_pro-->", response.toString());
+                    Log.e("AddProduct=>", response.toString());
 
                     CreateProductModel createProductModel = new Gson().fromJson(response.toString(), CreateProductModel.class);
 
@@ -372,7 +355,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_add_pro_err-->", error.toString());
+                    Log.e("AddProduct_Error=>", error.toString());
                     error.printStackTrace();
 
                 }
@@ -424,7 +407,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_add_pro1-->", response.toString());
+                    Log.e("UpdateProduct=>", response.toString());
 
                     CreateProductModel createProductModel = new Gson().fromJson(response.toString(), CreateProductModel.class);
 
@@ -436,7 +419,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_add_pro_err1-->", error.toString());
+                    Log.e("UpdateProduct_Error=>", error.toString());
                     error.printStackTrace();
 
                 }
@@ -463,6 +446,7 @@ public class AddProductActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_product + "?pid=" + id, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    Log.e("FetchSingleProduct=>", response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
 
@@ -509,7 +493,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(AddProductActivity.this);
-                    System.out.println("LLL_product---> " + error.toString());
+                    System.out.println("FetchSingleProduct_Error=> " + error.toString());
                 }
             }) {
                 @Override
@@ -530,7 +514,6 @@ public class AddProductActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-//        startActivity(new Intent(getApplicationContext(), ProductActivity.class));
         finish();
     }
 }

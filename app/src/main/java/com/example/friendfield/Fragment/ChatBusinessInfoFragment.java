@@ -86,7 +86,6 @@ public class ChatBusinessInfoFragment extends Fragment {
             }
         });
 
-//        getApiCalling();
         return inflate;
     }
 
@@ -111,7 +110,6 @@ public class ChatBusinessInfoFragment extends Fragment {
         SwitchButton email_switch = dialog.findViewById(R.id.email_switch);
         SwitchButton media_switch = dialog.findViewById(R.id.media_switch);
 
-
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,54 +117,6 @@ public class ChatBusinessInfoFragment extends Fragment {
             }
         });
 
-
         dialog.show();
     }
-
-
-//    private void getApiCalling() {
-//
-//        try {
-//            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_business_info, null, new Response.Listener<JSONObject>() {
-//                @Override
-//                public void onResponse(JSONObject response) {
-//
-//                    Log.e("BusinessInfo", response.toString());
-//                    BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
-//
-//                    Double latitiude = businessInfoRegisterModel.getBusinessInfoModel().getLatitude();
-//                    Double logitude = businessInfoRegisterModel.getBusinessInfoModel().getLongitude();
-//
-//                    LatLng latLng = new LatLng(latitiude, logitude);
-//
-//                    txt_business_name.setText(businessInfoRegisterModel.getBusinessInfoModel().getName());
-//                    txt_category.setText(businessInfoRegisterModel.getBusinessInfoModel().getCategory());
-//                    txt_subcategory.setText(businessInfoRegisterModel.getBusinessInfoModel().getSubCategory());
-//                    txt_discription.setText(businessInfoRegisterModel.getBusinessInfoModel().getDescription());
-//                    txt_business_location.setText(FileUtils.getAddressFromLatLng(getContext(), latLng));
-//                    txt_business_category.setText(businessInfoRegisterModel.getBusinessInfoModel().getInterestedCategory());
-//                    txt_business_subcategory.setText(businessInfoRegisterModel.getBusinessInfoModel().getInterestedSubCategory());
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    Log.e("Error", error.toString());
-//                }
-//            }) {
-//                @Override
-//                public Map<String, String> getHeaders() throws AuthFailureError {
-//                    Map<String, String> map = new HashMap<>();
-//                    map.put("Content-Type", "application/json");
-//                    map.put("auth-token", MyApplication.getAuthToken(getContext()));
-//                    return map;
-//                }
-//            };
-//
-//            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-//            requestQueue.add(jsonObjectRequest);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }

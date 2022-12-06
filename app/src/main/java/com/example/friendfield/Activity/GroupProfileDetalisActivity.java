@@ -172,7 +172,6 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
-//                groupProfileAdapter.getFilter().filter(text);
                 filter(text);
 
                 iv_search.setVisibility(View.GONE);
@@ -268,15 +267,12 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
         SwitchButton email_switch = dialog.findViewById(R.id.email_switch);
         SwitchButton media_switch = dialog.findViewById(R.id.media_switch);
 
-
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
-
-
         dialog.show();
     }
 
@@ -284,7 +280,6 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
-
             try {
                 Uri selectedImageUri = data.getData();
                 try {
@@ -307,29 +302,19 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
     }
 
     private void filter(String text) {
-        // creating a new array list to filter our data.
         ArrayList<GroupUserModel> filteredlist = new ArrayList<>();
 
-        // running a for loop to compare elements.
         for (GroupUserModel item : modelList) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.getName().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
                 filteredlist.add(item);
             }
         }
         if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
             Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show();
         } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
             groupProfileAdapter.filterList(filteredlist);
         }
     }
-
 
     @Override
     public void onBackPressed() {

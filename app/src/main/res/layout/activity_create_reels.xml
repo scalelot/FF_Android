@@ -133,7 +133,7 @@
             <EditText
                 android:id="@+id/edt_aboutUs"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/sp_100dp"
+                android:layout_height="@dimen/sp_100"
                 android:layout_below="@+id/rl_upload"
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginRight="@dimen/margin_20"

@@ -49,6 +49,9 @@ public class BlockedFriendRegisterModel {
     @SerializedName("profileimage")
     @Expose
     private String profileimage;
+    @SerializedName("request_id")
+    @Expose
+    private String requestId;
     @SerializedName("status")
     @Expose
     private String status;
@@ -172,6 +175,14 @@ public class BlockedFriendRegisterModel {
 
     public void setProfileimage(String profileimage) {
         this.profileimage = profileimage;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public String getStatus() {

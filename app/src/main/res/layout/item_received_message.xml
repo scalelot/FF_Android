@@ -7,40 +7,40 @@
     android:layout_marginBottom="@dimen/margin_5"
     android:orientation="vertical">
 
-<!--    <TextView-->
-<!--        android:id="@+id/nameTxt"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/margin_4"-->
-<!--        android:fontFamily="@font/roboto_bold"-->
-<!--        android:text="@string/name"-->
-<!--        android:visibility="gone" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/nameTxt"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="@dimen/margin_4"-->
+    <!--        android:fontFamily="@font/roboto_bold"-->
+    <!--        android:text="@string/name"-->
+    <!--        android:visibility="gone" />-->
 
     <RelativeLayout
         android:id="@+id/rel_name"
         android:layout_width="match_parent"
-        android:visibility="visible"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_5"
-        android:layout_height="wrap_content">
+        android:visibility="visible">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/cir_profile_pic"
-            android:layout_width="@dimen/dp20"
+            android:layout_width="@dimen/sp_20"
+            android:layout_height="@dimen/sp_20"
             android:layout_centerVertical="true"
-            android:layout_height="@dimen/dp20"
-            android:src="@drawable/girl_image"/>
+            android:src="@drawable/girl_image" />
 
         <TextView
             android:id="@+id/nameTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:layout_marginLeft="@dimen/margin_5"
-            android:layout_toRightOf="@id/cir_profile_pic"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toRightOf="@id/cir_profile_pic"
             android:fontFamily="@font/roboto_bold"
-            android:textSize="@dimen/text_12"
             android:text="@string/name"
             android:textColor="@color/darkturquoise"
+            android:textSize="@dimen/text_12"
             android:visibility="visible" />
     </RelativeLayout>
 

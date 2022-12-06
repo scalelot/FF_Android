@@ -2,6 +2,7 @@ package com.example.friendfield.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -90,7 +91,7 @@ public class Contact_Us_Activity extends BaseActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.contact_us, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-
+                    Log.e("ContactUs=>", response.toString());
                     ContactDataModel contactDataModel = new Gson().fromJson(response.toString(), ContactDataModel.class);
                     full_name.setText("");
                     phone_number.setText("");
@@ -103,7 +104,7 @@ public class Contact_Us_Activity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("Contatct_us_error:--" + error.toString());
+                    System.out.println("CContactUs_Error=>" + error.toString());
                     Toast.makeText(Contact_Us_Activity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -125,55 +126,6 @@ public class Contact_Us_Activity extends BaseActivity {
         requestQueue.add(jsonObjectRequest);
 
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == PICK_IMAGE) {
-//            try {
-//                Uri selectedImageUri = data.getData();
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-//                    Const.bitmap_business_profile_image = bitmap;
-//                    img_add_image.setImageBitmap(bitmap);
-//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                    byte[] b = baos.toByteArray();
-//                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-//            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-//    ImageView ic_back, img_add_image;
-//    SharedPreferences.Editor editor;
-//    public static final int PICK_IMAGE = 1;
-//    String encodedImage;
-//       img_add_image.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            ImagePicker.Companion.with(Contact_Us_Activity.this)
-//                    .crop()
-////                        .galleryOnly()
-//                    .maxResultSize(1080, 1080)
-//                    .start(PICK_IMAGE);
-//        }
-//    });
-//    else if (img_add_image.getDrawable() == null) {
-//        Toast.makeText(Contact_Us_Activity.this, "Add Image", Toast.LENGTH_SHORT).show();
-//    }
-//    editor.putString(Image_data,encodedImage);
-//     img_add_image.setImageResource(0);
 
     @Override
     public void onBackPressed() {

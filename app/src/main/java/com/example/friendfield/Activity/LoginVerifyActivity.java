@@ -67,9 +67,8 @@ public class LoginVerifyActivity extends BaseActivity {
         otpTextView = findViewById(R.id.otpTextView);
 
         csrfToken = getIntent().getStringExtra("csrfToken");
-        c_code = getIntent().getStringExtra("c_code");
-        MobileNo = getIntent().getStringExtra("m_no");
-        Log.e("LLL_csrfto--->", csrfToken);
+        c_code = getIntent().getStringExtra("Country_code");
+        MobileNo = getIntent().getStringExtra("ph_number");
 
         txt_phone_number.setText(" +" + c_code + " " + MobileNo);
 
@@ -90,9 +89,8 @@ public class LoginVerifyActivity extends BaseActivity {
 
             @Override
             public void onOTPComplete(String otp) {
-//                otpTextView.setOTP(otp);
                 OtpValue = otp;
-                Log.e("LLL_onOtpCompleted=>", otp);
+                Log.e("onOtpCompleted=>", otp);
             }
         });
 
@@ -148,7 +146,6 @@ public class LoginVerifyActivity extends BaseActivity {
             public void onFinish() {
                 tv_timer.setText("00:00");
                 txt_resend_code.setEnabled(true);
-
             }
         }.start();
 
@@ -165,39 +162,24 @@ public class LoginVerifyActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
-                    Log.e("LLL_v_otp_res-->", response.toString());
+                    Log.e("Verify_Otp=>", response.toString());
 
                     VerifyOtpModel verifyOtpModel = new Gson().fromJson(response.toString(), VerifyOtpModel.class);
 
-//                    if (verifyOtpModel.getStatusCode().equals("10001")) {
-//
-//                        Toast.makeText(LoginVerifyActivity.this, verifyOtpModel.getMessage(), Toast.LENGTH_LONG).show();
-//                    } else {
                     Toast.makeText(LoginVerifyActivity.this, verifyOtpModel.getMessage(), Toast.LENGTH_LONG).show();
 
-//                        MyApplication.setuserActive(getApplicationContext(), verifyOtpModel.getVerifyDataModel().getVerifyUserModel().getActive());
-//                        MyApplication.setcontactNo(getApplicationContext(), verifyOtpModel.getVerifyDataModel().getVerifyUserModel().getContactNo());
-//                        MyApplication.setuserName(getApplicationContext(), verifyOtpModel.getVerifyDataModel().getVerifyUserModel().getUserName());
-//                        MyApplication.setAuthToken(getApplicationContext(), verifyOtpModel.getVerifyDataModel().getVerifyTokenModel().getAuthToken());
-//                        MyApplication.setPersonalProfileRegistered(getApplicationContext(), verifyOtpModel.getVerifyDataModel().getVerifyUserModel().getIsPersonalProfileRegistered());
-//                        MyApplication.setBusinessProfileRegistered(getApplicationContext(), verifyOtpModel.getVerifyDataModel().getVerifyUserModel().getIsBusinessProfileRegistered());
-//                        Log.e("LLL_auth_token--->", verifyOtpModel.getVerifyDataModel().getVerifyTokenModel().getAuthToken());
-
                     MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
-                    Log.e("LLL_auth_token--->", verifyOtpModel.getData().getToken());
-
+                    Log.e("AuthToken=>", verifyOtpModel.getData().getToken());
 
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
-
-//                    }
 
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
-                    System.out.println("LLL_v_err--> " + error.toString());
+                    System.out.println("Verify_Otp_Error=> " + error.toString());
                 }
             }) {
 
@@ -205,9 +187,7 @@ public class LoginVerifyActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-//                    map.put("auth-token", "bearer "+csrfToken);
                     map.put("authorization", "bearer " + csrfToken);
-//                    map.put("Cookie", "auth-token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJfY29udGFjdE5vIjoiNzI4NDA3MDg2NiIsIl91c2VySWQiOiIyZWU2NDliOC0yNmFmLTQzNmMtOTBiZi1lYzYwM2Y5ZDRjNGMiLCJfbmV3VXNlciI6ZmFsc2UsImlhdCI6MTY0OTEzNDkxNX0.qiqAF6agReb3FZ3wHRyPzpR_N_M46ra9ogt07A_QLgbG_iy-avw4dfCOzaf2y74PJBcBJ0Lfc0cZXUoyJsDBfA");
                     return map;
                 }
 
@@ -219,18 +199,9 @@ public class LoginVerifyActivity extends BaseActivity {
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     public void SendOtp(String phone_number) {
-
         showtimer();
 
         JSONObject paramObject = new JSONObject();
@@ -250,17 +221,16 @@ public class LoginVerifyActivity extends BaseActivity {
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("LLL_sendotp_res-->", response.toString());
+                    Log.e("VerifySendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
-                    Log.e("LLL_message-->", sendOtpModel.getMessage());
 
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(LoginVerifyActivity.this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
-                    Log.e("LLL_err-->", error.getMessage());
+                    Log.e("VerifySendOtp_Error=>", error.getMessage());
                 }
             }) {
 

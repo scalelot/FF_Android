@@ -1,6 +1,7 @@
 package com.example.friendfield;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -71,27 +72,23 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends BaseActivity {
 
     TextView txt_chats, txt_find_friend, txt_calls, txt_contact_list, select;
-
     ImageView iv_chats;
     ImageView iv_find_friend;
     ImageView iv_calls;
     ImageView iv_contact_list;
-
     LinearLayout lin_chats;
     LinearLayout lin_find_friend;
     LinearLayout lin_calls;
     LinearLayout lin_contact_list;
-
     ImageView iv_likes;
     ImageView iv_promotion;
-
+    ImageView iv_business_account, popup_btn;
     TextView noti_title, noti_message;
     final String[] token = {""};
-    private Intent intent;
     ColorStateList def;
     TextView user_name;
     CircleImageView user_img;
-    private static final int REQUEST_CODE = 101;
+    private Intent intent;
     private static final int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -102,7 +99,6 @@ public class MainActivity extends BaseActivity {
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.READ_CONTACTS
     };
-    ImageView iv_business_account, popup_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +120,6 @@ public class MainActivity extends BaseActivity {
         lin_calls = findViewById(R.id.lin_calls);
         lin_contact_list = findViewById(R.id.lin_contact_list);
 
-
-//        select = findViewById(R.id.select);
         user_name = findViewById(R.id.user_name);
         user_img = findViewById(R.id.user_img);
         iv_business_account = findViewById(R.id.iv_business_account);
@@ -134,13 +128,11 @@ public class MainActivity extends BaseActivity {
         popup_btn = findViewById(R.id.popup_btn);
         noti_title = findViewById(R.id.noti_title);
         noti_message = findViewById(R.id.noti_message);
-//        fb_map = findViewById(R.id.fb_map);
+
+        getAllPersonalData();
 
         def = txt_find_friend.getTextColors();
-//        iv_business_account.setVisibility(View.GONE);
-        getAllPersonalData();
-        Log.e("LLL_c_code-->", MyApplication.getCountryCode(getApplicationContext()));
-
+        Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));
 
         if (MyApplication.getuserName(getApplicationContext()).equals("")) {
             user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
@@ -148,33 +140,12 @@ public class MainActivity extends BaseActivity {
             user_name.setText(MyApplication.getuserName(getApplicationContext()));
         }
 
-//        if (!hasPermissions(this, PERMISSIONS)) {
-//            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
-//        } else {
-//            if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
-//                CustomDialog();
-//            }
-//        }
-
-//        fb_map.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this,MapActivity.class));
-//            }
-//        });
-
-
-        Log.e("LLL_auth_token-->", MyApplication.getAuthToken(getApplicationContext()));
+        Log.e("AuthToken==>", MyApplication.getAuthToken(getApplicationContext()));
 
         user_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
-//                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-//
-//                } else {
                 startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-//                }
             }
         });
 
@@ -287,10 +258,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(MainActivity.this, popup_btn);
-                //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.main_menu, popup.getMenu());
 
-                //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
@@ -319,7 +288,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        //Notification Code
         if (getIntent().getExtras() != null) {
             try {
                 if (getIntent().getExtras() != null) {
@@ -361,6 +329,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("Range")
     private void getContactList() {
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
@@ -379,8 +348,8 @@ public class MainActivity extends BaseActivity {
                             new String[]{id}, null);
                     while (pCur.moveToNext()) {
                         String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        Log.i("LLL_TAG-->", "Name: " + name);
-                        Log.i("LLL_TAG-->", "Phone Number: " + phoneNo);
+                        Log.i("ContactName=>", "Name: " + name);
+                        Log.i("ContactNum=>", "Phone Number: " + phoneNo);
                     }
                     pCur.close();
                 }
@@ -428,7 +397,7 @@ public class MainActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
 
                     try {
-                        Log.e("personal", response.toString());
+                        Log.e("PersonalInfo=>", response.toString());
                         JSONObject jsonObject = new JSONObject(String.valueOf(response));
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
@@ -436,26 +405,12 @@ public class MainActivity extends BaseActivity {
                             CustomDialog();
                         }
                         MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
-//                        MyApplication.setPersonalProfileRegistered(getApplicationContext(), peronalInfoModel.getData().getIsPersonalProfileRegistered());
-//                        MyApplication.setBusinessProfileRegistered(getApplicationContext(), peronalInfoModel.getData().getIsBusinessProfileRegistered());
-
-                        Log.e("LLL_user_id-->", peronalInfoModel.getData().getId());
-
-//                        if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
-//                            CustomDialog();
-//                        }
 
                         if (MyApplication.getuserName(getApplicationContext()).equals("")) {
                             user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
                         } else {
                             user_name.setText(MyApplication.getuserName(getApplicationContext()));
                         }
-
-//                        if (MyApplication.isBusinessProfileRegistered(getApplicationContext())) {
-//                            iv_business_account.setVisibility(View.VISIBLE);
-//                        } else {
-//                            iv_business_account.setVisibility(View.GONE);
-//                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -465,7 +420,7 @@ public class MainActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("error", error.toString());
+                    Log.e("PersonalInfo_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -482,13 +437,6 @@ public class MainActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FileUtils.hideKeyboard(MainActivity.this);
 
     }
 
@@ -509,9 +457,6 @@ public class MainActivity extends BaseActivity {
         switch (requestCode) {
             case PERMISSION_ALL:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    if (!MyApplication.getAccountType(getApplicationContext()).equals("")) {
-//                        CustomDialog();
-//                    }
                     getAllPersonalData();
                 } else {
                     finishAffinity();
@@ -546,13 +491,8 @@ public class MainActivity extends BaseActivity {
         dialog_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
-//                    Toast.makeText(MainActivity.this, "Create Your Profile", Toast.LENGTH_SHORT).show();
-//                } else {
                 if (dialog.isShowing())
                     dialog.dismiss();
-
-//                }
             }
         });
 
@@ -574,27 +514,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        FileUtils.hideKeyboard(MainActivity.this);
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-//
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         } else {
             getAllPersonalData();
-
-//            if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
-//                CustomDialog();
-//            }
             getContactList();
         }
-
-//        CustomDialog();
-//
-//        if (!MyApplication.isBusinessProfileRegistered(getApplicationContext())) {
-//            iv_business_account.setVisibility(View.GONE);
-//        } else {
-//            iv_business_account.setVisibility(View.VISIBLE);
-//        }
     }
 
     @Override

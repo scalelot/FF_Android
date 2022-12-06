@@ -27,7 +27,6 @@ public class PromotionDetailsActivity extends BaseActivity {
     LinearLayout ll_notifi_people;
     int[] details_img = {R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user};
     String[] details_name = {"John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan"};
-    NotificationDetailsModel listNotificationModelArrayList;
     TextView txt_des;
 
     @Override
@@ -44,12 +43,6 @@ public class PromotionDetailsActivity extends BaseActivity {
         ll_notifi_people = findViewById(R.id.ll_notifi_people);
         txt_new_product = findViewById(R.id.txt_new_product);
         txt_des = findViewById(R.id.txt_des);
-
-//        Intent intent = getIntent();
-//        listNotificationModelArrayList = (NotificationDetailsModel) intent.getSerializableExtra("noti_image");
-//        Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + listNotificationModelArrayList.getImageUrl()).into(product_image);
-//        txt_new_product.setText(listNotificationModelArrayList.getTitle());
-//        txt_des.setText(listNotificationModelArrayList.getDescription());
 
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -96,7 +96,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_edit_promotion"
-            android:layout_width="@dimen/sp_103dp"
+            android:layout_width="@dimen/sp_103"
             android:layout_height="@dimen/sp_30"
             android:layout_below="@+id/notification_link"
             android:layout_marginTop="@dimen/margin_10"

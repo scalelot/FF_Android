@@ -103,7 +103,6 @@ public class CallsFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 }

@@ -48,30 +48,16 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         try {
             mMap = googleMap;
             mMap.getUiSettings().setZoomControlsEnabled(true);
-
-//        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
@@ -79,7 +65,6 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                 criteria = new Criteria();
                 bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
-                //You can still do this if you like, you might get lucky:
                 Location location = locationManager.getLastKnownLocation(bestProvider);
                 if (location != null) {
                     Log.e("TAG", "GPS is on");
@@ -92,20 +77,10 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                         Const.b_longitude = location.getLongitude();
                     }
                     Log.e("LLL_map_Latitude1: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
-
-                    //
                     centreMapOnLocation(location, bestProvider);
 
-
                 } else {
-                    //This is what you need:
                     locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-
-//                    if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER))
-//                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-//
-//                    if (locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER))
-//                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 }
 
             } else {
@@ -137,8 +112,6 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                     Const.b_lattitude = marker.getPosition().latitude;
                     Const.b_longitude = marker.getPosition().longitude;
                 }
-//                Const.longitude = marker.getPosition().longitude;
-//                Const.lattitude = marker.getPosition().latitude;
 
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
@@ -165,9 +138,6 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1, 12));
                 Log.e("LLL_final_location-->", "latitude: " + latLng.latitude + " longitude: " + latLng.longitude);
-
-//                Const.longitude = latLng.longitude;
-//                Const.lattitude = latLng.latitude;
 
                 if (isProfileLocation) {
                     Const.lattitude = latLng.latitude;
@@ -198,8 +168,6 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onLocationChanged(Location location) {
         Log.e("LLL_map_Latitude: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
-//        Const.longitude = location.getLongitude();
-//        Const.lattitude = location.getLatitude();
 
         if (isProfileLocation) {
             Const.lattitude = location.getLatitude();
@@ -217,8 +185,6 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(userLocation);
-//        markerOptions.draggable(true);
-//        markerOptions.title(title);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         Const.mCurrLocationMarker = mMap.addMarker(markerOptions);
 

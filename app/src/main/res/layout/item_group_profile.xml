@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/margin_5"
         android:layout_toRightOf="@+id/group_img"
         android:fontFamily="@font/roboto_regular"
-        android:text="@string/user_name"
+        android:text="@string/ph_number"
         android:textColor="@color/grey"
         android:textSize="@dimen/text_12" />
 

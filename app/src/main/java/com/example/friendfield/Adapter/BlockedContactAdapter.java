@@ -11,13 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.friendfield.Activity.BlockedContactActivity;
 import com.example.friendfield.Model.BlockedFriends.BlockedFriendRegisterModel;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
+import com.google.android.exoplayer2.util.Log;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,7 +43,6 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
         inflater = LayoutInflater.from(activity);
     }
 
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -47,11 +56,40 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
 
         holder.txt_contact.setText(blockedFriendRegisterModels.get(position).getContactNo());
 
+        String strIds = blockedFriendRegisterModels.get(position).getRequestId();
+
         holder.btn_clear_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setUnblockUser(strIds);
             }
         });
+    }
+
+    private void setUnblockUser(String strIds) {
+        HashMap<String, String> stringHashMap = new HashMap<>();
+        stringHashMap.put("friendrequestid", strIds);
+        stringHashMap.put("status", "unblocked");
+
+        JsonObjectRequest jsonObjectRequest = null;
+        try {
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.response_friend_request, new JSONObject(stringHashMap), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("UnBlockUser=>", response.toString());
+                    Toast.makeText(activity, "Unblock user Successfully!!", Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("UnBlockUser_Error=>", error.toString());
+                }
+            });
+            RequestQueue requestQueue = Volley.newRequestQueue(activity);
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

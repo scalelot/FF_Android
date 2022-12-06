@@ -62,7 +62,7 @@ public class LoginActivity extends BaseActivity {
 
                         SendOtp(countycode, edtPhone.getText().toString());
                     } else {
-                            edtPhone.setError(getResources().getString(R.string.please_enter_mno));
+                        edtPhone.setError(getResources().getString(R.string.please_enter_mno));
                     }
                 } else {
                     edtPhone.setError(getResources().getString(R.string.please_enter_mno_error));
@@ -92,24 +92,19 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
 
-                    Log.e("LLL_sendotp_res-->", response.toString());
+                    Log.e("SendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
-                    Log.e("LLL_message-->", sendOtpModel.getMessage());
 
                     startActivity(new Intent(getApplicationContext(), LoginVerifyActivity.class).
                             putExtra("csrfToken", sendOtpModel.getData().getToken())
-                            .putExtra("c_code", countycode)
-                            .putExtra("m_no", edtPhone.getText().toString()));
-
-
+                            .putExtra("Country_code", countycode)
+                            .putExtra("ph_number", edtPhone.getText().toString()));
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
-                    System.out.println("LLL_err-->" + error.getMessage());
-                    System.out.println("LLL_err1-->" + error.toString());
+                    System.out.println("SendOtp_Error=>" + error.toString());
                 }
             }) {
 
@@ -119,7 +114,6 @@ public class LoginActivity extends BaseActivity {
                     map.put("Content-Type", "application/json");
                     return map;
                 }
-
             };
 
             queue.add(request);

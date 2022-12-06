@@ -29,8 +29,8 @@
 
                 <ImageView
                     android:id="@+id/iv_chats"
-                    android:layout_width="@dimen/dp25"
-                    android:layout_height="@dimen/dp25"
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_chat" />
 
@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp5"
+                    android:layout_marginTop="@dimen/margin_5"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:fontFamily="@font/roboto_bold"
@@ -59,8 +59,8 @@
 
                 <ImageView
                     android:id="@+id/iv_find_friend"
-                    android:layout_width="@dimen/dp25"
-                    android:layout_height="@dimen/dp25"
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_location_icon"
                     app:tint="@color/grey" />
@@ -69,7 +69,7 @@
                     android:id="@+id/txt_find_friend"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dp5"
+                    android:layout_marginTop="@dimen/margin_5"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:fontFamily="@font/roboto_bold"
@@ -88,8 +88,8 @@
 
                 <ImageView
                     android:id="@+id/iv_calls"
-                    android:layout_width="@dimen/dp25"
-                    android:layout_height="@dimen/dp25"
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_audio_call"
                     app:tint="@color/grey" />
@@ -98,7 +98,7 @@
                     android:id="@+id/txt_calls"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dp5"
+                    android:layout_marginTop="@dimen/margin_5"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
                     android:gravity="center"
@@ -116,8 +116,8 @@
 
                 <ImageView
                     android:id="@+id/iv_contact_list"
-                    android:layout_width="@dimen/dp25"
-                    android:layout_height="@dimen/dp25"
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_contact"
                     app:tint="@color/grey" />
@@ -126,7 +126,7 @@
                     android:id="@+id/txt_contact_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dp5"
+                    android:layout_marginTop="@dimen/margin_5"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:fontFamily="@font/roboto_bold"

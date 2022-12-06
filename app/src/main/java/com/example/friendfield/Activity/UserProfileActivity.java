@@ -90,7 +90,6 @@ public class UserProfileActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(UserProfileActivity.this, ProductActivity.class));
-//                finish();
             }
         });
 
@@ -131,7 +130,7 @@ public class UserProfileActivity extends BaseActivity {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
-                            intent.putExtra("edit_p_profile", getResources().getString(R.string.edit_business_profile));
+                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
                             startActivity(intent);
                         }
                     });
@@ -141,7 +140,7 @@ public class UserProfileActivity extends BaseActivity {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
-                            intent.putExtra("edit_p_profile", getResources().getString(R.string.edit_personal_profile));
+                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
                             startActivity(intent);
                         }
                     });
@@ -150,7 +149,28 @@ public class UserProfileActivity extends BaseActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                viewPager.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 1) {
+                    btn_edit_profile.setText(getResources().getString(R.string.edit_business_profile));
+                    btn_edit_profile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
+                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    btn_edit_profile.setText(getResources().getString(R.string.edit_personal_profile));
+                    btn_edit_profile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
+                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -173,7 +193,6 @@ public class UserProfileActivity extends BaseActivity {
             public void onResponse(JSONObject response) {
                 GetPersonalProfileModel userProfileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
-//                UserProfileRegisterModel userProfileRegisterModel = new Gson().fromJson(response.toString(), UserProfileRegisterModel.class);
                 u_name.setText(userProfileRegisterModel.getData().getFullName());
                 u_nickname.setText(userProfileRegisterModel.getData().getNickName());
 
@@ -198,7 +217,6 @@ public class UserProfileActivity extends BaseActivity {
                     } else if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Youtube")) {
                         ic_youtube.setVisibility(View.VISIBLE);
                     }
-
                 }
 
                 ic_fb.setOnClickListener(new View.OnClickListener() {

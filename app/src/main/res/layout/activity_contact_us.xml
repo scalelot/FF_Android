@@ -103,7 +103,7 @@
     <EditText
         android:id="@+id/description"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sp_100dp"
+        android:layout_height="@dimen/sp_100"
         android:layout_below="@+id/email_id"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_20"

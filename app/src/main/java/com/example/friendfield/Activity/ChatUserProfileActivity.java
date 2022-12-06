@@ -23,8 +23,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.friendfield.Adapter.ChatViewPagerAdapter;
+import com.example.friendfield.Adapter.TagAdapter;
 import com.example.friendfield.BaseActivity;
+import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.example.friendfield.Model.UserProfile.UserProfileRegisterModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
@@ -34,18 +37,24 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatUserProfileActivity extends BaseActivity {
 
     ImageView ic_back;
-    TextView u_name, u_nickname;
+    TextView u_name, u_nickname, chat_name;
     LinearLayout l_product;
     TabLayout tabLayout;
     ViewPager viewPager;
-    ImageView ic_fb, ic_insta, ic_tw, ic_ld,ic_pinterest,ic_youtube;
+    String chatImg, chatFname, chatNick;
+    CircleImageView user_profile_image;
+    ImageView ic_fb, ic_insta, ic_tw, ic_ld, ic_pinterest, ic_youtube;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +70,23 @@ public class ChatUserProfileActivity extends BaseActivity {
         tabLayout = findViewById(R.id.chat_tabLayout);
         viewPager = findViewById(R.id.viewPager);
         l_product = findViewById(R.id.l_product);
+        chat_name = findViewById(R.id.chat_name);
+        u_nickname = findViewById(R.id.u_nickname);
         ic_fb = findViewById(R.id.ic_fb);
         ic_insta = findViewById(R.id.ic_insta);
         ic_tw = findViewById(R.id.ic_twitter);
         ic_ld = findViewById(R.id.ic_linkdin);
         ic_pinterest = findViewById(R.id.ic_pinterest);
         ic_youtube = findViewById(R.id.ic_youtube);
+        user_profile_image = findViewById(R.id.user_profile_image);
 
-        u_name = findViewById(R.id.u_name);
-        u_nickname = findViewById(R.id.u_nickname);
+        chatImg = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("images", null);
+        chatFname = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("userName", null);
+        chatNick = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("nickName", null);
 
-        getApiCalling();
+        Glide.with(this).load(Constans.Display_Image_URL + chatImg).placeholder(R.drawable.ic_user_img).into(user_profile_image);
+        chat_name.setText(chatFname);
+        u_nickname.setText(chatNick);
 
         if (!MyApplication.isBusinessProfileRegistered(ChatUserProfileActivity.this)) {
             l_product.setVisibility(View.GONE);
@@ -103,7 +118,6 @@ public class ChatUserProfileActivity extends BaseActivity {
             ChatViewPagerAdapter viewPagerAdapter = new ChatViewPagerAdapter(ChatUserProfileActivity.this, getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(viewPagerAdapter);
 
-            //if business profile not created
             ((LinearLayout) Objects.requireNonNull(tabLayout.getTabAt(1)).view).setVisibility(View.GONE);
 
         } else {
@@ -134,130 +148,7 @@ public class ChatUserProfileActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-//        startActivity(new Intent(ChatUserProfileActivity.this, ChatingActivity.class));
-        finish();
-    }
-
-    private void getApiCalling() {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onResponse(JSONObject response) {
-
-                UserProfileRegisterModel userProfileRegisterModel = new Gson().fromJson(response.toString(), UserProfileRegisterModel.class);
-//                u_name.setText(userProfileRegisterModel.getUserProfileModel().getFullName());
-///                u_nickname.setText(userProfileRegisterModel.getUserProfileModel().getNickName());
-
-//                if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-//                    u_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
-//                } else {
-//                    u_name.setText(userProfileRegisterModel.getUserProfileModel().getFullName());
-//                }
-//
-//                if (userProfileRegisterModel.getUserProfileModel().getFacebookLink() != null) {
-//                    ic_fb.setVisibility(View.VISIBLE);
-//                } else {
-//                    ic_fb.setVisibility(View.GONE);
-//                }
-//
-//                if (userProfileRegisterModel.getUserProfileModel().getInstagramLink() != null) {
-//                    ic_insta.setVisibility(View.VISIBLE);
-//                } else {
-//                    ic_insta.setVisibility(View.GONE);
-//                }
-//
-//                if (userProfileRegisterModel.getUserProfileModel().getTwitterLink() != null) {
-//                    ic_tw.setVisibility(View.VISIBLE);
-//                } else {
-//                    ic_tw.setVisibility(View.GONE);
-//                }
-//
-//                if (userProfileRegisterModel.getUserProfileModel().getLinkedinLink() != null) {
-//                    ic_ld.setVisibility(View.VISIBLE);
-//                } else {
-//                    ic_ld.setVisibility(View.GONE);
-//                }
-
-//                ic_fb.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        if (u_name.equals("")) {
-//                            Toast.makeText(ChatUserProfileActivity.this, "Enter Data", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            String url = userProfileRegisterModel.getUserProfileModel().getFacebookLink();
-//                            if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-//                                Uri uri = Uri.parse(url);
-//                                Intent i_fb = new Intent(Intent.ACTION_VIEW, uri);
-//                                startActivity(i_fb);
-//
-//                            } else {
-//                                Toast.makeText(ChatUserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//                });
-//
-//                ic_insta.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        String url = userProfileRegisterModel.getUserProfileModel().getInstagramLink();
-//                        if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-//                            Uri uri = Uri.parse(url);
-//                            Intent i_insta = new Intent(Intent.ACTION_VIEW, uri);
-//                            startActivity(i_insta);
-//                        } else {
-//                            Toast.makeText(ChatUserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//
-//                ic_tw.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                        String url = userProfileRegisterModel.getUserProfileModel().getTwitterLink();
-//                        if (url.startsWith("https://") || url.startsWith("http://")) {
-//                            Uri uri = Uri.parse(url);
-//                            Intent i_twitter = new Intent(Intent.ACTION_VIEW, uri);
-//                            startActivity(i_twitter);
-//                        } else {
-//                            Toast.makeText(ChatUserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//
-//                ic_ld.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        String url = userProfileRegisterModel.getUserProfileModel().getLinkedinLink();
-//                        if (url.startsWith("https://") || url.startsWith("http://")) {
-//                            Uri uri = Uri.parse(url);
-//                            Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
-//                            startActivity(i_linkedin);
-//                        } else {
-//                            Toast.makeText(ChatUserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("error", error.toString());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Content-Type", "application/json");
-                map.put("authorization", MyApplication.getAuthToken(ChatUserProfileActivity.this));
-                return map;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(ChatUserProfileActivity.this);
-        requestQueue.add(jsonObjectRequest);
+        startActivity(new Intent(ChatUserProfileActivity.this, ChatingActivity.class));
     }
 
 }

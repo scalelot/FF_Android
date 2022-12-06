@@ -136,8 +136,7 @@ public class FriendRequestFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("LLL_pro_Error", error.toString());
+                    Log.e("friends_request_error=>", error.toString());
                 }
             }) {
                 @Override

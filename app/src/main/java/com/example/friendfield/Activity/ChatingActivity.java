@@ -78,7 +78,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     RelativeLayout btn_send, rel_replay, rl_user;
     RecyclerView chat_recycler;
     String toUserIds, txt_name, p_name, p_des, userName;
-    String loginUserId = "", p_price, edt_str, pro_img;
+    String loginUserId = "", p_price, edt_str, pro_img, p_img;
     Uri imageUri, uri;
     MessageAdapter messageAdapter;
     ListChatsModel listChatsModel;
@@ -121,6 +121,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         toUserIds = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("ids", null);
         userName = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("userName", null);
+        p_img = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("images", null);
+
+        Glide.with(this).load(Constans.Display_Image_URL + p_img).placeholder(R.drawable.ic_user_img).into(img_user);
 
         if (!MyApplication.isBusinessProfileRegistered(ChatingActivity.this)) {
             img_product.setVisibility(View.VISIBLE);
@@ -296,13 +299,12 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.e("LLL_send_message--->", response.toString());
-//                        edt_chating.getText().clear();
+                        Log.e("ChatSendMessage=>", response.toString());
                     }
 
                     @Override
                     public void onError(ANError error) {
-                        Log.e("LLL_send_error--->", error.toString());
+                        Log.e("SendMessage_Error=>", error.toString());
                     }
                 });
     }
@@ -327,7 +329,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_chat_message, jsonObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.e("LLL_list_message", response.toString());
+                        Log.e("ListChat=>", response.toString());
                         listChatsModelArrayList.clear();
                         form_id = new ArrayList<>();
                         to_id = new ArrayList<>();
@@ -402,7 +404,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("LLL_list_message_error", error.toString());
+                        Log.e("ListMessage_error=>", error.toString());
                     }
                 }) {
                     @Override
@@ -427,7 +429,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChatingActivity.this);
-                    Log.e("Chat_PersonalInfo", response.toString());
+                    Log.e("Chat_PersonalInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
                     loginUserId = businessInfoRegisterModel.getData().getId();
                     Log.e("Ids", loginUserId);
@@ -436,7 +438,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChatingActivity.this);
-                    Log.e("Chat_Personal_Error", error.toString());
+                    Log.e("Chat_Personal_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -521,14 +523,13 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                        // do anything with progress
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         // do anything with response
-                        Log.e("LLL_chat_pset--->", response.toString());
+                        Log.e("SendImage=>", response.toString());
                     }
 
                     @Override
@@ -536,7 +537,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         // handle error
 
                         Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
-                        Log.e("LLL_chat_perr--->", error.toString());
+                        Log.e("SendImage_Error=>", error.toString());
 
                     }
                 });

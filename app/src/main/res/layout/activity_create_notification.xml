@@ -60,7 +60,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="@dimen/dp5">
+                app:cardCornerRadius="@dimen/sp_5">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -97,8 +97,8 @@
                     android:layout_height="@dimen/sp_30"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_margin="@dimen/margin_5"
                     android:layout_gravity="bottom|right"
+                    android:layout_margin="@dimen/margin_5"
                     android:background="@drawable/circle"
                     android:visibility="gone">
 
@@ -141,7 +141,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_edt_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/sp_100dp"
+                android:layout_height="@dimen/sp_100"
                 android:layout_below="@+id/edt_notification_title"
                 android:layout_marginTop="@dimen/margin_20"
                 android:background="@drawable/notification_bg"

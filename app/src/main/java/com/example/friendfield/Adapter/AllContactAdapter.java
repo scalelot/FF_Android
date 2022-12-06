@@ -34,8 +34,6 @@ public class AllContactAdapter extends RecyclerView.Adapter<AllContactAdapter.My
     public static String isSelectedname;
 
     public interface ClickListener {
-        //        void onItemClick(int position, View v);
-//        void onItemClick(String username, ImageView v, boolean isToAdd);
         void onItemClick(CreateGroupModel username, ImageView v, boolean isToAdd);
     }
 
@@ -58,7 +56,6 @@ public class AllContactAdapter extends RecyclerView.Adapter<AllContactAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyDataViewHolder holder, int position) {
-//        holder.img_user.setImageResource(user_img[position]);
         holder.txt_user_name.setText(arraylist.get(position).getUsername());
         holder.txt_message.setText(arraylist.get(position).getUsername());
 
@@ -88,7 +85,6 @@ public class AllContactAdapter extends RecyclerView.Adapter<AllContactAdapter.My
         });
     }
 
-    // method for filtering our recyclerview items.
     public void filterList(ArrayList<CreateGroupModel> filterllist) {
         arraylist = filterllist;
         notifyDataSetChanged();
@@ -97,10 +93,6 @@ public class AllContactAdapter extends RecyclerView.Adapter<AllContactAdapter.My
     @Override
     public int getItemCount() {
         return arraylist.size();
-    }
-
-    public static String getIsSelectedname() {
-        return isSelectedname;
     }
 
     class MyDataViewHolder extends RecyclerView.ViewHolder {
@@ -128,7 +120,6 @@ public class AllContactAdapter extends RecyclerView.Adapter<AllContactAdapter.My
             user_name.addAll(arraylist);
         } else {
             for (CreateGroupModel wp : arraylist) {
-//                if (wp.getAnimalName().toLowerCase(Locale.getDefault()).contains(charText)) {
                 if (wp.getUsername().toLowerCase(Locale.getDefault()).contains(charText)) {
                     user_name.add(wp);
                 }

@@ -105,23 +105,18 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
     RadioGroup radioGender;
     RadioButton selectBtn;
-    EditText edt_name, edt_nickname, edt_emailId, edt_fb, edt_insta, edt_twitter, edt_linkdin, edt_address, edt_aboutUs, edt_hobbies, edt_pintrest, edt_youtube;
+    EditText edt_name, edt_nickname, edt_emailId, edt_fb, edt_insta, edt_twitter, edt_linkdin, edt_address, edt_aboutUs, edt_pintrest, edt_youtube;
     AppCompatButton btn_save, btn_business;
     ImageView ic_back;
-    //    CheckBox chk;
     LinearLayout ll_chk;
     LocationManager locationManager;
     private static final int REQUEST_CODE = 101;
     SeekBar seekbar_range;
     CircleImageView profile_image;
     private static final int PICK_IMAGE = 100;
-    Marker mCurrLocationMarker;
     RelativeLayout edit_profile;
     TextView t_km, title, txt_min_age, txt_max_age, gender;
-    int p = 0;
-    int text_km = 0;
-    int txt_min = 0;
-    int txt_max = 0;
+    int p = 0, text_km = 0, txt_min = 0, txt_max = 0;
     SimpleRangeView rangeBar;
     String yourRd = "MALE";
     String hello = "";
@@ -139,23 +134,16 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     RelativeLayout relative_map;
     EditText edt_dob;
     ImageView img_calender;
-
     Boolean isSaveAndCreateBusiness = false;
     ContactsCompletionView completionView;
     ArrayAdapter<Person> adapter;
     Person[] people;
     SocialMediaLink socialMediaLink;
-    Hobbies hobbies;
     ArrayList<SocialMediaLink> socialMediaLinkArrayList = new ArrayList<>();
-    //    ArrayList<Hobbies> hobbiesArrayList = new ArrayList<>();
     ArrayList<String> hobbiesArrayList = new ArrayList<>();
     JSONArray hobbiesJsonArray = new JSONArray();
     String gen_spinner_value = "";
     String selectedImage = "";
-
-
-    public ProfileActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +191,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         btn_save = findViewById(R.id.btn_save);
         ic_back = findViewById(R.id.ic_back);
         btn_business = findViewById(R.id.btn_business);
-//        chk = findViewById(R.id.chk);
         ll_chk = findViewById(R.id.ll_chk);
         radioGender = findViewById(R.id.radioGender);
         seekbar_range = findViewById(R.id.seekbar_range);
@@ -244,7 +231,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         });
 
         Calendar newCalendar = Calendar.getInstance();
-//        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -298,7 +284,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             }
         });
 
-
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -348,29 +333,15 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             }
         });
 
-
-//        chk.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (((CheckBox) view).isChecked()) {
-//                    ll_chk.setVisibility(View.GONE);
-//                } else {
-//                    ll_chk.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-
         relative_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("LLL_rel_map", "isClick");
+                Log.e("RelMap=>", "isClick");
                 startActivity(new Intent(getApplicationContext(), MapsLocationActivity.class).putExtra("isProfileLocation", true));
 
             }
         });
 
-//        yourRd = String.valueOf(radioGender.getCheckedRadioButtonId());
-//        Log.e("LLL_gender--->", yourRd.toString());
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -412,10 +383,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
                     postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
                 }
-
-//                startActivity(new Intent(ProfileActivity.this, BusinessProfileActivity.class));
-//                finish();
-
             }
         });
 
@@ -425,7 +392,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 selectBtn = findViewById(radioGroup.getCheckedRadioButtonId());
                 yourRd = selectBtn.getText().toString();
-//                Toast.makeText(ProfileActivity.this, "" + yourRd, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -435,7 +401,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
         mapview.getMapAsync(this);
 
-        Log.e("LLL_lati--: ", Const.longitude + " : longi : " + Const.lattitude);
+        Log.e("Lati: ", Const.longitude + " : Longi : " + Const.lattitude);
 
         if (profile_title != null) {
             title.setText(profile_title);
@@ -445,19 +411,15 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             title.setText(getResources().getString(R.string.create_personal_profile));
         }
 
-
         if (Const.longitude != null) {
-
             if (map != null) {
                 map.clear();
-//            }
                 if (Const.mCurrLocationMarker != null) {
                     Const.mCurrLocationMarker.remove();
                 }
                 LatLng userLocation = new LatLng(Double.valueOf(Const.lattitude), Double.valueOf(Const.longitude));
                 map.addMarker(new MarkerOptions().position(userLocation));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
-//            edt_address.setText(FileUtils.getAddressFromLatLng(getApplicationContext(), Const.latLngvalue));
             }
         } else {
             fetchLocation();
@@ -489,7 +451,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
         if (!hobbiesArrayList.isEmpty()) {
             for (int i = 0; i < hobbiesArrayList.size(); i++) {
-//                hobbiesJsonArray.put(hobbiesArrayList.get(i).getJSONObject());
                 hobbiesJsonArray.put(hobbiesArrayList.get(i));
             }
             try {
@@ -558,17 +519,14 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
         JsonObjectRequest jsonObjectRequest = null;
         try {
-//            jsonObjectRequest = new JsonObjectRequest(Request.Method.PATCH, Constans.fetch_personal_info, new JSONObject(params), new Response.Listener<JSONObject>() {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.profile_register, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    Log.e("LLL_Profile_update", response.toString());
-//                    Toast.makeText(ProfileActivity.this, getResources().getString(R.string.data_add_successfully), Toast.LENGTH_SHORT).show();
+                    Log.e("ProfileUpdate=>", response.toString());
                     ProfileRegisterModel profileRegisterModel = new Gson().fromJson(response.toString(), ProfileRegisterModel.class);
 
                     MyApplication.setPersonalProfileRegistered(getApplicationContext(), profileRegisterModel.getIsSuccess());
-//                    Toast.makeText(ProfileActivity.this, profileRegisterModel.getMessage(), Toast.LENGTH_SHORT).show();
 
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
@@ -577,7 +535,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    System.out.println("LLL_p_err---> " + error.toString());
+                    System.out.println("ProfileUpdate_Error=>" + error.toString());
                     error.printStackTrace();
                     Toast.makeText(ProfileActivity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
@@ -622,12 +580,10 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         }
         if (!hobbiesArrayList.isEmpty()) {
             for (int i = 0; i < hobbiesArrayList.size(); i++) {
-//                hobbiesJsonArray.put(hobbiesArrayList.get(i).getJSONObject());
                 hobbiesJsonArray.put(hobbiesArrayList.get(i));
             }
             try {
                 jsonBody.put("hobbies", hobbiesJsonArray);
-//                jsonBody.put("hobbies", hobbiesArrayList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -691,14 +647,12 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
         JsonObjectRequest jsonObjectRequest = null;
         try {
-//            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.profile_register, new JSONObject(params), new Response.Listener<JSONObject>() {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.profile_register, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    Log.e("LL_Profile", response.toString());
+                    Log.e("CreateProfileDone=>", response.toString());
                     ProfileRegisterModel profileRegisterModel = new Gson().fromJson(response.toString(), ProfileRegisterModel.class);
-//                    Toast.makeText(ProfileActivity.this, getResources().getString(R.string.data_add_successfully), Toast.LENGTH_SHORT).show();
                     Toast.makeText(ProfileActivity.this, profileRegisterModel.getMessage(), Toast.LENGTH_SHORT).show();
 
                     if (isSaveAndCreateBusiness) {
@@ -713,7 +667,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    System.out.println("LLL_p_err---> " + error.toString());
+                    System.out.println("CreateProfileError=>" + error.toString());
                     Toast.makeText(ProfileActivity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -735,27 +689,13 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         requestQueue.add(jsonObjectRequest);
     }
 
-    public static <T> List<T> getList(JSONArray jsonArray) throws Exception {
-
-        List<T> list = new ArrayList<>(jsonArray.length());
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-
-            list.add((T) jsonArray.get(i));
-        }
-
-        return list;
-
-    }
-
     private void fetchgetApi() {
-//        FileUtils.DisplayLoading(getApplicationContext());
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-//                    FileUtils.DismissLoading(getApplicationContext());
+                    Log.e("GetPersonalInfo=>", response.toString());
 
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
@@ -765,7 +705,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     LatLng latLng1 = new LatLng(latitude, longitude);
                     latLng = latLng1;
                     String getadd = FileUtils.getAddressFromLatLng(getApplicationContext(), latitude, longitude);
-                    Log.e("LLL_b_add-->", getadd);
 
                     edt_address.setText(getadd);
                     edt_name.setText(profileRegisterModel.getData().getFullName());
@@ -837,14 +776,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
                     map.addMarker(new MarkerOptions().position(latLng1));
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1, 12));
-
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    FileUtils.DismissLoading(getApplicationContext());
-
+                    Log.e("GetPersonalInfo_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -859,7 +795,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             RequestQueue requestQueue = Volley.newRequestQueue(ProfileActivity.this);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
-//            FileUtils.DismissLoading(getApplicationContext());
             e.printStackTrace();
         }
     }
@@ -878,22 +813,17 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             Uri selectedImageUri;
             try {
                 selectedImageUri = data.getData();
-                Log.e("LLL_immm-->", selectedImageUri.getPath());
+                Log.e("ProfileImageUri=>", selectedImageUri.getPath());
                 selectedImage = selectedImageUri.getPath();
-                Log.e("LLL_immm1-->", selectedImageUri.toString());
+                Log.e("ProfileImageUri1=>", selectedImageUri.toString());
                 Bitmap bitmap = null;
-//                try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                 Const.bitmap_profile_image = bitmap;
                 profile_image.setImageBitmap(bitmap);
 
                 File file = new File(selectedImageUri.getPath());
 
-//                uploadImage(file);
                 FileUtils.personalProfileImageUpload(getApplicationContext(), file);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -903,41 +833,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void uploadImage(File file) {
-        AndroidNetworking.upload(Constans.set_profile_pic)
-                .addMultipartFile("file", file)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                        // do anything with progress
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        Log.e("LLL_image_up--->", response.toString());
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        Log.e("LLL_image_err--->", error.toString());
-
-                    }
-                });
-    }
-
-    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
     }
 
     @SuppressLint("Range")
@@ -956,16 +851,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
             cursor.close();
         }
-
-//        cursor.moveToFirst();
-
-
         return path;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-//        txtLat = (TextView) findViewById(R.id.textview1);
         Log.e("Latitude: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
         longitude = String.valueOf(location.getLongitude());
         lattitude = String.valueOf(location.getLatitude());
@@ -1007,11 +897,10 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             } else {
 
             }
-//            map.setMyLocationEnabled(true);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
 
         } catch (Exception e) {
-            Log.e("LLL_bproerr--->", e.getMessage());
+            Log.e("FetchLocation_Error=>", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -1031,14 +920,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     @Override
     protected void onResume() {
         super.onResume();
-
-//        if (Const.longitude != null) {
-//
-//            edt_address.setText(FileUtils.getAddressFromLatLng(getApplicationContext(), Const.latLngvalue));
-//        } else {
-//            fetchLocation();
-//        }
-
         if (Const.longitude != null) {
 
             if (map != null) {
@@ -1047,26 +928,16 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     Const.mCurrLocationMarker.remove();
                 }
                 LatLng userLocation = new LatLng(Const.lattitude, Const.longitude);
-//            Const.mCurrLocationMarker = map.addMarker(new MarkerOptions().position(userLocation));
                 map.addMarker(new MarkerOptions().position(userLocation));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
 
                 map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng latLng) {
-                        Log.e("LLL_onclickmap==>", "false");
+                        Log.e("OnClickMap=>", "false");
                     }
                 });
-
             }
-//            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//                @Override
-//                public void onMapClick(@NonNull LatLng latLng) {
-//                    Log.e("LLL_onclickmap==>", "true");
-//                }
-//            });
-//            mapview.invalidate();
-
         } else {
             fetchLocation();
         }
@@ -1076,26 +947,12 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     public void onMapReady(@NonNull GoogleMap googleMap) {
         try {
             map = googleMap;
-//        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 map.setMyLocationEnabled(true);
-
-//                if (map != null) {
-//                    map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//                        @Override
-//                        public void onMapClick(LatLng arg0) {
-//                            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-//
-//                            android.util.Log.i("onMapClick", "Horray!");
-//                        }
-//                    });
-//                }
 
                 criteria = new Criteria();
                 bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
-                //You can still do this if you like, you might get lucky:
                 Location location = locationManager.getLastKnownLocation(bestProvider);
                 if (location != null) {
                     Log.e("TAG", "GPS is on");
@@ -1104,9 +961,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     Log.e("LLL_Latitude: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
 
                     centreMapOnLocation(location, bestProvider);
-
                 } else {
-                    //This is what you need:
                     locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
                 }
 
@@ -1125,12 +980,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                         android.util.Log.i("onMapClick", "Horray!");
                     }
                 });
-
             } else {
 
             }
         } catch (Exception e) {
-            Log.e("LLL_bproerr1--->", e.getMessage());
+            Log.e("OnMapError=>", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -1156,22 +1010,15 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     public void centreMapOnLocation(Location location, String title) {
-//        if (mCurrLocationMarker != null) {
-//            mCurrLocationMarker.remove();
-//        }
-
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-//        map.clear();
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(userLocation);
         markerOptions.draggable(true);
         markerOptions.title(title);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-//        mCurrLocationMarker = map.addMarker(markerOptions);
         map.addMarker(markerOptions);
 
-//        map.addMarker(new MarkerOptions().position(userLocation).title(title));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
 
     }
@@ -1184,17 +1031,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         StringBuilder sb1 = new StringBuilder();
         for (Object token : completionView.getObjects()) {
             sb.append(token.toString());
-//            sb.append("\n");
             sb.append(",");
 
             hobbiesArrayList.add(token.toString());
-
         }
-
         tag_str = sb.toString();
-//        Log.e("LLL_tag_str--->", tag_str);
-//        Log.e("LLL_tag_array--->", String.valueOf(hobbiesArrayList.size()));
-
     }
 
     @Override
@@ -1220,5 +1061,4 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
-
 }

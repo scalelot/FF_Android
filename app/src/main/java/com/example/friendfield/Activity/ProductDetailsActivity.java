@@ -137,7 +137,6 @@ public class ProductDetailsActivity extends BaseActivity {
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
 
                     txt_p_name.setText(productModel.getProductDetailsModel().getName());
-//                    txt_p_price.setText("$" + String.valueOf(productModel.getProductDetailsModel().getPrice()) + ".00");
                     txt_p_price.setText("$" + String.format("%,.0f", Float.valueOf(productModel.getProductDetailsModel().getPrice())) + ".00");
 
                     if (productModel.getProductDetailsModel().getOffer().equals("")) {
@@ -147,7 +146,6 @@ public class ProductDetailsActivity extends BaseActivity {
                         txt_p_offer.setText(productModel.getProductDetailsModel().getOffer() + "% Off");
                     }
 
-//                    txt_p_offer.setText(productModel.getProductDetailsModel().getOffer()+ "% Off");
                     txt_p_des.setText(productModel.getProductDetailsModel().getDescription());
                     txt_p_code.setText(productModel.getProductDetailsModel().getItemCode());
 

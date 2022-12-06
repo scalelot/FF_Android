@@ -50,7 +50,6 @@ public class SelectUserActivity extends BaseActivity {
             selecetdUserModelArrayList.add(selecetdUserModel);
         }
 
-//        userSelectAdapter = new UserSelectAdapter(this, user_img, user_name);
         userSelectAdapter = new UserSelectAdapter(this, selecetdUserModelArrayList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         user_recycler.setLayoutManager(linearLayoutManager);

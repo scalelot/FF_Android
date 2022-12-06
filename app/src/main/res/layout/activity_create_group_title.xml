@@ -74,8 +74,8 @@
 
             <RelativeLayout
                 android:id="@+id/user_image"
-                android:layout_width="@dimen/dp50"
-                android:layout_height="@dimen/dp50"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="@dimen/sp_50"
                 android:background="@drawable/ellipse_4">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -92,7 +92,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/circle"
-                    android:padding="@dimen/dp5">
+                    android:padding="@dimen/margin_5">
 
                     <ImageView
                         android:layout_width="@dimen/sp_12"

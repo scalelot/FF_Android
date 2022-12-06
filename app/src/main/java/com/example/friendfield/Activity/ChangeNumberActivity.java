@@ -115,7 +115,7 @@ public class ChangeNumberActivity extends BaseActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.change_number, new JSONObject(map), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("chnage_number:--", response.toString());
+                    Log.e("ChangeNumber=>", response.toString());
                     ChangeNumberVerify();
                     edt_old_number.setText("");
                     edt_new_number.setText("");
@@ -123,7 +123,7 @@ public class ChangeNumberActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("chnage_number_error:--", error.toString());
+                    Log.e("ChangeNumber_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -201,9 +201,8 @@ public class ChangeNumberActivity extends BaseActivity {
 
             @Override
             public void onOTPComplete(String otp) {
-//                otpTextView.setOTP(otp);
                 OtpValue = otp;
-                Log.e("LLL_onOtpCompleted=>", otp);
+                Log.e("CPHOtp=>", otp);
             }
         });
 
@@ -248,13 +247,13 @@ public class ChangeNumberActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChangeNumberActivity.this);
-                    Log.e("New_verify_otp-->", response.toString());
+                    Log.e("ChnageOtp=>", response.toString());
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChangeNumberActivity.this);
-                    System.out.println("New_verify_otp_err--> " + error.toString());
+                    System.out.println("ChnageOtp_Error=>" + error.toString());
                 }
             }) {
 

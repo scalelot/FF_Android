@@ -185,28 +185,12 @@ public class SettingActivity extends BaseActivity {
         ic_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                try {
-//                    final String docId = DocumentsContract.getDocumentId(uri);
-//                    final String[] split = docId.split(":");
-//
-//                    String fullPath = getPathFromExtSD(split);
-//                    File file = new File(fullPath);
-//
-//                    if (file.exists()) {
-//                        file.delete();
-//                        Toast.makeText(SettingActivity.this, getResources().getString(R.string.file_delete_successfully), Toast.LENGTH_SHORT).show();
-                btn_select_file.setVisibility(View.VISIBLE);
+               btn_select_file.setVisibility(View.VISIBLE);
                 ll_sample_txt.setVisibility(View.VISIBLE);
                 ll_phone_email.setVisibility(View.GONE);
                 ll_txt.setVisibility(View.GONE);
                 ic_close.setVisibility(View.GONE);
-//                    } else {
-//                        Toast.makeText(SettingActivity.this, getResources().getString(R.string.file_not_delete), Toast.LENGTH_SHORT).show();
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+
             }
         });
 

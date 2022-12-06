@@ -46,7 +46,7 @@
         android:text="@string/dis_txt"
         android:textAlignment="center"
         android:textColor="@color/grey"
-        android:textSize="@dimen/text_12" />
+        android:textSize="@dimen/text_14" />
 
     <LinearLayout
         android:layout_width="match_parent"

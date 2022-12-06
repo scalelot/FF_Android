@@ -102,7 +102,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("LLL_add_pro_dis-->", response.toString());
+                    Log.e("ListProduct=>", response.toString());
                     loaderLay.setVisibility(View.GONE);
                     productDetailsModelArrayList.clear();
                     try {
@@ -116,8 +116,6 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
                         }
-
-                        Log.e("LLL_product_listsize-->", String.valueOf(productDetailsModelArrayList.size()));
 
                         if (!productDetailsModelArrayList.isEmpty()) {
                             emptyLay.setVisibility(View.GONE);
@@ -140,7 +138,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LLL_pro_Error", error.toString());
+                    Log.e("ListProduct_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -166,8 +164,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChatProductSelectActivity.this);
-
-                    Log.e("Chat_BusinessInfo", response.toString());
+                    Log.e("Chat_BusinessInfo=>", response.toString());
 
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
@@ -181,7 +178,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChatProductSelectActivity.this);
-                    Log.e("Chat_pro_Error", error.toString());
+                    Log.e("ChatBusInfo_Error=>", error.toString());
                 }
             }) {
                 @Override

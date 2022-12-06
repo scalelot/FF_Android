@@ -53,7 +53,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_accept"
-        android:layout_width="@dimen/sp_100dp"
+        android:layout_width="@dimen/sp_100"
         android:layout_height="@dimen/sp_30"
         android:layout_below="@+id/text_dis"
         android:layout_alignParentRight="true"

@@ -210,8 +210,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     edt_interested_category.setError(getResources().getString(R.string.please_enter_interested_category));
                 } else if (edt_interested_subcategory.getText().toString().equals("")) {
                     edt_interested_subcategory.setError(getResources().getString(R.string.please_enter_interested_subcategory));
-//                } else if (img_add_brochure.getDrawable() == null) {
-//                    Toast.makeText(context, "Enter Your Brochure", Toast.LENGTH_SHORT).show();
                 } else {
                     FileUtils.DisplayLoading(context);
                     CreateBusinessAccount(Request.Method.POST, Constans.business_register, edt_bussiness_name.getText().toString().trim(), edt_category.getText().toString().trim(), edt_subcategory.getText().toString().trim(), edt_description.getText().toString().trim(), String.valueOf(Const.b_longitude), String.valueOf(Const.b_lattitude), edt_interested_category.getText().toString().trim(), edt_interested_subcategory.getText().toString().trim());
@@ -264,7 +262,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }
         });
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -285,22 +282,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             btn_next.setVisibility(View.VISIBLE);
         }
 
-//        if (edit_profile != null) {
-//            tv_title.setText(getResources().getString(R.string.create_business_profile));
-//            if (Const.bitmap_business_profile_image != null) {
-//                business_profile_image.setImageBitmap(Const.bitmap_business_profile_image);
-//            }
-//            getBusinessProfileInfo();
-//            btn_save.setVisibility(View.VISIBLE);
-//            btn_next.setVisibility(View.GONE);
-//
-//        } else {
-//            tv_title.setText(getResources().getString(R.string.create_business_profile));
-//            btn_save.setVisibility(View.GONE);
-//            btn_next.setVisibility(View.VISIBLE);
-//        }
-
-
         if (Const.b_longitude != null) {
             if (map != null) {
                 map.clear();
@@ -316,9 +297,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }
         } else {
             fetchLocation();
-
         }
-
     }
 
     public void CreateBusinessAccount(int method, String url, String name, String category, String subcategory, String des, String longi, String latti, String interestedCategory, String interestedSubCategory) {
@@ -339,12 +318,11 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(context);
-                    Log.e("LLL_busi_res-->", response.toString());
+                    Log.e("BusinessRegister=>", response.toString());
 
                     BusinessRegisterModel businessRegisterModel = new Gson().fromJson(response.toString(), BusinessRegisterModel.class);
 
                     MyApplication.setBusinessProfileRegistered(BusinessProfileActivity.this, businessRegisterModel.getIsSuccess());
-                    Log.e("LLL_true_res-->", businessRegisterModel.getIsSuccess().toString());
                     finish();
 
                 }
@@ -352,11 +330,10 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(getApplicationContext());
-                    System.out.println("LLL_b_err--> " + error.toString());
+                    System.out.println("BusinessRegister_Error=>" + error.toString());
                     error.printStackTrace();
                 }
             }) {
-
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
@@ -364,7 +341,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
                     return map;
                 }
-
             };
 
             queue.add(request);
@@ -373,7 +349,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             FileUtils.DismissLoading(BusinessProfileActivity.this);
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-            Log.e("LLL_bserror-->", e.getMessage());
         }
     }
 
@@ -385,7 +360,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(BusinessProfileActivity.this);
 
-                    Log.e("LLL_BusinessInfo", response.toString());
+                    Log.e("FetchBusinessInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
                     Double logitude = businessInfoRegisterModel.getData().getLocation().getCoordinates().get(0);
@@ -401,15 +376,12 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     edt_description.setText(businessInfoRegisterModel.getData().getDescription());
 
                     if (businessInfoRegisterModel.getData().getBusinessimage().equals("")) {
-                        Log.e("LLL_data-->", "No Image Found");
                         business_profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
                     } else {
                         Glide.with(BusinessProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + businessInfoRegisterModel.getData().getBusinessimage()).placeholder(R.drawable.user_accept_dialog).into(business_profile_image);
                     }
 
                     String getadd = FileUtils.getAddressFromLatLng(getApplicationContext(), latLng);
-
-                    Log.e("LLL_b_add-->", getadd);
 
                     edt_business_address.setText(getadd);
 
@@ -426,6 +398,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    Log.e("FetchBusiness_Error=>", error.toString());
                     FileUtils.DismissLoading(BusinessProfileActivity.this);
                     error.printStackTrace();
                 }
@@ -475,7 +448,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                     Const.bitmap_business_profile_image = bitmap;
                     business_profile_image.setImageBitmap(bitmap);
-//                    img_add_brochure.setImageBitmap(bitmap);
 
                     File file = new File(selectedImageUri.getPath());
 
@@ -506,7 +478,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     cursor = this.getContentResolver().query(uri, null, null, null, null);
                     if (cursor != null && cursor.moveToFirst()) {
                         displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        Log.d("nameeeee>>>>  ", displayName);
+                        Log.d("PDFName=>", displayName);
                         SharedPreferences sharedPreferences = getSharedPreferences("name", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("displayName", displayName);
@@ -526,7 +498,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 }
             } else if (uriString.startsWith("file://")) {
                 displayName = myFile.getName();
-                Log.d("nameeeee>>>>  ", displayName);
+                Log.d("PDFName=>", displayName);
             }
         }
     }
@@ -543,7 +515,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     new Response.Listener<NetworkResponse>() {
                         @Override
                         public void onResponse(NetworkResponse response) {
-                            Log.d("ressssssoo", new String(response.data));
+                            Log.d("PdfUpload=>", new String(response.data));
                             rQueue.getCache().clear();
                             JSONObject jsonObject;
                             try {
@@ -564,14 +536,13 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            System.out.println("PdfError" + error.getMessage());
+                            System.out.println("PdfUpload_Error=>" + error.getMessage());
                         }
                     }) {
 
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    // params.put("tags", "ccccc");  add string parameters
                     return params;
                 }
 
@@ -636,21 +607,17 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                        // do anything with progress
                     }
                 })
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do anything with response
-                        Log.e("LLL_business_pset--->", response.toString());
+                        Log.e("BusinessProImage=>", response.toString());
                     }
 
                     @Override
                     public void onError(ANError error) {
-                        // handle error
-                        Log.e("LLL_business_perr--->", error.toString());
-
+                        Log.e("BusinProImage_Error--->", error.toString());
                     }
                 });
     }
@@ -808,7 +775,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                         Log.e("LLL_onclick_map==>", "false");
                     }
                 });
-
             }
         } else {
             fetchLocation();

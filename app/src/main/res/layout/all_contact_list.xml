@@ -16,8 +16,8 @@
 
         <RelativeLayout
             android:id="@+id/rel_top"
-            android:layout_width="@dimen/dp50"
-            android:layout_height="@dimen/dp50"
+            android:layout_width="@dimen/sp_50"
+            android:layout_height="@dimen/sp_50"
             android:layout_centerHorizontal="true">
 
             <de.hdodenhof.circleimageview.CircleImageView

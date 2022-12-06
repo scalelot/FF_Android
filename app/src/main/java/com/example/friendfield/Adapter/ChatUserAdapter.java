@@ -78,6 +78,8 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("ids", registerModels.get(position).getId());
                 editor.putString("userName", registerModels.get(position).getFullName());
+                editor.putString("images", registerModels.get(position).getProfileimage());
+                editor.putString("nickName", registerModels.get(position).getNickName());
                 editor.apply();
                 editor.commit();
 

@@ -38,7 +38,6 @@ public class HistoryPromotionFragment extends Fragment {
         btn_create_notification = inflate.findViewById(R.id.btn_create_notification);
         recycler_noti = inflate.findViewById(R.id.recycler_noti);
         emptyLay = inflate.findViewById(R.id.emptyLay);
-//        loaderLay = inflate.findViewById(R.id.loaderLay);
 
         btn_create_notification.setOnClickListener(new View.OnClickListener() {
             @Override

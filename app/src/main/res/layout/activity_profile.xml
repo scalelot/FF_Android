@@ -65,7 +65,7 @@
                     android:layout_width="@dimen/sp_110"
                     android:layout_height="@dimen/sp_110"
                     android:padding="@dimen/margin_5"
-                    android:src="@drawable/ic_img"
+                    android:src="@drawable/ic_user"
                     app:civ_circle_background_color="@color/bg_grey" />
 
                 <RelativeLayout
@@ -181,15 +181,16 @@
 
                     <ImageView
                         android:id="@+id/img_calender"
-                        android:layout_width="@dimen/dp25"
-                        android:layout_height="@dimen/dp25"
+                        android:layout_width="@dimen/sp_25"
+                        android:layout_height="@dimen/sp_25"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/sp_5"
                         android:layout_marginRight="@dimen/sp_5"
                         android:padding="@dimen/sp_3"
-                        android:src="@drawable/ic_date_picker_icon" />
+                        android:src="@drawable/ic_date_picker_icon"
+                        app:tint="@color/black" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -223,7 +224,7 @@
                 android:gravity="top"
                 android:hint="@string/aboutUs"
                 android:imeOptions="actionNext"
-                android:minHeight="@dimen/dp100"
+                android:minHeight="@dimen/sp_100"
                 android:padding="@dimen/sp_15"
                 android:textColor="@color/black"
                 android:textColorHint="@color/edt_hint"
@@ -244,7 +245,7 @@
                 android:imeOptions="actionDone"
                 android:inputType="text|textNoSuggestions|textMultiLine"
                 android:lineSpacingExtra="@dimen/text_5"
-                android:minHeight="@dimen/dp100"
+                android:minHeight="@dimen/sp_100"
                 android:nextFocusDown="@+id/editText"
                 android:padding="@dimen/sp_15"
                 android:textColor="@android:color/darker_gray"
@@ -323,7 +324,7 @@
             <RelativeLayout
                 android:id="@+id/rl_map"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/sp_100dp"
+                android:layout_height="@dimen/sp_100"
                 android:layout_below="@+id/txt_location"
                 android:layout_marginLeft="@dimen/sp_20"
                 android:layout_marginTop="@dimen/margin_10"
@@ -332,7 +333,7 @@
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/mapview"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/sp_100dp"
+                    android:layout_height="@dimen/sp_100"
                     android:apiKey="@string/google_maps_key"
                     android:visibility="visible" />
 
@@ -341,7 +342,7 @@
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/sp_100dp"
+                    android:layout_height="@dimen/sp_100"
                     android:visibility="visible"
                     tools:context=".MapLocationActivity" />
 

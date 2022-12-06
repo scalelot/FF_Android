@@ -124,9 +124,7 @@ public class RunningPromotionFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     loaderLay.setVisibility(View.GONE);
-
-                    Log.e("LLL_add_pro_dis-->", response.toString());
-                    arraylist.clear();
+                    Log.e("FetchNotifi=>", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
                         JSONArray data_array = dataJsonObject.getJSONArray("docs");
@@ -160,14 +158,11 @@ public class RunningPromotionFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("LLL_pro_Error", error.toString());
+                    Log.e("FetchNotifi_Error=>", error.toString());
                 }
             }) {
                 @Override
@@ -183,9 +178,6 @@ public class RunningPromotionFragment extends Fragment {
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
-//            FileUtils.DismissLoading(ProductActivity.this);
-
         }
     }
-
 }

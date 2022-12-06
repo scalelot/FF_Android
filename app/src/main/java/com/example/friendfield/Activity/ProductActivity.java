@@ -103,10 +103,6 @@ public class ProductActivity extends BaseActivity {
 
         recycle_add_new_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-//        if (Const.bitmap_business_profile_image != null) {
-//            img_business.setImageBitmap(Const.bitmap_business_profile_image);
-//        }
-
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +114,6 @@ public class ProductActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), AddProductActivity.class));
-//                finish();
             }
         });
 
@@ -126,7 +121,6 @@ public class ProductActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), AddProductActivity.class));
-//                finish();
             }
         });
 
@@ -150,7 +144,6 @@ public class ProductActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), BusinessProfileActivity.class).putExtra("edit_profile", getResources().getString(R.string.edit_business_profile)));
-//                finish();
             }
         });
 
@@ -164,10 +157,6 @@ public class ProductActivity extends BaseActivity {
                 }
             }
         });
-
-//        getBusinessInfo();
-//        getProductItem();
-
     }
 
     public void getBusinessInfo() {
@@ -178,12 +167,9 @@ public class ProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProductActivity.this);
 
-                    Log.e("BusinessInfo", response.toString());
+                    Log.e("ProBusinessInfo=>", response.toString());
 
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
-
-//                    Double latitiude = businessInfoRegisterModel.getData().getLatitude();
-//                    Double logitude = businessInfoRegisterModel.getData().getLongitude();
 
                     txt_business_name.setText(businessInfoRegisterModel.getData().getName());
                     txt_business_des.setText(businessInfoRegisterModel.getData().getDescription());
@@ -195,7 +181,7 @@ public class ProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("Error", error.toString());
+                    Log.e("ProBusinessInfoError=>", error.toString());
                 }
             }) {
                 @Override
@@ -234,15 +220,13 @@ public class ProductActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-//        FileUtils.DisplayLoading(ProductActivity.this);
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
-//                    FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("LLL_add_pro_dis-->", response.toString());
+                    Log.e("ProList=>", response.toString());
                     productDetailsModelArrayList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -255,9 +239,6 @@ public class ProductActivity extends BaseActivity {
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
                         }
-
-                        Log.e("LLL_product_listsize-->", String.valueOf(productDetailsModelArrayList.size()));
-
                         if (!productDetailsModelArrayList.isEmpty()) {
                             lin_not_empty.setVisibility(View.VISIBLE);
                             lin_empty_view.setVisibility(View.GONE);
@@ -280,13 +261,11 @@ public class ProductActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("LLL_pro_Error", error.toString());
+                    Log.e("ProList_Error", error.toString());
                 }
             }) {
                 @Override
@@ -302,7 +281,6 @@ public class ProductActivity extends BaseActivity {
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
-//            FileUtils.DismissLoading(ProductActivity.this);
         }
     }
 

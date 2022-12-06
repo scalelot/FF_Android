@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">FriendField</string>
     <string name="default_notification_channel_id">FriendField</string>
-    <string name="chatlook">Chatlook</string>
     <string name="google_maps_key">AIzaSyBtnrzIQpD4MqzvmkeaQdbGUngVZ8YNpwQ</string>
 
     <!--Login Screen-->
@@ -22,41 +21,24 @@
     <string name="verify">Verify</string>
     <string name="otp_time">00:00</string>
 
-    <!--CropImageView-->
-    <string name="crop_image_activity_title"></string>
-    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
-    <string name="crop_image_menu_rotate_right">Rotate</string>
-    <string name="crop_image_menu_crop">Crop</string>
-    <string name="crop_image_menu_flip">Flip</string>
-    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
-    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
-    <string name="pick_image_intent_chooser_title">Select source</string>
-    <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
-
-
     <!--    MainActivity-->
     <string name="hiiiii">Hi,</string>
     <string name="name">Hunter Bryan</string>
-    <string name="user_name">+91 523 4589 764</string>
     <string name="tab_chat">Chats</string>
     <string name="tab_find_friend">Find Friends</string>
-    <string name="tab_status">STATUS</string>
     <string name="tab_calls">Calls</string>
     <string name="search">Search</string>
     <string name="tab_contact_list">Contact List</string>
     <string name="create_your_profile">Create Your Profile</string>
     <string name="dis_txt">Lorern Ipsum is simply dummy text of the printing and typesetting industy</string>
-    <string name="marketing">Marketing</string>
     <string name="call_time">Today, 09:30</string>
     <string name="requests">Requests</string>
     <string name="new_brodcas">New Brodcast</string>
     <string name="new_group">New Group</string>
 
-
     <!--Create your Profile-->
     <string name="create_personal_profile">Create Personal Profile</string>
     <string name="create_profile">Create Your Profile</string>
-    <string name="create_profile_des">Lorem Ipsum is simply dummy text of the printing and typesetting industry</string>
     <string name="skip_now">Skip Now</string>
     <string name="full_name">Full Name</string>
     <string name="nick_name">Nickname</string>
@@ -71,7 +53,6 @@
     <string name="male">Male</string>
     <string name="Female">Female</string>
     <string name="other">Other</string>
-    <string name="hide">HIDE</string>
     <string name="social_media_link">Add Your Social Media Links</string>
     <string name="enter_fb_link">Enter Facebook Link</string>
     <string name="enter_insta_link">Enter Instagram Link</string>
@@ -79,28 +60,22 @@
     <string name="enter_ld_link">Enter Linkedin Link</string>
     <string name="enter_pt_link">Enter Pintrest Link</string>
     <string name="enter_yt_link">Enter Youtube Link</string>
-    <string name="enter_area_range">Enter Area Range</string>
     <string name="enter_full_name">Enter Full Name</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_nickname">Enter Nickname</string>
     <string name="enter_emailid">Enter EmailId</string>
-    <string name="data_add_successfully">Data Add Successfully</string>
     <string name="save_and_create_business_profile">SAVE AND CREATE BUSINESS PROFILE</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="address">Address</string>
     <string name="zero">0</string>
     <string name="nine">9</string>
     <string name="aboutUs">About Us</string>
     <string name="enter_hobbies">Enter Your Hobbies</string>
-    <string name="enter_aboutUs">Enter Your AboutUs</string>
     <string name="hobbies">Hobbies</string>
     <string name="music">Music</string>
     <string name="cricket">Cricket</string>
     <string name="travelling">Travelling</string>
     <string name="authorized_permission">Authorized Permission</string>
     <string name="write_a_caption">Write a caption</string>
-
 
     <!--    Create Your Business Profile-->
     <string name="create_business_profile">Create Business Profile</string>
@@ -135,8 +110,6 @@
     <string name="tab_personal_info">Personal Info</string>
     <string name="tab_business_info">Business Info</string>
     <string name="tab_reels">My Reels</string>
-    <string name="treels">Reels</string>
-
 
     <!-- PersonalInfoFragment -->
     <string name="phone_number">Phone Number</string>
@@ -144,9 +117,7 @@
     <string name="number">852 1235 456</string>
     <string name="ph_number">+91 8888 555 999</string>
     <string name="email">Email</string>
-    <string name="countycode">+91</string>
     <string name="mail">hello@gmail.com</string>
-    <string name="location_add">4100 Pearcy Avenue Logansport, IN 46947</string>
     <string name="intrested_age_range">Interested Age Range</string>
     <string name="app_lock_wi">App-lock with face ID /\nfingerprint</string>
 
@@ -154,6 +125,7 @@
     <string name="subcategory">Sub Category</string>
     <string name="discription">Description</string>
     <string name="create">CREATE</string>
+
     <!--Display product-->
     <string name="products">Products</string>
     <string name="monginis_ca">Monginis Cake Shop</string>
@@ -171,7 +143,6 @@
     <string name="offers">Offers</string>
     <string name="product_cod">Product Code</string>
     <string name="save">Save</string>
-    <string name="title_activity_maps">MapsActivity</string>
     <string name="please_enter_pro_name">Please enter product name</string>
     <string name="please_enter_pro_price">Please enter product price</string>
     <string name="please_enter_pro_des">Please enter product description</string>
@@ -214,7 +185,6 @@
     <string name="clear_all_chats">Clear All Chats</string>
     <string name="notifications">Notifications</string>
     <string name="blocked_contacts">Blocked Contacts</string>
-    <string name="empty_block_contact">Empty Blocked Contacts</string>
     <string name="chat_backup">Chat Backup</string>
     <string name="change_number">Change Number</string>
     <string name="conatact_us">Contact Us</string>
@@ -244,10 +214,8 @@
     <string name="yes">Yes</string>
 
     <!--ConatactUsActivity-->
-    <string name="contact_us">Contact Us</string>
     <string name="send">SEND</string>
     <string name="describe_your_issue">Describe Your Issue</string>
-    <string name="enter_describe_issue">Enter Describe Your</string>
 
     <!--HelpActivity-->
     <string name="faq1">FAQ-1</string>
@@ -262,20 +230,17 @@
     <string name="typing_here">Typing here...</string>
     <string name="video">Video</string>
     <string name="audio">Audio</string>
-    <string name="personal_info">Personal Info</string>
     <string name="video_call">Video Call</string>
     <string name="online">Online</string>
     <string name="audio_call">Audio Call</string>
     <string name="clear_chats">Clear Chats</string>
     <string name="block_john_hosier">Block John Hosier</string>
     <string name="report_john_hosier">Report John Hosier</string>
-    <string name="connected">Connected</string>
-    <string name="disconnected">Disconnected</string>∟
-    <string name="onConnectionError">onConnectionError</string>
     <string name="mute_notifi">Mute Notification</string>
     <string name="message_info">Message Info</string>
     <string name="delivered">Delivered</string>
     <string name="read">Read</string>
+    <string name="meassge_count">30</string>
 
     <!--FriendRequestActivity-->
     <string name="friend_request">FRIEND REQUEST</string>
@@ -287,74 +252,36 @@
     <string name="reject_alert_txt">Are you sure you want to reject this request?</string>
     <string name="block">BLOCK</string>
     <string name="accept_request">Accept Request</string>
-    <string name="accept_txt">Lorem Ipsum is simply dummy text of the\nprinting and typesetting industry</string>
     <string name="pending">PENDING</string>
     <string name="social_media">Social Media</string>
     <string name="privacy_security">For Privacy and Security</string>
     <string name="accept_dialog_txt">Our profile settings for this person</string>
-    <string name="friends_request_empty">Friends Request Empty</string>
-    <string name="send_friends_request_empty">Friends request not found.</string>
 
     <!--MapActivity-->
     <string name="search_user_area">Search user and area</string>
     <string name="location_ust_be_on">Location must be on</string>
     <string name="location_ust_be_off">Location must be off</string>
 
-    <!--StatusFragment-->
-    <string name="my_status">My Status</string>
-    <string name="tap_to_add">Tap to add status upload</string>
-    <string name="resent_upda">Resent Updates</string>
-    <string name="viewed_stat">Viewed Status</string>
-    <string name="meassge_count">30</string>
-
     <!--marketingActivity-->
-    <string name="need_to_buy">Need to Buy plan</string>
-    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the\nprinting and typesetting industry.</string>
-    <string name="buy_plan">Buy plan</string>
-    <string name="marketing_">Marketing Plan</string>
-    <string name="basic">Basic</string>
     <string name="noti_69">69 FOR 999 USERS</string>
     <string name="sms_399">399 FOR 999 USERS</string>
     <string name="email_89">89 FOR 999 USERS</string>
     <string name="all_475">475 FOR 999 USERS</string>
     <string name="price">150</string>
-    <string name="sms_100">100 SMS,</string>
-    <string name="email_200">200 Email</string>
-    <string name="send_500_notification">Send 500 Notification,</string>
-    <string name="plan_Details">PLAN DETAILS</string>
-    <string name="plan_Detail">Plan Details</string>
-    <string name="message_details">MESSAGE DETAILS</string>
-    <string name="basic_plan_details">Basic Plan Details</string>
-    <string name="buy_plan_now">BUY PLAN NOW</string>
 
     <!--BuyPlanDetailsActivity-->
-    <string name="plan_titile">Plan Details</string>
-    <string name="basic_plan">Basic Plan</string>
-    <string name="dollar_150">$150</string>
     <string name="plan_description">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</string>
-    <string name="plan_text">There are many variations of passages.</string>
-    <string name="plan_date_time">Transaction Date &amp; Time</string>
-    <string name="plan_transaction_id">Transaction Id</string>
     <string name="payment_status">Payment Status</string>
-    <string name="create_message">CREATE MESSAGE</string>
-    <string name="plan_later">I\'ll do it later</string>
-    <string name="plan_date">21 April 2022,</string>
-    <string name="plan_time">12:15pm</string>
-    <string name="plan_status">Successful</string>
-
 
     <!--    CreateMessageActivity-->
-    <string name="create_message_title">Create Message</string>
     <string name="upload_image">Upload Image</string>
     <string name="notifi_title">Notification Title</string>
     <string name="notifi_Description">Notification Description</string>
     <string name="link">Link</string>
     <string name="url">www.companyname.com</string>
     <string name="target_audience_location">Target Audience Location</string>
-    <string name="sms_email">SMS and Email</string>
     <string name="select_user">Select User</string>
     <string name="select_file">Select File</string>
-    <string name="pepole_selected">People Selected</string>
     <string name="upload_excel_file">Upload Excel File</string>
     <string name="upload_file">UPLOAD FILE</string>
     <string name="upload_reels">Upload Reels</string>
@@ -362,15 +289,7 @@
     <string name="phone_number_and">Phone Number and</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="please_upload_file">Please Upload File</string>
-    <string name="task_cancelled">Task Cancelled</string>l
-    <string name="data_not_submit">Data not Submit</string>
-    <string name="file_not_delete">File Not Delete</string>
-    <string name="file_delete_successfully">File Delete Successfully</string>
-    <string name="successfully_adding">Successfully Adding!!!!</string>
-    <string name="enter_link">Enter Link</string>
-    <string name="enter_noti_description">Enter Notification Description</string>
     <string name="enter_description">Enter Description</string>
-    <string name="enter_noti_title">Enter Notification Title</string>
     <string name="message">Message</string>
 
     <!--SelectUserActivity-->
@@ -393,18 +312,6 @@
     <string name="ringing">Ringing...</string>
     <string name="calling">Calling...</string>
 
-
-    <string name="selection_limiter_pix">Can\'t select more than %d items.</string>
-    <string name="pix_bottom_message_without_video">Drag images up for gallery</string>
-    <string name="pix_bottom_message_with_video">Hold for video, tap for photo</string>
-    <string name="pix_ok">OK</string>
-    <string name="pix_tap_to_select">Tap photo to select</string>
-    <string name="pix_selected">Selected</string>
-    <string name="pix_recent">Recent</string>
-    <string name="pix_last_month">Last Month</string>
-    <string name="pix_last_week">Last Week</string>
-    <string name="cannot_click_image_pix">Can not add more than %s images</string>
-
     <!--    Like & comment-->
     <string name="like_commen">Like &amp; comment</string>
 
@@ -415,7 +322,6 @@
 
     <!--    all user New products-->
     <string name="new_product">New Products</string>
-
 
     <!--ConversationActivity-->
     <string name="complain_about_payment">Complain about Payment</string>

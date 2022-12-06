@@ -13,9 +13,9 @@
 
         <RelativeLayout
             android:id="@+id/rel_top"
-            android:layout_width="@dimen/dp70"
-            android:layout_height="@dimen/dp70"
-            android:padding="@dimen/dp5">
+            android:layout_width="@dimen/sp_70"
+            android:layout_height="@dimen/sp_70"
+            android:padding="@dimen/margin_5">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_user"
@@ -31,7 +31,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="-3dp"
                 android:layout_marginBottom="-3dp"
-                android:padding="@dimen/dp3"
+                android:padding="@dimen/margin_3"
                 android:src="@drawable/ic_close_boader" />
         </RelativeLayout>
 
