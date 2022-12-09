@@ -16,8 +16,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_image"
-            android:layout_width="@dimen/sp_100"
-            android:layout_height="@dimen/sp_100"
+            android:layout_width="@dimen/sp_155"
+            android:layout_height="@dimen/sp_155"
             app:cardCornerRadius="@dimen/margin_5">
 
             <ImageView
@@ -52,9 +52,9 @@
                 android:id="@+id/txt_des"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:ellipsize="end"
                 android:text="@string/there_are_des"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/sp_12" />

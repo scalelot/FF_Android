@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +55,7 @@ public class DisplayAllProductActivity extends BaseActivity {
     ImageView iv_clear_text;
     int page = 1, limit = 10;
     String searchData = "";
-    RelativeLayout emptyLay, loaderLay;
+    ProgressBar idPBLoading;
     NestedScrollView nestedScrollView;
     DisplayAllProductAdapter productDisplayAdapter;
 
@@ -69,8 +70,7 @@ public class DisplayAllProductActivity extends BaseActivity {
         iv_search = findViewById(R.id.iv_search);
         iv_clear_text = findViewById(R.id.iv_clear_text);
         nestedScrollView = findViewById(R.id.nestedScrollView);
-        emptyLay = findViewById(R.id.emptyLay);
-        loaderLay = findViewById(R.id.loaderLay);
+        idPBLoading = findViewById(R.id.idPBLoading);
 
         recyclerview_product.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
@@ -128,12 +128,14 @@ public class DisplayAllProductActivity extends BaseActivity {
             }
         });
 
+        getProductItem(page, limit, searchData, "price", -1);
+
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    loaderLay.setVisibility(View.VISIBLE);
+                    idPBLoading.setVisibility(View.VISIBLE);
                     getProductItem(page, limit, searchData, "price", -1);
                 }
             }
@@ -144,7 +146,7 @@ public class DisplayAllProductActivity extends BaseActivity {
     public void getProductItem(int page, int limit, String search, String short_field, int short_option) {
         if (page > limit) {
             Toast.makeText(this, "That's all the data..", Toast.LENGTH_SHORT).show();
-            loaderLay.setVisibility(View.GONE);
+            idPBLoading.setVisibility(View.GONE);
             return;
         }
 
@@ -165,7 +167,6 @@ public class DisplayAllProductActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("DisAllProduct=>", response.toString());
-                    loaderLay.setVisibility(View.GONE);
                     productDetailsModelArrayList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -177,19 +178,10 @@ public class DisplayAllProductActivity extends BaseActivity {
 
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
+
+                            productDisplayAdapter = new DisplayAllProductAdapter(DisplayAllProductActivity.this, productDetailsModelArrayList);
+                            recyclerview_product.setAdapter(productDisplayAdapter);
                         }
-
-                        if (!productDetailsModelArrayList.isEmpty()) {
-                            emptyLay.setVisibility(View.GONE);
-                            nestedScrollView.setVisibility(View.VISIBLE);
-                        } else {
-                            emptyLay.setVisibility(View.VISIBLE);
-                            nestedScrollView.setVisibility(View.GONE);
-                        }
-
-                        productDisplayAdapter = new DisplayAllProductAdapter(DisplayAllProductActivity.this, productDetailsModelArrayList);
-                        recyclerview_product.setAdapter(productDisplayAdapter);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -234,7 +226,6 @@ public class DisplayAllProductActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getProductItem(page, limit, searchData, "price", -1);
     }
 
     @Override

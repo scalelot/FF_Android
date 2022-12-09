@@ -125,12 +125,10 @@ public class BlockedContactActivity extends BaseActivity {
                         LinearLayoutManager manager = new LinearLayoutManager(BlockedContactActivity.this);
                         recyclerView.setLayoutManager(manager);
                         recyclerView.setAdapter(blockeContactAdapter);
-
+                        blockeContactAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -153,16 +151,15 @@ public class BlockedContactActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getBlockedFriends(page, limit, searchData);
+    }
 
     @Override
     public void onBackPressed() {
         startActivity(new Intent(BlockedContactActivity.this, SettingActivity.class));
         finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getBlockedFriends(page, limit, searchData);
     }
 }

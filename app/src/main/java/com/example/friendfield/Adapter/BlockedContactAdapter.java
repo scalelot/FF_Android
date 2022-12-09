@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,14 +21,18 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.friendfield.Activity.BlockedContactActivity;
 import com.example.friendfield.Model.BlockedFriends.BlockedFriendRegisterModel;
+import com.example.friendfield.Model.BlockedFriends.BlockedFriendsModel;
+import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
 import com.google.android.exoplayer2.util.Log;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,7 +63,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
 
         String strIds = blockedFriendRegisterModels.get(position).getRequestId();
 
-        holder.btn_clear_data.setOnClickListener(new View.OnClickListener() {
+        holder.btn_unblock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setUnblockUser(strIds);
@@ -77,6 +82,8 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("UnBlockUser=>", response.toString());
+
+                    BlockedFriendsModel blockedFriendsModel = new Gson().fromJson(response.toString(), BlockedFriendsModel.class);
                     Toast.makeText(activity, "Unblock user Successfully!!", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
@@ -84,7 +91,14 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
                 public void onErrorResponse(VolleyError error) {
                     Log.e("UnBlockUser_Error=>", error.toString());
                 }
-            });
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("authorization", MyApplication.getAuthToken(activity));
+                    return map;
+                }
+            };
             RequestQueue requestQueue = Volley.newRequestQueue(activity);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
@@ -101,13 +115,13 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
 
         CircleImageView circleImageView;
         TextView txt_contact;
-        AppCompatButton btn_clear_data;
+        AppCompatButton btn_unblock;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             circleImageView = itemView.findViewById(R.id.contact_user);
             txt_contact = itemView.findViewById(R.id.txt_contact);
-            btn_clear_data = itemView.findViewById(R.id.btn_clear_data);
+            btn_unblock = itemView.findViewById(R.id.btn_unblock);
         }
     }
 }

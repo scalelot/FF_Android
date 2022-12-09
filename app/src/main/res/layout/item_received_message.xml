@@ -7,15 +7,6 @@
     android:layout_marginBottom="@dimen/margin_5"
     android:orientation="vertical">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/nameTxt"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="@dimen/margin_4"-->
-    <!--        android:fontFamily="@font/roboto_bold"-->
-    <!--        android:text="@string/name"-->
-    <!--        android:visibility="gone" />-->
-
     <RelativeLayout
         android:id="@+id/rel_name"
         android:layout_width="match_parent"
@@ -24,19 +15,19 @@
         android:visibility="visible">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/cir_profile_pic"
+            android:id="@+id/rec_profile_pic"
             android:layout_width="@dimen/sp_20"
             android:layout_height="@dimen/sp_20"
             android:layout_centerVertical="true"
             android:src="@drawable/girl_image" />
 
         <TextView
-            android:id="@+id/nameTxt"
+            android:id="@+id/recive_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_5"
-            android:layout_toRightOf="@id/cir_profile_pic"
+            android:layout_toRightOf="@id/rec_profile_pic"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/name"
             android:textColor="@color/darkturquoise"
@@ -63,7 +54,7 @@
         android:layout_marginTop="@dimen/margin_5">
 
         <TextView
-            android:id="@+id/txt_time"
+            android:id="@+id/rec_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time"

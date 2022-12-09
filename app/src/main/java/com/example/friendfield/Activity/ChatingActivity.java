@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -44,10 +47,6 @@ import com.example.friendfield.BaseActivity;
 import com.example.friendfield.MainActivity;
 import com.example.friendfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.example.friendfield.Model.ListChat.ListChatsModel;
-import com.example.friendfield.Model.PersonalInfo.PeronalRegisterModel;
-import com.example.friendfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterModel;
-import com.example.friendfield.Model.SendMessage.SendAllModelData;
-import com.example.friendfield.Model.SendMessage.SendTextModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
@@ -61,9 +60,13 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -86,12 +89,12 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     protected static final int GALLERY_REQUEST = 1;
     private static final int PERMISSION_CODE = 1000;
     private int IMAGE_CAPTURE_CODE = 1001;
-    int page = 1, limit = 20;
+    int page = 1, limit = 10;
     NestedScrollView nestedScrollView;
-    List<String> send_message;
-    List<String> form_id;
-    List<String> to_id;
-    List<String> time;
+    List<String> send_message, send_time;
+    List<String> form_id, to_id;
+    List<String> userIdList, recivetime;
+    JSONObject send, recive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +185,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 finish();
             }
         });
-
         initView();
     }
 
@@ -249,7 +251,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-
         messageAdapter = new MessageAdapter(getLayoutInflater());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, true);
         linearLayoutManager.setStackFromEnd(true);
@@ -330,11 +331,15 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.e("ListChat=>", response.toString());
-                        listChatsModelArrayList.clear();
                         form_id = new ArrayList<>();
                         to_id = new ArrayList<>();
                         send_message = new ArrayList<>();
-                        time = new ArrayList<>();
+                        userIdList = new ArrayList<>();
+                        send_time = new ArrayList<>();
+                        recivetime = new ArrayList<>();
+                        listChatsModelArrayList.clear();
+                        send_message.clear();
+                        userIdList.clear();
                         try {
                             JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -348,55 +353,52 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                             for (int index = 0; index < listChatsModelArrayList.size(); index++) {
                                 send_message.add(listChatsModelArrayList.get(index).getSendAllModelData().getText().getMessage());
-                                time.add(String.valueOf(listChatsModelArrayList.get(index).getFrom().getId()));
+                                userIdList.add(String.valueOf(listChatsModelArrayList.get(index).getFrom().getId()));
+                            }
+
+                            for (int i = 0; i < userIdList.size(); i++) {
+                                if (userIdList.get(i).equals(loginUserId)) {
+                                    form_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
+                                    send_time.add(String.valueOf(listChatsModelArrayList.get(i).getTimestamp()));
+                                } else {
+                                    to_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
+                                    recivetime.add(String.valueOf(listChatsModelArrayList.get(i).getTimestamp()));
+                                }
+                            }
+
+                            if (!form_id.isEmpty()) {
                                 try {
-                                    JSONObject contact = new JSONObject();
-                                    contact.put("message", send_message.get(index));
-                                    contact.put("isRecive", false);
-                                    contact.put("isSent", true);
-                                    messageAdapter.addItem(contact);
-                                    chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                                    for (int i = 0; i < form_id.size(); i++) {
+                                        send = new JSONObject();
+                                        send.put("message", form_id.get(i));
+                                        send.put("Sendtime", send_time.get(i));
+                                        send.put("isRecive", false);
+                                        send.put("isSent", true);
+                                        messageAdapter.addItem(send);
+                                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
-//
-//                            for (int i = 0; i < time.size(); i++) {
-//                                if (time.get(i).contains(loginUserId)) {
-//                                    form_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
-//                                    Log.e("list_message", String.valueOf(form_id));
-//                                } else if (!time.get(i).contains(loginUserId)) {
-//                                    to_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
-//                                }
-//                            }
-//
-//                            if (!form_id.isEmpty()) {
-//                                try {
-//                                    for (int i = 0; i < form_id.size(); i++) {
-//                                        JSONObject contact = new JSONObject();
-//                                        contact.put("message", form_id.get(i));
-//                                        contact.put("isRecive", false);
-//                                        contact.put("isSent", true);
-//                                        messageAdapter.addItem(contact);
-//                                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
-//                                    }
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            } else if (!to_id.isEmpty()) {
-//                                try {
-//                                    for (int i = 0; i < to_id.size(); i++) {
-//                                        JSONObject contact = new JSONObject();
-//                                        contact.put("message", to_id.get(i));
-//                                        contact.put("isRecive", true);
-//                                        contact.put("isSent", false);
-//                                        messageAdapter.addItem(contact);
-//                                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
-//                                    }
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
+
+                            if (!to_id.isEmpty()) {
+                                try {
+                                    for (int i = 0; i < to_id.size(); i++) {
+                                        recive = new JSONObject();
+                                        recive.put("message", to_id.get(i));
+                                        recive.put("recivetime", recivetime.get(i));
+                                        recive.put("name", userName);
+                                        recive.put("isRecive", true);
+                                        recive.put("isSent", false);
+                                        messageAdapter.addItem(recive);
+                                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -492,17 +494,34 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 options.inJustDecodeBounds = true;
 
                 File file = new File(uri.getPath());
+                String path = file.getPath();
 
-                uploadImage(file);
-//                    try {
-//                        BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-//                        options.inSampleSize = calculateInSampleSize(options, 100, 100);
-//                        options.inJustDecodeBounds = false;
-//                        Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-////                        img_add_image.setImageBitmap(image);
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
+                try {
+                    BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
+                    options.inSampleSize = calculateInSampleSize(options, 100, 100);
+                    options.inJustDecodeBounds = false;
+                    Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
+
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("to", toUserIds);
+                        jsonObject.put("image", path);
+                        jsonObject.put("isSent", true);
+                        jsonObject.put("isRecive", false);
+
+                        if (path == null) {
+                            Toast.makeText(ChatingActivity.this, "Enter Images", Toast.LENGTH_SHORT);
+                        } else {
+                            uploadImage(file);
+                            messageAdapter.addItem(jsonObject);
+                        }
+                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             } else {
                 Toast.makeText(getApplicationContext(), "Cancelled",
                         Toast.LENGTH_SHORT).show();
@@ -516,6 +535,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     public void uploadImage(File file) {
         AndroidNetworking.upload(Constans.set_chat_message)
                 .addMultipartFile("file", file)
+                .addMultipartParameter("to", toUserIds)
                 .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
                 .setTag("uploadTest")
                 .setPriority(Priority.HIGH)
@@ -535,7 +555,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onError(ANError error) {
                         // handle error
-
                         Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
                         Log.e("SendImage_Error=>", error.toString());
 
@@ -543,24 +562,24 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 });
     }
 
-//    public static int calculateInSampleSize(
-//            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-//        final int height = options.outHeight;
-//        final int width = options.outWidth;
-//        int inSampleSize = 1;
-//
-//        if (height > reqHeight || width > reqWidth) {
-//
-//            final int halfHeight = height / 2;
-//            final int halfWidth = width / 2;
-//
-//            while ((halfHeight / inSampleSize) > reqHeight
-//                    && (halfWidth / inSampleSize) > reqWidth) {
-//                inSampleSize *= 2;
-//            }
-//        }
-//        return inSampleSize;
-//    }
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
 
     @Override
     protected void onResume() {

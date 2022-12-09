@@ -362,5 +362,4 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             e.printStackTrace();
         }
     }
-
 }

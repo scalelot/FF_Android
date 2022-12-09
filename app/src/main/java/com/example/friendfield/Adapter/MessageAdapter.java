@@ -1,5 +1,6 @@
 package com.example.friendfield.Adapter;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.friendfield.R;
+import com.example.friendfield.Utils.Constans;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +28,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_MESSAGE_SENT = 0;
@@ -34,6 +39,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater inflater;
     private List<JSONObject> messages = new ArrayList<>();
+    Activity activity;
 
     public MessageAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
@@ -53,24 +59,27 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private class SentImageHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
+        ImageView send_image;
 
         public SentImageHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.imageView);
+            send_image = itemView.findViewById(R.id.send_image);
         }
     }
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTxt, receivedText;
+        TextView rec_time, receivedText, recive_name;
+        CircleImageView rec_profile_pic;
 
         public ReceivedMessageHolder(@NonNull View itemView) {
             super(itemView);
 
-            nameTxt = itemView.findViewById(R.id.nameTxt);
+            rec_time = itemView.findViewById(R.id.rec_time);
+            recive_name = itemView.findViewById(R.id.recive_name);
             receivedText = itemView.findViewById(R.id.receivedText);
+            rec_profile_pic = itemView.findViewById(R.id.rec_profile_pic);
         }
     }
 
@@ -150,7 +159,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         JSONObject message = messages.get(position);
-
         try {
             if (message.getBoolean("isSent")) {
 
@@ -161,32 +169,37 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     if (!str.isEmpty()) {
                         messageHolder.messageTxt.setText(str);
                     }
-
-//                    String strTime = String.valueOf(message.getString("time"));
-//                    long timestamp = Long.parseLong(strTime) * 1000L;
-//                    if (String.valueOf(timestamp) != null) {
-//                        String time = getDate(timestamp);
-//                        messageHolder.txt_time.setText(time);
-//                    }
+                    String strTime = String.valueOf(message.getString("Sendtime"));
+                    long timestamp = Long.parseLong(strTime) * 1000L;
+                    if (String.valueOf(timestamp) != null) {
+                        String time = getDate(timestamp);
+                        messageHolder.txt_time.setText(time);
+                    }
 
                 } else {
-
                     SentImageHolder imageHolder = (SentImageHolder) holder;
-                    Bitmap bitmap = getBitmapFromString(message.getString("image"));
+                    Bitmap bitmap = BitmapFactory.decodeFile(message.getString("image"));
 
-                    imageHolder.imageView.setImageBitmap(bitmap);
-
+                    imageHolder.send_image.setImageBitmap(bitmap);
                 }
 
-            } else if (message.getBoolean("isRecive")){
+            } else if (message.getBoolean("isRecive")) {
 
                 if (message.has("message")) {
 
-                    ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
-//                    messageHolder.nameTxt.setText(message.getString("name"));
+                    ReceivedMessageHolder receivedMessageHolder = (ReceivedMessageHolder) holder;
                     String str = message.getString("message");
+                    String str1 = message.getString("name");
                     if (!str.isEmpty()) {
-                        messageHolder.receivedText.setText(str);
+                        receivedMessageHolder.receivedText.setText(str);
+                        receivedMessageHolder.recive_name.setText(str1);
+                    }
+
+                    String strTime = String.valueOf(message.getString("recivetime"));
+                    long timestamp = Long.parseLong(strTime) * 1000L;
+                    if (String.valueOf(timestamp) != null) {
+                        String time = getDate(timestamp);
+                        receivedMessageHolder.rec_time.setText(time);
                     }
 
                 } else {
@@ -194,9 +207,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
                     imageHolder.nameTxt.setText(message.getString("name"));
 
-                    Bitmap bitmap = getBitmapFromString(message.getString("image"));
-                    imageHolder.imageView.setImageBitmap(bitmap);
+//                    Bitmap bitmap = getBitmapFromString(message.getString("image"));
+//                    imageHolder.imageView.setImageBitmap(bitmap);
+                    String img = message.getString("image");
 
+                    Glide.with(inflater.getContext()).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(imageHolder.imageView);
                 }
             }
         } catch (JSONException e) {
@@ -230,5 +245,4 @@ public class MessageAdapter extends RecyclerView.Adapter {
         messages.add(jsonObject);
         notifyDataSetChanged();
     }
-
 }

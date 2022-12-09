@@ -127,6 +127,7 @@ public class FriendRequestFragment extends Fragment {
                         LinearLayoutManager manager = new LinearLayoutManager(getContext());
                         recycle_request.setLayoutManager(manager);
                         recycle_request.setAdapter(friendsRequestAdapter);
+                        friendsRequestAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

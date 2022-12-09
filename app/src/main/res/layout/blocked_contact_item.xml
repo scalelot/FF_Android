@@ -31,7 +31,7 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_clear_data"
+            android:id="@+id/btn_unblock"
             android:layout_width="@dimen/sp_75"
             android:layout_height="@dimen/sp_25"
             android:layout_alignParentRight="true"

@@ -64,7 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/sp_19"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:layout_toLeftOf="@id/txt_time"
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="top"
                     android:text="@string/notification"
@@ -119,9 +118,6 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_12" />
             </RelativeLayout>
-
         </LinearLayout>
-
     </LinearLayout>
-
 </RelativeLayout>

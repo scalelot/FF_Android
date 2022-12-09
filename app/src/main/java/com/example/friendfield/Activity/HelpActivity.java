@@ -1,162 +1,51 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.icu.util.RangeValueIterator;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.friendfield.Adapter.HelpAdapter;
 import com.example.friendfield.BaseActivity;
+import com.example.friendfield.Model.HelpModel;
 import com.example.friendfield.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelpActivity extends BaseActivity {
 
-    RelativeLayout rl_faq1, rl_faq2, rl_faq3, rl_faq4, rl_faq5, rl_faq6;
-    ImageView hp_back_arrow,img_top, img_top2, img_top3, img_top4, img_top5, img_top6, img_bottom, img_bottom2, img_bottom3, img_bottom4, img_bottom5, img_bottom6;
-    TextView txt_dis, txt_dis2, txt_dis3, txt_dis4, txt_dis5, txt_dis6;
-    int i = 0;
+    RecyclerView help_recycler;
+    HelpAdapter helpAdapter;
+    String[] name = {"FAQ-1", "FAQ-2", "FAQ-3", "FAQ-4", "FAQ-5"};
+    String[] description = {"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.","It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.","It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.","It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.","It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."};
+    List<HelpModel> helpModels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        hp_back_arrow = findViewById(R.id.hp_back_arrow);
-        rl_faq1 = findViewById(R.id.rl_faq1);
-        rl_faq2 = findViewById(R.id.rl_faq2);
-        rl_faq3 = findViewById(R.id.rl_faq3);
-        rl_faq4 = findViewById(R.id.rl_faq4);
-        rl_faq5 = findViewById(R.id.rl_faq5);
-        rl_faq6 = findViewById(R.id.rl_faq6);
-        img_top = findViewById(R.id.img_top);
-        img_top2 = findViewById(R.id.img_top2);
-        img_top3 = findViewById(R.id.img_top3);
-        img_top4 = findViewById(R.id.img_top4);
-        img_top5 = findViewById(R.id.img_top5);
-        img_top6 = findViewById(R.id.img_top6);
-        img_bottom = findViewById(R.id.img_bottom);
-        img_bottom2 = findViewById(R.id.img_bottom2);
-        img_bottom3 = findViewById(R.id.img_bottom3);
-        img_bottom4 = findViewById(R.id.img_bottom4);
-        img_bottom5 = findViewById(R.id.img_bottom5);
-        img_bottom6 = findViewById(R.id.img_bottom6);
-        txt_dis = findViewById(R.id.txt_dis);
-        txt_dis2 = findViewById(R.id.txt_dis2);
-        txt_dis3 = findViewById(R.id.txt_dis3);
-        txt_dis4 = findViewById(R.id.txt_dis4);
-        txt_dis5 = findViewById(R.id.txt_dis5);
-        txt_dis6 = findViewById(R.id.txt_dis6);
+        help_recycler = findViewById(R.id.help_recycler);
 
-        hp_back_arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        helpModels = new ArrayList<>();
 
-        rl_faq1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i % 2 == 0) {
-                    txt_dis.setVisibility(View.GONE);
-                    img_top.setVisibility(View.GONE);
-                    img_bottom.setVisibility(View.VISIBLE);
-                } else {
-                    txt_dis.setVisibility(View.VISIBLE);
-                    img_top.setVisibility(View.VISIBLE);
-                    img_bottom.setVisibility(View.GONE);
-                }
-                i++;
-            }
-        });
+        for (int i = 0; i < name.length; i++) {
+            HelpModel hModel = new HelpModel();
+            hModel.setName(name[i]);
+            hModel.setDescription(description[i]);
+            helpModels.add(hModel);
+        }
 
-        rl_faq2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i % 2 == 0) {
-                    txt_dis2.setVisibility(View.VISIBLE);
-                    img_top2.setVisibility(View.VISIBLE);
-                    img_bottom2.setVisibility(View.GONE);
-                } else {
-                    txt_dis2.setVisibility(View.GONE);
-                    img_top2.setVisibility(View.GONE);
-                    img_bottom2.setVisibility(View.VISIBLE);
-                }
-                i++;
-            }
-        });
-
-        rl_faq3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i % 2 == 0) {
-                    txt_dis3.setVisibility(View.VISIBLE);
-                    img_top3.setVisibility(View.VISIBLE);
-                    img_bottom3.setVisibility(View.GONE);
-                } else {
-                    txt_dis3.setVisibility(View.GONE);
-                    img_top3.setVisibility(View.GONE);
-                    img_bottom3.setVisibility(View.VISIBLE);
-                }
-                i++;
-            }
-        });
-
-        rl_faq4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i % 2 == 0) {
-                    txt_dis4.setVisibility(View.VISIBLE);
-                    img_top4.setVisibility(View.VISIBLE);
-                    img_bottom4.setVisibility(View.GONE);
-                } else {
-                    txt_dis4.setVisibility(View.GONE);
-                    img_top4.setVisibility(View.GONE);
-                    img_bottom4.setVisibility(View.VISIBLE);
-                }
-                i++;
-            }
-        });
-
-        rl_faq5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i % 2 == 0) {
-                    txt_dis5.setVisibility(View.VISIBLE);
-                    img_top5.setVisibility(View.VISIBLE);
-                    img_bottom5.setVisibility(View.GONE);
-                } else {
-                    txt_dis5.setVisibility(View.GONE);
-                    img_top5.setVisibility(View.GONE);
-                    img_bottom5.setVisibility(View.VISIBLE);
-                }
-                i++;
-            }
-        });
-
-        rl_faq6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (i % 2 == 0) {
-                    txt_dis6.setVisibility(View.VISIBLE);
-                    img_top6.setVisibility(View.VISIBLE);
-                    img_bottom6.setVisibility(View.GONE);
-                } else {
-                    txt_dis6.setVisibility(View.GONE);
-                    img_top6.setVisibility(View.GONE);
-                    img_bottom6.setVisibility(View.VISIBLE);
-                }
-                i++;
-            }
-        });
+        helpAdapter = new HelpAdapter(this, helpModels);
+        help_recycler.setAdapter(helpAdapter);
+        help_recycler.setHasFixedSize(true);
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(HelpActivity.this,SettingActivity.class));
+        startActivity(new Intent(HelpActivity.this, SettingActivity.class));
         finish();
     }
 }
