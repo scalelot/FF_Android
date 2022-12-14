@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,7 +57,8 @@ public class ContactFragment extends Fragment {
     RecyclerView recyclerview_contact;
     ContactAdapter contactAdapter;
     NestedScrollView nestedScrollView;
-    RelativeLayout emptyLay, loaderLay;
+    RelativeLayout emptyLay;
+    ProgressBar progressBar;
     AllFriendsRegisterModel productDetailsModel;
     int page = 1, limit = 10;
     String searchData = "";
@@ -74,7 +76,7 @@ public class ContactFragment extends Fragment {
         iv_clear_text = view.findViewById(R.id.iv_clear_text);
         nestedScrollView = view.findViewById(R.id.nestedScrollView);
         emptyLay = view.findViewById(R.id.emptyLay);
-        loaderLay = view.findViewById(R.id.loaderLay);
+        progressBar = view.findViewById(R.id.idPBLoading);
 
         edt_search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -124,12 +126,14 @@ public class ContactFragment extends Fragment {
             }
         });
 
+        getAllMyFriends(page, limit, searchData);
+
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    loaderLay.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
                     getAllMyFriends(page, limit, searchData);
                 }
             }
@@ -155,7 +159,7 @@ public class ContactFragment extends Fragment {
     private void getAllMyFriends(int page, int limit, String search) {
         if (page > limit) {
             Toast.makeText(getContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            loaderLay.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             return;
         }
 
@@ -167,15 +171,14 @@ public class ContactFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        allFriendsModelsList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_myfriend, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    loaderLay.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                     Log.e("All_my_friends:--", response.toString());
-                    allFriendsModelsList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -227,11 +230,5 @@ public class ContactFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getAllMyFriends(page, limit, searchData);
     }
 }

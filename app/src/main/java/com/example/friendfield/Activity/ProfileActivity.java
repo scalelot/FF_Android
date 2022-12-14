@@ -218,7 +218,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             showGPSDisabledAlertToUser();
         }
 
-        profile_title = getIntent().getStringExtra("edit_p_profile");
+        profile_title = getIntent().getStringExtra("EditProfile");
 
         rangeBar.setOnChangeRangeListener(new SimpleRangeView.OnChangeRangeListener() {
             @Override
@@ -755,9 +755,9 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
                     if (profileRegisterModel.getData().getProfileimage().equals("")) {
                         Log.e("LLL_data-->", "No Image Found");
-                        profile_image.setImageDrawable(getResources().getDrawable(R.drawable.user_accept_dialog));
+                        profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
                     } else {
-                        Glide.with(ProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + profileRegisterModel.getData().getProfileimage()).placeholder(R.drawable.user_accept_dialog).into(profile_image);
+                        Glide.with(ProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + profileRegisterModel.getData().getProfileimage()).placeholder(R.drawable.ic_user).into(profile_image);
                     }
 
                     hello = gender.getText().toString();
@@ -921,7 +921,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     protected void onResume() {
         super.onResume();
         if (Const.longitude != null) {
-
             if (map != null) {
                 map.clear();
                 if (Const.mCurrLocationMarker != null) {

@@ -183,6 +183,11 @@
                     android:layout_marginTop="@dimen/margin_5"
                     tools:listitem="@layout/user_chat_list" />
 
+                <ProgressBar
+                    android:id="@+id/idPBLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
@@ -199,8 +204,6 @@
         android:src="@drawable/ic_reels"
         android:tint="@color/white"
         app:maxImageSize="@dimen/text_24" />
-
-    <include layout="@layout/layout_loader" />
 
     <include layout="@layout/layout_empty" />
 

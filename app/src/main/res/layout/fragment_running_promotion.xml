@@ -26,6 +26,11 @@
                 android:layout_marginRight="@dimen/margin_20"
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_noti_promotion" />
+
+            <ProgressBar
+                android:id="@+id/idPBLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -45,8 +50,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_16" />
     </RelativeLayout>
-
-    <include layout="@layout/layout_loader" />
 
     <include layout="@layout/layout_empty" />
 </RelativeLayout>

@@ -43,7 +43,6 @@ public class CreateNewGroupActivity extends BaseActivity {
     ImageView iv_clear_text;
 
     String[] user_name = {"John Bryan", "Bryan", "Hunter Bryan", "Doris Collins", "Deann Sumpter", "Angel Egotrip", "Binary Bark", "Geez God", "Mindhack Diva", "ugar Lump", "Droolbug", "Zig Wagon", "Strife Life"};
-    Boolean[] isSelectedlist = {false, false, false, false, false, false, false, false, false, false, false, false, false};
     ArrayList<CreateGroupModel> arraylist = new ArrayList<>();
     ArrayList<CreateGroupModel> selectedarraylist = new ArrayList<>();
 

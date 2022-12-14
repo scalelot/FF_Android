@@ -4,19 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SelecetdUserModel implements Parcelable {
-    String username;
-    Boolean isSelected = false;
 
-    public SelecetdUserModel(String username) {
-        this.username = username;
+    String userName;
+    public boolean isSelected = false;
 
+    public SelecetdUserModel(String userName) {
+        this.userName = userName;
     }
 
     protected SelecetdUserModel(Parcel in) {
-        username = in.readString();
-        byte tmpIsSelected = in.readByte();
-        isSelected = tmpIsSelected == 0 ? null : tmpIsSelected == 1;
-
+        userName = in.readString();
+        isSelected = in.readByte() != 0;
     }
 
     public static final Creator<SelecetdUserModel> CREATOR = new Creator<SelecetdUserModel>() {
@@ -31,22 +29,21 @@ public class SelecetdUserModel implements Parcelable {
         }
     };
 
-    public String getUsername() {
-        return username;
+    public String getuserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setuserName(String userName) {
+        this.userName = userName;
     }
 
-    public Boolean getSelected() {
+    public boolean isSelected() {
         return isSelected;
     }
 
-    public void setSelected(Boolean selected) {
+    public void setSelected(boolean selected) {
         isSelected = selected;
     }
-
 
     @Override
     public int describeContents() {
@@ -55,7 +52,7 @@ public class SelecetdUserModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(username);
-        dest.writeByte((byte) (isSelected == null ? 0 : isSelected ? 1 : 2));
+        dest.writeString(userName);
+        dest.writeByte((byte) (isSelected ? 1 : 0));
     }
 }

@@ -120,10 +120,10 @@
                         android:layout_width="@dimen/sp_25"
                         android:layout_height="@dimen/sp_25"
                         android:layout_alignParentRight="true"
-                        android:padding="@dimen/margin_5"
                         android:layout_margin="@dimen/margin_15"
-                        android:visibility="gone"
+                        android:padding="@dimen/margin_5"
                         android:src="@drawable/ic_baseline_close_20"
+                        android:visibility="gone"
                         app:tint="@color/white" />
 
                 </RelativeLayout>
@@ -152,10 +152,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sp_50"
                 android:layout_below="@+id/edt_aboutUs"
-                android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginTop="@dimen/margin_20"
-                android:layout_marginEnd="@dimen/margin_20"
-                android:layout_marginBottom="@dimen/margin_20"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/margin_20"
                 android:background="@drawable/login_btn_bg"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/share"

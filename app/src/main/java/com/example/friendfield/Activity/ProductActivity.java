@@ -219,7 +219,7 @@ public class ProductActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        productDetailsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
@@ -227,7 +227,6 @@ public class ProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
                     Log.e("ProList=>", response.toString());
-                    productDetailsModelArrayList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -256,6 +255,7 @@ public class ProductActivity extends BaseActivity {
                         }
 
                         ProductDisplayAdapter productDisplayAdapter = new ProductDisplayAdapter(ProductActivity.this, productDetailsModelArrayList);
+                        recycle_add_new_product.setHasFixedSize(true);
                         recycle_add_new_product.setAdapter(productDisplayAdapter);
 
                     } catch (JSONException e) {
@@ -293,6 +293,7 @@ public class ProductActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        startActivity(new Intent(ProductActivity.this, UserProfileActivity.class));
         finish();
     }
 }

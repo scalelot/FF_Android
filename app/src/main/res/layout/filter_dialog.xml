@@ -26,13 +26,27 @@
             android:layout_marginRight="@dimen/margin_20"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:text="@string/filter_opti"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_20" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/filter_opti"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_20" />
+
+                <ImageView
+                    android:id="@+id/filter_close"
+                    android:layout_width="@dimen/sp_25"
+                    android:layout_height="@dimen/sp_25"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/ic_baseline_close_20" />
+            </RelativeLayout>
 
             <CheckBox
                 android:id="@+id/check_contact_fnd"
@@ -41,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_15"
                 android:layout_marginBottom="@dimen/margin_15"
+                android:baselineAligned="false"
                 android:drawablePadding="@dimen/margin_15"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@string/contact_fri"

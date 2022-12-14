@@ -31,6 +31,7 @@ import com.example.friendfield.Utils.Constans;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -65,7 +66,7 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
         String strTime = String.valueOf(registerModels.get(position).getTimestamp());
         long timestamp = Long.parseLong(strTime) * 1000L;
         if (String.valueOf(timestamp) != null) {
-            String time = getDate(timestamp);
+            String time = getFormattedDate(timestamp);
             holder.chat_user_time.setText(time);
         }
 //        holder.txt_message.setText(registerModels.get(position));
@@ -90,13 +91,24 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
         });
     }
 
-    private String getDate(long timeStamp) {
-        try {
-            DateFormat sdf = new SimpleDateFormat("hh:mm", Locale.US);
-            Date netDate = (new Date(timeStamp));
+    public String getFormattedDate(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        Calendar now = Calendar.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.US);
+        Date netDate = (new Date(smsTimeInMilis));
+        final String dateTimeFormatString = "EEEE, MMMM d, h:mm aa";
+        final long HOURS = 60 * 60 * 60;
+        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
             return sdf.format(netDate);
-        } catch (Exception ex) {
-            return "xx";
+        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
+            return "Yesterday";
+        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return android.text.format.DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return android.text.format.DateFormat.format("dd/MM/yy", smsTime).toString();
         }
     }
 

@@ -173,9 +173,12 @@
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/margin_15"
+                    android:focusableInTouchMode="false"
+
                     android:singleLine="true"
                     android:text="@string/brochure"
-                    android:textColorHint="@color/edt_hint"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/light_grey"
                     android:textSize="@dimen/sp_14" />
 
                 <androidx.appcompat.widget.AppCompatButton

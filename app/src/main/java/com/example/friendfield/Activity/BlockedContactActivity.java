@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,7 +43,8 @@ public class BlockedContactActivity extends BaseActivity {
     BlockedContactAdapter blockeContactAdapter;
     ImageView ic_back;
     NestedScrollView nestedScroll;
-    RelativeLayout emptyLay, loaderLay;
+    RelativeLayout emptyLay;
+    ProgressBar idPBLoading;
     ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
     int page = 1, limit = 10;
     String searchData = "";
@@ -56,7 +58,7 @@ public class BlockedContactActivity extends BaseActivity {
         ic_back = findViewById(R.id.ic_back_arrow);
         nestedScroll = findViewById(R.id.nestedScroll);
         emptyLay = findViewById(R.id.emptyLay);
-        loaderLay = findViewById(R.id.loaderLay);
+        idPBLoading = findViewById(R.id.idPBLoading);
 
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,12 +67,14 @@ public class BlockedContactActivity extends BaseActivity {
             }
         });
 
+        getBlockedFriends(page, limit, searchData);
+
         nestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    loaderLay.setVisibility(View.VISIBLE);
+                    idPBLoading.setVisibility(View.VISIBLE);
                     getBlockedFriends(page, limit, searchData);
                 }
             }
@@ -80,7 +84,7 @@ public class BlockedContactActivity extends BaseActivity {
     private void getBlockedFriends(int page, int limit, String search) {
         if (page > limit) {
             Toast.makeText(getApplicationContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            loaderLay.setVisibility(View.GONE);
+            idPBLoading.setVisibility(View.GONE);
             return;
         }
 
@@ -92,15 +96,14 @@ public class BlockedContactActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        blockedFriendRegisterModels.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_block_friends, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    loaderLay.setVisibility(View.GONE);
+                    idPBLoading.setVisibility(View.GONE);
                     Log.e("AllBlockFriends=>", response.toString());
-                    blockedFriendRegisterModels.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -149,12 +152,6 @@ public class BlockedContactActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getBlockedFriends(page, limit, searchData);
     }
 
     @Override

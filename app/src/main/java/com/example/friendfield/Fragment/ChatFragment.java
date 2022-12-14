@@ -61,7 +61,8 @@ public class ChatFragment extends Fragment {
     ChatUserAdapter chatUserAdapter;
     LinearLayout ll_notification;
     FloatingActionButton fb_reels;
-    RelativeLayout iv_filter, emptyLay, loaderLay;
+    RelativeLayout iv_filter, emptyLay;
+    ProgressBar progressBar;
     EditText edt_search_text;
     ImageView iv_search;
     ImageView iv_clear_text;
@@ -84,7 +85,7 @@ public class ChatFragment extends Fragment {
         iv_search = view.findViewById(R.id.iv_search);
         iv_clear_text = view.findViewById(R.id.iv_clear_text);
         emptyLay = view.findViewById(R.id.emptyLay);
-        loaderLay = view.findViewById(R.id.loaderLay);
+        progressBar = view.findViewById(R.id.idPBLoading);
 
         iv_filter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,12 +110,14 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        getAllMyFriends(page, limit, searchData);
+
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    loaderLay.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
                     getAllMyFriends(page, limit, searchData);
                 }
             }
@@ -173,7 +176,7 @@ public class ChatFragment extends Fragment {
     private void getAllMyFriends(int page, int limit, String search) {
         if (page > limit) {
             Toast.makeText(getContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            loaderLay.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             return;
         }
 
@@ -185,15 +188,14 @@ public class ChatFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        receivefriendrequestsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_myfriend, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    loaderLay.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                     Log.e("All_my_friends:--", response.toString());
-                    receivefriendrequestsModelArrayList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -260,6 +262,14 @@ public class ChatFragment extends Fragment {
 
         AppCompatButton btn_cancel = bottomSheetDialog.findViewById(R.id.btn_cancel);
         AppCompatButton btn_apply = bottomSheetDialog.findViewById(R.id.btn_apply);
+        ImageView filter_close = bottomSheetDialog.findViewById(R.id.filter_close);
+
+        filter_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+            }
+        });
 
         check_contact_fnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -339,9 +349,4 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getAllMyFriends(page, limit, searchData);
-    }
 }

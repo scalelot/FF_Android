@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".Fragment.FriendRequestFragment">
+    tools:context=".Fragment.SendRequestFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -24,11 +24,14 @@
                 android:layout_height="match_parent"
                 tools:listitem="@layout/send_request_item" />
 
+            <ProgressBar
+                android:id="@+id/idPBLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <include layout="@layout/layout_loader" />
 
     <include layout="@layout/layout_empty" />
 

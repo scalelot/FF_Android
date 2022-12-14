@@ -57,6 +57,7 @@ public class UserProfileActivity extends BaseActivity {
     private static final int PICK_IMAGE = 100;
     public static AppCompatButton btn_edit_profile;
     LinearLayout ll_business_product;
+    int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +124,7 @@ public class UserProfileActivity extends BaseActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                pos = tab.getPosition();
                 if (tab.getPosition() == 1) {
                     btn_edit_profile.setText(getResources().getString(R.string.edit_business_profile));
                     btn_edit_profile.setOnClickListener(new View.OnClickListener() {
@@ -149,28 +150,6 @@ public class UserProfileActivity extends BaseActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                if (tab.getPosition() == 1) {
-                    btn_edit_profile.setText(getResources().getString(R.string.edit_business_profile));
-                    btn_edit_profile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
-                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
-                            startActivity(intent);
-                        }
-                    });
-                } else {
-                    btn_edit_profile.setText(getResources().getString(R.string.edit_personal_profile));
-                    btn_edit_profile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
-                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
-                            startActivity(intent);
-                        }
-                    });
-                }
             }
 
             @Override
@@ -178,12 +157,8 @@ public class UserProfileActivity extends BaseActivity {
 
             }
         });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getApiCalling();
+
     }
 
     private void getApiCalling() {
@@ -198,9 +173,9 @@ public class UserProfileActivity extends BaseActivity {
 
                 if (userProfileRegisterModel.getData().getProfileimage().equals("")) {
                     Log.e("LLL_data-->", "No Image Found");
-                    user_profile_image.setImageDrawable(getResources().getDrawable(R.drawable.user_accept_dialog));
+                    user_profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
                 } else {
-                    Glide.with(UserProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + userProfileRegisterModel.getData().getProfileimage()).placeholder(R.drawable.user_accept_dialog).into(user_profile_image);
+                    Glide.with(UserProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + userProfileRegisterModel.getData().getProfileimage()).placeholder(R.drawable.ic_user).into(user_profile_image);
                 }
 
                 for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
@@ -270,7 +245,7 @@ public class UserProfileActivity extends BaseActivity {
                         for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
                             if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Twitter")) {
                                 String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                if (url.startsWith("https://") || url.startsWith("http://")) {
+                                if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
                                     Uri uri = Uri.parse(url);
                                     Intent i_twitter = new Intent(Intent.ACTION_VIEW, uri);
                                     startActivity(i_twitter);
@@ -288,7 +263,7 @@ public class UserProfileActivity extends BaseActivity {
                         for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
                             if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Linkedin")) {
                                 String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                if (url.startsWith("https://") || url.startsWith("http://")) {
+                                if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
                                     Uri uri = Uri.parse(url);
                                     Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
                                     startActivity(i_linkedin);
@@ -306,7 +281,7 @@ public class UserProfileActivity extends BaseActivity {
                         for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
                             if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Pinterest")) {
                                 String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                if (url.startsWith("https://") || url.startsWith("http://")) {
+                                if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
                                     Uri uri = Uri.parse(url);
                                     Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
                                     startActivity(i_linkedin);
@@ -324,7 +299,7 @@ public class UserProfileActivity extends BaseActivity {
                         for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
                             if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Youtube")) {
                                 String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                if (url.startsWith("https://") || url.startsWith("http://")) {
+                                if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
                                     Uri uri = Uri.parse(url);
                                     Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
                                     startActivity(i_linkedin);
@@ -389,6 +364,33 @@ public class UserProfileActivity extends BaseActivity {
             Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getApiCalling();
+        if (pos == 1) {
+            btn_edit_profile.setText(getResources().getString(R.string.edit_business_profile));
+            btn_edit_profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
+                    intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
+                    startActivity(intent);
+                }
+            });
+        } else {
+            btn_edit_profile.setText(getResources().getString(R.string.edit_personal_profile));
+            btn_edit_profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
+                    intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
+                    startActivity(intent);
+                }
+            });
         }
     }
 

@@ -26,11 +26,14 @@
                 android:layout_height="match_parent"
                 tools:listitem="@layout/request_item" />
 
+            <ProgressBar
+                android:id="@+id/idPBLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <include layout="@layout/layout_loader" />
 
     <include layout="@layout/layout_empty" />
 </RelativeLayout>

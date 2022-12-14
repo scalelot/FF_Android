@@ -84,11 +84,14 @@
                     android:layout_marginTop="@dimen/margin_5"
                     tools:listitem="@layout/contact_list" />
 
+                <ProgressBar
+                    android:id="@+id/idPBLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
-
-    <include layout="@layout/layout_loader" />
 
     <include layout="@layout/layout_empty" />
 

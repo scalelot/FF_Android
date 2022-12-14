@@ -77,6 +77,7 @@
             android:id="@+id/ll_existing_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -446,6 +447,7 @@
                 style="@style/Widget.AppCompat.Spinner.DropDown"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sp_50"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/spinner_background"
                 android:popupElevation="3dp" />
 
@@ -492,6 +494,8 @@
                 android:layout_marginRight="@dimen/sp_6"
                 android:layout_toLeftOf="@id/iv_location"
                 android:background="@null"
+                android:cursorVisible="false"
+                android:focusableInTouchMode="false"
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/address"
                 android:imeOptions="actionNext"

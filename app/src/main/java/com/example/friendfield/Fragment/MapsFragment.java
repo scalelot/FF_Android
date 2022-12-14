@@ -158,40 +158,41 @@ public class MapsFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String location = searchView.getQuery().toString();
+                try {
+                    List<Address> addressList = null;
+                    if (location != null || location.equals("")) {
+                        Geocoder geocoder = new Geocoder(MapsFragment.this.getContext());
 
-                List<Address> addressList = null;
-                if (location != null || location.equals("")) {
-                    Geocoder geocoder = new Geocoder(MapsFragment.this.getContext());
-                    try {
                         addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
-                    address = addressList.get(0);
 
-                    latitude = address.getLatitude();
-                    longitude = address.getLongitude();
-                    findLocationorName(latitude, longitude);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        address = addressList.get(0);
 
-                    if (latLng != null) {
-                        showRipples(latLng);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                showRipples(latLng);
-                            }
-                        }, DURATION - 500);
+                        latitude = address.getLatitude();
+                        longitude = address.getLongitude();
+                        findLocationorName(latitude, longitude);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-                        fetchgetApi();
+                        if (latLng != null) {
+                            showRipples(latLng);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showRipples(latLng);
+                                }
+                            }, DURATION - 500);
 
+                            fetchgetApi();
+
+                        } else {
+                            Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
+
+                        }
                     } else {
                         Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
-
                     }
-                } else {
-                    Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 return false;
             }

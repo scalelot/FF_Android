@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -166,6 +167,13 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         rl_user.setOnClickListener(this);
         img_camera.setOnClickListener(this);
         img_gallery.setOnClickListener(this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getChatList(toUserIds, page, limit);
+            }
+        }, 200);
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -585,7 +593,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     protected void onResume() {
         super.onResume();
         getPersonalInfo();
-        getChatList(toUserIds, page, limit);
+
     }
 
     @Override

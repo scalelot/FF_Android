@@ -97,6 +97,11 @@ public class ChooseUserPromotionActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String package_txt = intent.getStringExtra("package_name");
+        String count = intent.getStringExtra("CountUser");
+        if (count != null) {
+            select_count.setVisibility(View.VISIBLE);
+            select_count.setText(count);
+        }
         txt_user.setText(package_txt);
 
         sharedPreferences = getSharedPreferences("myPlan", MODE_PRIVATE);
@@ -115,6 +120,11 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                     ll_existing_user.setVisibility(View.VISIBLE);
                     ll_app_users.setVisibility(View.GONE);
                     chk_app_user.setChecked(false);
+                    select_text = chk_exiting_user.getText().toString();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("star_promotion", select_text);
+                    editor.apply();
+                    editor.commit();
                 } else {
                     ll_existing_user.setVisibility(View.GONE);
                 }
@@ -128,6 +138,11 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                     ll_app_users.setVisibility(View.VISIBLE);
                     ll_existing_user.setVisibility(View.GONE);
                     chk_exiting_user.setChecked(false);
+                    select_text = chk_app_user.getText().toString();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("star_promotion", select_text);
+                    editor.apply();
+                    editor.commit();
                 } else {
                     ll_app_users.setVisibility(View.GONE);
                 }
@@ -149,6 +164,18 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                 finish();
             }
         });
+
+        String str = sharedPreferences.getString("star_promotion", null);
+
+        if (str == ("App Users") || str != null) {
+            chk_app_user.setChecked(true);
+            ll_app_users.setVisibility(View.VISIBLE);
+            ll_existing_user.setVisibility(View.GONE);
+        } else {
+            chk_exiting_user.setChecked(true);
+            ll_existing_user.setVisibility(View.VISIBLE);
+            ll_app_users.setVisibility(View.GONE);
+        }
 
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override

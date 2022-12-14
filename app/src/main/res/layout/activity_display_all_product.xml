@@ -129,4 +129,5 @@
 
     </LinearLayout>
 
+    <include layout="@layout/layout_empty" />
 </RelativeLayout>

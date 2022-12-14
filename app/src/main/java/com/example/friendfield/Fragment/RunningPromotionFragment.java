@@ -55,7 +55,8 @@ public class RunningPromotionFragment extends Fragment {
     ArrayList<NotificationDetailsModel> arraylist = new ArrayList<>();
     int page = 1, limit = 10;
     String searchData = "";
-    RelativeLayout emptyLay, loaderLay;
+    ProgressBar idPBLoading;
+    RelativeLayout emptyLay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,8 +66,8 @@ public class RunningPromotionFragment extends Fragment {
         btn_create_notification = inflate.findViewById(R.id.btn_create_notification);
         recycler_noti = inflate.findViewById(R.id.recycler_noti);
         nestedScrollView = inflate.findViewById(R.id.nestedScrollView);
+        idPBLoading = inflate.findViewById(R.id.idPBLoading);
         emptyLay = inflate.findViewById(R.id.emptyLay);
-        loaderLay = inflate.findViewById(R.id.loaderLay);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recycler_noti.setLayoutManager(linearLayoutManager);
@@ -88,7 +89,7 @@ public class RunningPromotionFragment extends Fragment {
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    loaderLay.setVisibility(View.VISIBLE);
+                    idPBLoading.setVisibility(View.VISIBLE);
                     getNotificationItem(page, limit, searchData, "", "title", 1);
                 }
             }
@@ -102,7 +103,7 @@ public class RunningPromotionFragment extends Fragment {
     public void getNotificationItem(int page, int limit, String search, String status, String short_field, int short_option) {
         if (page > limit) {
             Toast.makeText(getActivity(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            loaderLay.setVisibility(View.GONE);
+            idPBLoading.setVisibility(View.GONE);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -116,14 +117,13 @@ public class RunningPromotionFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
+        arraylist.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.fetch_notification, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    loaderLay.setVisibility(View.GONE);
+                    idPBLoading.setVisibility(View.GONE);
                     Log.e("FetchNotifi=>", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");

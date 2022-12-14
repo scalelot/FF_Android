@@ -69,7 +69,7 @@ public class RecentStatusAdapter extends RecyclerView.Adapter<RecentStatusAdapte
 //            }
         }
 
-        Glide.with(context).load(user_profile[position]).placeholder(R.drawable.user_accept_dialog).into(holder.person_img);
+        Glide.with(context).load(user_profile[position]).placeholder(R.drawable.ic_user).into(holder.person_img);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

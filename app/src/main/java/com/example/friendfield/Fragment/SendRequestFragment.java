@@ -47,7 +47,8 @@ public class SendRequestFragment extends Fragment {
     String searchData = "";
     NestedScrollView nestedScrollView;
     ArrayList<ReceiveFriendsRegisterModel> receivefriendrequestsModelArrayList = new ArrayList<>();
-    RelativeLayout emptyLay,loaderLay;
+    RelativeLayout emptyLay;
+    ProgressBar idPBLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,14 +58,16 @@ public class SendRequestFragment extends Fragment {
         send_recylerview = view.findViewById(R.id.send_recylerview);
         nestedScrollView = view.findViewById(R.id.nestedScrollView);
         emptyLay = view.findViewById(R.id.emptyLay);
-        loaderLay = view.findViewById(R.id.loaderLay);
+        idPBLoading = view.findViewById(R.id.idPBLoading);
+
+        getSendFriendsRequest(page, limit, searchData);
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    loaderLay.setVisibility(View.VISIBLE);
+                    idPBLoading.setVisibility(View.VISIBLE);
                     getSendFriendsRequest(page, limit, searchData);
                 }
             }
@@ -76,7 +79,7 @@ public class SendRequestFragment extends Fragment {
     private void getSendFriendsRequest(int page, int limit, String search) {
         if (page > limit) {
             Toast.makeText(getContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            loaderLay.setVisibility(View.GONE);
+            idPBLoading.setVisibility(View.GONE);
             return;
         }
 
@@ -88,15 +91,14 @@ public class SendRequestFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        receivefriendrequestsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_send_friend_request, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    loaderLay.setVisibility(View.GONE);
+                    idPBLoading.setVisibility(View.GONE);
                     Log.e("friends_request_dis-->", response.toString());
-                    receivefriendrequestsModelArrayList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -152,9 +154,4 @@ public class SendRequestFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getSendFriendsRequest(page, limit, searchData);
-    }
 }

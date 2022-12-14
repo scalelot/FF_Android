@@ -57,6 +57,7 @@ public class DisplayAllProductActivity extends BaseActivity {
     String searchData = "";
     ProgressBar idPBLoading;
     NestedScrollView nestedScrollView;
+    RelativeLayout emptyLay;
     DisplayAllProductAdapter productDisplayAdapter;
 
     @Override
@@ -71,6 +72,7 @@ public class DisplayAllProductActivity extends BaseActivity {
         iv_clear_text = findViewById(R.id.iv_clear_text);
         nestedScrollView = findViewById(R.id.nestedScrollView);
         idPBLoading = findViewById(R.id.idPBLoading);
+        emptyLay = findViewById(R.id.emptyLay);
 
         recyclerview_product.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
@@ -160,14 +162,14 @@ public class DisplayAllProductActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        productDetailsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("DisAllProduct=>", response.toString());
-                    productDetailsModelArrayList.clear();
+                    idPBLoading.setVisibility(View.GONE);
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -178,6 +180,14 @@ public class DisplayAllProductActivity extends BaseActivity {
 
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
+
+                            if (!productDetailsModelArrayList.isEmpty()) {
+                                emptyLay.setVisibility(View.GONE);
+                                nestedScrollView.setVisibility(View.VISIBLE);
+                            } else {
+                                emptyLay.setVisibility(View.VISIBLE);
+                                nestedScrollView.setVisibility(View.GONE);
+                            }
 
                             productDisplayAdapter = new DisplayAllProductAdapter(DisplayAllProductActivity.this, productDetailsModelArrayList);
                             recyclerview_product.setAdapter(productDisplayAdapter);
@@ -230,7 +240,6 @@ public class DisplayAllProductActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(DisplayAllProductActivity.this, MainActivity.class));
         finish();
     }
 }

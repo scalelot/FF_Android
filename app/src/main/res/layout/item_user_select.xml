@@ -64,7 +64,7 @@
         android:textSize="@dimen/sp_12" />
 
     <CheckBox
-        android:id="@+id/img_chk"
+        android:id="@+id/chkBox"
         style="@style/CustomCheckbox02"
         android:layout_width="@dimen/sp_25"
         android:layout_height="@dimen/sp_25"

@@ -1,5 +1,6 @@
 package com.example.friendfield.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,16 +25,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.MyViewHolder> {
 
     Activity activity;
-    int[] u_img;
-    String[] u_name;
     LayoutInflater inflater;
     ArrayList<SelecetdUserModel> selecetdUserModelArrayList;
+    static ClickListener clickListener;
 
-    public UserSelectAdapter(SelectUserActivity selectUserActivity, int[] user_img, String[] user_name) {
-        this.activity = selectUserActivity;
-        this.u_img = user_img;
-        this.u_name = user_name;
-        inflater = LayoutInflater.from(activity);
+    public interface ClickListener {
+        void onItemClick(SelecetdUserModel model, boolean isAddTo);
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        UserSelectAdapter.clickListener = clickListener;
     }
 
     public UserSelectAdapter(Activity activity, ArrayList<SelecetdUserModel> selecetdUserModelArrayList) {
@@ -51,17 +52,28 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.txt_username.setText(selecetdUserModelArrayList.get(position).getUsername());
-        holder.txt_gmail.setText(selecetdUserModelArrayList.get(position).getUsername());
-//        holder.profile_img.setImageResource(u_img[position]);
-        holder.img_chk.setChecked(selecetdUserModelArrayList.get(position).getSelected() ? true : false);
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.txt_username.setText(selecetdUserModelArrayList.get(position).getuserName());
+        holder.txt_gmail.setText(selecetdUserModelArrayList.get(position).getuserName());
+        
+        holder.chkBox.setChecked(selecetdUserModelArrayList.get(position).isSelected);
 
-        holder.img_chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.chkBox.setTag(selecetdUserModelArrayList.get(position));
+
+        holder.chkBox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+            public void onClick(View v) {
+                CheckBox cb = (CheckBox) v;
+                SelecetdUserModel model = (SelecetdUserModel) cb.getTag();
 
+                if (!selecetdUserModelArrayList.get(position).isSelected) {
+                    model.setSelected(cb.isChecked());
+                    selecetdUserModelArrayList.get(position).setSelected(cb.isChecked());
+                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), true);
+                } else {
+                    model.setSelected(!cb.isChecked());
+                    selecetdUserModelArrayList.get(position).setSelected(false);
+                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), false);
                 }
             }
         });
@@ -92,7 +104,7 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
         TextView txt_username, txt_gmail;
         RelativeLayout iv_circle_image;
         ImageView iv_type_img;
-        CheckBox img_chk;
+        CheckBox chkBox;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,7 +114,7 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
 
             iv_circle_image = itemView.findViewById(R.id.iv_circle_image);
             iv_type_img = itemView.findViewById(R.id.iv_type_img);
-            img_chk = itemView.findViewById(R.id.img_chk);
+            chkBox = itemView.findViewById(R.id.chkBox);
 
 
         }

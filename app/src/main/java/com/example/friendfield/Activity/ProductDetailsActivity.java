@@ -49,21 +49,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductDetailsActivity extends BaseActivity {
-    ImageView ic_back;
-    ImageView ic_delete;
-    TextView txt_p_name;
-    TextView txt_p_price;
-    TextView txt_p_offer;
-    TextView txt_p_des;
-    TextView txt_p_code;
-    ImageView ic_p_edit;
+    ImageView ic_back, ic_delete, ic_p_edit;
+    TextView txt_p_name, txt_p_price, txt_p_offer;
+    TextView txt_p_des, txt_p_code;
     Context context;
-    ProductDetailsModel productDetailsModel;
-    String ProductId;
     Button btn_inquiry_message;
-    String isFromUser;
     ViewPager viewPager;
+    ProductDetailsModel productDetailsModel;
     LinearLayout sliderDotspanel;
+    String ProductId;
+    String isFromUser;
     private int dotscount;
     private ImageView[] dots;
     ImageSliderPagerAdapter viewPagerAdapter;
@@ -263,15 +258,19 @@ public class ProductDetailsActivity extends BaseActivity {
                 FileUtils.DeleteProduct(context, Constans.remove_product, ProductId);
                 dialog.dismiss();
                 onBackPressed();
-
             }
         });
         dialog.show();
     }
 
-
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), ChatingActivity.class));
+        if (isFromUser.equals("Product")) {
+            startActivity(new Intent(getApplicationContext(), ProductActivity.class));
+            finish();
+        } else {
+            startActivity(new Intent(getApplicationContext(), ChatingActivity.class));
+            finish();
+        }
     }
 }

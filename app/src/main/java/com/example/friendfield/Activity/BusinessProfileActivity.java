@@ -370,6 +370,9 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     LatLng latLng1 = new LatLng(latitiude, logitude);
                     latLng = latLng1;
 
+                    String str = businessInfoRegisterModel.getData().getBrochure();
+                    Log.e("GetBrochure=>", str.toString());
+
                     edt_bussiness_name.setText(businessInfoRegisterModel.getData().getName());
                     edt_category.setText(businessInfoRegisterModel.getData().getCategory());
                     edt_subcategory.setText(businessInfoRegisterModel.getData().getSubCategory());
@@ -378,7 +381,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     if (businessInfoRegisterModel.getData().getBusinessimage().equals("")) {
                         business_profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
                     } else {
-                        Glide.with(BusinessProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + businessInfoRegisterModel.getData().getBusinessimage()).placeholder(R.drawable.user_accept_dialog).into(business_profile_image);
+                        Glide.with(BusinessProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + businessInfoRegisterModel.getData().getBusinessimage()).placeholder(R.drawable.ic_user).into(business_profile_image);
                     }
 
                     String getadd = FileUtils.getAddressFromLatLng(getApplicationContext(), latLng);
@@ -482,6 +485,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                         SharedPreferences sharedPreferences = getSharedPreferences("name", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("displayName", displayName);
+                        editor.apply();
                         editor.commit();
 
                         edt_brochure.setText(displayName);
