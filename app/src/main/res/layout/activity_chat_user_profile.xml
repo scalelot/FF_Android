@@ -11,7 +11,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/darkturquoise">
+        android:background="@color/app_color">
 
         <ImageView
             android:id="@+id/ic_back"
@@ -94,7 +94,7 @@
                         android:layout_width="@dimen/sp_24"
                         android:layout_height="@dimen/sp_24"
                         android:src="@drawable/ic_video_call_icon"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
 
                 </LinearLayout>
 
@@ -127,7 +127,7 @@
                         android:layout_width="@dimen/sp_24"
                         android:layout_height="@dimen/sp_24"
                         android:src="@drawable/ic_audio_call"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
 
                 </LinearLayout>
 
@@ -162,7 +162,7 @@
                         android:layout_width="@dimen/sp_24"
                         android:layout_height="@dimen/sp_24"
                         android:src="@drawable/ic_business_acimg"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
 
                 </LinearLayout>
 
@@ -246,7 +246,7 @@
             android:background="@drawable/rectangle_8"
             app:tabIndicatorHeight="@dimen/sp_0"
             app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@color/darkturquoise"
+            app:tabSelectedTextColor="@color/app_color"
             app:tabTextAppearance="@style/MyCustomTextAppearance"
             app:tabTextColor="@color/grey">
 

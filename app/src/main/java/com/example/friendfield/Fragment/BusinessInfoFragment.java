@@ -67,7 +67,6 @@ public class BusinessInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_business_info, container, false);
 
-
         edt_img = view.findViewById(R.id.edt_img);
         cir_business_img = view.findViewById(R.id.cir_business_img);
         txt_business_name = view.findViewById(R.id.text_business_name);

@@ -144,7 +144,7 @@
                             android:fontFamily="@font/roboto_regular"
                             android:gravity="center"
                             android:text="@string/sample_exe_file"
-                            android:textColor="@color/darkturquoise"
+                            android:textColor="@color/app_color"
                             android:textSize="@dimen/text_12" />
                     </LinearLayout>
 
@@ -163,7 +163,7 @@
                             android:layout_gravity="center_vertical"
                             android:fontFamily="@font/roboto_regular"
                             android:text="@string/sample_exe_file"
-                            android:textColor="@color/darkturquoise"
+                            android:textColor="@color/app_color"
                             android:textSize="@dimen/text_12" />
                     </LinearLayout>
 
@@ -228,7 +228,7 @@
                     android:layout_height="@dimen/sp_25"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/edt_bg"
-                    android:backgroundTint="@color/darkturquoise"
+                    android:backgroundTint="@color/app_color"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -379,8 +379,8 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/select_package"
                 android:text="@string/select_package"
-                android:textColor="@color/darkturquoise"
-                android:textColorHint="@color/darkturquoise"
+                android:textColor="@color/app_color"
+                android:textColorHint="@color/app_color"
                 android:textSize="@dimen/text_12" />
 
 
@@ -513,7 +513,7 @@
                 android:layout_centerVertical="true"
                 android:padding="@dimen/sp_5"
                 android:src="@drawable/ic_location"
-                app:tint="@color/darkturquoise" />
+                app:tint="@color/app_color" />
 
         </RelativeLayout>
     </LinearLayout>

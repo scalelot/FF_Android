@@ -60,7 +60,7 @@
             android:layout_marginTop="@dimen/margin_5"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/url"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_12" />
 
         <LinearLayout
@@ -104,7 +104,7 @@
             android:layout_toLeftOf="@+id/ll_promotion"
             android:background="@drawable/button_boder"
             android:text="@string/edit_notification"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/sp_10" />
     </RelativeLayout>
 </RelativeLayout>

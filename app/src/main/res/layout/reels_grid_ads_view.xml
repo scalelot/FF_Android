@@ -7,14 +7,14 @@
     android:layout_gravity="center"
     android:layout_margin="@dimen/margin_5"
     android:background="@color/white"
-    app:cardBackgroundColor="@color/darkturquoise"
+    app:cardBackgroundColor="@color/app_color"
     app:cardCornerRadius="@dimen/sp_5"
     app:cardElevation="@dimen/sp_2">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="@dimen/margin_140"
-        android:background="@color/darkturquoise"
+        android:background="@color/app_color"
         android:orientation="vertical" />
 
 </androidx.cardview.widget.CardView>

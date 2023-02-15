@@ -61,7 +61,7 @@
         android:layout_marginRight="@dimen/margin_20"
         android:layout_toRightOf="@+id/send_image"
         android:text="@string/pending"
-        android:textColor="@color/darkturquoise"
+        android:textColor="@color/app_color"
         android:textSize="@dimen/text_12" />
 
     <View

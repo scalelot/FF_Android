@@ -30,7 +30,7 @@
             android:layout_toRightOf="@id/cir_profile_pic"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/name"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_12"
             android:visibility="visible" />
     </RelativeLayout>

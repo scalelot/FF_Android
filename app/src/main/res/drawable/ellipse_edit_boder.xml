@@ -10,6 +10,6 @@
 
     <stroke
         android:width="@dimen/sp_2"
-        android:color="@color/darkturquoise" />
+        android:color="@color/app_color" />
 
 </shape>

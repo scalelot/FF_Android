@@ -219,7 +219,6 @@ public class ProductActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        productDetailsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {

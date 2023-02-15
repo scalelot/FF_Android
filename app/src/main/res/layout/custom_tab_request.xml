@@ -53,7 +53,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="center"
                 android:text="@string/friend_request"
-                android:textColor="@color/darkturquoise"
+                android:textColor="@color/app_color"
                 android:textSize="@dimen/sp_14" />
 
             <TextView

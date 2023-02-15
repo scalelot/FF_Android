@@ -116,7 +116,7 @@
         android:fontFamily="@font/roboto_regular"
         android:singleLine="true"
         android:text="@string/resend_code"
-        android:textColor="@color/darkturquoise"
+        android:textColor="@color/app_color"
         android:textSize="@dimen/text_16" />
 
     <Button

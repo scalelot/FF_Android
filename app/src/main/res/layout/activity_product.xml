@@ -202,7 +202,7 @@
                     android:layout_marginLeft="@dimen/margin_10"
                     android:fontFamily="@font/roboto_bold"
                     android:text="@string/add_new_pro"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_16" />
             </LinearLayout>
 
@@ -283,7 +283,7 @@
             android:fontFamily="@font/roboto_regular"
             android:padding="@dimen/sp_5"
             android:text="@string/skip_for_no"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/sp_16"
             android:visibility="visible" />
     </LinearLayout>

@@ -67,8 +67,15 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
             @Override
             public void onClick(View view) {
                 setUnblockUser(strIds);
+                removeAt(holder.getAdapterPosition());
             }
         });
+    }
+
+    private void removeAt(int adapterPosition) {
+        blockedFriendRegisterModels.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+        notifyItemRangeChanged(adapterPosition, blockedFriendRegisterModels.size());
     }
 
     private void setUnblockUser(String strIds) {

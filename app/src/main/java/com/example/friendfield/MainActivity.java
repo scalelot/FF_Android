@@ -39,7 +39,6 @@ import com.example.friendfield.Activity.ChatingActivity;
 import com.example.friendfield.Activity.CreateNewGroupActivity;
 import com.example.friendfield.Activity.DisplayAllProductActivity;
 import com.example.friendfield.Activity.LikeAndCommentActivity;
-import com.example.friendfield.Activity.ProductActivity;
 import com.example.friendfield.Activity.PromotionActivity;
 import com.example.friendfield.Activity.RequestActivity;
 import com.example.friendfield.Activity.ProfileActivity;
@@ -49,7 +48,6 @@ import com.example.friendfield.Fragment.CallsFragment;
 import com.example.friendfield.Fragment.ChatFragment;
 import com.example.friendfield.Fragment.ContactFragment;
 import com.example.friendfield.Fragment.MapsFragment;
-import com.example.friendfield.Model.PersonalInfo.PeronalRegisterModel;
 import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
@@ -58,11 +56,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -179,12 +175,12 @@ public class MainActivity extends BaseActivity {
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txt_chats.setTextColor(getResources().getColor(R.color.darkturquoise));
+                txt_chats.setTextColor(getResources().getColor(R.color.app_color));
                 txt_find_friend.setTextColor(def);
                 txt_calls.setTextColor(def);
                 txt_contact_list.setTextColor(def);
 
-                iv_chats.setColorFilter(getResources().getColor(R.color.darkturquoise));
+                iv_chats.setColorFilter(getResources().getColor(R.color.app_color));
                 iv_find_friend.setColorFilter(getResources().getColor(R.color.grey));
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
@@ -199,12 +195,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                txt_find_friend.setTextColor(getResources().getColor(R.color.darkturquoise));
+                txt_find_friend.setTextColor(getResources().getColor(R.color.app_color));
                 txt_chats.setTextColor(def);
                 txt_calls.setTextColor(def);
                 txt_contact_list.setTextColor(def);
 
-                iv_find_friend.setColorFilter(getResources().getColor(R.color.darkturquoise));
+                iv_find_friend.setColorFilter(getResources().getColor(R.color.app_color));
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
@@ -218,12 +214,12 @@ public class MainActivity extends BaseActivity {
         lin_calls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txt_calls.setTextColor(getResources().getColor(R.color.darkturquoise));
+                txt_calls.setTextColor(getResources().getColor(R.color.app_color));
                 txt_chats.setTextColor(def);
                 txt_find_friend.setTextColor(def);
                 txt_contact_list.setTextColor(def);
 
-                iv_calls.setColorFilter(getResources().getColor(R.color.darkturquoise));
+                iv_calls.setColorFilter(getResources().getColor(R.color.app_color));
                 iv_find_friend.setColorFilter(getResources().getColor(R.color.grey));
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
@@ -237,12 +233,12 @@ public class MainActivity extends BaseActivity {
         lin_contact_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txt_contact_list.setTextColor(getResources().getColor(R.color.darkturquoise));
+                txt_contact_list.setTextColor(getResources().getColor(R.color.app_color));
                 txt_chats.setTextColor(def);
                 txt_find_friend.setTextColor(def);
                 txt_calls.setTextColor(def);
 
-                iv_contact_list.setColorFilter(getResources().getColor(R.color.darkturquoise));
+                iv_contact_list.setColorFilter(getResources().getColor(R.color.app_color));
                 iv_find_friend.setColorFilter(getResources().getColor(R.color.grey));
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));

@@ -14,31 +14,6 @@
         <item>Home Decor</item>
     </string-array>
 
-    <string-array name="inter_business_category">
-        <item>Cafe</item>
-        <item>Restaurants</item>
-        <item>Manufacturing</item>
-        <item>Sports</item>
-        <item>Home Decor</item>
-    </string-array>
-
-    <string-array name="inter_business_subcategory">
-        <item>Cafe</item>
-        <item>Restaurants</item>
-        <item>Manufacturing</item>
-        <item>Sports</item>
-        <item>Home Decor</item>
-    </string-array>
-
-    <array name="recent_status">
-        <item>@array/array1</item>
-        <item>@array/array2</item>
-        <item>@array/array3</item>
-        <item>@array/array4</item>
-        <item>@array/array5</item>
-        <item>@array/array6</item>
-    </array>
-
     <array name="array1">
         <item>@drawable/img_1</item>
         <item>@drawable/img_2</item>
@@ -48,28 +23,28 @@
     <array name="array2">
         <item>@drawable/img_4</item>
         <item>@drawable/img_6</item>
-        <!--        <item>@drawable/img_7</item>-->
     </array>
+
     <array name="array3">
         <item>@drawable/img_2</item>
         <item>@drawable/img_4</item>
         <item>@drawable/img_6</item>
     </array>
+
     <array name="array4">
         <item>@drawable/img_1</item>
-        <!--        <item>@drawable/img_3</item>-->
-        <!--        <item>@drawable/img_7</item>-->
     </array>
+
     <array name="array5">
         <item>@drawable/cupcakes_bg</item>
         <item>@drawable/ic_user_img</item>
         <item>@drawable/img_1</item>
         <item>@drawable/img_3</item>
     </array>
+
     <array name="array6">
         <item>@drawable/img_7</item>
         <item>@drawable/img_2</item>
-        <!--        <item>@drawable/img_4</item>-->
     </array>
 
 </resources>

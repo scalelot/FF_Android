@@ -61,7 +61,7 @@
             android:layout_marginTop="@dimen/margin_5"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/url"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_12" />
 
     </RelativeLayout>

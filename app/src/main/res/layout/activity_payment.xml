@@ -10,7 +10,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/sp_125"
-        android:background="@color/darkturquoise">
+        android:background="@color/app_color">
 
         <ImageView
             android:id="@+id/ic_back_btn"

@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/edt_bg"
-            android:backgroundTint="@color/darkturquoise"
+            android:backgroundTint="@color/app_color"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/unblock"
             android:textColor="@color/white"

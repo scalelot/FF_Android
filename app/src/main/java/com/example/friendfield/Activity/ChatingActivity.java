@@ -81,7 +81,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     TextView u_name, txt_online, txt_pro_name, txt_pro_des, txt_pro_price;
     RelativeLayout btn_send, rel_replay, rl_user;
     RecyclerView chat_recycler;
-    String toUserIds, txt_name, p_name, p_des, userName;
+    String toUserIds, txt_name, p_name, p_des, userName, p_ids;
     String loginUserId = "", p_price, edt_str, pro_img, p_img;
     Uri imageUri, uri;
     MessageAdapter messageAdapter;
@@ -139,6 +139,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         pro_img = getIntent().getStringExtra("product_img");
         p_name = getIntent().getStringExtra("product_name");
         p_des = getIntent().getStringExtra("product_des");
+        p_ids = getIntent().getStringExtra("product_ids");
         p_price = getIntent().getStringExtra("product_price");
 
         if (p_name == null && p_des == null && p_price == null) {
@@ -270,23 +271,49 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("to", toUserIds);
-                    jsonObject.put("message", edt_chating.getText().toString().trim());
-                    jsonObject.put("isSent", true);
-                    jsonObject.put("isRecive", false);
+                if (rel_replay.getVisibility() != View.VISIBLE) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("to", toUserIds);
+                        jsonObject.put("message", edt_chating.getText().toString().trim());
+                        jsonObject.put("isSent", true);
+                        jsonObject.put("isRecive", false);
 
-                    if (edt_chating.getText().toString().equals("")) {
-                        Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT);
-                    } else {
-                        sendMessage(toUserIds, edt_chating.getText().toString().trim());
-                        messageAdapter.addItem(jsonObject);
+                        if (edt_chating.getText().toString().equals("")) {
+                            Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT);
+                        } else {
+                            sendMessage(toUserIds, edt_chating.getText().toString().trim());
+                            messageAdapter.addItem(jsonObject);
+                        }
+                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                        resetMessageEdit();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
-                    resetMessageEdit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } else {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("to", toUserIds);
+                        jsonObject.put("product", p_ids);
+                        jsonObject.put("pro_message", edt_chating.getText().toString().trim());
+                        jsonObject.put("pro_name", p_name);
+                        jsonObject.put("pro_img", pro_img);
+                        jsonObject.put("pro_price", p_price);
+                        jsonObject.put("pro_des", p_des);
+                        jsonObject.put("isSent", true);
+                        jsonObject.put("isRecive", false);
+
+                        if (p_ids == null && edt_chating.getText().toString().equals("")) {
+                            Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT);
+                        } else {
+                            sendProduct(toUserIds, p_ids, edt_chating.getText().toString().trim());
+                            rel_replay.setVisibility(View.GONE);
+                            messageAdapter.addItem(jsonObject);
+                        }
+                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -318,6 +345,33 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 });
     }
 
+    private void sendProduct(String userIds, String toUserIds, String txt) {
+        AndroidNetworking.post(Constans.set_chat_message)
+                .addBodyParameter("to", userIds)
+                .addBodyParameter("product", toUserIds)
+                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
+                .setPriority(Priority.HIGH)
+                .setTag("UploadTest")
+                .build()
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("ProductSendMessage=>", response.toString());
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.e("ProductMessage_Error=>", error.toString());
+                    }
+                });
+    }
+
     public void getChatList(String toUserIds, int page, int limit) {
         if (page > limit) {
             Toast.makeText(getApplicationContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
@@ -332,6 +386,15 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        listChatsModelArrayList.clear();
+        form_id = new ArrayList<>();
+        to_id = new ArrayList<>();
+        send_message = new ArrayList<>();
+        userIdList = new ArrayList<>();
+        send_time = new ArrayList<>();
+        recivetime = new ArrayList<>();
+        send_message.clear();
+        userIdList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         {
             try {
@@ -339,15 +402,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.e("ListChat=>", response.toString());
-                        form_id = new ArrayList<>();
-                        to_id = new ArrayList<>();
-                        send_message = new ArrayList<>();
-                        userIdList = new ArrayList<>();
-                        send_time = new ArrayList<>();
-                        recivetime = new ArrayList<>();
-                        listChatsModelArrayList.clear();
-                        send_message.clear();
-                        userIdList.clear();
                         try {
                             JSONObject dataJsonObject = response.getJSONObject("Data");
 

@@ -3,44 +3,23 @@ package com.example.friendfield.Activity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.friendfield.Adapter.ChatViewPagerAdapter;
-import com.example.friendfield.Adapter.TagAdapter;
 import com.example.friendfield.BaseActivity;
-import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
-import com.example.friendfield.Model.UserProfile.UserProfileRegisterModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -64,7 +43,7 @@ public class ChatUserProfileActivity extends BaseActivity {
         Window window = ChatUserProfileActivity.this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(ChatUserProfileActivity.this, R.color.darkturquoise));
+        window.setStatusBarColor(ContextCompat.getColor(ChatUserProfileActivity.this, R.color.app_color));
 
         ic_back = findViewById(R.id.ic_back);
         tabLayout = findViewById(R.id.chat_tabLayout);
@@ -121,7 +100,7 @@ public class ChatUserProfileActivity extends BaseActivity {
             ((LinearLayout) Objects.requireNonNull(tabLayout.getTabAt(1)).view).setVisibility(View.GONE);
 
         } else {
-            tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.darkturquoise));
+            tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.app_color));
             ChatViewPagerAdapter viewPagerAdapter = new ChatViewPagerAdapter(ChatUserProfileActivity.this, getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(viewPagerAdapter);
         }

@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/margin_5"
         android:layout_toRightOf="@+id/group_img"
         android:fontFamily="@font/roboto_regular"
-        android:text="@string/ph_number"
+        android:text="@string/ph_no"
         android:textColor="@color/grey"
         android:textSize="@dimen/text_12" />
 
@@ -53,7 +53,7 @@
             android:fontFamily="@font/roboto_regular"
             android:padding="@dimen/margin_5"
             android:text="@string/admin"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_12" />
     </LinearLayout>
 </RelativeLayout>

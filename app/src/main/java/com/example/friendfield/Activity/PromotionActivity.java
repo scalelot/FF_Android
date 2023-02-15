@@ -1,6 +1,5 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.content.Intent;
@@ -53,7 +52,7 @@ public class PromotionActivity extends BaseActivity {
         running.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                running.setTextColor(getResources().getColor(R.color.darkturquoise));
+                running.setTextColor(getResources().getColor(R.color.app_color));
                 history.setTextColor(def);
                 select.animate().x(0).setDuration(100);
                 getSupportFragmentManager().beginTransaction()
@@ -66,7 +65,7 @@ public class PromotionActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 running.setTextColor(def);
-                history.setTextColor(getResources().getColor(R.color.darkturquoise));
+                history.setTextColor(getResources().getColor(R.color.app_color));
                 int size = history.getWidth();
                 select.animate().x(size).setDuration(100);
                 getSupportFragmentManager().beginTransaction()

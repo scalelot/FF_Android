@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/margin_10"
         android:src="@drawable/ic_help"
-        app:tint="@color/darkturquoise" />
+        app:tint="@color/app_color" />
 
     <TextView
         android:id="@+id/cerate_txt"
@@ -66,7 +66,7 @@
             android:background="@drawable/button_boder"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/no"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_12" />
 
         <View
@@ -78,7 +78,7 @@
             android:layout_width="@dimen/sp_130"
             android:layout_height="@dimen/margin_40"
             android:background="@drawable/rectangle_150"
-            android:backgroundTint="@color/darkturquoise"
+            android:backgroundTint="@color/app_color"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/yes"
             android:textColor="@color/white"

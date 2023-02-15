@@ -7,5 +7,5 @@
 
     <item
         android:state_checked="false"
-        android:color="@color/darkturquoise"/>
+        android:color="@color/app_color"/>
 </selector>

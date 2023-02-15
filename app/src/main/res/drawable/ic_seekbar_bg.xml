@@ -16,7 +16,7 @@
             <shape android:shape="rectangle">
                 <corners android:radius="5dp" />
 
-                <solid android:color="@color/darkturquoise" />
+                <solid android:color="@color/app_color" />
             </shape>
         </clip>
     </item>
@@ -25,7 +25,7 @@
             <shape android:shape="rectangle">
                 <corners android:radius="5dp" />
 
-                <solid android:color="@color/darkturquoise" />
+                <solid android:color="@color/app_color" />
             </shape>
         </clip>
     </item>

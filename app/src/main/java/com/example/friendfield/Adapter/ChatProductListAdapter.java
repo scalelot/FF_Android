@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.friendfield.Activity.ChatProductSelectActivity;
-import com.example.friendfield.Activity.ChatingActivity;
 import com.example.friendfield.Activity.ProductDetailsActivity;
 import com.example.friendfield.Model.Product.ProductDetailsModel;
 import com.example.friendfield.R;
@@ -37,7 +36,7 @@ public class ChatProductListAdapter extends RecyclerView.Adapter<ChatProductList
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.item_chat_product_send, parent, false);
+        View view = inflater.inflate(R.layout.item_product_list, parent, false);
         return new ViewHolder(view);
     }
 

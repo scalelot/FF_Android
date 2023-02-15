@@ -101,7 +101,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_audio_call"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/txt_call"
@@ -124,7 +124,7 @@
                     android:layout_marginTop="@dimen/margin_5"
                     android:layout_toRightOf="@+id/image_call"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/number"
+                    android:text="@string/ph_no"
                     android:textColor="@color/grey"
                     android:textSize="@dimen/text_14" />
 
@@ -155,7 +155,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_email_icon"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/txt_mail"
@@ -208,7 +208,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_birthday"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/text_birthday"
@@ -261,7 +261,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_gender"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/text_gender"
@@ -314,7 +314,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_copy_link"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/media"
@@ -368,7 +368,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_video_call_icon"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/video"
@@ -422,7 +422,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_audio_call"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
                 <TextView
                     android:id="@+id/audio"
@@ -445,7 +445,7 @@
                     android:layout_marginTop="@dimen/margin_5"
                     android:layout_toRightOf="@+id/image_audio"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/number"
+                    android:text="@string/ph_no"
                     android:textColor="@color/grey"
                     android:textSize="@dimen/text_14" />
 

@@ -33,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_MESSAGE_SENT = 0;
+    private static final int TYPE_PRODUCT_SENT = 4;
     private static final int TYPE_MESSAGE_RECEIVED = 1;
     private static final int TYPE_IMAGE_SENT = 2;
     private static final int TYPE_IMAGE_RECEIVED = 3;
@@ -65,6 +66,22 @@ public class MessageAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             send_image = itemView.findViewById(R.id.send_image);
+        }
+    }
+
+    private class SentProductHolder extends RecyclerView.ViewHolder {
+
+        ImageView pro_chat_image;
+        TextView txt_pro_name, txt_pro_des, txt_pro_price, txt_product;
+
+        public SentProductHolder(@NonNull View itemView) {
+            super(itemView);
+
+            pro_chat_image = itemView.findViewById(R.id.pro_chat_image);
+            txt_pro_name = itemView.findViewById(R.id.txt_pro_name);
+            txt_pro_des = itemView.findViewById(R.id.txt_pro_des);
+            txt_pro_price = itemView.findViewById(R.id.txt_pro_price);
+            txt_product = itemView.findViewById(R.id.txt_product);
         }
     }
 
@@ -107,6 +124,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                 if (message.has("message"))
                     return TYPE_MESSAGE_SENT;
+                else if (message.has("product"))
+                    return TYPE_PRODUCT_SENT;
                 else
                     return TYPE_IMAGE_SENT;
 
@@ -150,6 +169,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 view = inflater.inflate(R.layout.item_received_photo, parent, false);
                 return new ReceivedImageHolder(view);
 
+            case TYPE_PRODUCT_SENT:
+
+                view = inflater.inflate(R.layout.item_chat_product, parent, false);
+                return new SentProductHolder(view);
+
         }
 
         return null;
@@ -175,7 +199,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         String time = getDate(timestamp);
                         messageHolder.txt_time.setText(time);
                     }
-
+                } else if (message.has("product")) {
+                    SentProductHolder sentProductHolder = (SentProductHolder) holder;
+                    sentProductHolder.txt_pro_name.setText(String.valueOf(message.getString("pro_name")));
+                    sentProductHolder.txt_pro_des.setText(message.getString("pro_des"));
+                    sentProductHolder.txt_pro_price.setText(message.getString("p_price"));
+                    sentProductHolder.txt_product.setText(message.getString("pro_message"));
+                    Glide.with(inflater.getContext()).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
                 } else {
                     SentImageHolder imageHolder = (SentImageHolder) holder;
                     Bitmap bitmap = BitmapFactory.decodeFile(message.getString("image"));

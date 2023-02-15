@@ -7,8 +7,7 @@
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorPrimary">#FFFFFF</color>
 
-<!--    <color name="darkturquoise">#2dcad5</color>-->
-    <color name="darkturquoise">#5AC8D2</color>
+    <color name="app_color">#5AC8D2</color>
     <color name="light_darkturquoise">#96E4E9</color>
     <color name="grey">#888888</color>
     <color name="light_grey">#DDDDDD</color>
@@ -20,54 +19,12 @@
     <color name="tab_bg">#F1F1F1</color>
     <color name="red">#FC5858</color>
     <color name="bg_grey_color">#F0F0F0</color>
-    <color name="bg_trans">#803E3B3B</color>
     <color name="light_silver">#eeeeee</color>
     <color name="medium_grey">#AFAFAF</color>
     <color name="light_sky">#def4f6</color>
 
-    <array name="default_colors">
-        <item>#ff0000</item>
-        <item>#ffff00</item>
-        <item>#00ffff</item>
-        <item>#000000</item>
-    </array>
-    <color name="gray">#737171</color>
-    <color name="transparent_black">#a34b4949</color>
-    <color name="transparent">#6F1B1A1A</color>
-    <color name="blackish">#2d2c2c</color>
-    <color name="checkbox_color">#ff0000</color>
-
-    <!-- Story Display Progress-->
-    <color name="progress_primary">@color/white</color>
-    <color name="progress_secondary">@color/gray_scale</color>
-    <color name="progress_max_active">@color/white</color>
-
-
-    <color name="camera_progress_three">#24ff00</color>
-    <color name="camera_bg">#2c2c2c</color>
-    <color name="camera_progress_split">#005084</color>
-    <color name="camera_progress_delete">#f68b2b</color>
-    <color name="camera_progress_overflow">#1b5d89</color>
-    <color name="blue">#3394EC</color>
-<!--    <color name="white">#FFFFFF</color>-->
-<!--    <color name="black">#000000</color>-->
-<!--    <color name="gray">#2c2c2c</color>-->
-    <color name="gray_text">#e6e6e6</color>
-    <color name="mainColor">#FF9520</color>
     <color name="stickerBacColor">#CC212121</color>
-    <color name="cutRateBacColor">#FF212121</color>
     <color name="editBubbleTextBac">#F8F8F8</color>
-    <color name="editBubbleTextColor">#333333</color>
     <color name="musicBacColor">#0F0F1B</color>
-    <color name="sixtyWhite">#99FFFFFF</color>
-    <color name="sixtyBlack">#99000000</color>
-    <color name="fiftyWhite">#80FFFFFF</color>
-    <color name="fiftyblack">#80000000</color>
-    <color name="lightblack">#30000000</color>
-    <color name="light_black">#2D2E30</color>
-    <color name="lightgrey">#99FFFFFF</color>
-    <color name="offgrey">#66FFFFFF</color>
-<!--    <color name="transparent">#00000000</color>-->
-    <color name="editSpBac">#0F0F1B</color>
 
 </resources>

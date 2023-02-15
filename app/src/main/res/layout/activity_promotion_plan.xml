@@ -79,7 +79,7 @@
             android:layout_width="@dimen/sp_20"
             android:layout_height="@dimen/sp_20"
             android:src="@drawable/ic_notification_bell"
-            app:tint="@color/darkturquoise" />
+            app:tint="@color/app_color" />
 
         <TextView
             android:id="@+id/txt_noti"
@@ -119,7 +119,7 @@
             android:layout_width="@dimen/sp_20"
             android:layout_height="@dimen/sp_20"
             android:src="@drawable/ic_email_icon"
-            app:tint="@color/darkturquoise" />
+            app:tint="@color/app_color" />
 
         <TextView
             android:id="@+id/txt_mess"
@@ -159,7 +159,7 @@
             android:layout_width="@dimen/sp_20"
             android:layout_height="@dimen/sp_20"
             android:src="@drawable/ic_conversation_icon"
-            app:tint="@color/darkturquoise" />
+            app:tint="@color/app_color" />
 
         <TextView
             android:id="@+id/txt_sms"

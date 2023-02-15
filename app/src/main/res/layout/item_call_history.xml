@@ -68,6 +68,6 @@
         android:layout_marginRight="@dimen/margin_20"
         android:layout_toLeftOf="@+id/img_close"
         android:src="@drawable/ic_video_call_icon"
-        app:tint="@color/darkturquoise" />
+        app:tint="@color/app_color" />
 
 </RelativeLayout>

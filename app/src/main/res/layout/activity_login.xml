@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/text_30"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/welcome_txt"
-        android:textColor="@color/darkturquoise"
+        android:textColor="@color/app_color"
         android:textSize="@dimen/text_30"
         android:textStyle="bold" />
 

@@ -190,7 +190,7 @@
                     android:layout_marginRight="@dimen/margin_20"
                     android:layout_marginBottom="@dimen/margin_20"
                     android:background="@drawable/edt_bg"
-                    android:backgroundTint="@color/darkturquoise"
+                    android:backgroundTint="@color/app_color"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/change_number"
                     android:textColor="@color/white"

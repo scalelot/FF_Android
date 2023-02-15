@@ -16,7 +16,7 @@
             android:id="@+id/rl_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/darkturquoise">
+            android:background="@color/app_color">
 
             <ImageView
                 android:id="@+id/back_arrow"
@@ -60,7 +60,7 @@
                         android:layout_height="@dimen/sp_16"
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_edit"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -94,7 +94,7 @@
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/edit_group_info"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_14" />
 
                 <LinearLayout
@@ -110,7 +110,7 @@
                         android:layout_width="@dimen/sp_24"
                         android:layout_height="@dimen/sp_24"
                         android:src="@drawable/ic_video_call_icon"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
 
                 </LinearLayout>
 
@@ -127,7 +127,7 @@
                         android:layout_width="@dimen/sp_24"
                         android:layout_height="@dimen/sp_24"
                         android:src="@drawable/ic_audio_call"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -311,7 +311,7 @@
                     android:layout_width="@dimen/sp_20"
                     android:layout_height="@dimen/sp_20"
                     android:src="@drawable/ic_group_add_user"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
             </LinearLayout>
         </RelativeLayout>
@@ -333,7 +333,7 @@
             android:fontFamily="@font/roboto_medium"
             android:padding="@dimen/margin_10"
             android:text="@string/show_all"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_14" />
 
         <TextView
@@ -346,7 +346,7 @@
             android:fontFamily="@font/roboto_medium"
             android:padding="@dimen/margin_10"
             android:text="@string/show_less"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_14" />
 
         <View

@@ -100,7 +100,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="center"
                         android:text="@string/sample_exe_file"
-                        android:textColor="@color/darkturquoise"
+                        android:textColor="@color/app_color"
                         android:textSize="@dimen/text_12" />
                 </LinearLayout>
 
@@ -119,7 +119,7 @@
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/roboto_regular"
                         android:text="@string/sample_exe_file"
-                        android:textColor="@color/darkturquoise"
+                        android:textColor="@color/app_color"
                         android:textSize="@dimen/text_12" />
                 </LinearLayout>
 
@@ -229,7 +229,7 @@
                 android:layout_height="@dimen/margin_40"
                 android:layout_weight="1"
                 android:background="@drawable/rectangle_150"
-                android:backgroundTint="@color/darkturquoise"
+                android:backgroundTint="@color/app_color"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/upload_file"
                 android:textColor="@color/white"

@@ -103,7 +103,7 @@
                     android:layout_marginTop="@dimen/margin_5"
                     android:fontFamily="@font/roboto_medium"
                     android:text="www.companyname.com"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_12" />
 
             </RelativeLayout>
@@ -136,7 +136,7 @@
                     android:layout_marginTop="@dimen/margin_5"
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/publish_date_time"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_12" />
 
             </RelativeLayout>
@@ -228,7 +228,7 @@
                     android:layout_marginTop="@dimen/margin_5"
                     android:layout_toRightOf="@+id/img_id"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/number"
+                    android:text="@string/ph_no"
                     android:textColor="@color/grey"
                     android:textSize="@dimen/text_14" />
             </RelativeLayout>
@@ -268,7 +268,7 @@
                     android:layout_toRightOf="@+id/img_status"
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/successful"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_14" />
             </RelativeLayout>
 
@@ -295,7 +295,7 @@
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/download_invoice"
                     android:textAllCaps="true"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_16" />
 
             </LinearLayout>

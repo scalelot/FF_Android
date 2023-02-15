@@ -1,7 +1,5 @@
 package com.example.friendfield.Adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +13,8 @@ import com.bumptech.glide.Glide;
 import com.example.friendfield.Fragment.SendRequestFragment;
 import com.example.friendfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterModel;
 import com.example.friendfield.R;
-import com.example.friendfield.Utils.Const;
 import com.example.friendfield.Utils.Constans;
 
-import org.apache.http.Consts;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,7 +52,7 @@ public class SendRequestAdapter extends RecyclerView.Adapter<SendRequestAdapter.
         status = receiveFriendsRequestModels.get(position).getStatus();
         if (status.equals("sent")) {
             holder.txt_request_check.setText(fragment.getContext().getResources().getString(R.string.pending));
-            holder.txt_request_check.setTextColor(fragment.getResources().getColor(R.color.darkturquoise));
+            holder.txt_request_check.setTextColor(fragment.getResources().getColor(R.color.app_color));
         }
         String strTime = String.valueOf(receiveFriendsRequestModels.get(position).getTimestamp());
         long timestamp = Long.parseLong(strTime) * 1000L;

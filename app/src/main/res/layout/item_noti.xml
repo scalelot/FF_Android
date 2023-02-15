@@ -104,7 +104,7 @@
             android:layout_toRightOf="@+id/img_user"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/url"
-            android:textColor="@color/darkturquoise"
+            android:textColor="@color/app_color"
             android:textSize="@dimen/text_12" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -114,7 +114,7 @@
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/margin_10"
             android:background="@drawable/rectangle_150"
-            android:backgroundTint="@color/darkturquoise"
+            android:backgroundTint="@color/app_color"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/message"
             android:textColor="@color/white"

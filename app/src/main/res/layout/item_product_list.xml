@@ -63,7 +63,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
                 android:text="@string/some_id"
-                android:textColor="@color/darkturquoise"
+                android:textColor="@color/app_color"
                 android:textSize="@dimen/text_14" />
         </LinearLayout>
     </RelativeLayout>

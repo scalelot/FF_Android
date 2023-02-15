@@ -1,7 +1,5 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -47,7 +45,7 @@ public class RequestActivity extends BaseActivity {
         friend_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                friend_request.setTextColor(getResources().getColor(R.color.darkturquoise));
+                friend_request.setTextColor(getResources().getColor(R.color.app_color));
                 send_request.setTextColor(def);
                 select.animate().x(0).setDuration(100);
                 getSupportFragmentManager().beginTransaction()
@@ -60,7 +58,7 @@ public class RequestActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 friend_request.setTextColor(def);
-                send_request.setTextColor(getResources().getColor(R.color.darkturquoise));
+                send_request.setTextColor(getResources().getColor(R.color.app_color));
                 int size = send_request.getWidth();
                 select.animate().x(size).setDuration(100);
                 getSupportFragmentManager().beginTransaction()

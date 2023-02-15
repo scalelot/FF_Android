@@ -121,7 +121,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_5"
                 android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_chat_product_send" />
+                tools:listitem="@layout/item_product_list" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

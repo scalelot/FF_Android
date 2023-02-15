@@ -262,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
                         android:text="@string/people_150"
-                        android:textColor="@color/darkturquoise"
+                        android:textColor="@color/app_color"
                         android:textSize="@dimen/text_16" />
 
                     <TextView

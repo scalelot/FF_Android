@@ -64,7 +64,7 @@
             android:layout_marginLeft="@dimen/margin_13"
             android:layout_weight="1.8"
             android:background="@drawable/edt_bg"
-            android:backgroundTint="@color/darkturquoise"
+            android:backgroundTint="@color/app_color"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/invite"
             android:textColor="@color/white"

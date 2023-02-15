@@ -63,6 +63,7 @@ public class ProductDetailsActivity extends BaseActivity {
     private ImageView[] dots;
     ImageSliderPagerAdapter viewPagerAdapter;
     List<ImageSliderModel> imageSliderModels;
+    String idsProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +142,7 @@ public class ProductDetailsActivity extends BaseActivity {
                         txt_p_offer.setText(productModel.getProductDetailsModel().getOffer() + "% Off");
                     }
 
+                    idsProduct = productModel.getProductDetailsModel().getId();
                     txt_p_des.setText(productModel.getProductDetailsModel().getDescription());
                     txt_p_code.setText(productModel.getProductDetailsModel().getItemCode());
 
@@ -193,6 +195,7 @@ public class ProductDetailsActivity extends BaseActivity {
                             intent.putExtra("product_img", String.valueOf(productModel.getProductDetailsModel().getImages().get(0)));
                             intent.putExtra("product_name", productModel.getProductDetailsModel().getName());
                             intent.putExtra("product_des", productModel.getProductDetailsModel().getDescription());
+                            intent.putExtra("product_ids", productModel.getProductDetailsModel().getId());
                             intent.putExtra("product_price", "$" + String.format("%,.0f", Float.valueOf(productModel.getProductDetailsModel().getPrice())) + ".00");
                             startActivity(intent);
                             finish();

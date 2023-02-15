@@ -189,7 +189,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/margin_10"
                     android:background="@drawable/edt_bg"
-                    android:backgroundTint="@color/darkturquoise"
+                    android:backgroundTint="@color/app_color"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/change"
                     android:textColor="@color/white"
@@ -289,7 +289,7 @@
                     android:layout_centerVertical="true"
                     android:padding="@dimen/sp_5"
                     android:src="@drawable/ic_baseline_location_on_24"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
             </RelativeLayout>
 
@@ -330,7 +330,7 @@
                     android:layout_margin="@dimen/margin_10"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/google_map"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/text_14" />
             </RelativeLayout>
 
@@ -378,7 +378,7 @@
                 android:layout_marginRight="@dimen/margin_20"
                 android:layout_marginBottom="@dimen/margin_20"
                 android:background="@drawable/edt_bg"
-                android:backgroundTint="@color/darkturquoise"
+                android:backgroundTint="@color/app_color"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/next"
                 android:textColor="@color/white"
@@ -391,7 +391,7 @@
                 android:layout_below="@+id/seekbar_age"
                 android:layout_margin="@dimen/margin_20"
                 android:background="@drawable/edt_bg"
-                android:backgroundTint="@color/darkturquoise"
+                android:backgroundTint="@color/app_color"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/save"
                 android:textColor="@color/white"

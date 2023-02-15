@@ -194,7 +194,7 @@
                 android:layout_height="@dimen/sp_21"
                 android:layout_marginLeft="@dimen/sp_20"
                 android:src="@drawable/ic_location_icon"
-                app:tint="@color/darkturquoise" />
+                app:tint="@color/app_color" />
 
             <TextView
                 android:id="@+id/business_location"
@@ -362,7 +362,7 @@
                 android:layout_height="@dimen/sp_21"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_user_setting"
-                app:tint="@color/darkturquoise" />
+                app:tint="@color/app_color" />
 
             <TextView
                 android:id="@+id/authorized"

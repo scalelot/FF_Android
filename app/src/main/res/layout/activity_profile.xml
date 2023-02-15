@@ -317,7 +317,7 @@
                     android:layout_centerVertical="true"
                     android:padding="@dimen/sp_5"
                     android:src="@drawable/ic_baseline_location_on_24"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
 
             </RelativeLayout>
 
@@ -394,7 +394,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/zero"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/sp_14" />
 
                 <TextView
@@ -403,7 +403,7 @@
                     android:layout_marginLeft="@dimen/margin_5"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/km"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/sp_14" />
             </LinearLayout>
 
@@ -568,7 +568,7 @@
                     android:layout_marginRight="@dimen/margin_2"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/zero"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/sp_14" />
 
                 <TextView
@@ -578,7 +578,7 @@
                     android:layout_marginRight="@dimen/margin_2"
                     android:fontFamily="@font/roboto_medium"
                     android:text="-"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/sp_14" />
 
                 <TextView
@@ -589,7 +589,7 @@
                     android:layout_marginRight="@dimen/margin_5"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/nine"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/sp_14" />
 
                 <TextView
@@ -598,7 +598,7 @@
                     android:layout_alignParentRight="true"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/age"
-                    android:textColor="@color/darkturquoise"
+                    android:textColor="@color/app_color"
                     android:textSize="@dimen/sp_14" />
             </LinearLayout>
 
@@ -610,8 +610,8 @@
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_15"
                 android:layout_marginRight="@dimen/margin_20"
-                app:activeLineColor="@color/darkturquoise"
-                app:activeThumbColor="@color/darkturquoise"
+                app:activeLineColor="@color/app_color"
+                app:activeThumbColor="@color/app_color"
                 app:count="80"
                 app:lineColor="@color/bg_grey"
                 app:showActiveTicks="false"
@@ -857,7 +857,7 @@
                 android:layout_marginRight="@dimen/margin_20"
                 android:layout_marginBottom="@dimen/margin_20"
                 android:background="@drawable/edt_bg"
-                android:backgroundTint="@color/darkturquoise"
+                android:backgroundTint="@color/app_color"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/save"
                 android:textColor="@color/white"
@@ -874,7 +874,7 @@
                 android:background="@drawable/rectangle_bg"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/save_and_create_business_profile"
-                android:textColor="@color/darkturquoise"
+                android:textColor="@color/app_color"
                 android:textSize="@dimen/text_16" />
         </RelativeLayout>
     </ScrollView>

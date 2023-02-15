@@ -54,7 +54,7 @@
                 android:layout_height="@dimen/sp_50"
                 android:layout_margin="@dimen/margin_20"
                 android:background="@drawable/edt_bg"
-                android:backgroundTint="@color/darkturquoise"
+                android:backgroundTint="@color/app_color"
                 android:text="@string/create"
                 android:textColor="@color/white" />
 
@@ -79,7 +79,7 @@
                     android:layout_width="@dimen/sp_70"
                     android:layout_height="@dimen/sp_70"
                     android:src="@drawable/ic_user_img"
-                    app:civ_border_color="@color/darkturquoise"
+                    app:civ_border_color="@color/app_color"
                     app:civ_border_width="@dimen/sp_1"
                     app:civ_circle_background_color="@color/bg_grey" />
 
@@ -291,7 +291,7 @@
                         android:layout_height="@dimen/sp_20"
                         android:layout_marginLeft="@dimen/sp_20"
                         android:src="@drawable/ic_location_icon"
-                        app:tint="@color/darkturquoise" />
+                        app:tint="@color/app_color" />
 
                     <TextView
                         android:id="@+id/business_location"

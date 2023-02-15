@@ -11,7 +11,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/darkturquoise">
+        android:background="@color/app_color">
 
         <ImageView
             android:id="@+id/ic_back"
@@ -55,7 +55,7 @@
                     android:layout_height="@dimen/sp_16"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_edit"
-                    app:tint="@color/darkturquoise" />
+                    app:tint="@color/app_color" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -100,7 +100,7 @@
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/edit_personal_profile"
-                android:textColor="@color/darkturquoise" />
+                android:textColor="@color/app_color" />
 
             <LinearLayout
                 android:id="@+id/ll_business_product"
@@ -188,7 +188,7 @@
             android:background="@drawable/rectangle_8"
             app:tabIndicatorHeight="@dimen/sp_0"
             app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@color/darkturquoise"
+            app:tabSelectedTextColor="@color/app_color"
             app:tabTextAppearance="@style/MyCustomTextAppearance"
             app:tabTextColor="@color/grey">
 

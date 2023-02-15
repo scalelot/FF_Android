@@ -57,7 +57,7 @@
         android:layout_below="@+id/fm"
         android:layout_marginTop="@dimen/margin_10"
         android:background="@drawable/login_btn_bg"
-        android:backgroundTint="@color/darkturquoise"
+        android:backgroundTint="@color/app_color"
         android:text="@string/send_request"
         android:textColor="@color/white"
         android:textSize="@dimen/text_12" />

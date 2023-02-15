@@ -47,7 +47,7 @@
             android:fontFamily="@font/roboto_medium"
             android:paddingRight="@dimen/margin_10"
             android:singleLine="true"
-            android:text="@string/ph_number"
+            android:text="@string/ph_no"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
 
