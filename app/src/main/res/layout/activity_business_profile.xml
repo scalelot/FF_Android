@@ -170,11 +170,10 @@
                     android:layout_height="@dimen/sp_45"
                     android:layout_toLeftOf="@+id/btn_change"
                     android:background="@drawable/edt_bg"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/margin_15"
-                    android:focusableInTouchMode="false"
-
                     android:singleLine="true"
                     android:text="@string/brochure"
                     android:textColor="@color/black"
@@ -308,8 +307,7 @@
                     android:apiKey="@string/google_maps_key"
                     android:visibility="visible" />
 
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
+                <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"

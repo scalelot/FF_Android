@@ -72,14 +72,14 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:checked="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
 
@@ -126,14 +126,14 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:checked="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
 
@@ -179,14 +179,14 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
 
@@ -233,14 +233,14 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:checked="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
 
@@ -287,14 +287,14 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:checked="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
 
@@ -341,14 +341,14 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:checked="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
 
@@ -395,14 +395,14 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:checked="true"
-                android:textColor="#fff"
+                android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="@dimen/margin_8"
                 app:kswTextOff="Off"
                 app:kswTextOn="ON"
-                app:kswThumbColor="#ffffff"
+                app:kswThumbColor="@color/white"
                 app:kswThumbDrawable="@drawable/switch_thumb_selector" />
         </RelativeLayout>
     </LinearLayout>
