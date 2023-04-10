@@ -3,6 +3,8 @@ package com.example.friendfield.Activity;
 import android.content.Intent;
 import android.icu.util.RangeValueIterator;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class HelpActivity extends BaseActivity {
 
+    ImageView hp_back_arrow;
     RecyclerView help_recycler;
     HelpAdapter helpAdapter;
     String[] name = {"FAQ-1", "FAQ-2", "FAQ-3", "FAQ-4", "FAQ-5"};
@@ -27,7 +30,15 @@ public class HelpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
+        hp_back_arrow = findViewById(R.id.hp_back_arrow);
         help_recycler = findViewById(R.id.help_recycler);
+
+        hp_back_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         helpModels = new ArrayList<>();
 

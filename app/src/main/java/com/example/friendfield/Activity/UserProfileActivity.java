@@ -124,6 +124,7 @@ public class UserProfileActivity extends BaseActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
                 pos = tab.getPosition();
                 if (tab.getPosition() == 1) {
                     btn_edit_profile.setText(getResources().getString(R.string.edit_business_profile));

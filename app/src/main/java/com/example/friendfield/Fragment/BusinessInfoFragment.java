@@ -82,13 +82,13 @@ public class BusinessInfoFragment extends Fragment {
         rel_brochure = view.findViewById(R.id.rel_brochure);
         txt_business_brochure = view.findViewById(R.id.txt_business_brochure);
 
-        if (!MyApplication.isBusinessProfileRegistered(BusinessInfoFragment.this.getContext())) {
-            create_profile.setVisibility(View.VISIBLE);
-            ll_create_profile.setVisibility(View.GONE);
-        } else {
-            create_profile.setVisibility(View.GONE);
-            ll_create_profile.setVisibility(View.VISIBLE);
-        }
+//        if (!MyApplication.isBusinessProfileRegistered(BusinessInfoFragment.this.getContext())) {
+//            create_profile.setVisibility(View.VISIBLE);
+//            ll_create_profile.setVisibility(View.GONE);
+//        } else {
+//            create_profile.setVisibility(View.GONE);
+//            ll_create_profile.setVisibility(View.VISIBLE);
+//        }
 
         if (Const.bitmap_business_profile_image != null) {
             cir_business_img.setImageBitmap(Const.bitmap_business_profile_image);
@@ -115,14 +115,14 @@ public class BusinessInfoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!MyApplication.isBusinessProfileRegistered(getActivity())) {
+//        if (!MyApplication.isBusinessProfileRegistered(getActivity())) {
             getApiCalling();
-            create_profile.setVisibility(View.VISIBLE);
-            ll_create_profile.setVisibility(View.GONE);
-        } else {
-            ll_create_profile.setVisibility(View.VISIBLE);
-            create_profile.setVisibility(View.GONE);
-        }
+//            create_profile.setVisibility(View.VISIBLE);
+//            ll_create_profile.setVisibility(View.GONE);
+//        } else {
+//            ll_create_profile.setVisibility(View.VISIBLE);
+//            create_profile.setVisibility(View.GONE);
+//        }
     }
 
     private void getApiCalling() {
@@ -148,6 +148,9 @@ public class BusinessInfoFragment extends Fragment {
                         txt_business_category.setText(businessInfoRegisterModel.getData().getInterestedCategory());
                         txt_business_subcategory.setText(businessInfoRegisterModel.getData().getInterestedSubCategory());
                         txt_business_brochure.setText(businessInfoRegisterModel.getData().getBrochure());
+
+                        ll_create_profile.setVisibility(View.GONE);
+                        create_profile.setVisibility(View.VISIBLE);
                     } else {
 
                     }

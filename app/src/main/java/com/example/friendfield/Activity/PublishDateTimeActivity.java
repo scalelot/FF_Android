@@ -1,6 +1,5 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.DatePickerDialog;
@@ -13,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -22,7 +20,6 @@ import com.example.friendfield.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class PublishDateTimeActivity extends BaseActivity {
 
@@ -94,9 +91,9 @@ public class PublishDateTimeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (txt_select_date.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(PublishDateTimeActivity.this,"Enter Date",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(),"Enter Date",Toast.LENGTH_LONG).show();
                 } else if (txt_select_time.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(PublishDateTimeActivity.this,"Enter Time",Toast.LENGTH_LONG).show();
+                    Toast.makeText(PublishDateTimeActivity.this,"Enter Time", Toast.LENGTH_LONG).show();
                 } else {
                     System.out.println("chk--->>" + txt_select_date);
                     SharedPreferences sharedPreferences = getSharedPreferences("Datetime", MODE_PRIVATE);

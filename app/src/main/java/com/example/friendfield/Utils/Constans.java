@@ -16,7 +16,7 @@ public class Constans {
 
     //Personal Profile
     public static String profile_register = BASE_URL + "profile/setprofile";
-    public static String fetch_personal_info = BASE_URL + "profile/getprofile";
+    public static String    fetch_personal_info = BASE_URL + "profile/getprofile";
     public static String set_profile_pic = BASE_URL + "profile/setprofilepic";
 
     //Business Profile

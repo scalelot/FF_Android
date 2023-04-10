@@ -70,10 +70,12 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
                     model.setSelected(cb.isChecked());
                     selecetdUserModelArrayList.get(position).setSelected(cb.isChecked());
                     clickListener.onItemClick(selecetdUserModelArrayList.get(position), true);
+                    notifyDataSetChanged();
                 } else {
                     model.setSelected(!cb.isChecked());
                     selecetdUserModelArrayList.get(position).setSelected(false);
                     clickListener.onItemClick(selecetdUserModelArrayList.get(position), false);
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -86,6 +88,7 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
                 for (int index = 0; index < selecetdUserModelArrayList.size(); index++) {
                     selecetdUserModelArrayList.get(index).setSelected(isSelectedAll);
                 }
+                notifyDataSetChanged();
             }
             notifyDataSetChanged();
         } catch (Exception e) {

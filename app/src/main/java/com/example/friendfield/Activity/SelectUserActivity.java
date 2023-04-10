@@ -33,7 +33,6 @@ public class SelectUserActivity extends BaseActivity {
     ImageView ic_back_arrow;
     ArrayList<SelecetdUserModel> selecetdUserModelArrayList = new ArrayList<>();
     ArrayList<SelecetdUserModel> selectedarraylist = new ArrayList<>();
-    boolean flagSelectAll = false;
     RelativeLayout iv_filter;
     String str_count;
 
@@ -85,8 +84,7 @@ public class SelectUserActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 try {
                     for (int i = 0; i < selecetdUserModelArrayList.size(); i++) {
-                        if (selecetdUserModelArrayList.get(i).isSelected) {
-                            flagSelectAll = true;
+                        if (!isChecked) {
                             txt_people_count.setText("");
                             userSelectAdapter.selectAllItem(false);
                             userSelectAdapter.notifyDataSetChanged();
