@@ -12,6 +12,8 @@
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_20"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/sp_80"
         tools:listitem="@layout/item_noti_history" />
 
     <RelativeLayout
@@ -24,7 +26,6 @@
             android:id="@+id/btn_create_notification"
             android:layout_width="match_parent"
             android:layout_height="@dimen/sp_50"
-
             android:background="@drawable/login_btn_bg"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/create_notification"

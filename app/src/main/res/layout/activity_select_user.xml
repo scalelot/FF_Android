@@ -178,6 +178,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_select"
         android:layout_marginTop="@dimen/margin_10"
+        android:paddingBottom="50dp"
+        android:clipToPadding="false"
         tools:listitem="@layout/item_user_select" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

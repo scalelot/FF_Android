@@ -181,6 +181,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/margin_5"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/sp_60"
                     tools:listitem="@layout/user_chat_list" />
 
                 <ProgressBar
