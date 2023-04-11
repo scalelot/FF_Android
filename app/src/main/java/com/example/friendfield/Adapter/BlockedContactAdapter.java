@@ -85,7 +85,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
 
         JsonObjectRequest jsonObjectRequest = null;
         try {
-            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.response_friend_request, new JSONObject(stringHashMap), new Response.Listener<JSONObject>() {
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_friends_unblock, new JSONObject(stringHashMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("UnBlockUser=>", response.toString());

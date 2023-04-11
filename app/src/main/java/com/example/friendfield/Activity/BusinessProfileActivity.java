@@ -83,16 +83,14 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BusinessProfileActivity extends BaseActivity implements OnMapReadyCallback, LocationListener {
-    String selectedImage = "";
     private GoogleMap map;
-    ImageView ic_back, img_add_brochure, iv_location, img;
+    ImageView ic_back, img_add_brochure, iv_location;
     CircleImageView business_profile_image;
     RelativeLayout edt_img, rl_map, relative_busi_map, rl_upload, rl_add_brochur;
     LinearLayout lin_add_images;
     EditText edt_subcategory, edt_interested_subcategory, edt_interested_category;
     EditText edt_category, edt_description, edt_bussiness_name, edt_business_address;
     AppCompatButton btn_next, btn_save, btn_change;
-    File myFile;
     LocationManager locationManager;
     RequestQueue queue;
     Context context;
@@ -102,19 +100,17 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     String edit_profile = "";
     TextView tv_title, edt_brochure;
     MapView mapview;
-    String longitude, uriString;
+    String longitude;
     String lattitude;
-    String path = null;
     public static final int PICK_FILE = 99;
     PdfRenderer renderer;
     int total_pages = 0;
     int display_page = 0;
-    String finalDisplayName;
     public static final int PICK_IMAGE = 1;
     private static final int REQUEST_CODE = 101;
     private RequestQueue rQueue;
     private ArrayList<HashMap<String, String>> arraylist;
-    String url = "https://www.google.com";
+    boolean status = false;
 
 
     @Override
@@ -617,11 +613,13 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.e("BusinessProImage=>", response.toString());
+                        status = true;
                     }
 
                     @Override
                     public void onError(ANError error) {
                         Log.e("BusinProImage_Error--->", error.toString());
+                        status = false;
                     }
                 });
     }

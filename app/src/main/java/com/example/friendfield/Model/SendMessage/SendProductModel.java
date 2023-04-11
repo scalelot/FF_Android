@@ -4,15 +4,17 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class SendProductModel {
+
     @SerializedName("productid")
     @Expose
-    private String productid;
+    private ProductidModel productid;
 
-    public String getProductid() {
+    public ProductidModel getProductid() {
         return productid;
     }
 
-    public void setProductid(String productid) {
+    public void setProductid(ProductidModel productid) {
         this.productid = productid;
     }
+
 }

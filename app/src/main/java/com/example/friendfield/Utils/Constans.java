@@ -54,6 +54,8 @@ public class Constans {
     public static String set_authorized_permissions = BASE_URL + "friends/set_authorized_permissions";
     public static String set_friends_unfriendorblock = BASE_URL + "friends/unfriendorblock";
 
+    public static String set_friends_unblock = BASE_URL + "friends/unblock";
+
     //Chat
     public static String set_chat_message = BASE_URL + "chats/send";
     public static String list_chat_message = BASE_URL + "chats";

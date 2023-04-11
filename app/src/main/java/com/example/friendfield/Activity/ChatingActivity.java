@@ -284,6 +284,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         } else {
                             sendMessage(toUserIds, edt_chating.getText().toString().trim());
                             messageAdapter.addItem(jsonObject);
+                            messageAdapter.notifyDataSetChanged();
                         }
                         chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                         resetMessageEdit();
@@ -309,6 +310,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                             sendProduct(toUserIds, p_ids, edt_chating.getText().toString().trim());
                             rel_replay.setVisibility(View.GONE);
                             messageAdapter.addItem(jsonObject);
+                            messageAdapter.notifyDataSetChanged();
                         }
                         chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                     } catch (JSONException e) {
@@ -437,6 +439,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                         send.put("isRecive", false);
                                         send.put("isSent", true);
                                         messageAdapter.addItem(send);
+                                        messageAdapter.notifyItemInserted(i);
                                         chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                                     }
                                 } catch (JSONException e) {
@@ -454,6 +457,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                         recive.put("isRecive", true);
                                         recive.put("isSent", false);
                                         messageAdapter.addItem(recive);
+                                        messageAdapter.notifyItemInserted(i);
                                         chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                                     }
                                 } catch (JSONException e) {
@@ -576,6 +580,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         } else {
                             uploadImage(file);
                             messageAdapter.addItem(jsonObject);
+                            messageAdapter.notifyDataSetChanged();
                         }
                         chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                     } catch (JSONException e) {

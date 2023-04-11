@@ -80,6 +80,8 @@ public class CreateNotificationActivity extends BaseActivity {
     String edit_noti;
     TextView txt_title;
     String notificationId;
+    File file;
+    Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,6 @@ public class CreateNotificationActivity extends BaseActivity {
                         updateNotification(notificationId, edt_notification_title.getText().toString().trim(), edt_notification_des.getText().toString().trim(), edt_notification_link.getText().toString().trim(), image_url);
                     } else {
                         createNotification(edt_notification_title.getText().toString().trim(), edt_notification_des.getText().toString().trim(), edt_notification_link.getText().toString().trim(), image_url);
-                        Toast.makeText(CreateNotificationActivity.this, "Data add successfully", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -169,21 +170,14 @@ public class CreateNotificationActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
             try {
-                Uri selectedImageUri = data.getData();
+                selectedImageUri = data.getData();
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                     Const.bitmap_business_profile_image = bitmap;
                     add_image.setImageBitmap(bitmap);
                     img = add_image;
-                    if (img != null) {
-                        status = true;
-                        ic_edit_img.setVisibility(View.VISIBLE);
-                    } else {
-                        status = false;
-                        ic_edit_img.setVisibility(View.GONE);
-                    }
 
-                    File file = new File(selectedImageUri.getPath());
+                    file = new File(selectedImageUri.getPath());
                     uploadImage(file);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -216,8 +210,16 @@ public class CreateNotificationActivity extends BaseActivity {
                         try {
                             Log.e("NotiBanner=>", response.toString());
                             ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
-
                             image_url = productImagesModel.getData().getKey();
+
+                            if (image_url != null) {
+                                status = true;
+                                ic_edit_img.setVisibility(View.VISIBLE);
+                            } else {
+                                status = false;
+                                ic_edit_img.setVisibility(View.GONE);
+                            }
+
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
@@ -250,6 +252,7 @@ public class CreateNotificationActivity extends BaseActivity {
                     Log.e("CreateNotification=>", response.toString());
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
+                    Toast.makeText(CreateNotificationActivity.this, "Data add successfully", Toast.LENGTH_SHORT).show();
 
                     onBackPressed();
 
@@ -262,7 +265,6 @@ public class CreateNotificationActivity extends BaseActivity {
                     error.printStackTrace();
                 }
             }) {
-
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
@@ -304,8 +306,8 @@ public class CreateNotificationActivity extends BaseActivity {
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
 
-                    onBackPressed();
-
+                    startActivity(new Intent(CreateNotificationActivity.this, PromotionActivity.class));
+                    finish();
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
