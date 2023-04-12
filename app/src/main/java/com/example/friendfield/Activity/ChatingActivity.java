@@ -388,7 +388,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        listChatsModelArrayList.clear();
         form_id = new ArrayList<>();
         to_id = new ArrayList<>();
         send_message = new ArrayList<>();

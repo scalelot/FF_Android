@@ -1,11 +1,15 @@
 package com.example.friendfield.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class DisplayAllProductActivity extends BaseActivity {
 
     ImageView ic_back;
@@ -60,6 +65,9 @@ public class DisplayAllProductActivity extends BaseActivity {
     RelativeLayout emptyLay;
     DisplayAllProductAdapter productDisplayAdapter;
 
+    GridLayoutManager gridLayoutManager;
+    private boolean loading = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +78,17 @@ public class DisplayAllProductActivity extends BaseActivity {
         edt_search_text = findViewById(R.id.edt_search_text);
         iv_search = findViewById(R.id.iv_search);
         iv_clear_text = findViewById(R.id.iv_clear_text);
-        nestedScrollView = findViewById(R.id.nestedScrollView);
+        nestedScrollView = findViewById(R.id.nestedScrollView1);
         idPBLoading = findViewById(R.id.idPBLoading);
         emptyLay = findViewById(R.id.emptyLay);
 
-        recyclerview_product.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        if (!productDetailsModelArrayList.isEmpty()) {
+            productDetailsModelArrayList.clear();
+        }
+
+        gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
+
+        recyclerview_product.setLayoutManager(gridLayoutManager);
 
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,8 +144,6 @@ public class DisplayAllProductActivity extends BaseActivity {
             }
         });
 
-        getProductItem(page, limit, searchData, "price", -1);
-
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -162,7 +174,6 @@ public class DisplayAllProductActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        productDetailsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
@@ -190,6 +201,7 @@ public class DisplayAllProductActivity extends BaseActivity {
                             }
 
                             productDisplayAdapter = new DisplayAllProductAdapter(DisplayAllProductActivity.this, productDetailsModelArrayList);
+                            recyclerview_product.setHasFixedSize(true);
                             recyclerview_product.setAdapter(productDisplayAdapter);
                         }
                     } catch (JSONException e) {
@@ -236,10 +248,12 @@ public class DisplayAllProductActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        getProductItem(page, limit, searchData, "price", -1);
     }
 
     @Override
     public void onBackPressed() {
+        startActivity(new Intent(DisplayAllProductActivity.this, MainActivity.class));
         finish();
     }
 }

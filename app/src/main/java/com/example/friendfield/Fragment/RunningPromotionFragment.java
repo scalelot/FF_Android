@@ -117,7 +117,6 @@ public class RunningPromotionFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        arraylist.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.fetch_notification, jsonObject, new Response.Listener<JSONObject>() {

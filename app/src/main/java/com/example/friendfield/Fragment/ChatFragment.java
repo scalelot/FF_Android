@@ -188,7 +188,6 @@ public class ChatFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        receivefriendrequestsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_myfriend, jsonObject, new Response.Listener<JSONObject>() {

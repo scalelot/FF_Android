@@ -96,7 +96,6 @@ public class BlockedContactActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        blockedFriendRegisterModels.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_block_friends, jsonObject, new Response.Listener<JSONObject>() {

@@ -91,7 +91,6 @@ public class SendRequestFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        receivefriendrequestsModelArrayList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_send_friend_request, jsonObject, new Response.Listener<JSONObject>() {
