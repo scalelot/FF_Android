@@ -264,20 +264,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
         mapview.getMapAsync(this);
 
-        if (!MyApplication.isBusinessProfileRegistered(BusinessProfileActivity.this)) {
-            tv_title.setText(getResources().getString(R.string.edit_business_profile));
-            if (Const.bitmap_business_profile_image != null) {
-                business_profile_image.setImageBitmap(Const.bitmap_business_profile_image);
-            }
-            getBusinessProfileInfo();
-            btn_save.setVisibility(View.VISIBLE);
-            btn_next.setVisibility(View.GONE);
-        } else {
-            tv_title.setText(getResources().getString(R.string.create_business_profile));
-            btn_save.setVisibility(View.GONE);
-            btn_next.setVisibility(View.VISIBLE);
-        }
-
         if (Const.b_longitude != null) {
             if (map != null) {
                 map.clear();
@@ -318,7 +304,8 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
                     BusinessRegisterModel businessRegisterModel = new Gson().fromJson(response.toString(), BusinessRegisterModel.class);
 
-                    MyApplication.setBusinessProfileRegistered(BusinessProfileActivity.this, businessRegisterModel.getIsSuccess());
+                    startActivity(new Intent(BusinessProfileActivity.this,ProductActivity.class));
+
                     finish();
 
                 }
@@ -383,6 +370,12 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     String getadd = FileUtils.getAddressFromLatLng(getApplicationContext(), latLng);
 
                     edt_business_address.setText(getadd);
+
+                    String fileName = businessInfoRegisterModel.getData().getBrochure();
+
+                    String fileName1 = fileName.substring(fileName.lastIndexOf('/') + 1);
+
+                    edt_brochure.setText(fileName1);
 
                     map.addMarker(new MarkerOptions().position(latLng1));
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1, 12));
@@ -755,12 +748,27 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     @Override
     public void onBackPressed() {
+        startActivity(new Intent(BusinessProfileActivity.this,UserProfileActivity.class));
         finish();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (!MyApplication.isBusinessProfileRegistered(BusinessProfileActivity.this)) {
+            tv_title.setText(getResources().getString(R.string.edit_business_profile));
+            if (Const.bitmap_business_profile_image != null) {
+                business_profile_image.setImageBitmap(Const.bitmap_business_profile_image);
+            }
+            getBusinessProfileInfo();
+            btn_save.setVisibility(View.VISIBLE);
+            btn_next.setVisibility(View.GONE);
+        } else {
+            tv_title.setText(getResources().getString(R.string.create_business_profile));
+            btn_save.setVisibility(View.GONE);
+            btn_next.setVisibility(View.VISIBLE);
+        }
+
         if (Const.b_longitude != null) {
             if (map != null) {
                 map.clear();

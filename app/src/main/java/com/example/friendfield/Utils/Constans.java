@@ -5,7 +5,6 @@ public class Constans {
     public static String CHAT_SERVER_URL = "ws://192.168.29.105:8080/socket.io/socket.io.js";
     public static String Display_Image_URL = "https://friendsfield.s3.ap-south-1.amazonaws.com/";
 
-    //    public static String BASE_URL = "http://192.168.29.105:8080/v1/";
     public static String BASE_URL = "https://friendsfield.in/apis/v1/";
 
     //Login
@@ -16,7 +15,7 @@ public class Constans {
 
     //Personal Profile
     public static String profile_register = BASE_URL + "profile/setprofile";
-    public static String    fetch_personal_info = BASE_URL + "profile/getprofile";
+    public static String fetch_personal_info = BASE_URL + "profile/getprofile";
     public static String set_profile_pic = BASE_URL + "profile/setprofilepic";
 
     //Business Profile

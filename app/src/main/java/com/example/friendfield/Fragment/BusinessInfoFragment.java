@@ -82,14 +82,6 @@ public class BusinessInfoFragment extends Fragment {
         rel_brochure = view.findViewById(R.id.rel_brochure);
         txt_business_brochure = view.findViewById(R.id.txt_business_brochure);
 
-//        if (!MyApplication.isBusinessProfileRegistered(BusinessInfoFragment.this.getContext())) {
-//            create_profile.setVisibility(View.VISIBLE);
-//            ll_create_profile.setVisibility(View.GONE);
-//        } else {
-//            create_profile.setVisibility(View.GONE);
-//            ll_create_profile.setVisibility(View.VISIBLE);
-//        }
-
         if (Const.bitmap_business_profile_image != null) {
             cir_business_img.setImageBitmap(Const.bitmap_business_profile_image);
         }
@@ -110,19 +102,6 @@ public class BusinessInfoFragment extends Fragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        if (!MyApplication.isBusinessProfileRegistered(getActivity())) {
-            getApiCalling();
-//            create_profile.setVisibility(View.VISIBLE);
-//            ll_create_profile.setVisibility(View.GONE);
-//        } else {
-//            ll_create_profile.setVisibility(View.VISIBLE);
-//            create_profile.setVisibility(View.GONE);
-//        }
     }
 
     private void getApiCalling() {
@@ -149,10 +128,19 @@ public class BusinessInfoFragment extends Fragment {
                         txt_business_subcategory.setText(businessInfoRegisterModel.getData().getInterestedSubCategory());
                         txt_business_brochure.setText(businessInfoRegisterModel.getData().getBrochure());
 
+                        txt_business_brochure.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Uri uri = Uri.parse(Constans.Display_Image_URL+businessInfoRegisterModel.getData().getBrochure());
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                startActivity(intent);
+                            }
+                        });
+
                         ll_create_profile.setVisibility(View.GONE);
                         create_profile.setVisibility(View.VISIBLE);
                     } else {
-
+                        Log.e("BussinessGetProfile==>>","Not Get BussinessProfile");
                     }
                 }
             }, new Response.ErrorListener() {
@@ -180,7 +168,6 @@ public class BusinessInfoFragment extends Fragment {
     private void openGallery() {
         ImagePicker.Companion.with(getActivity())
                 .crop()
-//                        .galleryOnly()
                 .maxResultSize(1080, 1080)
                 .start(PICK_IMAGE1);
 
@@ -209,5 +196,11 @@ public class BusinessInfoFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getApiCalling();
     }
 }

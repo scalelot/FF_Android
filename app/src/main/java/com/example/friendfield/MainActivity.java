@@ -64,7 +64,6 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class MainActivity extends BaseActivity {
 
     TextView txt_chats, txt_find_friend, txt_calls, txt_contact_list, select;
@@ -126,6 +125,7 @@ public class MainActivity extends BaseActivity {
         noti_message = findViewById(R.id.noti_message);
 
         getAllPersonalData();
+        fetchProfileApi();
 
         def = txt_find_friend.getTextColors();
         Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));
@@ -397,9 +397,6 @@ public class MainActivity extends BaseActivity {
                         JSONObject jsonObject = new JSONObject(String.valueOf(response));
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
-                        if (!peronalInfoModel.getIsSuccess()) {
-                            CustomDialog();
-                        }
                         MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
 
                         if (MyApplication.getuserName(getApplicationContext()).equals("")) {
@@ -461,6 +458,44 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void fetchProfileApi(){
+        JsonObjectRequest jsonObjectRequest = null;
+        try{
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("ProfileError=>", response.toString());
+
+                    GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
+
+                    String fullName = profileRegisterModel.getData().getFullName();
+                    if (fullName.isEmpty()){
+                        CustomDialog();
+                    }else{
+
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("ProfileError==>>",error.toString());
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> map = new HashMap<>();
+                    map.put("Content-Type", "application/json");
+                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    return map;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+            requestQueue.add(jsonObjectRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void CustomDialog() {
 
         Dialog dialog = new Dialog(MainActivity.this);
@@ -519,6 +554,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        fetchProfileApi();
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         } else {

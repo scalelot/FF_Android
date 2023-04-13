@@ -526,8 +526,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     Log.e("ProfileUpdate=>", response.toString());
                     ProfileRegisterModel profileRegisterModel = new Gson().fromJson(response.toString(), ProfileRegisterModel.class);
 
-                    MyApplication.setPersonalProfileRegistered(getApplicationContext(), profileRegisterModel.getIsSuccess());
-
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }
@@ -753,6 +751,9 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     rangeBar.setStart(profileRegisterModel.getData().getTargetAudienceAgeMin());
                     rangeBar.setEnd(profileRegisterModel.getData().getTargetAudienceAgeMax());
 
+                    MyApplication.setBusinessProfileRegistered(ProfileActivity.this, profileRegisterModel.getData().getIsBusinessProfileCreated());
+
+
                     if (profileRegisterModel.getData().getProfileimage().equals("")) {
                         Log.e("LLL_data-->", "No Image Found");
                         profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
@@ -918,31 +919,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (Const.longitude != null) {
-            if (map != null) {
-                map.clear();
-                if (Const.mCurrLocationMarker != null) {
-                    Const.mCurrLocationMarker.remove();
-                }
-                LatLng userLocation = new LatLng(Const.lattitude, Const.longitude);
-                map.addMarker(new MarkerOptions().position(userLocation));
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
-
-                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(@NonNull LatLng latLng) {
-                        Log.e("OnClickMap=>", "false");
-                    }
-                });
-            }
-        } else {
-            fetchLocation();
-        }
-    }
-
-    @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         try {
             map = googleMap;
@@ -1053,6 +1029,31 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     public void onTokenIgnored(Person token) {
         ((TextView) findViewById(R.id.lastEvent)).setText("Ignored: " + token);
         updateTokenConfirmation();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Const.longitude != null) {
+            if (map != null) {
+                map.clear();
+                if (Const.mCurrLocationMarker != null) {
+                    Const.mCurrLocationMarker.remove();
+                }
+                LatLng userLocation = new LatLng(Const.lattitude, Const.longitude);
+                map.addMarker(new MarkerOptions().position(userLocation));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
+
+                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(@NonNull LatLng latLng) {
+                        Log.e("OnClickMap=>", "false");
+                    }
+                });
+            }
+        } else {
+            fetchLocation();
+        }
     }
 
     @Override

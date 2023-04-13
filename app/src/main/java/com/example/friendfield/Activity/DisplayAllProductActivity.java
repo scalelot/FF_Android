@@ -49,9 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
 public class DisplayAllProductActivity extends BaseActivity {
-
     ImageView ic_back;
     RecyclerView recyclerview_product;
     ArrayList<ProductDetailsModel> productDetailsModelArrayList = new ArrayList<>();

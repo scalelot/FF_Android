@@ -292,7 +292,7 @@ public class ProductActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ProductActivity.this, UserProfileActivity.class));
+        startActivity(new Intent(ProductActivity.this, BusinessProfileActivity.class));
         finish();
     }
 }

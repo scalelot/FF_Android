@@ -96,7 +96,6 @@ public class ChatProductSelectActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
@@ -104,7 +103,6 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     Log.e("ListProduct=>", response.toString());
                     loaderLay.setVisibility(View.GONE);
-                    productDetailsModelArrayList.clear();
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 

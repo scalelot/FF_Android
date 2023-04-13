@@ -171,6 +171,11 @@ public class PersnoalInfoFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAllData();
     }
 }

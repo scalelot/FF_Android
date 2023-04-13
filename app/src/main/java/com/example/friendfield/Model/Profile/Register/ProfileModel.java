@@ -80,6 +80,9 @@ public class ProfileModel {
     @SerializedName("channelID")
     @Expose
     private String channelID;
+    @SerializedName("is_business_profile_created")
+    @Expose
+    private Boolean isBusinessProfileCreated;
 
     public String getId() {
         return id;
@@ -271,5 +274,13 @@ public class ProfileModel {
 
     public void setChannelID(String channelID) {
         this.channelID = channelID;
+    }
+
+    public Boolean getIsBusinessProfileCreated() {
+        return isBusinessProfileCreated;
+    }
+
+    public void setIsBusinessProfileCreated(Boolean isBusinessProfileCreated) {
+        this.isBusinessProfileCreated = isBusinessProfileCreated;
     }
 }

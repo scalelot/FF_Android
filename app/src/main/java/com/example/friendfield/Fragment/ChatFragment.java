@@ -232,6 +232,8 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     System.out.println("all_friends_error" + error.toString());
+                    progressBar.setVisibility(View.GONE);
+
                 }
             }) {
                 @Override
@@ -246,6 +248,8 @@ public class ChatFragment extends Fragment {
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressBar.setVisibility(View.GONE);
+
         }
     }
 
@@ -328,22 +332,14 @@ public class ChatFragment extends Fragment {
     private void filter(String text) {
         ArrayList<AllFriendsRegisterModel> filteredlist = new ArrayList<AllFriendsRegisterModel>();
 
-        // running a for loop to compare elements.
         for (AllFriendsRegisterModel item : receivefriendrequestsModelArrayList) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.getFullName().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
                 filteredlist.add(item);
             }
         }
         if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
             Toast.makeText(getContext(), "No Data Found..", Toast.LENGTH_SHORT).show();
         } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
             chatUserAdapter.filterList(filteredlist);
         }
     }
