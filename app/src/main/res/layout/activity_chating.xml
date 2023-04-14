@@ -12,100 +12,105 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/sp_56">
 
-        <RelativeLayout
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/rectangle_8">
-
-            <ImageView
-                android:id="@+id/hp_back_arrow"
-                android:layout_width="@dimen/sp_45"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/margin_5"
-                android:padding="@dimen/margin_11"
-                android:src="@drawable/backarrow" />
+            android:layout_height="match_parent">
 
             <RelativeLayout
-                android:id="@+id/rl_user"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/margin_5"
-                android:layout_marginRight="@dimen/margin_5"
-                android:layout_toLeftOf="@+id/img_product"
-                android:layout_toRightOf="@+id/hp_back_arrow">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_user"
-                    android:layout_width="@dimen/sp_40"
-                    android:layout_height="@dimen/sp_40"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
+                android:background="@drawable/rectangle_8">
+                <ImageView
+                    android:id="@+id/hp_back_arrow"
+                    android:layout_width="@dimen/sp_45"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:padding="@dimen/margin_11"
+                    android:src="@drawable/backarrow" />
 
                 <RelativeLayout
-                    android:id="@+id/rel_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/img_user">
+                    android:id="@+id/rl_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:layout_toLeftOf="@+id/img_product"
+                    android:layout_toRightOf="@+id/hp_back_arrow">
 
-                    <TextView
-                        android:id="@+id/u_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_10"
-                        android:fontFamily="@font/roboto_bold"
-                        android:text="@string/name"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_16" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/img_user"
+                        android:layout_width="@dimen/sp_40"
+                        android:layout_height="@dimen/sp_40"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_launcher" />
 
-                    <TextView
-                        android:id="@+id/txt_online"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rel_name"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/u_name"
-                        android:layout_marginLeft="@dimen/margin_10"
-                        android:layout_marginTop="@dimen/margin_5"
-                        android:fontFamily="@font/roboto_regular"
-                        android:text="@string/online"
-                        android:textColor="@color/btn_darkturquoise"
-                        android:textSize="@dimen/text_12"
-                        android:visibility="visible" />
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/img_user">
+
+                        <TextView
+                            android:id="@+id/u_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:fontFamily="@font/roboto_bold"
+                            android:text="@string/name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_16" />
+
+                        <TextView
+                            android:id="@+id/txt_online"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/u_name"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="@string/online"
+                            android:textColor="@color/btn_darkturquoise"
+                            android:textSize="@dimen/text_12"
+                            android:visibility="visible" />
+                    </RelativeLayout>
                 </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/img_product"
+                    android:layout_width="@dimen/sp_35"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:layout_toLeftOf="@+id/img_video_call"
+                    android:padding="@dimen/margin_7"
+                    android:src="@drawable/ic_business_acimg"
+                    app:tint="@color/black" />
+
+                <ImageView
+                    android:id="@+id/img_video_call"
+                    android:layout_width="@dimen/margin_35"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:layout_toLeftOf="@+id/img_contact"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/ic_video_call_icon" />
+
+                <ImageView
+                    android:id="@+id/img_contact"
+                    android:layout_width="@dimen/margin_35"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_12"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/ic_contact_us" />
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/img_product"
-                android:layout_width="@dimen/sp_35"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_5"
-                android:layout_toLeftOf="@+id/img_video_call"
-                android:padding="@dimen/margin_7"
-                android:src="@drawable/ic_business_acimg"
-                app:tint="@color/black" />
 
-            <ImageView
-                android:id="@+id/img_video_call"
-                android:layout_width="@dimen/margin_35"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_5"
-                android:layout_toLeftOf="@+id/img_contact"
-                android:padding="@dimen/margin_5"
-                android:src="@drawable/ic_video_call_icon" />
-
-            <ImageView
-                android:id="@+id/img_contact"
-                android:layout_width="@dimen/margin_35"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_12"
-                android:padding="@dimen/margin_5"
-                android:src="@drawable/ic_contact_us" />
-
-        </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

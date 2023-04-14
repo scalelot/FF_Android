@@ -3,6 +3,7 @@ package com.example.friendfield.Adapter;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.friendfield.Activity.ChatingActivity;
+import com.example.friendfield.Model.ListChat.ListChatsModel;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
 
@@ -41,6 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private LayoutInflater inflater;
     private List<JSONObject> messages = new ArrayList<>();
     Activity activity;
+
 
     public MessageAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
@@ -173,7 +177,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                 view = inflater.inflate(R.layout.item_chat_product, parent, false);
                 return new SentProductHolder(view);
-
         }
 
         return null;
@@ -192,6 +195,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     String str = message.getString("message");
                     if (!str.isEmpty()) {
                         messageHolder.messageTxt.setText(str);
+                        messageHolder.messageTxt.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                ((ChatingActivity) view.getContext()).prepareToolbar(holder.getAdapterPosition());
+                                messageHolder.messageTxt.setTextColor(Color.RED);
+                                return true;
+                            }
+                        });
                     }
                     String strTime = String.valueOf(message.getString("Sendtime"));
                     long timestamp = Long.parseLong(strTime) * 1000L;
@@ -273,6 +284,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     public void addItem(JSONObject jsonObject) {
         messages.add(jsonObject);
+        notifyDataSetChanged();
+    }
+
+    public void removeData(ArrayList<ListChatsModel> list) {
+        for (ListChatsModel model : list) {
+            messages.remove(model);
+        }
         notifyDataSetChanged();
     }
 }

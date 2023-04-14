@@ -1,7 +1,10 @@
 package com.example.friendfield.Activity;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -16,6 +19,7 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -26,6 +30,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,6 +79,10 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatingActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+
+    private Toolbar toolbar;
+    public static boolean isInActionMode = false;
+    public static ArrayList<ListChatsModel> selectionList = new ArrayList<>();
 
     ImageView hp_back_arrow, img_video_call, img_contact, iv_close;
     ImageView iv_pro_image, img_gallery, img_camera, img_product;
@@ -122,7 +132,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         rl_user = findViewById(R.id.rl_user);
         nestedScrollView = findViewById(R.id.nestedScrollView);
         img_product = findViewById(R.id.img_product);
+        toolbar=findViewById(R.id.toolbar);
 
+        setSupportActionBar(toolbar);
         toUserIds = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("ids", null);
         userName = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("userName", null);
         p_img = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("images", null);
@@ -197,6 +209,95 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         initView();
     }
 
+    public void prepareToolbar(int position) {
+
+        // prepare action mode
+        hp_back_arrow.setVisibility(View.GONE);
+        rl_user.setVisibility(View.GONE);
+        img_product.setVisibility(View.GONE);
+        img_video_call.setVisibility(View.GONE);
+        img_contact.setVisibility(View.GONE);
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_action_mode);
+        isInActionMode = true;
+        messageAdapter.notifyDataSetChanged();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        prepareSelection(position);
+    }
+    public void prepareSelection(int position) {
+
+        if (!selectionList.contains(listChatsModelArrayList.get(position))) {
+            selectionList.add(listChatsModelArrayList.get(position));
+        } else {
+            selectionList.remove(listChatsModelArrayList.get(position));
+        }
+
+        updateViewCounter();
+    }
+
+    private void updateViewCounter() {
+        int counter = selectionList.size();
+        if (counter == 1) {
+            // edit
+            toolbar.getMenu().getItem(0).setVisible(true);
+        } else {
+            toolbar.getMenu().getItem(0).setVisible(false);
+        }
+
+        toolbar.setTitle(counter + " item(s) selected");
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+        {
+            clearActionMode();
+            messageAdapter.notifyDataSetChanged();
+        } else if (item.getItemId()==R.id.item_left_for)
+        {
+            Log.d("====", "Left For");
+        }
+
+        else if (item.getItemId()==R.id.item_delete)
+        {
+            Log.d("====", "Delete");
+            isInActionMode = false;
+            ((MessageAdapter) messageAdapter).removeData(selectionList);
+            clearActionMode();
+        } else if (item.getItemId()==R.id.item_edit) {
+            Log.d("====", "Edit");
+
+        } else if (item.getItemId()==R.id.item_copy) {
+            Log.d("====", "Copy");
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            ListChatsModel model= selectionList.get(0);
+            ClipData clip = ClipData.newPlainText("label", ""+model.getSendAllModelData().getText());
+            clipboard.setPrimaryClip(clip);
+
+        } else if (item.getItemId()==R.id.item_right_for) {
+            Log.d("====", "Right For");
+        } else if (item.getItemId()==R.id.item_info) {
+            Log.d("====", "Info");
+        }
+        return true;
+    }
+
+    public void clearActionMode() {
+        isInActionMode = false;
+        toolbar.getMenu().clear();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+        toolbar.setTitle("");
+        hp_back_arrow.setVisibility(View.VISIBLE);
+        rl_user.setVisibility(View.VISIBLE);
+        img_product.setVisibility(View.VISIBLE);
+        img_video_call.setVisibility(View.VISIBLE);
+        img_contact.setVisibility(View.VISIBLE);
+        selectionList.clear();
+    }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
