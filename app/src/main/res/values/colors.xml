@@ -27,4 +27,6 @@
     <color name="editBubbleTextBac">#F8F8F8</color>
     <color name="musicBacColor">#0F0F1B</color>
 
+    <color name="selected_item">#EFFAFB</color>
+
 </resources>

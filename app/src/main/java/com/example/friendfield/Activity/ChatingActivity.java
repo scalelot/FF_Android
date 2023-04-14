@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -132,7 +133,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         rl_user = findViewById(R.id.rl_user);
         nestedScrollView = findViewById(R.id.nestedScrollView);
         img_product = findViewById(R.id.img_product);
-        toolbar=findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
         toUserIds = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("ids", null);
@@ -227,6 +228,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         prepareSelection(position);
     }
+
     public void prepareSelection(int position) {
 
         if (!selectionList.contains(listChatsModelArrayList.get(position))) {
@@ -235,50 +237,33 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             selectionList.remove(listChatsModelArrayList.get(position));
         }
 
-        updateViewCounter();
-    }
-
-    private void updateViewCounter() {
-        int counter = selectionList.size();
-        if (counter == 1) {
-            // edit
-            toolbar.getMenu().getItem(0).setVisible(true);
-        } else {
-            toolbar.getMenu().getItem(0).setVisible(false);
-        }
-
-        toolbar.setTitle(counter + " item(s) selected");
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-        {
+        if (item.getItemId() == android.R.id.home) {
             clearActionMode();
             messageAdapter.notifyDataSetChanged();
-        } else if (item.getItemId()==R.id.item_left_for)
-        {
+        } else if (item.getItemId() == R.id.item_left_for) {
             Log.d("====", "Left For");
-        }
-
-        else if (item.getItemId()==R.id.item_delete)
-        {
+        } else if (item.getItemId() == R.id.item_delete) {
             Log.d("====", "Delete");
             isInActionMode = false;
             ((MessageAdapter) messageAdapter).removeData(selectionList);
             clearActionMode();
-        } else if (item.getItemId()==R.id.item_edit) {
+        } else if (item.getItemId() == R.id.item_edit) {
             Log.d("====", "Edit");
 
-        } else if (item.getItemId()==R.id.item_copy) {
+        } else if (item.getItemId() == R.id.item_copy) {
             Log.d("====", "Copy");
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            ListChatsModel model= selectionList.get(0);
-            ClipData clip = ClipData.newPlainText("label", ""+model.getSendAllModelData().getText());
+            ListChatsModel model = selectionList.get(0);
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("label",model.getSendAllModelData().getText().getMessage());
+            if (clipboard == null || clip == null);
             clipboard.setPrimaryClip(clip);
 
-        } else if (item.getItemId()==R.id.item_right_for) {
+        } else if (item.getItemId() == R.id.item_right_for) {
             Log.d("====", "Right For");
-        } else if (item.getItemId()==R.id.item_info) {
+        } else if (item.getItemId() == R.id.item_info) {
             Log.d("====", "Info");
         }
         return true;
@@ -298,6 +283,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         img_contact.setVisibility(View.VISIBLE);
         selectionList.clear();
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
@@ -326,11 +312,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     openCamera();
                 }
             case R.id.img_gallery:
-                ImagePicker.Companion.with(ChatingActivity.this)
-                        .crop()
-                        .galleryOnly()
-                        .maxResultSize(1080, 1080)
-                        .start(GALLERY_REQUEST);
+                ImagePicker.Companion.with(ChatingActivity.this).crop().galleryOnly().maxResultSize(1080, 1080).start(GALLERY_REQUEST);
                 break;
         }
     }
@@ -361,7 +343,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        messageAdapter = new MessageAdapter(getLayoutInflater());
+        messageAdapter = new MessageAdapter(ChatingActivity.this, getLayoutInflater());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, true);
         linearLayoutManager.setStackFromEnd(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
@@ -423,56 +405,40 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void sendMessage(String toUserIds, String toString) {
-        AndroidNetworking.post(Constans.set_chat_message)
-                .addBodyParameter("to", toUserIds)
-                .addBodyParameter("message", toString)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setPriority(Priority.HIGH)
-                .setTag("UploadTest")
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("ChatSendMessage=>", response.toString());
-                    }
+        AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", toUserIds).addBodyParameter("message", toString).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
+            @Override
+            public void onProgress(long bytesUploaded, long totalBytes) {
+            }
+        }).getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("ChatSendMessage=>", response.toString());
+            }
 
-                    @Override
-                    public void onError(ANError error) {
-                        Log.e("SendMessage_Error=>", error.toString());
-                    }
-                });
+            @Override
+            public void onError(ANError error) {
+                Log.e("SendMessage_Error=>", error.toString());
+            }
+        });
     }
 
     private void sendProduct(String userIds, String toUserIds, String txt) {
-        AndroidNetworking.post(Constans.set_chat_message)
-                .addBodyParameter("to", userIds)
-                .addBodyParameter("product", toUserIds)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setPriority(Priority.HIGH)
-                .setTag("UploadTest")
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("ProductSendMessage=>", response.toString());
+        AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", userIds).addBodyParameter("product", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
+            @Override
+            public void onProgress(long bytesUploaded, long totalBytes) {
+            }
+        }).getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("ProductSendMessage=>", response.toString());
 
-                    }
+            }
 
-                    @Override
-                    public void onError(ANError error) {
-                        Log.e("ProductMessage_Error=>", error.toString());
-                    }
-                });
+            @Override
+            public void onError(ANError error) {
+                Log.e("ProductMessage_Error=>", error.toString());
+            }
+        });
     }
 
     public void getChatList(String toUserIds, int page, int limit) {
@@ -690,47 +656,36 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "Cancelled",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             }
         } else if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(getApplicationContext(), "Cancelled",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void uploadImage(File file) {
-        AndroidNetworking.upload(Constans.set_chat_message)
-                .addMultipartFile("file", file)
-                .addMultipartParameter("to", toUserIds)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        Log.e("SendImage=>", response.toString());
-                    }
+        AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file).addMultipartParameter("to", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+            @Override
+            public void onProgress(long bytesUploaded, long totalBytes) {
+            }
+        }).getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // do anything with response
+                Log.e("SendImage=>", response.toString());
+            }
 
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
-                        Log.e("SendImage_Error=>", error.toString());
+            @Override
+            public void onError(ANError error) {
+                // handle error
+                Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
+                Log.e("SendImage_Error=>", error.toString());
 
-                    }
-                });
+            }
+        });
     }
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
@@ -740,8 +695,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
 
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }

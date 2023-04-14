@@ -3,13 +3,12 @@ package com.example.friendfield.Adapter;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,36 +45,81 @@ public class MessageAdapter extends RecyclerView.Adapter {
     Activity activity;
 
 
-    public MessageAdapter(LayoutInflater inflater) {
+    public MessageAdapter(ChatingActivity chatingActivity, LayoutInflater inflater) {
+        this.activity = chatingActivity;
         this.inflater = inflater;
     }
 
-    private class SentMessageHolder extends RecyclerView.ViewHolder {
+    private class SentMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         TextView messageTxt, txt_time;
+        RelativeLayout relative;
+        View mView;
 
         public SentMessageHolder(@NonNull View itemView) {
             super(itemView);
 
             messageTxt = itemView.findViewById(R.id.sentTxt);
             txt_time = itemView.findViewById(R.id.txt_time);
+            relative = itemView.findViewById(R.id.relative);
+            mView = itemView;
+            itemView.setOnLongClickListener(this);
+            relative.setOnClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (ChatingActivity.isInActionMode) {
+                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
+            }
         }
     }
 
-    private class SentImageHolder extends RecyclerView.ViewHolder {
+    private class SentImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         ImageView send_image;
+        RelativeLayout relative;
+        View mView;
 
         public SentImageHolder(@NonNull View itemView) {
             super(itemView);
 
             send_image = itemView.findViewById(R.id.send_image);
+            relative = itemView.findViewById(R.id.relative);
+            mView = itemView;
+            itemView.setOnLongClickListener(this);
+            relative.setOnClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (ChatingActivity.isInActionMode) {
+                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
+            }
         }
     }
 
-    private class SentProductHolder extends RecyclerView.ViewHolder {
+    private class SentProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         ImageView pro_chat_image;
+        View mView;
+        RelativeLayout relative;
         TextView txt_pro_name, txt_pro_des, txt_pro_price, txt_product;
 
         public SentProductHolder(@NonNull View itemView) {
@@ -86,13 +130,34 @@ public class MessageAdapter extends RecyclerView.Adapter {
             txt_pro_des = itemView.findViewById(R.id.txt_pro_des);
             txt_pro_price = itemView.findViewById(R.id.txt_pro_price);
             txt_product = itemView.findViewById(R.id.txt_product);
+            relative = itemView.findViewById(R.id.relative);
+            mView = itemView;
+            itemView.setOnLongClickListener(this);
+            relative.setOnClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (ChatingActivity.isInActionMode) {
+                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
+            }
         }
     }
 
-    private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
+    private class ReceivedMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         TextView rec_time, receivedText, recive_name;
+        View mView;
         CircleImageView rec_profile_pic;
+        RelativeLayout relative;
 
         public ReceivedMessageHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,21 +165,60 @@ public class MessageAdapter extends RecyclerView.Adapter {
             rec_time = itemView.findViewById(R.id.rec_time);
             recive_name = itemView.findViewById(R.id.recive_name);
             receivedText = itemView.findViewById(R.id.receivedText);
+            relative = itemView.findViewById(R.id.relative);
             rec_profile_pic = itemView.findViewById(R.id.rec_profile_pic);
+            mView = itemView;
+            itemView.setOnLongClickListener(this);
+            relative.setOnClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (ChatingActivity.isInActionMode) {
+                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
+            }
         }
     }
 
-    private class ReceivedImageHolder extends RecyclerView.ViewHolder {
+    private class ReceivedImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         ImageView imageView;
+        View mView;
         TextView nameTxt;
+        RelativeLayout relative;
 
         public ReceivedImageHolder(@NonNull View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.imageView);
+            relative = itemView.findViewById(R.id.relative);
             nameTxt = itemView.findViewById(R.id.nameTxt);
+            mView = itemView;
+            itemView.setOnLongClickListener(this);
+            relative.setOnClickListener(this);
+        }
 
+        @Override
+        public boolean onLongClick(View view) {
+            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (ChatingActivity.isInActionMode) {
+                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
+            }
         }
     }
 
@@ -195,14 +299,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     String str = message.getString("message");
                     if (!str.isEmpty()) {
                         messageHolder.messageTxt.setText(str);
-                        messageHolder.messageTxt.setOnLongClickListener(new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View view) {
-                                ((ChatingActivity) view.getContext()).prepareToolbar(holder.getAdapterPosition());
-                                messageHolder.messageTxt.setTextColor(Color.RED);
-                                return true;
-                            }
-                        });
                     }
                     String strTime = String.valueOf(message.getString("Sendtime"));
                     long timestamp = Long.parseLong(strTime) * 1000L;
@@ -210,6 +306,15 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         String time = getDate(timestamp);
                         messageHolder.txt_time.setText(time);
                     }
+
+                    if (ChatingActivity.isInActionMode) {
+                        if (ChatingActivity.selectionList.contains(messages.get(position))) {
+                            messageHolder.mView.setBackgroundResource(R.color.green);
+                            messageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                        }
+                    }
+
+
                 } else if (message.has("product")) {
                     SentProductHolder sentProductHolder = (SentProductHolder) holder;
                     sentProductHolder.txt_pro_name.setText(String.valueOf(message.getString("pro_name")));
@@ -217,11 +322,27 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     sentProductHolder.txt_pro_price.setText(message.getString("p_price"));
                     sentProductHolder.txt_product.setText(message.getString("pro_message"));
                     Glide.with(inflater.getContext()).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
+
+                    if (ChatingActivity.isInActionMode) {
+                        if (ChatingActivity.selectionList.contains(messages.get(position))) {
+                            sentProductHolder.mView.setBackgroundResource(R.color.selected_item);
+                            sentProductHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+
+                        }
+                    }
                 } else {
                     SentImageHolder imageHolder = (SentImageHolder) holder;
                     Bitmap bitmap = BitmapFactory.decodeFile(message.getString("image"));
 
                     imageHolder.send_image.setImageBitmap(bitmap);
+
+                    if (ChatingActivity.isInActionMode) {
+                        if (ChatingActivity.selectionList.contains(messages.get(position))) {
+                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
+                            imageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+
+                        }
+                    }
                 }
 
             } else if (message.getBoolean("isRecive")) {
@@ -243,6 +364,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         receivedMessageHolder.rec_time.setText(time);
                     }
 
+                    if (ChatingActivity.isInActionMode) {
+                        if (ChatingActivity.selectionList.contains(messages.get(position))) {
+                            receivedMessageHolder.mView.setBackgroundResource(R.color.selected_item);
+                            receivedMessageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+
+                        }
+                    }
+
                 } else {
 
                     ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
@@ -253,6 +382,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     String img = message.getString("image");
 
                     Glide.with(inflater.getContext()).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(imageHolder.imageView);
+
+                    if (ChatingActivity.isInActionMode) {
+                        if (ChatingActivity.selectionList.contains(messages.get(position))) {
+                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
+                            imageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+
+                        }
+                    }
                 }
             }
         } catch (JSONException e) {
