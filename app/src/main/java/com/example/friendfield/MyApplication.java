@@ -44,6 +44,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     public static WebSocket webSocket;
     private static int stateCounter;
     private String TAG = getClass().getSimpleName();
+    SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
@@ -71,10 +72,15 @@ public class MyApplication extends Application implements LifecycleObserver {
         createNotificationChannel();
 
         //ReelsActivity SharedPreference
-        SharedPreferences sharedPreferences = getSharedPreferences("Reels", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("Reels", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+
+        sharedPreferences = getSharedPreferences("countUser", MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = sharedPreferences.edit();
+        editor1.clear();
+        editor1.commit();
     }
 
     public static boolean isApplicationOnBackground() {
@@ -257,11 +263,7 @@ public class MyApplication extends Application implements LifecycleObserver {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Example Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Example Channel", NotificationManager.IMPORTANCE_HIGH);
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
@@ -283,7 +285,7 @@ public class MyApplication extends Application implements LifecycleObserver {
                 MyApplication.activityStarted();
                 biometricPrompt.authenticate(promptInfo);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error ");
         }
     }

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.friendfield.Activity.SelectUserActivity;
 import com.example.friendfield.Model.SelecetdUserModel;
 import com.example.friendfield.R;
 
@@ -30,7 +28,7 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
     static ClickListener clickListener;
 
     public interface ClickListener {
-        void onItemClick(SelecetdUserModel model, boolean isAddTo);
+        void onItemClick(SelecetdUserModel model, boolean isAddTo, int position);
     }
 
     public void setOnItemClickListener(ClickListener clickListener) {
@@ -69,12 +67,12 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
                 if (!selecetdUserModelArrayList.get(position).isSelected) {
                     model.setSelected(cb.isChecked());
                     selecetdUserModelArrayList.get(position).setSelected(cb.isChecked());
-                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), true);
+                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), true,position);
                     notifyDataSetChanged();
                 } else {
                     model.setSelected(!cb.isChecked());
                     selecetdUserModelArrayList.get(position).setSelected(false);
-                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), false);
+                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), false,position);
                     notifyDataSetChanged();
                 }
             }

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -25,16 +26,19 @@ import java.util.ArrayList;
 public class SelectUserActivity extends BaseActivity {
 
     RecyclerView user_recycler;
+    ImageView ic_back_arrow;
+    SharedPreferences sharedPreferences;
     UserSelectAdapter userSelectAdapter;
     String[] user_name = {"John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan", "John Bryan"};
     CheckBox img_select_all;
     TextView txt_people_count;
     FloatingActionButton fb_map;
-    ImageView ic_back_arrow;
+
     ArrayList<SelecetdUserModel> selecetdUserModelArrayList = new ArrayList<>();
     ArrayList<SelecetdUserModel> selectedarraylist = new ArrayList<>();
     RelativeLayout iv_filter;
     String str_count;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +69,21 @@ public class SelectUserActivity extends BaseActivity {
             }
         });
 
+        sharedPreferences = getSharedPreferences("countUser",MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         userSelectAdapter.setOnItemClickListener(new UserSelectAdapter.ClickListener() {
             @Override
-            public void onItemClick(SelecetdUserModel model, boolean isAddTo) {
+            public void onItemClick(SelecetdUserModel model, boolean isAddTo, int position) {
                 if (isAddTo) {
                     selectedarraylist.add(model);
                 } else {
                     selectedarraylist.remove(model);
                 }
-                userSelectAdapter.notifyDataSetChanged();
                 txt_people_count.setText(String.valueOf(selectedarraylist.size()));
                 str_count = String.valueOf(selectedarraylist.size()+ " People Selected");
+                editor.putInt("Count",selectedarraylist.size());
+                userSelectAdapter.notifyDataSetChanged();
             }
         });
 
@@ -89,9 +97,11 @@ public class SelectUserActivity extends BaseActivity {
                             userSelectAdapter.selectAllItem(false);
                             userSelectAdapter.notifyDataSetChanged();
                         } else {
+                            selectedarraylist.clear();
                             userSelectAdapter.selectAllItem(true);
                             txt_people_count.setText(String.valueOf(user_name.length));
                             str_count = String.valueOf(user_name.length+" People Selected");
+                            editor.putInt("Count",user_name.length);
                             userSelectAdapter.notifyDataSetChanged();
                         }
                         break;
@@ -105,7 +115,8 @@ public class SelectUserActivity extends BaseActivity {
         fb_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SelectUserActivity.this, ChooseUserPromotionActivity.class).putExtra("CountUser", str_count));
+                editor.apply();
+                startActivity(new Intent(SelectUserActivity.this, ChooseUserPromotionActivity.class));
                 finish();
             }
         });
