@@ -55,6 +55,7 @@ import com.example.friendfield.BaseActivity;
 import com.example.friendfield.MainActivity;
 import com.example.friendfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.example.friendfield.Model.ListChat.ListChatsModel;
+import com.example.friendfield.Model.SendMessage.SendTextModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
@@ -250,9 +251,26 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             isInActionMode = false;
             ((MessageAdapter) messageAdapter).removeData(selectionList);
             clearActionMode();
-        } else if (item.getItemId() == R.id.item_edit) {
-            Log.d("====", "Edit");
+        } else if (item.getItemId() == R.id.item_edit)
+        {
+            if (selectionList.size() == 1) {
+                final EditText editText = new EditText(this);
+                new AlertDialog.Builder(this)
+                        .setTitle("Edit")
+                        .setView(editText)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ListChatsModel model = selectionList.get(0);
+//                                model.setContentType(editText.getText().toString());
+                                model.getSendAllModelData().getText().setMessage(editText.getText().toString());
+                                isInActionMode = false;
 
+//                                ((MessageAdapter) messageAdapter).changeDataItem(getCheckedLastPosition(), model);
+//                                clearActionMode();
+                            }
+                        })
+                        .create().show();
+            }
         } else if (item.getItemId() == R.id.item_copy) {
             Log.d("====", "Copy");
             ListChatsModel model = selectionList.get(0);
@@ -713,4 +731,14 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     public void onBackPressed() {
         startActivity(new Intent(ChatingActivity.this, MainActivity.class));
     }
+
+//    public int getCheckedLastPosition() {
+//        ArrayList<ListChatsModel> dataSet = MessageAdapter.getDataSet();
+//        for (int i = 0; i < dataSet.size(); i++) {
+//            if (dataSet.get(i).equals(selectionList.get(0))) {
+//                return i;
+//            }
+//        }
+//        return 0;
+//    }
 }

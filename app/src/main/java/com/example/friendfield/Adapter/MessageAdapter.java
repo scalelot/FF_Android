@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.friendfield.Activity.ChatingActivity;
 import com.example.friendfield.Model.ListChat.ListChatsModel;
+import com.example.friendfield.Model.SendMessage.SendTextModel;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
 
@@ -430,4 +431,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
         notifyDataSetChanged();
     }
+
+//    public void changeDataItem(int position, ListChatsModel model) {
+//        messages.set("message",model.getSendAllModelData()
+//                .getText().getMessage());
+//        notifyDataSetChanged();
+//    }
+//
+//    public static ArrayList<ListChatsModel> getDataSet() {
+//        return ;
+//    }
 }
