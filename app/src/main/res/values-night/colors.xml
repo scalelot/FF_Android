@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#ffffff</color>
+    <color name="white">#ffffff</color>
+
+    <color name="colorAccent">#2DCAD4</color>
+    <color name="colorPrimaryDark">#121212</color>
+    <color name="colorPrimary">#FFFFFF</color>
+
+    <color name="app_color">#5AC8D2</color>
+    <color name="app_bg">#1C1B1B</color>
+    <color name="toolbar">#2C2B2B</color>
+    <color name="light_darkturquoise">#96E4E9</color>
+    <color name="grey">#ffffff</color>
+    <color name="light_grey">#DDDDDD</color>
+    <color name="bg_grey">#2C2B2B</color>
+    <color name="green">#1DC843</color>
+    <color name="btn_darkturquoise">#fff</color>
+    <color name="light_quoise">#2C2B2B</color>
+    <color name="edt_hint">#AAAAAA</color>
+    <color name="tab_bg">#2C2B2B</color>
+    <color name="red">#FC5858</color>
+    <color name="bg_grey_color">#2C2B2B</color>
+    <color name="light_silver">#2C2B2B</color>
+    <color name="medium_grey">#AFAFAF</color>
+    <color name="light_sky">#def4f6</color>
+
+    <color name="stickerBacColor">#CC212121</color>
+    <color name="editBubbleTextBac">#F8F8F8</color>
+    <color name="musicBacColor">#0F0F1B</color>
+
+    <color name="selected_item">#EFFAFB</color>
+
+    <color name="icon_color">#ffffff</color>
+    <color name="dialog_color">#2C2B2B</color>
+    <color name="txt_black">#000</color>
+    <color name="tab_select">#1C1B1B</color>
+    <color name="send_chat">#121212</color>
+    <color name="call_icon_bg">#F1F1F1</color>
+    <color name="call_icon">#888888</color>
+
+</resources>
