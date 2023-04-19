@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     tools:context=".Activity.ChangeNumberActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -107,7 +107,7 @@
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginTop="@dimen/margin_30"
                     android:layout_marginRight="@dimen/margin_20"
-                    android:background="@drawable/phone_number_bg"
+                    android:background="@drawable/edt_bg"
                     android:orientation="horizontal">
 
                     <com.hbb20.CountryCodePicker
@@ -116,7 +116,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         app:hideNameCode="true"
-                        app:textSize="@dimen/text_14" />
+                        app:contentColor="@color/edt_hint"
+                        app:textSize="@dimen/text_14"
+                        />
 
                     <View
                         android:layout_width="@dimen/sp_2"
@@ -133,6 +135,8 @@
                         android:hint="@string/old_phone_number"
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
+                        android:textColorHint="@color/edt_hint"
+                        android:textColor="@color/edt_hint"
                         android:inputType="number"
                         android:maxLength="10"
                         android:padding="@dimen/margin_15"
@@ -148,7 +152,7 @@
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginTop="@dimen/margin_30"
                     android:layout_marginRight="@dimen/margin_20"
-                    android:background="@drawable/phone_number_bg"
+                    android:background="@drawable/edt_bg"
                     android:orientation="horizontal">
 
                     <com.hbb20.CountryCodePicker
@@ -156,6 +160,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        app:contentColor="@color/edt_hint"
                         app:hideNameCode="true"
                         app:textSize="@dimen/text_14" />
 
@@ -175,6 +180,8 @@
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:inputType="number"
+                        android:textColorHint="@color/edt_hint"
+                        android:textColor="@color/edt_hint"
                         android:maxLength="10"
                         android:padding="@dimen/margin_15"
                         android:textSize="@dimen/text_14" />

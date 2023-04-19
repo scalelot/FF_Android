@@ -4,9 +4,9 @@
     <solid android:color="@color/light_silver" />
 
     <stroke
+        android:width="@dimen/sp_2"
         android:color="@color/edt_hint"
         android:dashWidth="@dimen/sp_4"
-        android:width="@dimen/sp_2"
         android:dashGap="@dimen/sp_3" />
 
     <corners android:radius="@dimen/sp_5" />

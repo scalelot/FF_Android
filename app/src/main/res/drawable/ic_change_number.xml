@@ -9,12 +9,12 @@
     <path
         android:pathData="M28.1244,17.8173C28.1244,20.4422 26.5495,20.6297 26.2495,20.6297H3.1975L8.1566,15.6705L6.8348,14.3394L0.2726,20.9015C-0.0909,21.2672 -0.0909,21.8577 0.2726,22.2233L6.8348,28.7855L8.1566,27.4637L3.1975,22.5046H26.2495C27.5432,22.5046 29.9993,21.5671 29.9993,17.8173V15.0049H28.1244V17.8173Z"
         android:strokeWidth="0.5"
-        android:fillColor="#242427"
-        android:strokeColor="#000000"/>
+        android:fillColor="@color/icon_color"
+        android:strokeColor="@color/icon_color"/>
     <path
         android:pathData="M1.8757,12.1924C1.8757,9.5676 3.4506,9.3801 3.7506,9.3801H26.8026L21.8435,14.3392L23.1653,15.661L29.7275,9.0988C30.091,8.7332 30.091,8.1427 29.7275,7.777L23.1653,1.2148L21.8341,2.546L26.8026,7.5052H3.7506C2.4569,7.5052 0.0008,8.4426 0.0008,12.1924V15.0048H1.8757V12.1924Z"
         android:strokeWidth="0.5"
-        android:fillColor="#242427"
-        android:strokeColor="#000000"/>
+        android:fillColor="@color/icon_color"
+        android:strokeColor="@color/icon_color"/>
   </group>
 </vector>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_bg"
     tools:context=".Activity.ChooseUserPromotionActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -266,7 +267,7 @@
                 android:layout_marginTop="@dimen/margin_15"
                 android:layout_marginRight="@dimen/margin_5"
                 android:layout_toLeftOf="@+id/or"
-                android:background="@color/tab_bg" />
+                android:background="@color/bg_grey_color" />
 
             <RelativeLayout
                 android:id="@+id/select_user"
@@ -408,7 +409,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/margin_5"
                 android:layout_toLeftOf="@+id/or"
-                android:background="@color/tab_bg" />
+                android:background="@color/bg_grey_color" />
 
             <TextView
                 android:id="@+id/or"
@@ -427,7 +428,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_toRightOf="@+id/or"
-                android:background="@color/tab_bg" />
+                android:background="@color/bg_grey_color" />
 
         </RelativeLayout>
 
@@ -502,7 +503,7 @@
                 android:imeOptions="actionNext"
                 android:paddingLeft="@dimen/margin_10"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_hint"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 

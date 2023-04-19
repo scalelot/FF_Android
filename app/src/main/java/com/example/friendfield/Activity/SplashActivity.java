@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.example.friendfield.BaseActivity;
 import com.example.friendfield.MainActivity;
 import com.example.friendfield.MyApplication;

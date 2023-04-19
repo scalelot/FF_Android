@@ -24,7 +24,7 @@ public class ConversationActivity extends BaseActivity {
         setContentView(R.layout.activity_conversation);
 
         ic_back = findViewById(R.id.ic_back);
-        edt_chating = findViewById(R.id.edt_chating);
+        edt_chating = findViewById(R.id.edt_conversation);
         btn_send = findViewById(R.id.btn_send);
 
         ic_back.setOnClickListener(new View.OnClickListener() {

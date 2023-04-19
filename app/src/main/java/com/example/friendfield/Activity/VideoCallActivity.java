@@ -174,7 +174,7 @@ public class VideoCallActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-//        startActivity(new Intent(VideoCallActivity.this,ChatingActivity.class));
+        startActivity(new Intent(VideoCallActivity.this,ChatingActivity.class));
         finish();
     }
 }

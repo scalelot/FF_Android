@@ -11,7 +11,7 @@
         <clip-path android:pathData="M0 0H375V56H0V0Z" />
 
         <path
-            android:fillColor="#FFFFFF"
+            android:fillColor="@color/toolbar"
             android:pathData="M0 0V56H375V0" />
 
     </group>

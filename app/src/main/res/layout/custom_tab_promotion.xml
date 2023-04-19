@@ -9,8 +9,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/sp_50"
-        android:layout_marginTop="@dimen/margin_20"
         android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_20"
         android:background="@drawable/back_tabs">
 

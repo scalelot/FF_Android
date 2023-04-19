@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/app_bg"
     tools:context=".Activity.PublishDateTimeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -80,7 +81,7 @@
                 android:imeOptions="actionNext"
                 android:paddingLeft="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_hint"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 
@@ -120,7 +121,7 @@
                 android:imeOptions="actionNext"
                 android:paddingLeft="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_hint"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 

@@ -70,6 +70,6 @@
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_20"
-        android:background="@color/bg_grey" />
+        android:background="@color/bg_grey_color" />
 
 </LinearLayout>

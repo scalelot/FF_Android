@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/app_bg"
     tools:context=".Activity.VideoCallActivity">
 
     <LinearLayout
@@ -42,7 +42,7 @@
         android:layout_marginTop="@dimen/margin_10"
         android:fontFamily="@font/roboto_regular"
         android:text="@string/ringing"
-        android:textColor="@color/bg_grey"
+        android:textColor="@color/call_icon_bg"
         android:textSize="@dimen/text_16" />
 
     <RelativeLayout
@@ -59,14 +59,14 @@
             android:layout_marginRight="@dimen/margin_30"
             android:layout_toLeftOf="@+id/ll_camera_swipe"
             android:background="@drawable/icon_bg"
-            android:backgroundTint="@color/bg_grey"
+            android:backgroundTint="@color/call_icon_bg"
             android:gravity="center">
 
             <ImageView
                 android:layout_width="@dimen/sp_25"
                 android:layout_height="@dimen/sp_25"
                 android:src="@drawable/ic_video_call_icon"
-                app:tint="@color/grey" />
+                app:tint="@color/call_icon" />
 
         </LinearLayout>
 
@@ -76,14 +76,14 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:background="@drawable/icon_bg"
-            android:backgroundTint="@color/bg_grey"
+            android:backgroundTint="@color/call_icon_bg"
             android:gravity="center">
 
             <ImageView
                 android:layout_width="@dimen/sp_25"
                 android:layout_height="@dimen/sp_25"
                 android:src="@drawable/ic_swich_camera"
-                app:tint="@color/grey" />
+                app:tint="@color/call_icon" />
 
         </LinearLayout>
 
@@ -94,14 +94,14 @@
             android:layout_marginLeft="@dimen/margin_30"
             android:layout_toRightOf="@+id/ll_camera_swipe"
             android:background="@drawable/icon_bg"
-            android:backgroundTint="@color/bg_grey"
+            android:backgroundTint="@color/call_icon_bg"
             android:gravity="center">
 
             <ImageView
                 android:layout_width="@dimen/sp_25"
                 android:layout_height="@dimen/sp_25"
                 android:src="@drawable/ic_mute_icon"
-                app:tint="@color/grey" />
+                app:tint="@color/call_icon" />
 
         </LinearLayout>
     </RelativeLayout>

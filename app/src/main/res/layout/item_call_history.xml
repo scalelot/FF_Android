@@ -7,7 +7,7 @@
     android:layout_marginTop="@dimen/margin_10"
     android:layout_marginRight="@dimen/margin_20"
     android:layout_marginBottom="@dimen/margin_10"
-    android:background="@color/white">
+    android:background="@color/app_bg">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/call_user_profile"

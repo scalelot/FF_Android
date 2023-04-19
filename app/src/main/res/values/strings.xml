@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FriendField</string>
+    <string name="app_name">FestumField</string>
     <string name="default_notification_channel_id">FriendField</string>
     <string name="google_maps_key">AIzaSyBtnrzIQpD4MqzvmkeaQdbGUngVZ8YNpwQ</string>
 

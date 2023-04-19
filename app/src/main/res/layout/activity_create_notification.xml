@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     tools:context=".Activity.CreateNotificationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -57,60 +57,53 @@
             android:gravity="center"
             android:padding="@dimen/sp_1">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="@dimen/sp_5">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_upload_img" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:fontFamily="@font/roboto_medium"
-                        android:text="@string/upload_image"
-                        android:textColor="@color/edt_hint"
-                        android:textSize="@dimen/text_14" />
-                </LinearLayout>
-
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/add_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:visibility="visible" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_upload_img" />
 
-                <RelativeLayout
-                    android:id="@+id/ic_edit_img"
-                    android:layout_width="@dimen/sp_30"
-                    android:layout_height="@dimen/sp_30"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="bottom|right"
-                    android:layout_margin="@dimen/margin_5"
-                    android:background="@drawable/circle"
-                    android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/upload_image"
+                    android:textColor="@color/edt_hint"
+                    android:textSize="@dimen/text_14" />
+            </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="@dimen/sp_18"
-                        android:layout_height="@dimen/sp_18"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/ic_edit" />
 
-                </RelativeLayout>
+            <ImageView
+                android:id="@+id/add_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
 
-            </androidx.cardview.widget.CardView>
+            <RelativeLayout
+                android:id="@+id/ic_edit_img"
+                android:layout_width="@dimen/sp_30"
+                android:layout_height="@dimen/sp_30"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="@dimen/margin_5"
+                android:background="@drawable/circle"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_18"
+                    android:layout_height="@dimen/sp_18"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_edit" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -134,7 +127,7 @@
                 android:paddingLeft="@dimen/margin_15"
                 android:paddingRight="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_hint"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 
@@ -146,8 +139,10 @@
                 android:layout_marginTop="@dimen/margin_20"
                 android:background="@drawable/notification_bg"
                 android:imeOptions="actionNext"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_hint"
                 app:counterEnabled="true"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
                 app:counterMaxLength="150"
                 app:hintEnabled="false">
 
@@ -155,7 +150,7 @@
                     android:id="@+id/edt_notification_des"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/sp_75"
-                    android:background="@null"
+                    android:background="@drawable/notification_bg"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="top"
                     android:hint="@string/notifi_Description"
@@ -165,7 +160,7 @@
                     android:paddingLeft="@dimen/margin_15"
                     android:paddingTop="@dimen/margin_15"
                     android:paddingRight="@dimen/margin_15"
-                    android:textColor="@color/black"
+                    android:textColor="@color/edt_hint"
                     android:textColorHint="@color/edt_hint"
                     android:textSize="@dimen/text_14" />
 
@@ -184,7 +179,7 @@
                 android:paddingLeft="@dimen/margin_15"
                 android:paddingRight="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_hint"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
         </RelativeLayout>
