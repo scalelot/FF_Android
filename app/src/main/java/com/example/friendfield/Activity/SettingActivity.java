@@ -3,6 +3,7 @@ package com.example.friendfield.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 
@@ -22,6 +23,7 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,13 +46,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyStore;
 import java.util.ArrayList;
 
 public class SettingActivity extends BaseActivity {
 
-    ImageView ic_back_arrow, img_close, ic_close;
+    ImageView ic_back_arrow, img_close, ic_close,img_dark_mode;
     AppCompatButton btn_clear_data, btn_select_file;
-    SwitchButton noti_switch;
+    SwitchButton noti_switch,dark_mode_switch;
     RelativeLayout chat_backup, block_contact, change_number, contact_us, help, conversation, sign_out, upload_excel;
     File myFile;
     Uri uri;
@@ -74,7 +77,25 @@ public class SettingActivity extends BaseActivity {
         conversation = findViewById(R.id.conversation);
         sign_out = findViewById(R.id.sign_out);
         upload_excel = findViewById(R.id.upload_excel);
+        dark_mode_switch=findViewById(R.id.dark_mode_switch);
+        img_dark_mode=findViewById(R.id.img_dark_mode);
 
+        dark_mode_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked)
+                {
+                    MyApplication.getInstance().setIsNightModeEnabled(true);
+                    img_dark_mode.setImageResource(R.drawable.ic_light_mode);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+                else {
+                    MyApplication.getInstance().setIsNightModeEnabled(false);
+                    img_dark_mode.setImageResource(R.drawable.ic_dark_mode);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+            }
+        });
         ic_back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

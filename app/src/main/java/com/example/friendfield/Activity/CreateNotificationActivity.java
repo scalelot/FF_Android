@@ -69,7 +69,7 @@ public class CreateNotificationActivity extends BaseActivity {
     RelativeLayout ic_edit_img;
     public static final int PICK_IMAGE = 1;
     Bitmap bitmap = null;
-    boolean status = false;
+    boolean status = true;
     protected static final int CAMERA_REQUEST = 0;
     protected static final int GALLERY_REQUEST = 1;
     Uri uri;

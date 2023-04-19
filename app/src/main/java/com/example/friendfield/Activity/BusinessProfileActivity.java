@@ -186,7 +186,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
             }
         });
-
+        getBusinessProfileInfo();
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -336,6 +336,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     }
 
     public void getBusinessProfileInfo() {
+        Log.d("Api", "work");
         FileUtils.DisplayLoading(BusinessProfileActivity.this);
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_business_info, null, new Response.Listener<JSONObject>() {

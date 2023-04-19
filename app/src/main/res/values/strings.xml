@@ -198,6 +198,7 @@
     <string name="google_account">Google Account</string>
     <string name="back_up">Back Up</string>
     <string name="date_time">06/02/2019, 05:14</string>
+    <string name="dark_mode">Mode</string>
 
     <!--BlockedContatctsActivity-->
     <string name="unblock">UNBLOCK</string>

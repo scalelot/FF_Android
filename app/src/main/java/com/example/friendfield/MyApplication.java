@@ -49,6 +49,13 @@ public class MyApplication extends Application implements LifecycleObserver {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Dark mode code
+        singleton = this;
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        this.isNightModeEnabled = mPrefs.getBoolean(NIGHT_MODE, false);
+        //Dark mode code
+
         context = this;
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -308,5 +315,34 @@ public class MyApplication extends Application implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void onDestroyEvent() {
         Log.i(TAG, "ON_DESTROY event");
+    }
+
+
+    //Dark mode code
+    public static final String NIGHT_MODE = "NIGHT_MODE";
+    private boolean isNightModeEnabled = false;
+
+    private static MyApplication singleton = null;
+
+    public static MyApplication getInstance() {
+
+        if(singleton == null)
+        {
+            singleton = new MyApplication();
+        }
+        return singleton;
+    }
+
+    public boolean isNightModeEnabled() {
+        return isNightModeEnabled;
+    }
+
+    public void setIsNightModeEnabled(boolean isNightModeEnabled) {
+        this.isNightModeEnabled = isNightModeEnabled;
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(NIGHT_MODE, isNightModeEnabled);
+        editor.apply();
     }
 }
