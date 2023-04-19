@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     android:orientation="vertical"
     tools:context=".Activity.LoginVerifyActivity">
 
@@ -123,7 +123,7 @@
 
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_verify"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_50"

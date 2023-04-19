@@ -31,7 +31,6 @@ public class ReelsActivity extends AppCompatActivity {
 
     ImageView upload_reels_video, ic_back;
     ViewPager2 viewPager2;
-    LinearLayout ll_comment,ll_likes;
     String[] name = {"Hello", "World", "Welcome", "Hunter", "Bryan", "Hello", "World", "Welcome", "Hunter", "Bryan"};
     ReelsVideoAdapter reelsVideoAdapter;
     List<ReelsModel> reelsModelList = new ArrayList<>();
@@ -44,8 +43,6 @@ public class ReelsActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.viewPager2);
         upload_reels_video = findViewById(R.id.upload_reels_video);
         ic_back = findViewById(R.id.ic_back);
-        ll_comment = findViewById(R.id.ll_comment);
-        ll_likes = findViewById(R.id.ll_likes);
 
         for (int i = 0; i < name.length; i++) {
             ReelsModel reelsModel = new ReelsModel();

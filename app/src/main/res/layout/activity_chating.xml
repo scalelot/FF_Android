@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     tools:context=".Activity.ChatingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,7 +25,6 @@
                     android:id="@+id/hp_back_arrow"
                     android:layout_width="@dimen/sp_30"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_10"
                     android:padding="@dimen/margin_5"
                     android:src="@drawable/backarrow" />
 
@@ -159,7 +158,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
-                android:background="@drawable/bg_tans_replay"
+                android:background="@drawable/chat_txt_right_bg"
                 android:visibility="gone">
 
                 <LinearLayout

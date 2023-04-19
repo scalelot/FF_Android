@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     android:orientation="vertical"
     tools:context=".Activity.LoginActivity">
 
@@ -54,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            app:contentColor="@color/edt_hint"
             app:hideNameCode="true"
             app:textSize="@dimen/text_14" />
 
@@ -75,10 +76,12 @@
             android:inputType="number"
             android:maxLength="10"
             android:padding="@dimen/margin_15"
+            android:textColor="@color/edt_hint"
+            android:textColorHint="@color/edt_hint"
             android:textSize="@dimen/text_18" />
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_continue"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_50"

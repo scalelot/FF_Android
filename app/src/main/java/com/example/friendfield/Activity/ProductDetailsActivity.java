@@ -53,7 +53,7 @@ public class ProductDetailsActivity extends BaseActivity {
     TextView txt_p_name, txt_p_price, txt_p_offer;
     TextView txt_p_des, txt_p_code;
     Context context;
-    Button btn_inquiry_message;
+    AppCompatButton btn_inquiry_message;
     ViewPager viewPager;
     ProductDetailsModel productDetailsModel;
     LinearLayout sliderDotspanel;

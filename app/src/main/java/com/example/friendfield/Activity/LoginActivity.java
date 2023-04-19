@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatButton;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,7 +33,7 @@ public class LoginActivity extends BaseActivity {
 
     CountryCodePicker ccp;
     EditText edtPhone;
-    Button btn_continue;
+    AppCompatButton btn_continue;
     String countycode;
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.friendfield.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,8 +65,8 @@ public class ProductActivity extends BaseActivity {
     LinearLayout lin_not_empty;
     ImageView iv_add_new_product;
     RecyclerView recycle_add_new_product;
-    Button btn_add_product;
-    Button btn_save;
+    AppCompatButton btn_add_product;
+    AppCompatButton btn_save;
     TextView txt_skip_for_now;
     LinearLayout lin_add_product;
     Context context;

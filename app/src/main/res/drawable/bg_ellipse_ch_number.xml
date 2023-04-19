@@ -6,6 +6,6 @@
   <path
       android:pathData="M95,95m-95,0a95,95 0,1 1,190 0a95,95 0,1 1,-190 0"
       android:strokeAlpha="0.15"
-      android:fillColor="#5AC8D2"
+      android:fillColor="@color/btn_darkturquoise"
       android:fillAlpha="0.15"/>
 </vector>

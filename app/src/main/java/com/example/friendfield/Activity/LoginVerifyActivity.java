@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatButton;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,7 +43,7 @@ public class LoginVerifyActivity extends BaseActivity {
 
     TextView tv_timer;
     TextView txt_resend_code;
-    Button btn_verify;
+    AppCompatButton btn_verify;
     String csrfToken;
     String OtpValue;
     String MobileNo;

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/app_bg">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/request_image"
@@ -16,11 +16,13 @@
 
     <TextView
         android:id="@+id/text_username"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_15"
         android:layout_marginTop="@dimen/margin_15"
+        android:layout_toLeftOf="@+id/recive_text_time"
         android:layout_toRightOf="@+id/request_image"
+        android:layout_marginRight="@dimen/margin_5"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/create_profile"
         android:textColor="@color/black"

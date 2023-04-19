@@ -3,6 +3,7 @@ package com.example.friendfield.Activity;
 import static com.android.volley.Request.Method.GET;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Context;
 import android.content.Intent;
@@ -65,7 +66,7 @@ public class AddProductActivity extends BaseActivity {
     ImageView img_add_image, img_product1, img_product2, img_product3;
     EditText edt_pro_name, edt_pro_price, edt_pro_des, edt_offer;
     EditText edt_pro_code, edt_category, edt_subcategory;
-    Button btn_save_product;
+    AppCompatButton btn_save_product;
     RequestQueue queue;
     Context context;
     String edit_pro;

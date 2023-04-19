@@ -38,6 +38,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.friendfield.Activity.ChatingActivity;
 import com.example.friendfield.Activity.CreateNewGroupActivity;
 import com.example.friendfield.Activity.DisplayAllProductActivity;
+import com.example.friendfield.Activity.GroupProfileDetalisActivity;
 import com.example.friendfield.Activity.LikeAndCommentActivity;
 import com.example.friendfield.Activity.PromotionActivity;
 import com.example.friendfield.Activity.RequestActivity;

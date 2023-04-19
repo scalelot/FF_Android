@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_bg"
     tools:context=".Activity.MessageInfoActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -50,7 +51,6 @@
             android:layout_height="@dimen/sp_140"
             android:layout_margin="@dimen/margin_20"
             android:background="@drawable/chat_txt_right_bg"
-            android:backgroundTint="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
@@ -107,14 +107,14 @@
                     android:text="@string/time"
                     android:textColor="@color/grey"
                     android:textSize="@dimen/text_14" />
-                
+
                 <ImageView
                     android:layout_width="@dimen/sp_16"
                     android:layout_height="@dimen/sp_14"
-                    android:src="@drawable/ic_seen"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/margin_20"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:src="@drawable/ic_seen" />
 
             </RelativeLayout>
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/app_bg">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/send_image"
@@ -20,8 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_15"
         android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_toLeftOf="@+id/send_text_time"
         android:layout_toRightOf="@+id/send_image"
+        android:ellipsize="end"
         android:fontFamily="@font/roboto_medium"
+        android:maxLines="1"
         android:text="@string/create_profile"
         android:textColor="@color/black"
         android:textSize="@dimen/margin_16" />
@@ -69,6 +73,6 @@
         android:layout_height="@dimen/sp_1"
         android:layout_below="@+id/txt_request_check"
         android:layout_marginTop="@dimen/margin_20"
-        android:background="@color/bg_grey" />
+        android:background="@color/bg_grey_color" />
 
 </RelativeLayout>

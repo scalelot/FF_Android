@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     tools:context=".Activity.VideoCallReciveActivity">
 
     <LinearLayout
@@ -51,14 +51,14 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="@dimen/sp_50"
                 android:background="@drawable/icon_bg"
-                android:backgroundTint="@color/bg_grey"
+                android:backgroundTint="@color/call_icon_bg"
                 android:gravity="center">
 
                 <ImageView
                     android:layout_width="@dimen/sp_25"
                     android:layout_height="@dimen/sp_25"
                     android:src="@drawable/ic_message_icon"
-                    app:tint="@color/grey" />
+                    app:tint="@color/call_icon" />
 
             </LinearLayout>
 
@@ -75,14 +75,14 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="@dimen/sp_50"
                 android:background="@drawable/icon_bg"
-                android:backgroundTint="@color/bg_grey"
+                android:backgroundTint="@color/call_icon_bg"
                 android:gravity="center">
 
                 <ImageView
                     android:layout_width="@dimen/sp_25"
                     android:layout_height="@dimen/sp_25"
                     android:src="@drawable/ic_video_call_icon"
-                    app:tint="@color/grey" />
+                    app:tint="@color/call_icon" />
 
             </LinearLayout>
         </LinearLayout>
@@ -99,7 +99,7 @@
                 android:layout_height="@dimen/sp_50"
                 android:layout_gravity="center"
                 android:background="@drawable/icon_bg"
-                android:backgroundTint="@color/bg_grey"
+                android:backgroundTint="@color/call_icon_bg"
                 android:gravity="center">
 
                 <ImageView
@@ -107,7 +107,7 @@
                     android:layout_height="@dimen/sp_25"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_swich_camera"
-                    app:tint="@color/grey" />
+                    app:tint="@color/call_icon" />
 
             </LinearLayout>
 
@@ -125,14 +125,14 @@
                 android:layout_height="@dimen/sp_50"
                 android:layout_gravity="center"
                 android:background="@drawable/icon_bg"
-                android:backgroundTint="@color/bg_grey"
+                android:backgroundTint="@color/call_icon_bg"
                 android:gravity="center">
 
                 <ImageView
                     android:layout_width="@dimen/sp_25"
                     android:layout_height="@dimen/sp_25"
                     android:src="@drawable/ic_mute_icon"
-                    app:tint="@color/grey" />
+                    app:tint="@color/call_icon" />
 
             </LinearLayout>
 
