@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -129,6 +130,7 @@ public class ProductDetailsActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_product + "?pid=" + id, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    Log.e("ProductDetail",response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
 
@@ -207,7 +209,7 @@ public class ProductDetailsActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Log.e("ProductDetailError",error.toString());
                 }
             }) {
                 @Override

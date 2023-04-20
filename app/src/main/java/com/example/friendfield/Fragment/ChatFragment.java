@@ -72,8 +72,7 @@ public class ChatFragment extends Fragment {
     ArrayList<AllFriendsRegisterModel> receivefriendrequestsModelArrayList = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         chat_recyclerview = view.findViewById(R.id.chat_recyclerview);

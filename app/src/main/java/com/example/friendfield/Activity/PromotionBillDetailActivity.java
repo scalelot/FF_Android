@@ -1,6 +1,5 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
@@ -13,7 +12,6 @@ import com.example.friendfield.BaseActivity;
 import com.example.friendfield.R;
 
 public class PromotionBillDetailActivity extends BaseActivity {
-
     AppCompatButton button_ok;
     TextView publish_date_time;
     ImageView back_btn;

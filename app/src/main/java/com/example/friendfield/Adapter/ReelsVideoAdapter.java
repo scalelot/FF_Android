@@ -77,9 +77,6 @@ public class ReelsVideoAdapter extends RecyclerView.Adapter<ReelsVideoAdapter.Vi
 
         public void setVideoData(ReelsModel reelsModel) {
             user_name.setText(reelsModel.getName());
-//            videoView.setVideoURI();
-//            videoView.requestFocus();
-//            videoView.start();
 
             ll_comment.setOnClickListener(new View.OnClickListener() {
                 @Override

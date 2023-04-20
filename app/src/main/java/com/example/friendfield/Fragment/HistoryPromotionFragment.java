@@ -24,15 +24,13 @@ public class HistoryPromotionFragment extends Fragment {
     AppCompatButton btn_create_notification;
     RecyclerView recycler_noti;
     String[] txt_userName = {"Hello World", "World", "Hello World", "World", "Hello World"};
-    int[] img_noti = {R.drawable.img_1,R.drawable.img_2,R.drawable.img_3,R.drawable.img_4,R.drawable.img_6};
-
+    int[] img_noti = {R.drawable.img_1, R.drawable.img_2, R.drawable.img_3, R.drawable.img_4, R.drawable.img_6};
     ArrayList<String> arraylist = new ArrayList<String>();
     ArrayList<Integer> imagearraylist = new ArrayList<Integer>();
-    RelativeLayout emptyLay,loaderLay;
+    RelativeLayout emptyLay;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_history_promotion, container, false);
 
         btn_create_notification = inflate.findViewById(R.id.btn_create_notification);
@@ -49,9 +47,9 @@ public class HistoryPromotionFragment extends Fragment {
 
         int adPos = 0;
         for (int i = 0; i < txt_userName.length; i++) {
-            if(adPos == 1) {
+            if (adPos == 1) {
                 arraylist.add(null);
-                adPos=0;
+                adPos = 0;
             }
             arraylist.add(txt_userName[i]);
             adPos++;
@@ -60,16 +58,16 @@ public class HistoryPromotionFragment extends Fragment {
 
         int adPos1 = 0;
         for (int i = 0; i < img_noti.length; i++) {
-            if(adPos1 == 1) {
+            if (adPos1 == 1) {
                 imagearraylist.add(null);
-                adPos1=0;
+                adPos1 = 0;
             }
             imagearraylist.add(img_noti[i]);
             adPos1++;
         }
 
 
-        PromotionHistoryAdapter promotionHistoryAdapter = new PromotionHistoryAdapter(getActivity(), arraylist,imagearraylist);
+        PromotionHistoryAdapter promotionHistoryAdapter = new PromotionHistoryAdapter(getActivity(), arraylist, imagearraylist);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recycler_noti.setLayoutManager(linearLayoutManager);
         recycler_noti.setAdapter(promotionHistoryAdapter);

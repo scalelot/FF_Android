@@ -16,8 +16,6 @@ import com.example.friendfield.MainActivity;
 import com.example.friendfield.R;
 
 public class PromotionActivity extends BaseActivity {
-
-
     TextView running, history, send_request, select;
     ColorStateList def;
     ImageView ic_back;
@@ -45,9 +43,7 @@ public class PromotionActivity extends BaseActivity {
 
         def = history.getTextColors();
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.framlayout,
-                        new RunningPromotionFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.framlayout, new RunningPromotionFragment()).commit();
 
         running.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,9 +51,7 @@ public class PromotionActivity extends BaseActivity {
                 running.setTextColor(getResources().getColor(R.color.app_color));
                 history.setTextColor(def);
                 select.animate().x(0).setDuration(100);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.framlayout,
-                                new RunningPromotionFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.framlayout, new RunningPromotionFragment()).commit();
             }
         });
 
@@ -68,9 +62,7 @@ public class PromotionActivity extends BaseActivity {
                 history.setTextColor(getResources().getColor(R.color.app_color));
                 int size = history.getWidth();
                 select.animate().x(size).setDuration(100);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.framlayout,
-                                new HistoryPromotionFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.framlayout, new HistoryPromotionFragment()).commit();
             }
         });
     }

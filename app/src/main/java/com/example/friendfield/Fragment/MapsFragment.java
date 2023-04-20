@@ -135,9 +135,7 @@ public class MapsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_maps, container, false);
 
         viewdialog = LayoutInflater.from(getActivity()).inflate(R.layout.map_request_dialog, null);
@@ -212,8 +210,7 @@ public class MapsFragment extends Fragment {
         if (
 
                 getActivity() != null) {
-            mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
-                    .findFragmentById(R.id.mapFragment);
+            mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapFragment);
             if (mapFragment != null) {
                 mapFragment.getMapAsync(callback);
             }
@@ -260,13 +257,12 @@ public class MapsFragment extends Fragment {
     };
 
     public void findLocationorName(Double latitude, Double longitude) {
-        HashMap<String, String> maplatlog = new HashMap<>();
-        maplatlog.put("latitude", String.valueOf(latitude));
-        maplatlog.put("longitude", String.valueOf(longitude));
-        maplatlog.put("search", "");
-
         JsonObjectRequest jsonObjectRequest;
         try {
+            HashMap<String, String> maplatlog = new HashMap<>();
+            maplatlog.put("latitude", String.valueOf(latitude));
+            maplatlog.put("longitude", String.valueOf(longitude));
+            maplatlog.put("search", "");
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_find_friends_location_or_name, new JSONObject(maplatlog), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -299,31 +295,21 @@ public class MapsFragment extends Fragment {
                         RequestOptions requestOptions = new RequestOptions();
                         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(150));
 
-                        Glide.with(getActivity())
-                                .asBitmap()
-                                .centerCrop()
-                                .apply(requestOptions)
-                                .load(Constans.Display_Image_URL + profileimgList.get(i))
-                                .into(new CustomTarget<Bitmap>(150, 150) {
-                                    @Override
-                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                        marker = mGoogleMap.addMarker(new MarkerOptions()
-                                                .position(new LatLng(latitude, longitude))
-                                                .anchor(0.5f, 0.907f)
-                                                .icon(BitmapDescriptorFactory.fromBitmap(resource)));
-                                        marker.setTag(ids);
-                                    }
+                        Glide.with(getActivity()).asBitmap().centerCrop().apply(requestOptions).load(Constans.Display_Image_URL + profileimgList.get(i)).into(new CustomTarget<Bitmap>(150, 150) {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).anchor(0.5f, 0.907f).icon(BitmapDescriptorFactory.fromBitmap(resource)));
+                                marker.setTag(ids);
+                            }
 
-                                    @Override
-                                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                                    }
-                                });
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
 
 
                         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(m3));
-                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                .target(m3)
-                                .zoom(20).build();
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(m3).zoom(20).build();
 
                         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     }
@@ -353,7 +339,7 @@ public class MapsFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LL_location_friends-->", error.toString());
+                    Log.e("LL_findfriends_Error-->", error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -404,45 +390,6 @@ public class MapsFragment extends Fragment {
         }
     }
 
-    private Bitmap createUserBitmap() {
-        result = Bitmap.createBitmap(dp(62), dp(76), Bitmap.Config.ARGB_8888);
-        result.eraseColor(Color.TRANSPARENT);
-        Canvas canvas = new Canvas(result);
-        Drawable drawable = getResources().getDrawable(R.drawable.cricle_bg);
-        drawable.setBounds(0, 0, dp(62), dp(76));
-        drawable.draw(canvas);
-
-        Paint roundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        RectF bitmapRect = new RectF();
-        canvas.save();
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_dark);
-        if (bitmap != null) {
-            BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            Matrix matrix = new Matrix();
-            float scale = dp(52) / (float) bitmap.getWidth();
-            matrix.postTranslate(dp(5), dp(5));
-            matrix.postScale(scale, scale);
-            roundPaint.setShader(shader);
-            shader.setLocalMatrix(matrix);
-            bitmapRect.set(dp(5), dp(5), dp(52 + 5), dp(52 + 5));
-            canvas.drawRoundRect(bitmapRect, dp(26), dp(26), roundPaint);
-        }
-        canvas.restore();
-        try {
-            canvas.setBitmap(null);
-        } catch (Exception e) {
-        }
-        return result;
-    }
-
-    public int dp(float value) {
-        if (value == 0) {
-            return 0;
-        }
-        return (int) Math.ceil(getResources().getDisplayMetrics().density * value);
-    }
-
     public void PopupDialog() {
         popview = new PopupWindow(getActivity());
         popview.setContentView(viewdialog);
@@ -476,12 +423,11 @@ public class MapsFragment extends Fragment {
     }
 
     public void setFriendsApi(String userIds, String message) {
-        HashMap<String, String> hMap = new HashMap<>();
-        hMap.put("receiverid", userIds);
-        hMap.put("message", message);
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
+            HashMap<String, String> hMap = new HashMap<>();
+            hMap.put("receiverid", userIds);
+            hMap.put("message", message);
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_new_friend_request, new JSONObject(hMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -490,7 +436,7 @@ public class MapsFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LL_friends_error", error.toString());
+                    Log.e("Sendrequest_error", error.toString());
                 }
             }) {
                 @Override
@@ -514,9 +460,7 @@ public class MapsFragment extends Fragment {
         d.setColor(Color.rgb(90, 200, 210));
         d.setStroke(0, Color.TRANSPARENT);
 
-        Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth()
-                , d.getIntrinsicHeight()
-                , Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
         d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -526,8 +470,7 @@ public class MapsFragment extends Fragment {
         Log.e("hello", String.valueOf(area));
         final int radius = area;
 
-        final GroundOverlay circle = mGoogleMap.addGroundOverlay(new GroundOverlayOptions()
-                .position(latLng, 2 * radius).image(BitmapDescriptorFactory.fromBitmap(bitmap)));
+        final GroundOverlay circle = mGoogleMap.addGroundOverlay(new GroundOverlayOptions().position(latLng, 2 * radius).image(BitmapDescriptorFactory.fromBitmap(bitmap)));
 
         PropertyValuesHolder radiusHolder = PropertyValuesHolder.ofFloat("radius", 0, radius);
         PropertyValuesHolder transparencyHolder = PropertyValuesHolder.ofFloat("transparency", 0, 1);
@@ -554,15 +497,13 @@ public class MapsFragment extends Fragment {
 
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
-                .setCancelable(false).setPositiveButton("Goto Settings Page To Enable GPS",
-                        new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?").setCancelable(false).setPositiveButton("Goto Settings Page To Enable GPS", new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivity(callGPSSettingIntent);
-                            }
-                        });
+            public void onClick(DialogInterface dialog, int id) {
+                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(callGPSSettingIntent);
+            }
+        });
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
@@ -575,7 +516,6 @@ public class MapsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        fetchgetApi();
-//        findLocationorName(latitude, longitude);
+        fetchgetApi();
     }
 }

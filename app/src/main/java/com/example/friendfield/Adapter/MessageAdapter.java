@@ -431,14 +431,4 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
         notifyDataSetChanged();
     }
-
-//    public void changeDataItem(int position, ListChatsModel model) {
-//        messages.set("message",model.getSendAllModelData()
-//                .getText().getMessage());
-//        notifyDataSetChanged();
-//    }
-//
-//    public static ArrayList<ListChatsModel> getDataSet() {
-//        return ;
-//    }
 }

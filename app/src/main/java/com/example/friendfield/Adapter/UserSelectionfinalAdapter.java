@@ -28,8 +28,6 @@ public class UserSelectionfinalAdapter extends RecyclerView.Adapter<UserSelectio
     private static RemoveClickListener removeClickListener;
 
     public interface RemoveClickListener {
-//        void onItemClick(int position, View v);
-//        void onItemClick(CreateGroupModel createGroupModel, View v);
         void onItemClick(CreateGroupModel createGroupModel, int position,View v);
     }
 
@@ -61,7 +59,6 @@ public class UserSelectionfinalAdapter extends RecyclerView.Adapter<UserSelectio
             @Override
             public void onClick(View view) {
 
-//                removeClickListener.onItemClick(position, view);
                 removeClickListener.onItemClick(arraylist.get(position),position, view);
             }
         });
@@ -88,20 +85,4 @@ public class UserSelectionfinalAdapter extends RecyclerView.Adapter<UserSelectio
 
         }
     }
-
-//    public void filter(String charText) {
-//        charText = charText.toLowerCase(Locale.getDefault());
-//        user_name.clear();
-//        if (charText.length() == 0) {
-//            user_name.addAll(arraylist);
-//        } else {
-//            for (String wp : arraylist) {
-////                if (wp.getAnimalName().toLowerCase(Locale.getDefault()).contains(charText)) {
-//                if (wp.toLowerCase(Locale.getDefault()).contains(charText)) {
-//                    user_name.add(wp);
-//                }
-//            }
-//        }
-//        notifyDataSetChanged();
-//    }
 }

@@ -66,9 +66,6 @@ public class CreateGroupTitleActivity extends BaseActivity {
         txt_participant.setText("Participants : " + selectedArrayList.size());
 
         recy_selected_list.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
-//        int spanCount = 3; // 3 columns
-//        int spacing = 50; // 50px
-//        boolean includeEdge = false;
         recy_selected_list.addItemDecoration(new EqualSpacingItemDecoration(20, EqualSpacingItemDecoration.GRID));
 
         userSelectionAdapter = new UserSelectionfinalAdapter(getApplicationContext(), selectedArrayList);
@@ -98,10 +95,7 @@ public class CreateGroupTitleActivity extends BaseActivity {
         cir_group_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(CreateGroupTitleActivity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE);
+                ImagePicker.Companion.with(CreateGroupTitleActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
             }
         });
 

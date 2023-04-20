@@ -1,9 +1,6 @@
 package com.example.friendfield.Fragment;
 
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -11,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -171,7 +167,6 @@ public class ContactFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        allFriendsModelsList.clear();
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_myfriend, jsonObject, new Response.Listener<JSONObject>() {

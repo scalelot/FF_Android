@@ -61,9 +61,6 @@ public class ReelsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             myDataHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent img_intent = new Intent(activity, PromotionDetailsActivity.class);
-//                    img_intent.putExtra("noti_image", img_noti.get(position));
-//                    activity.startActivity(img_intent);
                 }
             });
         }else {

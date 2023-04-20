@@ -61,7 +61,6 @@ public class LoginActivity extends BaseActivity {
 
                 if (!edtPhone.getText().toString().equals("")) {
                     if (FileUtils.isValidPhoneNumber(edtPhone.getText().toString())) {
-
                         SendOtp(countycode, edtPhone.getText().toString());
                     } else {
                         edtPhone.setError(getResources().getString(R.string.please_enter_mno));
@@ -73,35 +72,20 @@ public class LoginActivity extends BaseActivity {
         });
 
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        edtPhone.setText("");
-    }
-
     public void SendOtp(String countyCode, String phone_number) {
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("countryCode", countyCode);
-        params.put("contactNo", phone_number);
-
-        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("countryCode", countyCode);
+            params.put("contactNo", phone_number);
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-
                     Log.e("SendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
 
-                    startActivity(new Intent(getApplicationContext(), LoginVerifyActivity.class).
-                            putExtra("csrfToken", sendOtpModel.getData().getToken())
-                            .putExtra("Country_code", countycode)
-                            .putExtra("ph_number", edtPhone.getText().toString()));
+                    startActivity(new Intent(getApplicationContext(), LoginVerifyActivity.class).putExtra("csrfToken", sendOtpModel.getData().getToken()).putExtra("Country_code", countycode).putExtra("ph_number", edtPhone.getText().toString()));
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
@@ -117,11 +101,22 @@ public class LoginActivity extends BaseActivity {
                     return map;
                 }
             };
-
+            RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(request);
         } catch (Exception e) {
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        edtPhone.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }

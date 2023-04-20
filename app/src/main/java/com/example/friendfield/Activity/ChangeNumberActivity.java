@@ -1,6 +1,5 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.Dialog;
@@ -104,14 +103,13 @@ public class ChangeNumberActivity extends BaseActivity {
     }
 
     public void changeNumber(String edt_old, String code_old, String edt_new, String code_new) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("oldcontactNo", edt_old);
-        map.put("oldcountryCode", code_old);
-        map.put("newcontactNo", edt_new);
-        map.put("newcountryCode", code_new);
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("oldcontactNo", edt_old);
+            map.put("oldcountryCode", code_old);
+            map.put("newcontactNo", edt_new);
+            map.put("newcountryCode", code_new);
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.change_number, new JSONObject(map), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -238,11 +236,10 @@ public class ChangeNumberActivity extends BaseActivity {
     }
 
     public void newVerifyOtp(String otpValue) {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("otp", otpValue);
-
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("otp", otpValue);
             request = new JsonObjectRequest(Request.Method.POST, Constans.verify_otp_new, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

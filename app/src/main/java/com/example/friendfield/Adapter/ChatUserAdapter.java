@@ -69,8 +69,6 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
             String time = getFormattedDate(timestamp);
             holder.chat_user_time.setText(time);
         }
-//        holder.txt_message.setText(registerModels.get(position));
-
 
         holder.ll_user_view.setOnClickListener(new View.OnClickListener() {
             @Override

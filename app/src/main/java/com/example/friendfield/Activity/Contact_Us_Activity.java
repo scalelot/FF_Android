@@ -42,7 +42,6 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Contact_Us_Activity extends BaseActivity {
 
     EditText full_name, phone_number, email_id, description;
@@ -50,7 +49,6 @@ public class Contact_Us_Activity extends BaseActivity {
     ImageView ic_back_arrow, img_add_image;
     ContactModel contactDataModel;
     Uri uri;
-
     private Bitmap bitmap;
     public static final int PICK_IMAGE = 1;
     protected static final int CAMERA_REQUEST = 0;
@@ -79,10 +77,7 @@ public class Contact_Us_Activity extends BaseActivity {
         img_add_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.Companion.with(Contact_Us_Activity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE);
+                ImagePicker.Companion.with(Contact_Us_Activity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
             }
         });
         btn_send.setOnClickListener(new View.OnClickListener() {
@@ -105,14 +100,13 @@ public class Contact_Us_Activity extends BaseActivity {
     }
 
     private void getContactApi(String name, String ph_number, String email, String des) {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("fullName", name);
-        hashMap.put("contactNo", ph_number);
-        hashMap.put("emailId", email);
-        hashMap.put("issue", des);
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("fullName", name);
+            hashMap.put("contactNo", ph_number);
+            hashMap.put("emailId", email);
+            hashMap.put("issue", des);
 
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.contact_us, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
                 @Override
@@ -130,7 +124,7 @@ public class Contact_Us_Activity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("CContactUs_Error=>" + error.toString());
+                    System.out.println("ContactUs_Error=>" + error.toString());
                     Toast.makeText(Contact_Us_Activity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -179,12 +173,10 @@ public class Contact_Us_Activity extends BaseActivity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Cancelled",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
                 }
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Cancelled",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == CAMERA_REQUEST) {
             if (resultCode == RESULT_OK) {
@@ -196,24 +188,20 @@ public class Contact_Us_Activity extends BaseActivity {
                     img_add_image.setImageBitmap(bitmap);
                 } else if (data.getExtras() == null) {
 
-                    Toast.makeText(getApplicationContext(),
-                                    "No extras to retrieve!", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(getApplicationContext(), "No extras to retrieve!", Toast.LENGTH_SHORT).show();
 
-                    BitmapDrawable thumbnail = new BitmapDrawable(
-                            getResources(), data.getData().getPath());
+                    BitmapDrawable thumbnail = new BitmapDrawable(getResources(), data.getData().getPath());
 //                    pet_pic.setImageDrawable(thumbnail);
 
                 }
 
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Cancelled",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             }
         }
     }
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
@@ -222,19 +210,20 @@ public class Contact_Us_Activity extends BaseActivity {
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
 
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
         return inSampleSize;
     }
+
     private Uri getImageUri(Contact_Us_Activity youractivity, Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         String path = MediaStore.Images.Media.insertImage(youractivity.getContentResolver(), bitmap, "Title", null);
         return Uri.parse(path);
     }
+
     private String getRealPathFromUri(Uri tempUri) {
         Cursor cursor = null;
         try {

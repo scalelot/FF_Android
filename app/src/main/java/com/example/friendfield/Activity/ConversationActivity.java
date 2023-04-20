@@ -37,7 +37,7 @@ public class ConversationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ConversationActivity.this,SettingActivity.class));
+        startActivity(new Intent(ConversationActivity.this, SettingActivity.class));
         finish();
     }
 }

@@ -28,16 +28,14 @@ public class CallsFragment extends Fragment {
     EditText edt_search_text;
     ImageView iv_search;
     ImageView iv_clear_text;
-
     RecyclerView recycle_call;
     CallAdapter callAdapter;
-    String[] user_name = {"Hunter Bryan", "Caroline Case", "Hunter Bryan", "John Bryan", "Bryan",  "Doris Collins"};
+    String[] user_name = {"Hunter Bryan", "Caroline Case", "Hunter Bryan", "John Bryan", "Bryan", "Doris Collins"};
     int[] call_img = {R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user};
     ArrayList<String> arraylist = new ArrayList<String>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_calls, container, false);
 

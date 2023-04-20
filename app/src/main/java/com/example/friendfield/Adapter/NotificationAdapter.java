@@ -59,13 +59,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (viewType == CONTENT_TYPE) {
             MyViewHolder myViewHolder = (MyViewHolder) holder;
-//            myViewHolder.notification_img.setImageResource(img.get(position));
             myViewHolder.notification_txt_name.setText(txt_usernae.get(position));
             myViewHolder.notification_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //                activity.startActivity(new Intent(activity, ChatingActivity.class));
-//                activity.finish();
                 }
             });
 
@@ -73,7 +70,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     Intent img_intent = new Intent(activity, PromotionDetailsActivity.class);
-//                    img_intent.putExtra("noti_image", img.get(position));
                     img_intent.putExtra("noti_title", txt_usernae.get(position));
                     activity.startActivity(img_intent);
                 }

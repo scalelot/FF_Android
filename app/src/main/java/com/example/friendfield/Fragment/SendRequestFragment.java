@@ -133,7 +133,6 @@ public class SendRequestFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    FileUtils.DismissLoading(ProductActivity.this);
                     Log.e("LLL_pro_Error", error.toString());
                 }
             }) {

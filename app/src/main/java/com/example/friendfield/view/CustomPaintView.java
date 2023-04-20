@@ -15,10 +15,6 @@ import android.view.View;
 
 import androidx.annotation.RequiresApi;
 
-/**
- * Created by panyi on 17/2/11.
- */
-
 public class CustomPaintView extends View {
     private Paint mPaint;
     private Bitmap mDrawBit;

@@ -33,7 +33,6 @@ public class SelectUserActivity extends BaseActivity {
     CheckBox img_select_all;
     TextView txt_people_count;
     FloatingActionButton fb_map;
-
     ArrayList<SelecetdUserModel> selecetdUserModelArrayList = new ArrayList<>();
     ArrayList<SelecetdUserModel> selectedarraylist = new ArrayList<>();
     RelativeLayout iv_filter;

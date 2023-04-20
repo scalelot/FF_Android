@@ -86,15 +86,7 @@ public class MainActivity extends BaseActivity {
     CircleImageView user_img;
     private Intent intent;
     private static final int PERMISSION_ALL = 1;
-    String[] PERMISSIONS = {
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            android.Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_CONTACTS
-    };
+    String[] PERMISSIONS = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_CONTACTS};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,9 +161,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout,
-                        new ChatFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
 
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,9 +176,7 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout,
-                                new ChatFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
             }
         });
 
@@ -206,9 +194,7 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout,
-                                new MapsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new MapsFragment()).commit();
             }
         });
 
@@ -225,9 +211,7 @@ public class MainActivity extends BaseActivity {
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout,
-                                new CallsFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CallsFragment()).commit();
             }
         });
 
@@ -244,9 +228,7 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout,
-                                new ContactFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ContactFragment()).commit();
 
             }
         });
@@ -305,8 +287,7 @@ public class MainActivity extends BaseActivity {
                     Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
                 }
 
-            } catch (
-                    Exception e) {
+            } catch (Exception e) {
                 e.getMessage();
             }
         }
@@ -329,8 +310,7 @@ public class MainActivity extends BaseActivity {
     @SuppressLint("Range")
     private void getContactList() {
         ContentResolver cr = getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, null);
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
         if ((cur != null ? cur.getCount() : 0) > 0) {
             while (cur != null && cur.moveToNext()) {
@@ -338,11 +318,7 @@ public class MainActivity extends BaseActivity {
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
                 if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    Cursor pCur = cr.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id}, null);
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
                     while (pCur.moveToNext()) {
                         String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         Log.i("ContactName=>", "Name: " + name);
@@ -386,54 +362,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void getAllPersonalData() {
-
-        try {
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-
-                    try {
-                        Log.e("PersonalInfo=>", response.toString());
-                        JSONObject jsonObject = new JSONObject(String.valueOf(response));
-                        GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
-
-                        MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
-
-                        if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-                            user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
-                        } else {
-                            user_name.setText(MyApplication.getuserName(getApplicationContext()));
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("PersonalInfo_Error=>", error.toString());
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
-                    return map;
-                }
-            };
-
-            RequestQueue referenceQueue = Volley.newRequestQueue(getApplicationContext());
-            referenceQueue.add(jsonObjectRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {
@@ -459,32 +387,78 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void fetchProfileApi(){
+    private void getAllPersonalData() {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Log.e("PersonalGetInfo=>", response.toString());
+                        JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                        GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
+
+                        MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
+
+                        if (MyApplication.getuserName(getApplicationContext()).equals("")) {
+                            user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
+                        } else {
+                            user_name.setText(MyApplication.getuserName(getApplicationContext()));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("PersonalGetInfo_Error=>", error.toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Content-Type", "application/json");
+                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    return map;
+                }
+            };
+
+            RequestQueue referenceQueue = Volley.newRequestQueue(getApplicationContext());
+            referenceQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void fetchProfileApi() {
         JsonObjectRequest jsonObjectRequest = null;
-        try{
+        try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("ProfileError=>", response.toString());
+                    Log.e("ProfileInfo=>", response.toString());
 
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                     String fullName = profileRegisterModel.getData().getFullName();
-                    if (fullName.isEmpty()){
+                    if (fullName.isEmpty()) {
                         CustomDialog();
-                    }else{
+                    } else {
 
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("ProfileError==>>",error.toString());
+                    Log.e("ProfileInfoError==>>", error.toString());
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
                     map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
                     return map;
@@ -492,7 +466,7 @@ public class MainActivity extends BaseActivity {
             };
             RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
             requestQueue.add(jsonObjectRequest);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -515,24 +489,21 @@ public class MainActivity extends BaseActivity {
         dialog_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dialog.isShowing())
-                    dialog.dismiss();
+                if (dialog.isShowing()) dialog.dismiss();
             }
         });
 
         dialog_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dialog.isShowing())
-                    dialog.dismiss();
+                if (dialog.isShowing()) dialog.dismiss();
             }
         });
 
         dialog_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dialog.isShowing())
-                    dialog.dismiss();
+                if (dialog.isShowing()) dialog.dismiss();
 
                 if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
                     startActivity(new Intent(MainActivity.this, ProfileActivity.class));

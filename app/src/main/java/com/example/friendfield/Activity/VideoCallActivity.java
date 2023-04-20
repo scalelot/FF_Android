@@ -25,8 +25,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class VideoCallActivity extends BaseActivity {
 
     CircleImageView videocall_image;
-    TextView videocall_username,videocall_txt;
-    LinearLayout ll_videoCall,ll_camera_swipe,ll_mute,ll_call_cut;
+    TextView videocall_username, videocall_txt;
+    LinearLayout ll_videoCall, ll_camera_swipe, ll_mute, ll_call_cut;
     SurfaceView surfaceView;
     private Context myContext1;
     private Camera mCamera1;
@@ -50,7 +50,7 @@ public class VideoCallActivity extends BaseActivity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         myContext1 = this;
-        mCamera1 =  Camera.open();
+        mCamera1 = Camera.open();
         mCamera1.setDisplayOrientation(90);
         cameraPreview = findViewById(R.id.cPreview);
         videoCallSurfaceView = new VideoCallSurfaceView(myContext1, mCamera1);
@@ -59,7 +59,7 @@ public class VideoCallActivity extends BaseActivity {
         ll_videoCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(VideoCallActivity.this,VideoCallReciveActivity.class));
+                startActivity(new Intent(VideoCallActivity.this, VideoCallReciveActivity.class));
                 finish();
             }
         });
@@ -127,13 +127,13 @@ public class VideoCallActivity extends BaseActivity {
 
         super.onResume();
 
-        if(mCamera1 == null) {
+        if (mCamera1 == null) {
             mCamera1 = Camera.open();
             mCamera1.setDisplayOrientation(90);
             videoCallSurfaceView.refreshCamera(mCamera1);
             Log.d("nu", "null");
-        }else {
-            Log.d("nu","no null");
+        } else {
+            Log.d("nu", "no null");
         }
 
     }
@@ -174,7 +174,7 @@ public class VideoCallActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(VideoCallActivity.this,ChatingActivity.class));
+        startActivity(new Intent(VideoCallActivity.this, ChatingActivity.class));
         finish();
     }
 }

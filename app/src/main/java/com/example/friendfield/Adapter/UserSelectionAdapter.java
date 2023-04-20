@@ -94,20 +94,4 @@ public class UserSelectionAdapter extends RecyclerView.Adapter<UserSelectionAdap
 
         }
     }
-
-//    public void filter(String charText) {
-//        charText = charText.toLowerCase(Locale.getDefault());
-//        user_name.clear();
-//        if (charText.length() == 0) {
-//            user_name.addAll(arraylist);
-//        } else {
-//            for (String wp : arraylist) {
-////                if (wp.getAnimalName().toLowerCase(Locale.getDefault()).contains(charText)) {
-//                if (wp.toLowerCase(Locale.getDefault()).contains(charText)) {
-//                    user_name.add(wp);
-//                }
-//            }
-//        }
-//        notifyDataSetChanged();
-//    }
 }

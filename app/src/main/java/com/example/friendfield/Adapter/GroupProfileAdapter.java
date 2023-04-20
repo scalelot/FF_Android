@@ -120,22 +120,6 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
         }
     }
 
-//    public void getfilter(String charText) {
-//        charText = charText.toLowerCase(Locale.getDefault());
-//        elements.clear();
-//        if (charText.length() == 0) {
-//            elements.addAll(modelList);
-//        } else {
-//            for (GroupUserModel groupUserModel : modelList) {
-////                if (wp.getAnimalName().toLowerCase(Locale.getDefault()).contains(charText)) {
-//                if (groupUserModel.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
-//                    elements.add(groupUserModel);
-//                }
-//            }
-//        }
-//        notifyDataSetChanged();
-//    }
-
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         modelList.clear();
@@ -143,7 +127,6 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
             modelList.addAll(elements);
         } else {
             for (GroupUserModel wp : elements) {
-//                if (wp.getAnimalName().toLowerCase(Locale.getDefault()).contains(charText)) {
                 if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
                     modelList.add(wp);
                 }
@@ -151,46 +134,5 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
         }
         notifyDataSetChanged();
     }
-
-//    @Override
-//    public Filter getFilter() {
-//
-//        return new Filter() {
-//            @Override
-//            protected FilterResults performFiltering(CharSequence charSequence) {
-//
-//                String searchString = charSequence.toString();
-//
-//                if (searchString.isEmpty()) {
-//
-//                    elements = modelList;
-//
-//                } else {
-//
-//                    ArrayList<GroupUserModel> tempFilteredList = new ArrayList<>();
-//
-//                    for (GroupUserModel user : modelList) {
-//
-//                        // search for user title
-//                        if (user.getName().toLowerCase().contains(searchString)) {
-//                            tempFilteredList.add(user);
-//                        }
-//                    }
-//
-//                    elements = tempFilteredList;
-//                }
-//
-//                FilterResults filterResults = new FilterResults();
-//                filterResults.values = elements;
-//                return filterResults;
-//            }
-//
-//            @Override
-//            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//                elements = (List<GroupUserModel>) filterResults.values;
-//                notifyDataSetChanged();
-//            }
-//        };
-//    }
 
 }

@@ -59,9 +59,7 @@ public class SettingActivity extends BaseActivity {
     Uri uri;
     TextView txt_ph_no, txt_file_name, txt_email_id;
     LinearLayout ll_txt, ll_phone_email, ll_sample_txt;
-
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);

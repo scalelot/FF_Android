@@ -56,8 +56,7 @@ public class ChatBusinessInfoFragment extends Fragment {
     RelativeLayout block_hunter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_chat_business_info, container, false);
         business_img = inflate.findViewById(R.id.business_img);
         txt_business_name = inflate.findViewById(R.id.text_business_name);

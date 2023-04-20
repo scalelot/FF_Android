@@ -63,8 +63,7 @@ public class BusinessInfoFragment extends Fragment {
     RelativeLayout rel_brochure;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_business_info, container, false);
 
         edt_img = view.findViewById(R.id.edt_img);
@@ -131,7 +130,7 @@ public class BusinessInfoFragment extends Fragment {
                         txt_business_brochure.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Uri uri = Uri.parse(Constans.Display_Image_URL+businessInfoRegisterModel.getData().getBrochure());
+                                Uri uri = Uri.parse(Constans.Display_Image_URL + businessInfoRegisterModel.getData().getBrochure());
                                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                                 startActivity(intent);
                             }
@@ -140,7 +139,7 @@ public class BusinessInfoFragment extends Fragment {
                         ll_create_profile.setVisibility(View.GONE);
                         create_profile.setVisibility(View.VISIBLE);
                     } else {
-                        Log.e("BussinessGetProfile==>>","Not Get BussinessProfile");
+                        Log.e("BussinessGetProfile==>>", "Not Get BussinessProfile");
                     }
                 }
             }, new Response.ErrorListener() {
@@ -166,10 +165,7 @@ public class BusinessInfoFragment extends Fragment {
     }
 
     private void openGallery() {
-        ImagePicker.Companion.with(getActivity())
-                .crop()
-                .maxResultSize(1080, 1080)
-                .start(PICK_IMAGE1);
+        ImagePicker.Companion.with(getActivity()).crop().maxResultSize(1080, 1080).start(PICK_IMAGE1);
 
     }
 

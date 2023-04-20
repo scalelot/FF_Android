@@ -150,34 +150,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        people = Person.samplePeople();
-        adapter = new PersonAdapter(this, R.layout.person_layout, people);
-
-        AndroidNetworking.initialize(getApplicationContext());
-
-        completionView = (ContactsCompletionView) findViewById(R.id.tagView);
-        completionView.setAdapter(adapter);
-        completionView.setThreshold(1);
-        completionView.setTokenListener(ProfileActivity.this);
-        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
-        completionView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                ((TextView) findViewById(R.id.textValue)).setText(editable.toString());
-
-            }
-        });
-
         edt_name = findViewById(R.id.edt_name);
         edt_nickname = findViewById(R.id.edt_nickname);
         edt_emailId = findViewById(R.id.edt_emailId);
@@ -210,6 +182,34 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         gen_spinner = findViewById(R.id.gen_spinner);
         edt_dob = findViewById(R.id.edt_dob);
         img_calender = findViewById(R.id.img_calender);
+
+        people = Person.samplePeople();
+        adapter = new PersonAdapter(this, R.layout.person_layout, people);
+
+        AndroidNetworking.initialize(getApplicationContext());
+
+        completionView = (ContactsCompletionView) findViewById(R.id.tagView);
+        completionView.setAdapter(adapter);
+        completionView.setThreshold(1);
+        completionView.setTokenListener(ProfileActivity.this);
+        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+        completionView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                ((TextView) findViewById(R.id.textValue)).setText(editable.toString());
+
+            }
+        });
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -395,8 +395,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
         mapview.getMapAsync(this);
@@ -426,8 +425,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         }
 
     }
-
-
     private void patchApivolley(String p_name, String pu_name, String p_email, String dob, String gender, String about_us, JSONArray hobbiesJsonArray, Double longitude, Double lattitude, Integer text_km, String yourRd, Integer txt_min, Integer txt_max, String fb_link, String insta_link, String tw_link, String ld_link, String pins_link, String youtube_link) {
         JSONObject jsonBody = new JSONObject();
         try {
@@ -801,10 +798,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     private void openGallery() {
-        ImagePicker.Companion.with(ProfileActivity.this)
-                .crop()
-                .maxResultSize(1080, 1080)
-                .start(PICK_IMAGE);
+        ImagePicker.Companion.with(ProfileActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
     }
 
     @Override
@@ -845,9 +839,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
             cursor.close();
 
-            cursor = getContentResolver().query(
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+            cursor = getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
             cursor.moveToFirst();
             path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
             cursor.close();
@@ -966,15 +958,13 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
-                .setCancelable(false).setPositiveButton("Goto Settings Page To Enable GPS",
-                        new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?").setCancelable(false).setPositiveButton("Goto Settings Page To Enable GPS", new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivity(callGPSSettingIntent);
-                            }
-                        });
+            public void onClick(DialogInterface dialog, int id) {
+                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(callGPSSettingIntent);
+            }
+        });
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();

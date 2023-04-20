@@ -32,13 +32,6 @@ public class Util {
     private AWSCredentialsProvider sMobileClient;
     private TransferUtility sTransferUtility;
 
-    /**
-     * Gets an instance of AWSMobileClient which is
-     * constructed using the given Context.
-     *
-     * @param context Android context
-     * @return AWSMobileClient which is a credentials provider
-     */
     private AWSCredentialsProvider getCredProvider(Context context) {
         if (sMobileClient == null) {
             final CountDownLatch latch = new CountDownLatch(1);
@@ -64,13 +57,6 @@ public class Util {
         return sMobileClient;
     }
 
-    /**
-     * Gets an instance of a S3 client which is constructed using the given
-     * Context.
-     *
-     * @param context Android context
-     * @return A default S3 client.
-     */
     public AmazonS3Client getS3Client(Context context) {
         if (sS3Client == null) {
             try {
@@ -86,13 +72,6 @@ public class Util {
         return sS3Client;
     }
 
-    /**
-     * Gets an instance of the TransferUtility which is constructed using the
-     * given Context
-     *
-     * @param context Android context
-     * @return a TransferUtility instance
-     */
     public TransferUtility getTransferUtility(Context context) {
         if (sTransferUtility == null) {
             sTransferUtility = TransferUtility.builder()
@@ -105,12 +84,6 @@ public class Util {
         return sTransferUtility;
     }
 
-    /**
-     * Converts number of bytes into proper scale.
-     *
-     * @param bytes number of bytes to be converted.
-     * @return A string that represents the bytes in a proper scale.
-     */
     public String getBytesString(long bytes) {
         String[] quantifiers = new String[]{
                 "KB", "MB", "GB", "TB"
@@ -127,15 +100,6 @@ public class Util {
         }
     }
 
-    /**
-     * Copies the data from the passed in Uri, to a new file for use with the
-     * Transfer Service
-     *
-     * @param context Android context
-     * @param uri Content URI
-     * @return New file copied from given URI
-     * @throws IOException if data read/write fails
-     */
     public File copyContentUriToFile(Context context, Uri uri) throws IOException {
         InputStream is = context.getContentResolver().openInputStream(uri);
         File copiedData = new File(context.getDir("SampleImagesDir", Context.MODE_PRIVATE),
@@ -155,10 +119,6 @@ public class Util {
         return copiedData;
     }
 
-    /**
-     * Fills in the map with information in the observer so that it can be used
-     * with a SimpleAdapter to populate the UI
-     */
     public void fillMap(Map<String, Object> map, TransferObserver observer, boolean isChecked) {
         int progress = (int) ((double) observer.getBytesTransferred() * 100 / observer
                 .getBytesTotal());

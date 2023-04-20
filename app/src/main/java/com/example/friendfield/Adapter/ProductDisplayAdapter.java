@@ -61,7 +61,6 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
             holder.txt_pro_offer.setVisibility(View.VISIBLE);
             holder.txt_pro_offer.setText(productDetailsModelArrayList.get(position).getOffer() + "% Off");
         }
-//        holder.txt_pro_price.setText("$" + String.valueOf(productDetailsModelArrayList.get(position).getPrice()) + ".00");
         holder.txt_pro_price.setText("$" + String.format("%,.0f", Float.valueOf(productDetailsModelArrayList.get(position).getPrice())) + ".00");
 
         holder.iv_delete.setOnClickListener(new View.OnClickListener() {
@@ -114,8 +113,6 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, AddProductActivity.class).putExtra("Edit_Pro", context.getResources().getString(R.string.edit_product)).putExtra("pro_id", productDetailsModelArrayList.get(position).getId()));
-//                ((ProductActivity) context).finish();
-//                ((Activity) context).finish();
             }
         });
 
@@ -130,42 +127,6 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
         });
 
     }
-
-//    public void deleteDialog(Activity context) {
-//        Dialog dialog = new Dialog(context);
-//        View view = LayoutInflater.from(context).inflate(R.layout.delete_dialog_product, null);
-//        dialog.setContentView(view);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//        ImageView dialog_close = dialog.findViewById(R.id.dialog_close);
-//        AppCompatButton btn_cancel = dialog.findViewById(R.id.btn_cancel);
-//        AppCompatButton btn_delete = dialog.findViewById(R.id.btn_delete);
-//
-//        dialog_close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        btn_cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        btn_delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FileUtils.DeleteProduct(context, Constans.add_product + "/" + ProductId);
-//                dialog.dismiss();
-//                onBackPressed();
-//
-//            }
-//        });
-//        dialog.show();
-//    }
 
     @Override
     public int getItemCount() {

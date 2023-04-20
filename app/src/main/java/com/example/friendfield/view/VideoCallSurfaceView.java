@@ -62,20 +62,15 @@ public class VideoCallSurfaceView extends SurfaceView implements SurfaceHolder.C
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        // If your preview can change or rotate, take care of those events here.
-        // Make sure to stop the preview before resizing or reformatting it.
         refreshCamera(mCamera1);
     }
 
     public void setCamera(Camera camera) {
-        //method to set a camera instance
         mCamera1 = camera;
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
-        // mCamera1.release();
 
     }
 }

@@ -19,7 +19,6 @@ public class LikeAndCommentActivity extends BaseActivity {
     ImageView ic_back;
     TextView txt_title;
     RecyclerView recyclerview_like;
-//    int[] user_img = {R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user, R.drawable.ic_user};
     String[] user_name = {"John Bryan", "Bryan", "Hunter Bryan", "Doris Collins", "Deann Sumpter", "John Bryan", "John Bryan", "John Bryan", "Deann Sumpter", "Collins Bryan", "John Bryan", "Deann Sumpter", "Collins Bryan"};
     LikeAndCommentAdapter likeAndCommentAdapter;
     ArrayList<String> arraylist = new ArrayList<String>();

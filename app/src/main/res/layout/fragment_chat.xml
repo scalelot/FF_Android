@@ -204,7 +204,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/sp_20"
         android:src="@drawable/ic_reels"
+        android:tint="@color/white"
         app:maxImageSize="@dimen/text_24" />
+
     <include layout="@layout/layout_empty" />
 
 </RelativeLayout>

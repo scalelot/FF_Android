@@ -66,7 +66,6 @@ public class LikeAndCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             MyDataViewHolder myDataViewHolder = (MyDataViewHolder) holder;
             myDataViewHolder.txt_user_name.setText(user_name.get(position));
             myDataViewHolder.txt_message.setText(user_name.get(position));
-//            myDataViewHolder.txt_time.setText(user_name.get(position));
 
         } else {
             AdRecyclerHolder adRecyclerHolder = (AdRecyclerHolder) holder;

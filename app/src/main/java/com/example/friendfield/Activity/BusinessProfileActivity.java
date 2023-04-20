@@ -258,8 +258,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
         mapview.getMapAsync(this);
@@ -283,19 +282,17 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     }
 
     public void CreateBusinessAccount(int method, String url, String name, String category, String subcategory, String des, String longi, String latti, String interestedCategory, String interestedSubCategory) {
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("name", name);
-        params.put("category", category);
-        params.put("subCategory", subcategory);
-        params.put("description", des);
-        params.put("longitude", longi);
-        params.put("latitude", latti);
-        params.put("interestedCategory", interestedCategory);
-        params.put("interestedSubCategory", interestedSubCategory);
-
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("name", name);
+            params.put("category", category);
+            params.put("subCategory", subcategory);
+            params.put("description", des);
+            params.put("longitude", longi);
+            params.put("latitude", latti);
+            params.put("interestedCategory", interestedCategory);
+            params.put("interestedSubCategory", interestedSubCategory);
             request = new JsonObjectRequest(method, url, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -304,7 +301,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
                     BusinessRegisterModel businessRegisterModel = new Gson().fromJson(response.toString(), BusinessRegisterModel.class);
 
-                    startActivity(new Intent(BusinessProfileActivity.this,ProductActivity.class));
+                    startActivity(new Intent(BusinessProfileActivity.this, ProductActivity.class));
 
                     finish();
 
@@ -422,10 +419,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
 
     private void openGallery() {
-        ImagePicker.Companion.with(BusinessProfileActivity.this)
-                .crop()
-                .maxResultSize(1080, 1080)
-                .start(PICK_IMAGE);
+        ImagePicker.Companion.with(BusinessProfileActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
     }
 
     @SuppressLint("Range")
@@ -462,8 +456,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             if (uriString.startsWith("content://")) {
                 Cursor cursor = null;
                 try {
-                    ParcelFileDescriptor parcelFileDescriptor = getContentResolver()
-                            .openFileDescriptor(uri, "r");
+                    ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(uri, "r");
                     renderer = new PdfRenderer(parcelFileDescriptor);
                     total_pages = renderer.getPageCount();
                     display_page = 0;
@@ -501,38 +494,35 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
         InputStream iStream = null;
         try {
-
             iStream = getContentResolver().openInputStream(pdffile);
             final byte[] inputData = getBytes(iStream);
 
-            VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, Constans.set_Setbrochure_pdf,
-                    new Response.Listener<NetworkResponse>() {
-                        @Override
-                        public void onResponse(NetworkResponse response) {
-                            Log.d("PdfUpload=>", new String(response.data));
-                            rQueue.getCache().clear();
-                            JSONObject jsonObject;
-                            try {
-                                jsonObject = new JSONObject(new String(response.data));
-                                Toast.makeText(getApplicationContext(), jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
+            VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, Constans.set_Setbrochure_pdf, new Response.Listener<NetworkResponse>() {
+                @Override
+                public void onResponse(NetworkResponse response) {
+                    Log.d("PdfUpload=>", new String(response.data));
+                    rQueue.getCache().clear();
+                    JSONObject jsonObject;
+                    try {
+                        jsonObject = new JSONObject(new String(response.data));
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("Message"), Toast.LENGTH_SHORT).show();
 
-                                jsonObject.toString().replace("\\\\", "");
+                        jsonObject.toString().replace("\\\\", "");
 
-                                if (jsonObject.getString("IsSuccess").equals("true")) {
-                                    Log.d("come::: >>>  ", "yessssss");
-                                    arraylist = new ArrayList<HashMap<String, String>>();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                        if (jsonObject.getString("IsSuccess").equals("true")) {
+                            Log.d("come::: >>>  ", "yessssss");
+                            arraylist = new ArrayList<HashMap<String, String>>();
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            System.out.println("PdfUpload_Error=>" + error.getMessage());
-                        }
-                    }) {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("PdfUpload_Error=>" + error.getMessage());
+                }
+            }) {
 
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
@@ -555,10 +545,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 }
             };
 
-            volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    0,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             rQueue = Volley.newRequestQueue(BusinessProfileActivity.this);
             rQueue.add(volleyMultipartRequest);
 
@@ -592,30 +579,27 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     }
 
     public void uploadImage(File file) {
-        AndroidNetworking.upload(Constans.set_business_profile_pic)
-                .addMultipartFile("file", file)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("BusinessProImage=>", response.toString());
-                        status = true;
-                    }
+       try {
+           AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+               @Override
+               public void onProgress(long bytesUploaded, long totalBytes) {
+               }
+           }).getAsJSONObject(new JSONObjectRequestListener() {
+               @Override
+               public void onResponse(JSONObject response) {
+                   Log.e("BusinessProImage=>", response.toString());
+                   status = true;
+               }
 
-                    @Override
-                    public void onError(ANError error) {
-                        Log.e("BusinProImage_Error--->", error.toString());
-                        status = false;
-                    }
-                });
+               @Override
+               public void onError(ANError error) {
+                   Log.e("BusinProImage_Error--->", error.toString());
+                   status = false;
+               }
+           });
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
 
@@ -749,7 +733,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(BusinessProfileActivity.this,UserProfileActivity.class));
+        startActivity(new Intent(BusinessProfileActivity.this, UserProfileActivity.class));
         finish();
     }
 

@@ -20,7 +20,7 @@ import com.example.friendfield.view.VideoCallSurfaceView;
 
 public class VideoCallReciveActivity extends BaseActivity {
 
-    LinearLayout ll_message,ll_videoCall,ll_switch_camera,ll_mute,ll_videoCall_cut;
+    LinearLayout ll_message, ll_videoCall, ll_switch_camera, ll_mute, ll_videoCall_cut;
     Context myContext;
     Camera mCamera;
     private boolean cameraFront = false;
@@ -41,7 +41,7 @@ public class VideoCallReciveActivity extends BaseActivity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         myContext = this;
-        mCamera =  Camera.open();
+        mCamera = Camera.open();
         mCamera.setDisplayOrientation(90);
 //        cameraPreview = (LinearLayout) findViewById(R.id.cPreview);
         cameraPreview = (LinearLayout) findViewById(R.id.cPreview1);
@@ -96,13 +96,13 @@ public class VideoCallReciveActivity extends BaseActivity {
 
     public void onResume() {
         super.onResume();
-        if(mCamera == null) {
+        if (mCamera == null) {
             mCamera = Camera.open();
             mCamera.setDisplayOrientation(90);
             mPreview.refreshCamera(mCamera);
             Log.d("nu", "null");
-        }else {
-            Log.d("nu","no null");
+        } else {
+            Log.d("nu", "no null");
         }
     }
 
@@ -142,7 +142,7 @@ public class VideoCallReciveActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(VideoCallReciveActivity.this,ChatingActivity.class));
+        startActivity(new Intent(VideoCallReciveActivity.this, ChatingActivity.class));
         finish();
     }
 }

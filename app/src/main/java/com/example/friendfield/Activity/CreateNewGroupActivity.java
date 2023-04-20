@@ -37,11 +37,9 @@ public class CreateNewGroupActivity extends BaseActivity {
     TextView txt_total_count;
     RecyclerView recyclerview_selected_list;
     RecyclerView recyclerview_contact_list;
-
     EditText edt_search_text;
     ImageView iv_search;
     ImageView iv_clear_text;
-
     String[] user_name = {"John Bryan", "Bryan", "Hunter Bryan", "Doris Collins", "Deann Sumpter", "Angel Egotrip", "Binary Bark", "Geez God", "Mindhack Diva", "ugar Lump", "Droolbug", "Zig Wagon", "Strife Life"};
     ArrayList<CreateGroupModel> arraylist = new ArrayList<>();
     ArrayList<CreateGroupModel> selectedarraylist = new ArrayList<>();
@@ -71,7 +69,6 @@ public class CreateNewGroupActivity extends BaseActivity {
         for (int i = 0; i < user_name.length; i++) {
             createGroupModel = new CreateGroupModel(user_name[i]);
             arraylist.add(createGroupModel);
-//            arraylist.add(user_name[i]);
         }
 
         txt_total_count.setText(arraylist.size() + " Selected");
@@ -90,7 +87,6 @@ public class CreateNewGroupActivity extends BaseActivity {
         }
 
         userSelectionAdapter = new UserSelectionAdapter(CreateNewGroupActivity.this, selectedarraylist);
-//        recyclerview_selected_list.setAdapter(userSelectionAdapter);
 
         allContactAdapter.setOnItemClickListener(new AllContactAdapter.ClickListener() {
             @Override
@@ -122,11 +118,8 @@ public class CreateNewGroupActivity extends BaseActivity {
             @Override
             public void onItemClick(CreateGroupModel createGroupModel, int position, View v) {
                 Log.e("LLL_de_posi-->", String.valueOf(position));
-//                selectedarraylist.remove(position);
                 if (arraylist.size() > 0) {
 
-//                    Log.e("LLL_de_po-->", createGroupModel.getUsername());
-//                    Log.e("LLL_debinf finduser", "Position of userList = " + arraylist.indexOf(createGroupModel) + ", AFTER REMOVED userListAdded.size() is " + arraylist.size());
                     arraylist.get(arraylist.indexOf(createGroupModel)).setSelected(false);
 
                     selectedarraylist.remove(position);
@@ -217,32 +210,22 @@ public class CreateNewGroupActivity extends BaseActivity {
     }
 
     private void filter(String text) {
-        // creating a new array list to filter our data.
         ArrayList<CreateGroupModel> filteredlist = new ArrayList<>();
 
-        // running a for loop to compare elements.
         for (CreateGroupModel item : arraylist) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.getUsername().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
                 filteredlist.add(item);
             }
         }
         if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
             Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show();
         } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
             allContactAdapter.filterList(filteredlist);
         }
     }
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         startActivity(new Intent(CreateNewGroupActivity.this, MainActivity.class));
         finish();
     }

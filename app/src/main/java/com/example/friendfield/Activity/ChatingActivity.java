@@ -17,12 +17,9 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -55,7 +52,6 @@ import com.example.friendfield.BaseActivity;
 import com.example.friendfield.MainActivity;
 import com.example.friendfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.example.friendfield.Model.ListChat.ListChatsModel;
-import com.example.friendfield.Model.SendMessage.SendTextModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.example.friendfield.Utils.Constans;
@@ -69,13 +65,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -85,7 +77,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     private Toolbar toolbar;
     public static boolean isInActionMode = false;
     public static ArrayList<ListChatsModel> selectionList = new ArrayList<>();
-
     ImageView hp_back_arrow, img_video_call, img_contact, iv_close;
     ImageView iv_pro_image, img_gallery, img_camera, img_product;
     CircleImageView img_user;
@@ -195,7 +186,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-//                    loaderLay.setVisibility(View.VISIBLE);
                     getChatList(toUserIds, page, limit);
                 }
             }
@@ -212,8 +202,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void prepareToolbar(int position) {
-
-        // prepare action mode
         hp_back_arrow.setVisibility(View.GONE);
         rl_user.setVisibility(View.GONE);
         img_product.setVisibility(View.GONE);
@@ -251,32 +239,23 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             isInActionMode = false;
             ((MessageAdapter) messageAdapter).removeData(selectionList);
             clearActionMode();
-        } else if (item.getItemId() == R.id.item_edit)
-        {
+        } else if (item.getItemId() == R.id.item_edit) {
             if (selectionList.size() == 1) {
                 final EditText editText = new EditText(this);
-                new AlertDialog.Builder(this)
-                        .setTitle("Edit")
-                        .setView(editText)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                ListChatsModel model = selectionList.get(0);
-//                                model.setContentType(editText.getText().toString());
-                                model.getSendAllModelData().getText().setMessage(editText.getText().toString());
-                                isInActionMode = false;
-
-//                                ((MessageAdapter) messageAdapter).changeDataItem(getCheckedLastPosition(), model);
-//                                clearActionMode();
-                            }
-                        })
-                        .create().show();
+                new AlertDialog.Builder(this).setTitle("Edit").setView(editText).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ListChatsModel model = selectionList.get(0);
+                        model.getSendAllModelData().getText().setMessage(editText.getText().toString());
+                        isInActionMode = false;
+                    }
+                }).create().show();
             }
         } else if (item.getItemId() == R.id.item_copy) {
             Log.d("====", "Copy");
             ListChatsModel model = selectionList.get(0);
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("label",model.getSendAllModelData().getText().getMessage());
-            if (clipboard == null || clip == null);
+            ClipData clip = ClipData.newPlainText("label", model.getSendAllModelData().getText().getMessage());
+            if (clipboard == null || clip == null) ;
             clipboard.setPrimaryClip(clip);
 
         } else if (item.getItemId() == R.id.item_right_for) {
@@ -423,40 +402,48 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void sendMessage(String toUserIds, String toString) {
-        AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", toUserIds).addBodyParameter("message", toString).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
-            @Override
-            public void onProgress(long bytesUploaded, long totalBytes) {
-            }
-        }).getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.e("ChatSendMessage=>", response.toString());
-            }
+        try {
+            AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", toUserIds).addBodyParameter("message", toString).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
+                @Override
+                public void onProgress(long bytesUploaded, long totalBytes) {
+                }
+            }).getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("ChatSendMessage=>", response.toString());
+                }
 
-            @Override
-            public void onError(ANError error) {
-                Log.e("SendMessage_Error=>", error.toString());
-            }
-        });
+                @Override
+                public void onError(ANError error) {
+                    Log.e("SendMessage_Error=>", error.toString());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendProduct(String userIds, String toUserIds, String txt) {
-        AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", userIds).addBodyParameter("product", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
-            @Override
-            public void onProgress(long bytesUploaded, long totalBytes) {
-            }
-        }).getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.e("ProductSendMessage=>", response.toString());
+        try {
+            AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", userIds).addBodyParameter("product", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
+                @Override
+                public void onProgress(long bytesUploaded, long totalBytes) {
+                }
+            }).getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("ProductSendMessage=>", response.toString());
 
-            }
+                }
 
-            @Override
-            public void onError(ANError error) {
-                Log.e("ProductMessage_Error=>", error.toString());
-            }
-        });
+                @Override
+                public void onError(ANError error) {
+                    Log.e("ProductMessage_Error=>", error.toString());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void getChatList(String toUserIds, int page, int limit) {
@@ -682,25 +669,29 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void uploadImage(File file) {
-        AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file).addMultipartParameter("to", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
-            @Override
-            public void onProgress(long bytesUploaded, long totalBytes) {
-            }
-        }).getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // do anything with response
-                Log.e("SendImage=>", response.toString());
-            }
+        try {
+            AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file).addMultipartParameter("to", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+                @Override
+                public void onProgress(long bytesUploaded, long totalBytes) {
+                }
+            }).getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    // do anything with response
+                    Log.e("SendImage=>", response.toString());
+                }
 
-            @Override
-            public void onError(ANError error) {
-                // handle error
-                Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
-                Log.e("SendImage_Error=>", error.toString());
+                @Override
+                public void onError(ANError error) {
+                    // handle error
+                    Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
+                    Log.e("SendImage_Error=>", error.toString());
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -731,14 +722,4 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     public void onBackPressed() {
         startActivity(new Intent(ChatingActivity.this, MainActivity.class));
     }
-
-//    public int getCheckedLastPosition() {
-//        ArrayList<ListChatsModel> dataSet = MessageAdapter.getDataSet();
-//        for (int i = 0; i < dataSet.size(); i++) {
-//            if (dataSet.get(i).equals(selectionList.get(0))) {
-//                return i;
-//            }
-//        }
-//        return 0;
-//    }
 }

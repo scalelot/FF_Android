@@ -98,11 +98,11 @@ public class ChooseUserPromotionActivity extends BaseActivity {
         Intent intent = getIntent();
         String package_txt = intent.getStringExtra("package_name");
 
-        int count = getSharedPreferences("countUser",MODE_PRIVATE).getInt("Count",0);
-        System.out.println("CountUser"+count);
+        int count = getSharedPreferences("countUser", MODE_PRIVATE).getInt("Count", 0);
+        System.out.println("CountUser" + count);
         if (count == 0) {
             select_count.setVisibility(View.GONE);
-        }else{
+        } else {
             select_count.setVisibility(View.VISIBLE);
             select_count.setText(String.valueOf(count) + " People Selected");
         }
@@ -212,8 +212,7 @@ public class ChooseUserPromotionActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (ActivityCompat.checkSelfPermission(ChooseUserPromotionActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ChooseUserPromotionActivity.this, new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    ActivityCompat.requestPermissions(ChooseUserPromotionActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 } else {
                     selectExcel();
                 }
@@ -274,8 +273,6 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                 startActivity(new Intent(getApplicationContext(), MapsLocationActivity.class));
             }
         });
-
-
     }
 
     private void selectExcel() {

@@ -1,6 +1,5 @@
 package com.example.friendfield.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
@@ -14,7 +13,7 @@ import com.example.friendfield.R;
 public class ApplyCouponActivity extends BaseActivity {
 
     ImageView back_btn;
-    AppCompatButton btn_30_apply,btn_50_apply,btn_80_apply;
+    AppCompatButton btn_30_apply, btn_50_apply, btn_80_apply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +35,8 @@ public class ApplyCouponActivity extends BaseActivity {
         btn_30_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i_30 = new Intent(ApplyCouponActivity.this,PromotionBillActivity.class);
-                i_30.putExtra("dis_30","30");
+                Intent i_30 = new Intent(ApplyCouponActivity.this, PromotionBillActivity.class);
+                i_30.putExtra("dis_30", "30");
                 startActivity(i_30);
             }
         });
@@ -45,8 +44,8 @@ public class ApplyCouponActivity extends BaseActivity {
         btn_50_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i_30 = new Intent(ApplyCouponActivity.this,PromotionBillActivity.class);
-                i_30.putExtra("dis_30","50");
+                Intent i_30 = new Intent(ApplyCouponActivity.this, PromotionBillActivity.class);
+                i_30.putExtra("dis_30", "50");
                 startActivity(i_30);
             }
         });
@@ -54,8 +53,8 @@ public class ApplyCouponActivity extends BaseActivity {
         btn_80_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i_30 = new Intent(ApplyCouponActivity.this,PromotionBillActivity.class);
-                i_30.putExtra("dis_30","80");
+                Intent i_30 = new Intent(ApplyCouponActivity.this, PromotionBillActivity.class);
+                i_30.putExtra("dis_30", "80");
                 startActivity(i_30);
             }
         });
@@ -63,7 +62,7 @@ public class ApplyCouponActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ApplyCouponActivity.this,PromotionBillActivity.class));
+        startActivity(new Intent(ApplyCouponActivity.this, PromotionBillActivity.class));
         finish();
     }
 }

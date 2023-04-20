@@ -193,58 +193,63 @@ public class CreateNotificationActivity extends BaseActivity {
     }
 
     public void uploadImage(File file) {
-        AndroidNetworking.upload(Constans.set_notification_banner)
-                .addMultipartFile("file", file)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.e("NotiBanner=>", response.toString());
-                            ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
-                            image_url = productImagesModel.getData().getKey();
+      try{
+          AndroidNetworking.upload(Constans.set_notification_banner)
+                  .addMultipartFile("file", file)
+                  .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
+                  .setTag("uploadTest")
+                  .setPriority(Priority.HIGH)
+                  .build()
+                  .setUploadProgressListener(new UploadProgressListener() {
+                      @Override
+                      public void onProgress(long bytesUploaded, long totalBytes) {
+                      }
+                  })
+                  .getAsJSONObject(new JSONObjectRequestListener() {
+                      @Override
+                      public void onResponse(JSONObject response) {
+                          try {
+                              Log.e("NotiBanner=>", response.toString());
+                              ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
+                              image_url = productImagesModel.getData().getKey();
 
-                            if (image_url != null) {
-                                status = true;
-                                ic_edit_img.setVisibility(View.VISIBLE);
-                            } else {
-                                status = false;
-                                ic_edit_img.setVisibility(View.GONE);
-                            }
+                              if (image_url != null) {
+                                  status = true;
+                                  ic_edit_img.setVisibility(View.VISIBLE);
+                              } else {
+                                  status = false;
+                                  ic_edit_img.setVisibility(View.GONE);
+                              }
 
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                          } catch (JsonSyntaxException e) {
+                              e.printStackTrace();
+                          }
+                      }
 
-                    @Override
-                    public void onError(ANError error) {
-                        Log.e("NotiBanner_Error=>", error.toString());
+                      @Override
+                      public void onError(ANError error) {
+                          Log.e("NotiBanner_Error=>", error.toString());
 
-                    }
-                });
+                      }
+                  });
+      }catch(Exception e){
+          e.printStackTrace();
+      }
     }
 
     public void createNotification(String title, String description, String link, String imageUrl) {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("title", title);
-        params.put("description", description);
-        params.put("link", link);
-        if (imageUrl.equals("")) {
 
-        } else {
-            params.put("imageUrl", imageUrl);
-        }
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("title", title);
+            params.put("description", description);
+            params.put("link", link);
+            if (imageUrl.equals("")) {
+
+            } else {
+                params.put("imageUrl", imageUrl);
+            }
             request = new JsonObjectRequest(POST, Constans.create_notification, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -286,18 +291,18 @@ public class CreateNotificationActivity extends BaseActivity {
     }
 
     public void updateNotification(String nid, String title, String description, String link, String imageUrl) {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("notificationid", nid);
-        params.put("title", title);
-        params.put("description", description);
-        params.put("link", link);
-        if (imageUrl.equals("")) {
-
-        } else {
-            params.put("imageUrl", imageUrl);
-        }
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("notificationid", nid);
+            params.put("title", title);
+            params.put("description", description);
+            params.put("link", link);
+            if (imageUrl.equals("")) {
+
+            } else {
+                params.put("imageUrl", imageUrl);
+            }
             request = new JsonObjectRequest(POST, Constans.update_notification, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

@@ -55,8 +55,7 @@ public class FriendRequestFragment extends Fragment {
     ArrayList<ReceiveFriendsRegisterModel> receivefriendrequestsModelArrayList = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_request, container, false);
 
         recycle_request = view.findViewById(R.id.recyler_request);
@@ -154,7 +153,6 @@ public class FriendRequestFragment extends Fragment {
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
-//            FileUtils.DismissLoading(ProductActivity.this);
         }
     }
 }

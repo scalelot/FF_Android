@@ -241,12 +241,11 @@ public class ChatPersnoalInfoFragment extends Fragment {
     }
 
     public void set_unfriendorblock(String strIds, String str) {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("friendid", strIds);
-        hashMap.put("status", str);
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("friendid", strIds);
+            hashMap.put("status", str);
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_friends_unfriendorblock, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

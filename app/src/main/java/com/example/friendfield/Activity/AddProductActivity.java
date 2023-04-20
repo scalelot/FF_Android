@@ -127,37 +127,25 @@ public class AddProductActivity extends BaseActivity {
         img_add_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE);
+                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
             }
         });
         img_product1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE1);
+                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE1);
             }
         });
         img_product2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE2);
+                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE2);
             }
         });
         img_product3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE3);
+                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE3);
             }
         });
 
@@ -277,43 +265,40 @@ public class AddProductActivity extends BaseActivity {
     }
 
     public void uploadImage(int pos, File file) {
-        AndroidNetworking.upload(Constans.set_product_image)
-                .addMultipartFile("file", file)
-                .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            Log.e("ProUploadImages=>", response.toString());
-                            ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
-                            if (edit_pro != null) {
-                                if (pos >= imagesArrayList.size() || pos < 0) {
-                                    imagesArrayList.add(productImagesModel.getData().getKey());
-                                } else {
-                                    imagesArrayList.set(pos, productImagesModel.getData().getKey());
-                                }
-                            } else {
+        try {
+            AndroidNetworking.upload(Constans.set_product_image).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+                @Override
+                public void onProgress(long bytesUploaded, long totalBytes) {
+                }
+            }).getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Log.e("ProUploadImages=>", response.toString());
+                        ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
+                        if (edit_pro != null) {
+                            if (pos >= imagesArrayList.size() || pos < 0) {
                                 imagesArrayList.add(productImagesModel.getData().getKey());
+                            } else {
+                                imagesArrayList.set(pos, productImagesModel.getData().getKey());
                             }
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
+                        } else {
+                            imagesArrayList.add(productImagesModel.getData().getKey());
                         }
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
                     }
+                }
 
-                    @Override
-                    public void onError(ANError error) {
-                        Log.e("ProUploadImagesError=>", error.toString());
+                @Override
+                public void onError(ANError error) {
+                    Log.e("ProUploadImagesError=>", error.toString());
 
-                    }
-                });
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(context, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void addProductInfo(String pro_name, String pro_price, String pro_des, String category, String subCat, String pro_offer, String pro_itemcode, ArrayList<String> imagesArrayList) {

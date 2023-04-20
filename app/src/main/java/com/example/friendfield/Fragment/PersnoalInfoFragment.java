@@ -50,7 +50,6 @@ public class PersnoalInfoFragment extends Fragment {
     public static SwitchButton switch_face_id;
     RecyclerView recy_tag;
     View view;
-
     SharedPreferences prefs;
     boolean value = false;
     String key = "key";

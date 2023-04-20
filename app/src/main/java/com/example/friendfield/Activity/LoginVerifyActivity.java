@@ -40,7 +40,6 @@ import in.aabhasjindal.otptextview.OtpTextView;
 public class LoginVerifyActivity extends BaseActivity {
     ImageView iv_back;
     TextView txt_phone_number;
-
     TextView tv_timer;
     TextView txt_resend_code;
     AppCompatButton btn_verify;
@@ -49,7 +48,6 @@ public class LoginVerifyActivity extends BaseActivity {
     String MobileNo;
     String c_code;
     RequestQueue queue;
-    String cookie;
     OtpTextView otpTextView;
 
     @Override
@@ -110,9 +108,7 @@ public class LoginVerifyActivity extends BaseActivity {
                         VerifyOtp(OtpValue);
                     } else {
                         Toast.makeText(LoginVerifyActivity.this, "Please Enter Otp", Toast.LENGTH_LONG).show();
-
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -129,11 +125,6 @@ public class LoginVerifyActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 
     public void showtimer() {
@@ -154,12 +145,10 @@ public class LoginVerifyActivity extends BaseActivity {
     }
 
     public void VerifyOtp(String otpval) {
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("otp", otpval);
-
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("otp", otpval);
             request = new JsonObjectRequest(Request.Method.POST, Constans.verify_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -206,20 +195,11 @@ public class LoginVerifyActivity extends BaseActivity {
     public void SendOtp(String phone_number) {
         showtimer();
 
-        JSONObject paramObject = new JSONObject();
-        try {
-            paramObject.put("contactNo", phone_number);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("countryCode", c_code);
-        params.put("contactNo", phone_number);
-
         JsonObjectRequest request = null;
         try {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("countryCode", c_code);
+            params.put("contactNo", phone_number);
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -247,10 +227,13 @@ public class LoginVerifyActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
-
         }
 
         queue.add(request);
+    }
 
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

@@ -59,8 +59,7 @@ public class RunningPromotionFragment extends Fragment {
     RelativeLayout emptyLay;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_running_promotion, container, false);
 
         btn_create_notification = inflate.findViewById(R.id.btn_create_notification);
