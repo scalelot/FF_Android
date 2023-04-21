@@ -115,10 +115,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        app:contentColor="@color/edt_dark"
                         app:hideNameCode="true"
-                        app:contentColor="@color/edt_hint"
-                        app:textSize="@dimen/text_14"
-                        />
+                        app:textSize="@dimen/text_14" />
 
                     <View
                         android:layout_width="@dimen/sp_2"
@@ -135,11 +134,11 @@
                         android:hint="@string/old_phone_number"
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
-                        android:textColorHint="@color/edt_hint"
-                        android:textColor="@color/edt_hint"
                         android:inputType="number"
                         android:maxLength="10"
                         android:padding="@dimen/margin_15"
+                        android:textColor="@color/edt_dark"
+                        android:textColorHint="@color/edt_hint"
                         android:textSize="@dimen/text_14" />
                 </LinearLayout>
 
@@ -160,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:contentColor="@color/edt_hint"
+                        app:contentColor="@color/edt_dark"
                         app:hideNameCode="true"
                         app:textSize="@dimen/text_14" />
 
@@ -180,10 +179,10 @@
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:inputType="number"
-                        android:textColorHint="@color/edt_hint"
-                        android:textColor="@color/edt_hint"
                         android:maxLength="10"
                         android:padding="@dimen/margin_15"
+                        android:textColor="@color/edt_dark"
+                        android:textColorHint="@color/edt_hint"
                         android:textSize="@dimen/text_14" />
                 </LinearLayout>
 

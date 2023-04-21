@@ -42,18 +42,16 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
 
     Fragment fragment;
     ArrayList<AllFriendsRegisterModel> registerModels;
-    LayoutInflater inflater;
 
     public ChatUserAdapter(ChatFragment activity, ArrayList<AllFriendsRegisterModel> receivefriendrequestsModelArrayList) {
         this.fragment = activity;
         this.registerModels = receivefriendrequestsModelArrayList;
-        inflater = LayoutInflater.from(fragment.getContext());
     }
 
     @NonNull
     @Override
     public MyDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.user_chat_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_chat_list, parent, false);
         return new MyDataViewHolder(view);
     }
 

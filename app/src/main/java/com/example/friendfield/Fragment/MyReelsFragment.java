@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MyReelsFragment extends Fragment {
     RecyclerView recycler_reels;
-    int[] img_noti = {R.drawable.img_1, R.drawable.img_2, R.drawable.img_3, R.drawable.img_4, R.drawable.img_6, R.drawable.img_7, R.drawable.img_8, R.drawable.img_9, R.drawable.img_10, R.drawable.img_11};
+    int[] img_noti = {R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1};
     ArrayList<Integer> imagearraylist = new ArrayList<Integer>();
     ReelsAdapter reelsAdapter;
 

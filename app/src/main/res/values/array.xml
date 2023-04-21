@@ -14,37 +14,4 @@
         <item>Home Decor</item>
     </string-array>
 
-    <array name="array1">
-        <item>@drawable/img_1</item>
-        <item>@drawable/img_2</item>
-        <item>@drawable/img_3</item>
-    </array>
-
-    <array name="array2">
-        <item>@drawable/img_4</item>
-        <item>@drawable/img_6</item>
-    </array>
-
-    <array name="array3">
-        <item>@drawable/img_2</item>
-        <item>@drawable/img_4</item>
-        <item>@drawable/img_6</item>
-    </array>
-
-    <array name="array4">
-        <item>@drawable/img_1</item>
-    </array>
-
-    <array name="array5">
-        <item>@drawable/cupcakes_bg</item>
-        <item>@drawable/ic_user_img</item>
-        <item>@drawable/img_1</item>
-        <item>@drawable/img_3</item>
-    </array>
-
-    <array name="array6">
-        <item>@drawable/img_7</item>
-        <item>@drawable/img_2</item>
-    </array>
-
 </resources>

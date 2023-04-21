@@ -40,7 +40,7 @@
                 android:paddingLeft="@dimen/margin_8"
                 android:paddingRight="@dimen/margin_8"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/edt_dark"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/text_14" />
 

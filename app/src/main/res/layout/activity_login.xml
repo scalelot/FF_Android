@@ -76,7 +76,7 @@
             android:inputType="number"
             android:maxLength="10"
             android:padding="@dimen/margin_15"
-            android:textColor="@color/edt_hint"
+            android:textColor="@color/edt_dark"
             android:textColorHint="@color/edt_hint"
             android:textSize="@dimen/text_18" />
     </LinearLayout>

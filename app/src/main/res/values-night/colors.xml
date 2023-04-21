@@ -38,5 +38,6 @@
     <color name="send_chat">#121212</color>
     <color name="call_icon_bg">#F1F1F1</color>
     <color name="call_icon">#888888</color>
+    <color name="edt_dark">#ffffff</color>
 
 </resources>

@@ -116,7 +116,7 @@
                 android:paddingLeft="@dimen/margin_15"
                 android:paddingRight="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/edt_hint"
+                android:textColor="@color/edt_dark"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 
@@ -136,7 +136,7 @@
             android:imeOptions="actionDone"
             android:padding="@dimen/sp_15"
             android:paddingLeft="@dimen/margin_15"
-            android:textColor="@color/black"
+            android:textColor="@color/edt_dark"
             android:textColorHint="@color/edt_hint"
             android:textSize="@dimen/sp_14" />
 

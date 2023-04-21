@@ -24,7 +24,7 @@ public class HistoryPromotionFragment extends Fragment {
     AppCompatButton btn_create_notification;
     RecyclerView recycler_noti;
     String[] txt_userName = {"Hello World", "World", "Hello World", "World", "Hello World"};
-    int[] img_noti = {R.drawable.img_1, R.drawable.img_2, R.drawable.img_3, R.drawable.img_4, R.drawable.img_6};
+    int[] img_noti = {R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1, R.drawable.img_1};
     ArrayList<String> arraylist = new ArrayList<String>();
     ArrayList<Integer> imagearraylist = new ArrayList<Integer>();
     RelativeLayout emptyLay;

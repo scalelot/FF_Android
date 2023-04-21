@@ -81,7 +81,7 @@
                 android:imeOptions="actionNext"
                 android:paddingLeft="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/edt_hint"
+                android:textColor="@color/edt_dark"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 
@@ -121,7 +121,7 @@
                 android:imeOptions="actionNext"
                 android:paddingLeft="@dimen/margin_15"
                 android:singleLine="true"
-                android:textColor="@color/edt_hint"
+                android:textColor="@color/edt_dark"
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 

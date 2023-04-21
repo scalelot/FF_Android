@@ -49,7 +49,8 @@
                 android:paddingLeft="@dimen/margin_10"
                 android:paddingRight="@dimen/margin_5"
                 android:singleLine="true"
-                android:textColor="@color/edt_hint"
+                android:textColor="@color/edt_dark"
+                android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/text_12" />
 
         </com.google.android.material.textfield.TextInputLayout>

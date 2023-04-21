@@ -46,6 +46,21 @@ public class MyApplication extends Application implements LifecycleObserver {
     private String TAG = getClass().getSimpleName();
     SharedPreferences sharedPreferences;
 
+    public static final String NIGHT_MODE = "N_MODE";
+    private boolean isNightModeEnabled = false;
+
+    private static MyApplication singleton = null;
+
+    public static MyApplication getInstance() {
+
+        if(singleton == null)
+        {
+            singleton = new MyApplication();
+        }
+        return singleton;
+    }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,7 +69,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         singleton = this;
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         this.isNightModeEnabled = mPrefs.getBoolean(NIGHT_MODE, false);
-        //Dark mode code
 
         context = this;
 
@@ -88,6 +102,19 @@ public class MyApplication extends Application implements LifecycleObserver {
         SharedPreferences.Editor editor1 = sharedPreferences.edit();
         editor1.clear();
         editor1.commit();
+    }
+
+    public boolean isNightModeEnabled() {
+        return isNightModeEnabled;
+    }
+
+    public void setIsNightModeEnabled(boolean isNightModeEnabled) {
+        this.isNightModeEnabled = isNightModeEnabled;
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(NIGHT_MODE, isNightModeEnabled);
+        editor.apply();
     }
 
     public static boolean isApplicationOnBackground() {
@@ -317,32 +344,4 @@ public class MyApplication extends Application implements LifecycleObserver {
         Log.i(TAG, "ON_DESTROY event");
     }
 
-
-    //Dark mode code
-    public static final String NIGHT_MODE = "NIGHT_MODE";
-    private boolean isNightModeEnabled = false;
-
-    private static MyApplication singleton = null;
-
-    public static MyApplication getInstance() {
-
-        if(singleton == null)
-        {
-            singleton = new MyApplication();
-        }
-        return singleton;
-    }
-
-    public boolean isNightModeEnabled() {
-        return isNightModeEnabled;
-    }
-
-    public void setIsNightModeEnabled(boolean isNightModeEnabled) {
-        this.isNightModeEnabled = isNightModeEnabled;
-
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putBoolean(NIGHT_MODE, isNightModeEnabled);
-        editor.apply();
-    }
 }
