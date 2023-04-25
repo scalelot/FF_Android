@@ -1,8 +1,13 @@
 package com.example.friendfield.Activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -13,8 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.AuthFailureError;
@@ -54,15 +66,17 @@ public class UserProfileActivity extends BaseActivity {
     TextView u_name, u_nickname;
     CircleImageView user_profile_image;
     ImageView ic_back, ic_fb, ic_insta, ic_twitter, ic_linkedin, ic_pinterest, ic_youtube;
-    private static final int PICK_IMAGE = 100;
+
     public static AppCompatButton btn_edit_profile;
     LinearLayout ll_business_product;
     int pos;
+    private static int CAMERA_PERMISSION_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -80,12 +94,6 @@ public class UserProfileActivity extends BaseActivity {
         ic_youtube = findViewById(R.id.ic_youtube);
 
         ll_business_product = findViewById(R.id.ll_business_product);
-
-        if (!MyApplication.isBusinessProfileRegistered(UserProfileActivity.this)) {
-            ll_business_product.setVisibility(View.VISIBLE);
-        } else {
-            ll_business_product.setVisibility(View.GONE);
-        }
 
         ll_business_product.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +117,9 @@ public class UserProfileActivity extends BaseActivity {
         edit_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent,"Select Images"),CAMERA_PERMISSION_CODE);
             }
         });
 
@@ -162,7 +172,7 @@ public class UserProfileActivity extends BaseActivity {
 
     private void getApiCalling() {
         JsonObjectRequest jsonObjectRequest = null;
-        try{
+        try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -192,6 +202,13 @@ public class UserProfileActivity extends BaseActivity {
                         } else if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Youtube")) {
                             ic_youtube.setVisibility(View.VISIBLE);
                         }
+                    }
+
+
+                    if (!userProfileRegisterModel.getData().getIsBusinessProfileCreated()) {
+                        ll_business_product.setVisibility(View.GONE);
+                    } else {
+                        ll_business_product.setVisibility(View.VISIBLE);
                     }
 
                     ic_fb.setOnClickListener(new View.OnClickListener() {
@@ -328,24 +345,30 @@ public class UserProfileActivity extends BaseActivity {
 
             RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
             requestQueue.add(jsonObjectRequest);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void openGallery() {
-        ImagePicker.Companion.with(UserProfileActivity.this)
-                .crop()
-                .maxResultSize(1080, 1080)
-                .start(PICK_IMAGE);
+    public String getPathFromURI(Uri contentUri){
+        String res = null;
 
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri,proj,null,null,null);
+        if (cursor.moveToFirst()){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+
+        return res;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
+        if (requestCode == CAMERA_PERMISSION_CODE) {
 
             try {
                 Uri selectedImageUri = data.getData();

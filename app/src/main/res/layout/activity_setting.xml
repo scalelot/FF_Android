@@ -436,57 +436,57 @@
                     android:src="@drawable/ic_right_arrow" />
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/sp_1"
-                android:background="@color/bg_grey_color" />
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/sp_1"-->
+<!--                android:background="@color/bg_grey_color" />-->
 
-            <RelativeLayout
-                android:id="@+id/night_mode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/night_mode"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
 
-                <ImageView
-                    android:id="@+id/img_dark_mode"
-                    android:layout_width="@dimen/sp_25"
-                    android:layout_height="@dimen/sp_25"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_20"
-                    android:layout_marginEnd="@dimen/margin_20"
-                    android:layout_marginBottom="@dimen/margin_20"
-                    android:src="@drawable/ic_dark_mode" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/img_dark_mode"-->
+<!--                    android:layout_width="@dimen/sp_25"-->
+<!--                    android:layout_height="@dimen/sp_25"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginStart="@dimen/margin_20"-->
+<!--                    android:layout_marginTop="@dimen/margin_20"-->
+<!--                    android:layout_marginEnd="@dimen/margin_20"-->
+<!--                    android:layout_marginBottom="@dimen/margin_20"-->
+<!--                    android:src="@drawable/ic_dark_mode" />-->
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/img_dark_mode"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/dark_mode"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_16" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_toRightOf="@+id/img_dark_mode"-->
+<!--                    android:fontFamily="@font/roboto_medium"-->
+<!--                    android:text="@string/dark_mode"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/text_16" />-->
 
-                <com.kyleduo.switchbutton.SwitchButton
-                    android:id="@+id/dark_mode_switch"
-                    android:layout_width="@dimen/sp_50"
-                    android:layout_height="@dimen/sp_25"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin_20"
-                    android:checked="false"
-                    android:textColor="#fff"
-                    android:textSize="@dimen/text_10"
-                    app:kswBackDrawable="@drawable/switch_back_drawable"
-                    app:kswTextAdjust="-1dp"
-                    app:kswTextExtra="@dimen/sp_8"
-                    app:kswTextOff="Off"
-                    app:kswTextOn="On"
-                    app:kswThumbColor="#ffffff"
-                    app:kswThumbDrawable="@drawable/switch_thumb_selector" />
-            </RelativeLayout>
+<!--                <com.kyleduo.switchbutton.SwitchButton-->
+<!--                    android:id="@+id/dark_mode_switch"-->
+<!--                    android:layout_width="@dimen/sp_50"-->
+<!--                    android:layout_height="@dimen/sp_25"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginRight="@dimen/margin_20"-->
+<!--                    android:checked="false"-->
+<!--                    android:textColor="#fff"-->
+<!--                    android:textSize="@dimen/text_10"-->
+<!--                    app:kswBackDrawable="@drawable/switch_back_drawable"-->
+<!--                    app:kswTextAdjust="-1dp"-->
+<!--                    app:kswTextExtra="@dimen/sp_8"-->
+<!--                    app:kswTextOff="Off"-->
+<!--                    app:kswTextOn="On"-->
+<!--                    app:kswThumbColor="#ffffff"-->
+<!--                    app:kswThumbDrawable="@drawable/switch_thumb_selector" />-->
+<!--            </RelativeLayout>-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sp_1"

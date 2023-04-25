@@ -84,7 +84,7 @@
                             android:layout_marginTop="@dimen/margin_5"
                             android:fontFamily="@font/roboto_medium"
                             android:text="@string/add_image"
-                            android:textColor="@color/edt_dark"
+                            android:textColor="@color/edt_hint"
                             android:textSize="@dimen/text_14" />
                     </LinearLayout>
 
@@ -133,7 +133,7 @@
                                 android:layout_marginTop="@dimen/margin_5"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/add_sub_image"
-                                android:textColor="@color/edt_dark"
+                                android:textColor="@color/edt_hint"
                                 android:textSize="@dimen/text_10" />
                         </LinearLayout>
 
@@ -177,7 +177,7 @@
                                 android:layout_marginTop="@dimen/margin_5"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/add_sub_image"
-                                android:textColor="@color/edt_dark"
+                                android:textColor="@color/edt_hint"
                                 android:textSize="@dimen/text_10" />
                         </LinearLayout>
 
@@ -221,7 +221,7 @@
                                 android:layout_marginTop="@dimen/margin_5"
                                 android:fontFamily="@font/roboto_medium"
                                 android:text="@string/add_sub_image"
-                                android:textColor="@color/edt_dark"
+                                android:textColor="@color/edt_hint"
                                 android:textSize="@dimen/text_10" />
                         </LinearLayout>
 

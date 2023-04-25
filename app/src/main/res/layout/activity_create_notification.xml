@@ -74,7 +74,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/upload_image"
-                    android:textColor="@color/edt_dark"
+                    android:textColor="@color/edt_hint"
                     android:textSize="@dimen/text_14" />
             </LinearLayout>
 

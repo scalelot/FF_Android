@@ -134,6 +134,8 @@ public class ContactFragment extends Fragment {
                 }
             }
         });
+
+
         return view;
     }
 
@@ -226,4 +228,5 @@ public class ContactFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
 }

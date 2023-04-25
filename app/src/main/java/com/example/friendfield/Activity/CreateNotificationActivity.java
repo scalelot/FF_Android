@@ -4,6 +4,7 @@ import static com.android.volley.Request.Method.GET;
 import static com.android.volley.Request.Method.POST;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -88,6 +90,7 @@ public class CreateNotificationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_notification);
 
+        ActivityCompat.requestPermissions(this, permissions(), 1);
         context = this;
 
         back_arrow_ic = findViewById(R.id.back_arrow_ic);
@@ -163,6 +166,24 @@ public class CreateNotificationActivity extends BaseActivity {
             }
         });
 
+    }
+
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
+
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
+    String[] per;
+
+    public String[] permissions() {
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                per = storge_permissions_33;
+            } else {
+                per = storge_permissions;
+            }
+        } catch (Exception e) {
+        }
+        return per;
     }
 
     @Override

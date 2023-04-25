@@ -31,19 +31,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyDataVi
 
     Fragment fragment;
     ArrayList<AllFriendsRegisterModel> registerModels;
-    LayoutInflater inflater;
 
     public ContactAdapter(ContactFragment contactFragment, ArrayList<AllFriendsRegisterModel> allFriendsModelsList) {
         this.fragment = contactFragment;
         this.registerModels = allFriendsModelsList;
-        inflater = LayoutInflater.from(fragment.getContext());
     }
 
 
     @NonNull
     @Override
     public MyDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.contact_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_list, parent, false);
         return new MyDataViewHolder(view);
     }
 

@@ -66,9 +66,9 @@ public class MyApplication extends Application implements LifecycleObserver {
         super.onCreate();
 
         //Dark mode code
-        singleton = this;
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        this.isNightModeEnabled = mPrefs.getBoolean(NIGHT_MODE, false);
+//        singleton = this;
+//        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        this.isNightModeEnabled = mPrefs.getBoolean(NIGHT_MODE, false);
 
         context = this;
 

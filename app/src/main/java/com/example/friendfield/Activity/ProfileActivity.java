@@ -4,6 +4,7 @@ import static com.example.friendfield.Utils.Const.tag_str;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
@@ -23,6 +24,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -182,6 +184,8 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         gen_spinner = findViewById(R.id.gen_spinner);
         edt_dob = findViewById(R.id.edt_dob);
         img_calender = findViewById(R.id.img_calender);
+
+        ActivityCompat.requestPermissions(this, permissions(), 1);
 
         people = Person.samplePeople();
         adapter = new PersonAdapter(this, R.layout.person_layout, people);
@@ -425,6 +429,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         }
 
     }
+
     private void patchApivolley(String p_name, String pu_name, String p_email, String dob, String gender, String about_us, JSONArray hobbiesJsonArray, Double longitude, Double lattitude, Integer text_km, String yourRd, Integer txt_min, Integer txt_max, String fb_link, String insta_link, String tw_link, String ld_link, String pins_link, String youtube_link) {
         JSONObject jsonBody = new JSONObject();
         try {
@@ -795,6 +800,24 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
+
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
+    String[] per;
+
+    public String[] permissions() {
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                per = storge_permissions_33;
+            } else {
+                per = storge_permissions;
+            }
+        } catch (Exception e) {
+        }
+        return per;
     }
 
     private void openGallery() {

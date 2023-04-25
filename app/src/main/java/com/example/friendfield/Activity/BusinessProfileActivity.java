@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
@@ -120,6 +121,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
         context = this;
         queue = Volley.newRequestQueue(BusinessProfileActivity.this, new HurlStack());
+        ActivityCompat.requestPermissions(this, permissions(), 1);
 
         ic_back = findViewById(R.id.ic_back);
         business_profile_image = findViewById(R.id.business_profile_image);
@@ -409,6 +411,25 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
         }
     }
+
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
+
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
+    String[] per;
+
+    public String[] permissions() {
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                per = storge_permissions_33;
+            } else {
+                per = storge_permissions;
+            }
+        } catch (Exception e) {
+        }
+        return per;
+    }
+
 
     private void selectPdf() {
         Intent intent = new Intent();

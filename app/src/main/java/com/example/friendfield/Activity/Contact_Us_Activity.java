@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -59,6 +61,8 @@ public class Contact_Us_Activity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
 
+        ActivityCompat.requestPermissions(this, permissions(), 1);
+
         ic_back_arrow = findViewById(R.id.ic_back_arrow);
         full_name = findViewById(R.id.full_name);
         phone_number = findViewById(R.id.phone_number);
@@ -97,6 +101,24 @@ public class Contact_Us_Activity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
+
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
+    String[] per;
+
+    public String[] permissions() {
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                per = storge_permissions_33;
+            } else {
+                per = storge_permissions;
+            }
+        } catch (Exception e) {
+        }
+        return per;
     }
 
     private void getContactApi(String name, String ph_number, String email, String des) {
