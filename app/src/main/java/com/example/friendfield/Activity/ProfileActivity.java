@@ -821,7 +821,14 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     private void openGallery() {
-        ImagePicker.Companion.with(ProfileActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
+//        ImagePicker.Companion.with(ProfileActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+
+        // pass the constant to compare it
+        // with the returned requestCode
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), PICK_IMAGE);
     }
 
     @Override
@@ -851,6 +858,15 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
+
+//        if (requestCode == PICK_IMAGE) {
+//
+//            Uri selectedImageUri = data.getData();
+//            if (null != selectedImageUri) {
+//                // update the preview image in the layout
+//                profile_image.setImageURI(selectedImageUri);
+//            }
+//        }
     }
 
     @SuppressLint("Range")
