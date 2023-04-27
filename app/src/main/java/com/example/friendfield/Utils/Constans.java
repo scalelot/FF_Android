@@ -3,9 +3,9 @@ package com.example.friendfield.Utils;
 public class Constans {
 
     public static String CHAT_SERVER_URL = "ws://192.168.29.105:8080/socket.io/socket.io.js";
-    public static String Display_Image_URL = "https://friendsfield.s3.ap-south-1.amazonaws.com/";
+    public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
-    public static String BASE_URL = "https://friendsfield.in/apis/v1/";
+    public static String BASE_URL = "https://api.festumfield.com/apis/v1/";
 
     //Login
     public static String send_otp = BASE_URL + "register/sendotp";
