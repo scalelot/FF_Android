@@ -2,6 +2,7 @@ package com.example.friendfield.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -36,6 +37,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
 import com.example.friendfield.Adapter.ViewPagerAdapter;
 import com.example.friendfield.BaseActivity;
@@ -43,6 +49,7 @@ import com.example.friendfield.MainActivity;
 import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.Const;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
@@ -70,13 +77,15 @@ public class UserProfileActivity extends BaseActivity {
     public static AppCompatButton btn_edit_profile;
     LinearLayout ll_business_product;
     int pos;
-    private static int CAMERA_PERMISSION_CODE = 100;
+    ActivityResultLauncher<Intent> resultLauncher;
+    private static final int PICK_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        ActivityCompat.requestPermissions(this, permissions(), 1);
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -117,9 +126,9 @@ public class UserProfileActivity extends BaseActivity {
         edit_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent,"Select Images"),CAMERA_PERMISSION_CODE);
+                startActivityForResult(intent, PICK_IMAGE);
             }
         });
 
@@ -169,6 +178,29 @@ public class UserProfileActivity extends BaseActivity {
             }
         });
     }
+
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO,Manifest.permission.CAMERA};
+    String[] p;
+
+    public String[] permissions() {
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                p = storge_permissions_33;
+            } else {
+                p = storge_permissions;
+            }
+            Log.e("Hello:--", String.valueOf(p));
+
+        } catch (Exception e) {
+            Log.e("Per:==", e.toString());
+        }
+        return p;
+    }
+
 
     private void getApiCalling() {
         JsonObjectRequest jsonObjectRequest = null;
@@ -351,48 +383,43 @@ public class UserProfileActivity extends BaseActivity {
 
     }
 
-    public String getPathFromURI(Uri contentUri){
-        String res = null;
-
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri,proj,null,null,null);
-        if (cursor.moveToFirst()){
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
-        }
-        cursor.close();
-
-        return res;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_PERMISSION_CODE) {
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            Uri selectImage = data.getData();
+            Glide.with(UserProfileActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(user_profile_image);
 
-            try {
-                Uri selectedImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    user_profile_image.setImageBitmap(bitmap);
-
-                    File file = new File(selectedImageUri.getPath());
-                    FileUtils.personalProfileImageUpload(getApplicationContext(), file);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
-        } else {
+            String path = RealPathUtil.getRealPath(UserProfileActivity.this, selectImage);
+            System.out.println("SetFilePath:==" + path);
+            File file = new File(path);
+            personalProfileImageUpload(file);
+        }  else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void personalProfileImageUpload(File file) {
+        AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+            @Override
+            public void onProgress(long bytesUploaded, long totalBytes) {
+                // do anything with progress
+            }
+        }).getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("LLL_image_up--->", response.toString());
+                getApiCalling();
+            }
+
+            @Override
+            public void onError(ANError error) {
+                Log.e("LLL_image_err--->", error.toString());
+
+            }
+        });
+    }
+
 
     @Override
     protected void onResume() {

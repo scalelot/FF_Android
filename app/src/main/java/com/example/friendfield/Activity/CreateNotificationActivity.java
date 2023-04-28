@@ -45,6 +45,7 @@ import com.example.friendfield.Model.Product.ProductImagesModel;
 import com.example.friendfield.Model.Product.ProductModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.Const;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
@@ -159,10 +160,9 @@ public class CreateNotificationActivity extends BaseActivity {
         add_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(CreateNotificationActivity.this)
-                        .crop()
-                        .maxResultSize(1080, 1080)
-                        .start(PICK_IMAGE);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE);
             }
         });
 
@@ -191,18 +191,13 @@ public class CreateNotificationActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
             try {
-                selectedImageUri = data.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    Const.bitmap_business_profile_image = bitmap;
-                    add_image.setImageBitmap(bitmap);
-                    img = add_image;
+                Uri selectImage = data.getData();
+                Glide.with(CreateNotificationActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(add_image);
 
-                    file = new File(selectedImageUri.getPath());
-                    uploadImage(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String path = RealPathUtil.getRealPath(CreateNotificationActivity.this, selectImage);
+                System.out.println("SetFilePath:==" + path);
+                File file = new File(path);
+                uploadImage(file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -214,48 +209,48 @@ public class CreateNotificationActivity extends BaseActivity {
     }
 
     public void uploadImage(File file) {
-      try{
-          AndroidNetworking.upload(Constans.set_notification_banner)
-                  .addMultipartFile("file", file)
-                  .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                  .setTag("uploadTest")
-                  .setPriority(Priority.HIGH)
-                  .build()
-                  .setUploadProgressListener(new UploadProgressListener() {
-                      @Override
-                      public void onProgress(long bytesUploaded, long totalBytes) {
-                      }
-                  })
-                  .getAsJSONObject(new JSONObjectRequestListener() {
-                      @Override
-                      public void onResponse(JSONObject response) {
-                          try {
-                              Log.e("NotiBanner=>", response.toString());
-                              ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
-                              image_url = productImagesModel.getData().getKey();
+        try {
+            AndroidNetworking.upload(Constans.set_notification_banner)
+                    .addMultipartFile("file", file)
+                    .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
+                    .setTag("uploadTest")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .setUploadProgressListener(new UploadProgressListener() {
+                        @Override
+                        public void onProgress(long bytesUploaded, long totalBytes) {
+                        }
+                    })
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.e("NotiBanner=>", response.toString());
+                                ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
+                                image_url = productImagesModel.getData().getKey();
 
-                              if (image_url != null) {
-                                  status = true;
-                                  ic_edit_img.setVisibility(View.VISIBLE);
-                              } else {
-                                  status = false;
-                                  ic_edit_img.setVisibility(View.GONE);
-                              }
+                                if (image_url != null) {
+                                    status = true;
+                                    ic_edit_img.setVisibility(View.VISIBLE);
+                                } else {
+                                    status = false;
+                                    ic_edit_img.setVisibility(View.GONE);
+                                }
+                                getNotification(notificationId);
+                            } catch (JsonSyntaxException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-                          } catch (JsonSyntaxException e) {
-                              e.printStackTrace();
-                          }
-                      }
+                        @Override
+                        public void onError(ANError error) {
+                            Log.e("NotiBanner_Error=>", error.toString());
 
-                      @Override
-                      public void onError(ANError error) {
-                          Log.e("NotiBanner_Error=>", error.toString());
-
-                      }
-                  });
-      }catch(Exception e){
-          e.printStackTrace();
-      }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void createNotification(String title, String description, String link, String imageUrl) {
@@ -390,7 +385,7 @@ public class CreateNotificationActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(CreateNotificationActivity.this);
+//                    FileUtils.DismissLoading(CreateNotificationActivity.this);
                     System.out.println("SingleNoti_Error=>" + error.toString());
                 }
             }) {

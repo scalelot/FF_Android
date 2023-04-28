@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.pdf.PdfRenderer;
 import android.location.Criteria;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -28,6 +30,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
@@ -50,10 +55,12 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
 import com.example.friendfield.BaseActivity;
+import com.example.friendfield.Fragment.BusinessInfoFragment;
 import com.example.friendfield.Model.Business.Register.BusinessRegisterModel;
 import com.example.friendfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.Const;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
@@ -336,12 +343,12 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     public void getBusinessProfileInfo() {
         Log.d("Api", "work");
-        FileUtils.DisplayLoading(BusinessProfileActivity.this);
+//        FileUtils.DisplayLoading(BusinessProfileActivity.this);
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_business_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(BusinessProfileActivity.this);
+//                    FileUtils.DismissLoading(BusinessProfileActivity.this);
 
                     Log.e("FetchBusinessInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
@@ -391,7 +398,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("FetchBusiness_Error=>", error.toString());
-                    FileUtils.DismissLoading(BusinessProfileActivity.this);
+//                    FileUtils.DismissLoading(BusinessProfileActivity.this);
                     error.printStackTrace();
                 }
             }) {
@@ -440,33 +447,24 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
 
     private void openGallery() {
-        ImagePicker.Companion.with(BusinessProfileActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
     }
+
 
     @SuppressLint("Range")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            Uri selectImage = data.getData();
+            Glide.with(BusinessProfileActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(business_profile_image);
 
-            try {
-                Uri selectedImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    Const.bitmap_business_profile_image = bitmap;
-                    business_profile_image.setImageBitmap(bitmap);
-
-                    File file = new File(selectedImageUri.getPath());
-
-                    uploadImage(file);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            String path = RealPathUtil.getRealPath(BusinessProfileActivity.this, selectImage);
+            System.out.println("SetFilePath:==" + path);
+            File file = new File(path);
+            uploadImage(file);
         } else if (requestCode == PICK_FILE) {
             Uri uri = data.getData();
             String uriString = uri.toString();
@@ -600,27 +598,28 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     }
 
     public void uploadImage(File file) {
-       try {
-           AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
-               @Override
-               public void onProgress(long bytesUploaded, long totalBytes) {
-               }
-           }).getAsJSONObject(new JSONObjectRequestListener() {
-               @Override
-               public void onResponse(JSONObject response) {
-                   Log.e("BusinessProImage=>", response.toString());
-                   status = true;
-               }
+        try {
+            AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+                @Override
+                public void onProgress(long bytesUploaded, long totalBytes) {
+                }
+            }).getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("BusinessProImage=>", response.toString());
+                    getBusinessProfileInfo();
+                    status = true;
+                }
 
-               @Override
-               public void onError(ANError error) {
-                   Log.e("BusinProImage_Error--->", error.toString());
-                   status = false;
-               }
-           });
-       }catch (Exception e){
-           e.printStackTrace();
-       }
+                @Override
+                public void onError(ANError error) {
+                    Log.e("BusinProImage_Error--->", error.toString());
+                    status = false;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

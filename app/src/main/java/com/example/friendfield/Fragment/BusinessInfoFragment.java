@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.friendfield.Activity.BusinessProfileActivity;
 import com.example.friendfield.Activity.UserProfileActivity;
 import com.example.friendfield.Model.BusinessInfo.BusinessInfoRegisterModel;
@@ -88,7 +89,7 @@ public class BusinessInfoFragment extends Fragment {
         edt_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+//                openGallery();
             }
         });
 
@@ -126,6 +127,8 @@ public class BusinessInfoFragment extends Fragment {
                         txt_business_category.setText(businessInfoRegisterModel.getData().getInterestedCategory());
                         txt_business_subcategory.setText(businessInfoRegisterModel.getData().getInterestedSubCategory());
                         txt_business_brochure.setText(businessInfoRegisterModel.getData().getBrochure());
+
+                        Glide.with(BusinessInfoFragment.this.getContext()).asBitmap().load(Constans.Display_Image_URL + businessInfoRegisterModel.getData().getBusinessimage()).placeholder(R.drawable.ic_user).into(cir_business_img);
 
                         txt_business_brochure.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -179,7 +182,7 @@ public class BusinessInfoFragment extends Fragment {
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), selectedImageUri);
-                    cir_business_img.setImageBitmap(bitmap);
+//                    cir_business_img.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

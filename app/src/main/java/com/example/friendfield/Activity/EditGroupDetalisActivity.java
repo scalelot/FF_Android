@@ -82,10 +82,9 @@ public class EditGroupDetalisActivity extends AppCompatActivity {
     }
 
     private void openGallery() {
-        ImagePicker.Companion.with(EditGroupDetalisActivity.this)
-                .crop()
-                .maxResultSize(1080, 1080)
-                .start(PICK_IMAGE);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
     }
 
     @Override

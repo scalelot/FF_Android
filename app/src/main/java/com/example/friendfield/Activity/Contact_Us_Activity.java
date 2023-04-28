@@ -26,11 +26,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.friendfield.BaseActivity;
 import com.example.friendfield.Model.ContactUs.ContactDataModel;
 import com.example.friendfield.Model.ContactUs.ContactModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -81,8 +83,9 @@ public class Contact_Us_Activity extends BaseActivity {
         img_add_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.Companion.with(Contact_Us_Activity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
-            }
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE);            }
         });
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,48 +181,17 @@ public class Contact_Us_Activity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    uri = data.getData();
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    try {
-                        BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-                        options.inSampleSize = calculateInSampleSize(options, 100, 100);
-                        options.inJustDecodeBounds = false;
-                        Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-                        img_add_image.setImageBitmap(image);
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+        if (requestCode == PICK_IMAGE) {
+            try {
+                Uri selectImage = data.getData();
+                img_add_image.setImageURI(selectImage);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } else if (requestCode == CAMERA_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                if (data.hasExtra("data")) {
-                    bitmap = (Bitmap) data.getExtras().get("data");
-                    uri = getImageUri(Contact_Us_Activity.this, bitmap);
-                    File finalFile = new File(getRealPathFromUri(uri));
-                    System.out.println("file:----" + uri.toString());
-                    img_add_image.setImageBitmap(bitmap);
-                } else if (data.getExtras() == null) {
-
-                    Toast.makeText(getApplicationContext(), "No extras to retrieve!", Toast.LENGTH_SHORT).show();
-
-                    BitmapDrawable thumbnail = new BitmapDrawable(getResources(), data.getData().getPath());
-//                    pet_pic.setImageDrawable(thumbnail);
-
-                }
-
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
-            }
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -41,6 +41,7 @@ import com.example.friendfield.Model.Product.ProductImagesModel;
 import com.example.friendfield.Model.Product.ProductModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.Const;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
@@ -127,25 +128,33 @@ public class AddProductActivity extends BaseActivity {
         img_add_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE);
             }
         });
         img_product1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE1);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE1);
             }
         });
         img_product2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE2);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE2);
             }
         });
         img_product3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(AddProductActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE3);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE3);
             }
         });
 
@@ -192,68 +201,46 @@ public class AddProductActivity extends BaseActivity {
         if (requestCode == PICK_IMAGE) {
 
             try {
-                Uri selectedImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    img_add_image.setImageBitmap(bitmap);
+                Uri selectImage = data.getData();
+                Glide.with(AddProductActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(img_add_image);
 
-                    File file = new File(selectedImageUri.getPath());
-                    uploadImage(0, file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
+                File file = new File(path);
+                uploadImage(0, file);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (requestCode == PICK_IMAGE1) {
             try {
-                Uri selectedImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    img_product1.setImageBitmap(bitmap);
+                Uri selectImage = data.getData();
+                Glide.with(AddProductActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(img_product1);
 
-                    File file = new File(selectedImageUri.getPath());
-                    uploadImage(1, file);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
+                File file = new File(path);
+                uploadImage(1, file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (requestCode == PICK_IMAGE2) {
             try {
-                Uri selectedImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    img_product2.setImageBitmap(bitmap);
+                Uri selectImage = data.getData();
+                Glide.with(AddProductActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(img_product2);
 
-                    File file = new File(selectedImageUri.getPath());
-                    uploadImage(2, file);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
+                File file = new File(path);
+                uploadImage(2, file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (requestCode == PICK_IMAGE3) {
             try {
-                Uri selectedImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    img_product3.setImageBitmap(bitmap);
+                Uri selectImage = data.getData();
+                Glide.with(AddProductActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(img_product3);
 
-                    File file = new File(selectedImageUri.getPath());
-                    uploadImage(3, file);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
+                File file = new File(path);
+                uploadImage(3, file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -285,6 +272,7 @@ public class AddProductActivity extends BaseActivity {
                         } else {
                             imagesArrayList.add(productImagesModel.getData().getKey());
                         }
+                        getProductDetails(proId);
                     } catch (JsonSyntaxException e) {
                         e.printStackTrace();
                     }

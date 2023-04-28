@@ -17,14 +17,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.friendfield.Adapter.UserSelectionAdapter;
 import com.example.friendfield.Adapter.UserSelectionfinalAdapter;
 import com.example.friendfield.BaseActivity;
 import com.example.friendfield.Model.CreateGroupModel;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.EqualSpacingItemDecoration;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -92,11 +95,12 @@ public class CreateGroupTitleActivity extends BaseActivity {
             }
         });
 
-        cir_group_image.setOnClickListener(new View.OnClickListener() {
+        edt_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.Companion.with(CreateGroupTitleActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
-            }
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_IMAGE);            }
         });
 
         ic_back.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +116,6 @@ public class CreateGroupTitleActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
-
             try {
                 Uri selectedImageUri = data.getData();
                 Bitmap bitmap = null;

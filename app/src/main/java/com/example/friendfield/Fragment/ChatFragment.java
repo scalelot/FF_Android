@@ -59,7 +59,7 @@ public class ChatFragment extends Fragment {
 
     RecyclerView chat_recyclerview;
     ChatUserAdapter chatUserAdapter;
-    LinearLayout ll_notification;
+    RelativeLayout ll_notification;
     FloatingActionButton fb_reels;
     RelativeLayout iv_filter, emptyLay;
     ProgressBar progressBar;

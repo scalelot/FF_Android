@@ -90,25 +90,31 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_notification"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/sp_55"
             android:layout_marginLeft="@dimen/margin_20"
             android:layout_marginTop="@dimen/margin_15"
-            android:layout_marginRight="@dimen/margin_20"
-            android:orientation="horizontal">
+            android:layout_marginRight="@dimen/margin_20">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_noti"
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="@dimen/sp_50"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_notification_icon" />
 
             <LinearLayout
+                android:id="@+id/ll_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/margin_15"
-                android:layout_weight="1"
+                android:layout_marginRight="@dimen/sp_10"
+                android:layout_toLeftOf="@+id/ll_right"
+                android:layout_toRightOf="@+id/img_noti"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
@@ -133,9 +139,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2.8"
+                android:id="@+id/ll_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
@@ -162,7 +171,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_12" />
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"

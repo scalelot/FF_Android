@@ -16,8 +16,9 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_img"
-            android:layout_width="@dimen/sp_30"
-            android:layout_height="@dimen/sp_30"
+            android:layout_width="@dimen/sp_45"
+            android:layout_height="match_parent"
+            android:padding="@dimen/sp_5"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_10"
             android:src="@drawable/ic_user_profile" />
@@ -54,11 +55,11 @@
         <ImageView
             android:id="@+id/iv_likes"
             android:layout_width="@dimen/margin_30"
-            android:layout_height="@dimen/margin_30"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
             android:layout_toLeftOf="@id/iv_promotion"
-            android:padding="@dimen/margin_3"
+            android:padding="@dimen/sp_3"
             android:src="@drawable/ic_fav"
             android:visibility="visible"
             app:tint="@color/black" />
@@ -66,7 +67,7 @@
         <ImageView
             android:id="@+id/iv_promotion"
             android:layout_width="@dimen/margin_30"
-            android:layout_height="@dimen/margin_30"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
             android:layout_toLeftOf="@id/iv_business_account"
@@ -78,7 +79,7 @@
         <ImageView
             android:id="@+id/iv_business_account"
             android:layout_width="@dimen/margin_30"
-            android:layout_height="@dimen/margin_30"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_5"
             android:layout_toLeftOf="@id/popup_btn"
@@ -88,11 +89,11 @@
 
         <ImageView
             android:id="@+id/popup_btn"
-            android:layout_width="@dimen/sp_30"
-            android:layout_height="@dimen/sp_30"
+            android:layout_width="@dimen/sp_40"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/margin_10"
+            android:padding="@dimen/sp_4"
             android:src="@drawable/ic_baseline_more_vert_24"
             app:tint="@color/black" />
 
