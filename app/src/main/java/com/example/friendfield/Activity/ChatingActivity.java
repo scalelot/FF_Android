@@ -54,6 +54,7 @@ import com.example.friendfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.example.friendfield.Model.ListChat.ListChatsModel;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
+import com.example.friendfield.RealPathUtil;
 import com.example.friendfield.Utils.Constans;
 import com.example.friendfield.Utils.FileUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -95,10 +96,10 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     private int IMAGE_CAPTURE_CODE = 1001;
     int page = 1, limit = 10;
     NestedScrollView nestedScrollView;
-    List<String> send_message, send_time;
+    List<String> send_message, send_time, send_pro_img;
     List<String> form_id, to_id;
     List<String> userIdList, recivetime;
-    JSONObject send, recive;
+    JSONObject send, recive, proJson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,7 +310,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     openCamera();
                 }
             case R.id.img_gallery:
-                ImagePicker.Companion.with(ChatingActivity.this).crop().galleryOnly().maxResultSize(1080, 1080).start(GALLERY_REQUEST);
+                openCamera();
                 break;
         }
     }
@@ -340,10 +341,11 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        messageAdapter = new MessageAdapter(ChatingActivity.this, getLayoutInflater());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, true);
-        linearLayoutManager.setStackFromEnd(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this/*, RecyclerView.VERTICAL, true*/);
+//        linearLayoutManager.setStackFromEnd(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
+
+        messageAdapter = new MessageAdapter(ChatingActivity.this, getLayoutInflater());
         chat_recycler.setAdapter(messageAdapter);
 
         edt_chating.addTextChangedListener(this);
@@ -356,6 +358,12 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     try {
                         jsonObject.put("to", toUserIds);
                         jsonObject.put("message", edt_chating.getText().toString().trim());
+                        jsonObject.put("image", "");
+                        jsonObject.put("pro_name", "");
+                        jsonObject.put("pro_des", "");
+                        jsonObject.put("pro_price", "");
+                        jsonObject.put("pro_img", "");
+                        jsonObject.put("pro_message", "");
                         jsonObject.put("isSent", true);
                         jsonObject.put("isRecive", false);
 
@@ -364,9 +372,10 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         } else {
                             sendMessage(toUserIds, edt_chating.getText().toString().trim());
                             messageAdapter.addItem(jsonObject);
-                            messageAdapter.notifyDataSetChanged();
+
+                            chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+
                         }
-                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                         resetMessageEdit();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -375,7 +384,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("to", toUserIds);
-                        jsonObject.put("product", p_ids);
+                        jsonObject.put("productIds", p_ids);
                         jsonObject.put("pro_message", edt_chating.getText().toString().trim());
                         jsonObject.put("pro_name", p_name);
                         jsonObject.put("pro_img", pro_img);
@@ -383,16 +392,17 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         jsonObject.put("pro_des", p_des);
                         jsonObject.put("isSent", true);
                         jsonObject.put("isRecive", false);
-
+                        jsonObject.put("message", "");
+                        jsonObject.put("image", "");
                         if (p_ids == null && edt_chating.getText().toString().equals("")) {
                             Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT);
                         } else {
                             sendProduct(toUserIds, p_ids, edt_chating.getText().toString().trim());
                             rel_replay.setVisibility(View.GONE);
                             messageAdapter.addItem(jsonObject);
-                            messageAdapter.notifyDataSetChanged();
+
+                            chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                         }
-                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -465,6 +475,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         send_message = new ArrayList<>();
         userIdList = new ArrayList<>();
         send_time = new ArrayList<>();
+        send_pro_img = new ArrayList<>();
         recivetime = new ArrayList<>();
         send_message.clear();
         userIdList.clear();
@@ -474,6 +485,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_chat_message, jsonObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        listChatsModelArrayList.clear();
                         Log.e("ListChat=>", response.toString());
                         try {
                             JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -491,14 +503,18 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                 userIdList.add(String.valueOf(listChatsModelArrayList.get(index).getFrom().getId()));
                             }
 
-                            for (int i = 0; i < userIdList.size(); i++) {
-                                if (userIdList.get(i).equals(loginUserId)) {
-                                    form_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
-                                    send_time.add(String.valueOf(listChatsModelArrayList.get(i).getTimestamp()));
-                                } else {
-                                    to_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
-                                    recivetime.add(String.valueOf(listChatsModelArrayList.get(i).getTimestamp()));
+                            try {
+                                for (int i = 0; i < userIdList.size(); i++) {
+                                    if (userIdList.get(i).equals(loginUserId)) {
+                                        form_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
+                                        send_time.add(String.valueOf(listChatsModelArrayList.get(i).getTimestamp()));
+                                    } else {
+                                        to_id.add(listChatsModelArrayList.get(i).getSendAllModelData().getText().getMessage());
+                                        recivetime.add(String.valueOf(listChatsModelArrayList.get(i).getTimestamp()));
+                                    }
                                 }
+                            } catch (Exception e) {
+                                System.out.println(e);
                             }
 
                             if (!form_id.isEmpty()) {
@@ -509,11 +525,30 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                         send.put("Sendtime", send_time.get(i));
                                         send.put("isRecive", false);
                                         send.put("isSent", true);
+                                        if (listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid() != null) {
+                                            send.put("pro_name", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getName());
+                                            send.put("pro_des", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getDescription());
+                                            send.put("pro_price", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getPrice());
+                                            send.put("pro_img", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getImages().get(0));
+                                            send.put("pro_message", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getDescription());
+                                        } else {
+                                            System.out.println("e");
+                                            send.put("pro_name", "");
+                                            send.put("pro_des", "");
+                                            send.put("pro_price", "");
+                                            send.put("pro_img", "");
+                                            send.put("pro_message", "");
+                                        }
+                                        if (!listChatsModelArrayList.get(i).getSendAllModelData().getMedia().getPath().isEmpty()) {
+                                            send.put("image", listChatsModelArrayList.get(i).getSendAllModelData().getMedia().getPath());
+                                        } else {
+                                            send.put("image", "");
+                                        }
                                         messageAdapter.addItem(send);
-                                        messageAdapter.notifyItemInserted(i);
-                                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                                        chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+
                                     }
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -525,13 +560,40 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                         recive.put("message", to_id.get(i));
                                         recive.put("recivetime", recivetime.get(i));
                                         recive.put("name", userName);
+                                        if (listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid() != null) {
+                                            recive.put("pro_name", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getName());
+                                            recive.put("pro_des", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getDescription());
+                                            recive.put("pro_price", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getPrice());
+                                            recive.put("pro_img", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getImages().get(0));
+                                            recive.put("pro_message", listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid().getDescription());
+                                        } else {
+                                            System.out.println("e");
+                                            recive.put("pro_name", "");
+                                            recive.put("pro_des", "");
+                                            recive.put("pro_price", "");
+                                            recive.put("pro_img", "");
+                                            recive.put("pro_message", "");
+                                        }
+                                        if (!listChatsModelArrayList.get(i).getSendAllModelData().getMedia().getPath().isEmpty()) {
+                                            recive.put("image", listChatsModelArrayList.get(i).getSendAllModelData().getMedia().getPath());
+                                        } else {
+                                            recive.put("image", "");
+                                        }
                                         recive.put("isRecive", true);
                                         recive.put("isSent", false);
+//                                        recive.put("message", to_id.get(i));
+//                                        recive.put("image", listChatsModelArrayList.get(i).getSendAllModelData().getMedia().getPath());
+//                                        recive.put("recivetime", recivetime.get(i));
+//                                        recive.put("name", userName);
+//                                        recive.put("isRecive", true);
+//                                        recive.put("isSent", false);
+//                                        if (listChatsModelArrayList.get(i).getSendAllModelData().getProduct().getProductid() != null) {
+//                                            send.put("product", proJson);
+//                                        }
                                         messageAdapter.addItem(recive);
-                                        messageAdapter.notifyItemInserted(i);
-                                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
+                                        chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                                     }
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -562,12 +624,10 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void getPersonalInfo() {
-        FileUtils.DisplayLoading(ChatingActivity.this);
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(ChatingActivity.this);
                     Log.e("Chat_PersonalInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
                     loginUserId = businessInfoRegisterModel.getData().getId();
@@ -576,7 +636,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(ChatingActivity.this);
                     Log.e("Chat_Personal_Error=>", error.toString());
                 }
             }) {
@@ -599,13 +658,17 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void openCamera() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "New Picture");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
-        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+//        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
+//        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, GALLERY_REQUEST);
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -624,47 +687,37 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_REQUEST) {
-            if (data != null) {
-                uri = data.getData();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
+        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+            Uri selectImage = data.getData();
 
-                File file = new File(uri.getPath());
-                String path = file.getPath();
+            String path = RealPathUtil.getRealPath(ChatingActivity.this, selectImage);
+            File file = new File(path);
 
-                try {
-                    BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
-                    options.inSampleSize = calculateInSampleSize(options, 100, 100);
-                    options.inJustDecodeBounds = false;
-                    Bitmap image = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri), null, options);
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("to", toUserIds);
+                jsonObject.put("image", path);
+                jsonObject.put("message", "");
+                jsonObject.put("pro_name", "");
+                jsonObject.put("pro_des", "");
+                jsonObject.put("pro_price", "");
+                jsonObject.put("pro_img", "");
+                jsonObject.put("pro_message", "");
+                jsonObject.put("isSent", true);
+                jsonObject.put("isRecive", false);
 
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("to", toUserIds);
-                        jsonObject.put("image", path);
-                        jsonObject.put("isSent", true);
-                        jsonObject.put("isRecive", false);
+                if (path == null) {
+                    Toast.makeText(ChatingActivity.this, "Enter Images", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadImage(file);
 
-                        if (path == null) {
-                            Toast.makeText(ChatingActivity.this, "Enter Images", Toast.LENGTH_SHORT);
-                        } else {
-                            uploadImage(file);
-                            messageAdapter.addItem(jsonObject);
-                            messageAdapter.notifyDataSetChanged();
-                        }
-                        chat_recycler.smoothScrollToPosition(chat_recycler.getAdapter().getItemCount());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    messageAdapter.addItem(jsonObject);
+
+                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                 }
-            } else {
-                Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } else if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -694,28 +747,10 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         getPersonalInfo();
-
     }
 
     @Override

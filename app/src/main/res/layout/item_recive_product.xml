@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/margin_20"
+    android:layout_marginTop="@dimen/margin_5"
+    android:layout_marginBottom="@dimen/margin_5">
+
+    <RelativeLayout
+        android:id="@+id/recvice_name"
+        android:layout_width="@dimen/margin_250"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:visibility="visible">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/recvice_profile_pic"
+            android:layout_width="@dimen/sp_20"
+            android:layout_height="@dimen/sp_20"
+            android:layout_centerVertical="true"
+            android:src="@drawable/girl_image" />
+
+        <TextView
+            android:id="@+id/recviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toRightOf="@id/recvice_profile_pic"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/name"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/text_12"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="@dimen/sp_250"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recvice_name"
+        android:layout_marginTop="@dimen/sp_5"
+        android:background="@drawable/chat_txt_right_bg"
+        android:padding="@dimen/margin_10">
+
+        <RelativeLayout
+            android:id="@+id/rl_pro"
+            android:layout_width="@dimen/sp_250"
+            android:layout_height="wrap_content"
+            android:background="@drawable/notification_bg">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_image"
+                android:layout_width="@dimen/sp_60"
+                android:layout_height="@dimen/sp_60"
+                app:cardCornerRadius="@dimen/sp_5">
+
+                <ImageView
+                    android:id="@+id/pro_recvice_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_user_img" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_toRightOf="@id/card_image"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_recvice_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:singleLine="true"
+                    android:text="@string/cup_cake"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/txt_recvice_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:singleLine="true"
+                    android:text="@string/noti_des"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                        android:id="@+id/txt_recvice_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:singleLine="true"
+                    android:text="@string/some_id"
+                    android:textColor="@color/app_color"
+                    android:textSize="@dimen/text_12" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/recvice_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_pro"
+            android:layout_marginTop="@dimen/margin_10"
+            android:fontFamily="@font/roboto_regular"
+            android:singleLine="true"
+            android:text="@string/txt_pro"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_14" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl"
+        android:layout_marginTop="@dimen/margin_5">
+
+        <TextView
+            android:id="@+id/recvice_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/sp_10" />
+
+        <ImageView
+            android:id="@+id/recvice_seen"
+            android:layout_width="@dimen/sp_16"
+            android:layout_height="@dimen/sp_16"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toRightOf="@id/recvice_time"
+            android:src="@drawable/ic_unseen" />
+    </RelativeLayout>
+
+</RelativeLayout>
