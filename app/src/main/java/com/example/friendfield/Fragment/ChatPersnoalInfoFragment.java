@@ -1,6 +1,7 @@
 package com.example.friendfield.Fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -29,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.friendfield.Adapter.TagAdapter;
+import com.example.friendfield.MainActivity;
 import com.example.friendfield.Model.ChatUserProfile.ChatUserProfileTokenModel;
 import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.example.friendfield.MyApplication;
@@ -250,6 +252,8 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("unfriends_block:--", response.toString());
+                    startActivity(new Intent(ChatPersnoalInfoFragment.this.getContext(), MainActivity.class));
+                    getActivity().finish();
                     Toast.makeText(getContext(), "Block Successfully!!!", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {

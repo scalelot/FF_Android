@@ -17,7 +17,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-import com.bokecc.camerafilter.LocalVideoFilter;
+//import com.bokecc.camerafilter.LocalVideoFilter;
 import com.example.friendfield.Utils.Constans;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
@@ -81,7 +81,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        LocalVideoFilter.init(this);
+//        LocalVideoFilter.init(this);
 
         LeastRecentlyUsedCacheEvictor leastRecentlyUsedCacheEvictor = new LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024);
         DatabaseProvider databaseProvider = (DatabaseProvider) (new ExoDatabaseProvider((Context) this));

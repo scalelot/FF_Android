@@ -101,6 +101,8 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             public void onClick(View view) {
                 freindsIds = receiveFriendsRequestModels.get(position).getRequestId();
                 acceptDialog(freindsIds, fName, num, email, dob, gen);
+                removeAt(holder.getAdapterPosition());
+
             }
         });
 
@@ -109,8 +111,16 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             public void onClick(View view) {
                 freindsIds = receiveFriendsRequestModels.get(position).getRequestId();
                 rejectDialog(freindsIds);
+                removeAt(holder.getAdapterPosition());
             }
         });
+    }
+
+    private void removeAt(int adapterPosition) {
+        receiveFriendsRequestModels.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+        notifyItemRangeChanged(adapterPosition, receiveFriendsRequestModels.size());
+        notifyDataSetChanged();
     }
 
     public String getFormattedDate(long smsTimeInMilis) {

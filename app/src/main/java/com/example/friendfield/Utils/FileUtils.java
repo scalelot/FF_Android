@@ -20,18 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.Bucket;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -47,13 +35,10 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.bokecc.shortvideo.G;
-import com.example.friendfield.MainActivity;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -157,145 +142,7 @@ public class FileUtils {
                 });
     }
 
-    public static void uploadImage(Context context, String img_key, String filename) {
 
-//        AmazonS3 s3Client = new AmazonS3Client(new BasicSessionCredentials(awsAccessKey, awsSecretKey, sessionToken));
-//        s3Client.setRegion(Region.getRegion(Regions.US_WEST_2));
-
-        AWSCredentials credentials = new BasicAWSCredentials("ACCESS_KEY", "SECRET_KEY");
-        AmazonS3 s3 = new AmazonS3Client(credentials);
-
-        java.security.Security.setProperty("networkaddress.cache.ttl", "60");
-        s3.setRegion(Region.getRegion(Regions.AP_SOUTHEAST_1));
-        s3.setEndpoint("https://s3-ap-southeast-1.amazonaws.com/");
-
-        List<Bucket> buckets = s3.listBuckets();
-        for (Bucket bucket : buckets) {
-            Log.e("Bucket ", "Name " + bucket.getName() + " Owner " + bucket.getOwner() + " Date " + bucket.getCreationDate());
-        }
-
-        Log.e("Size ", "" + s3.listBuckets().size());
-
-        TransferUtility transferUtility = new TransferUtility(s3, context);
-
-        File UPLOADING_IMAGE = new File(Environment.getExternalStorageDirectory().getPath() + "/Screenshot.png");
-//        File UPLOADING_IMAGE = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + filename + ".png");
-
-        TransferObserver observer = transferUtility.upload("MY_BUCKET", img_key, UPLOADING_IMAGE);
-        observer.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                // do something
-//                progress.hide();
-//                path.setText("ID "+id+"\nState "+state.name()+"\nImage ID "+OBJECT_KEY);
-                Log.e("LLL_state_change-->", state.toString());
-
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                int percentage = (int) (bytesCurrent / bytesTotal * 100);
-//                progress.setProgress(percentage);
-                Log.e("LLL_p_change-->", String.valueOf(percentage));
-
-                //Display percentage transfered to user
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                // do something
-                Log.e("LLL_p_Error-->", ex.getMessage());
-
-            }
-
-        });
-
-        /****************/
-
-//        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-//                context,
-//                "AWSKeys.COGNITO_POOL_ID",
-//                Regions.US_EAST_1);
-//        AmazonS3Client s3Client = new AmazonS3Client(credentialsProvider);
-//        TransferUtility transferUtility = new TransferUtility(s3Client, context);
-////        TransferObserver transferObserver = transferUtility.upload(imgId, new File(imagepath));
-//        String uniqueID = UUID.randomUUID().toString();
-//
-//        TransferObserver transferObserver = transferUtility.upload("http://192.168.29.105:8080/", img_key, new File(filename));
-//        transferObserver.setTransferListener(new TransferListener() {
-//
-//            @Override
-//
-//            public void onStateChanged(int id, TransferState state) {
-//
-////Implement the code for handle the file status changed.
-//                Log.e("LLL_state_change-->", state.toString());
-//
-//            }
-//
-//            @Override
-//
-//            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-//
-//                //Implement the code to handle the file uploaded progress.
-//                Log.e("LLL_p_change-->", String.valueOf(bytesCurrent));
-//
-//            }
-//
-//            @Override
-//
-//            public void onError(int id, Exception exception) {
-//                exception.printStackTrace();
-//                Log.e("LLL_p_Error-->", exception.getMessage());
-////Implement the code to handle the file upload error.
-//
-//            }
-//
-//        });
-
-    }
-
-    public static void retrieveImageFromAWS(Context context) {
-        File sdcard = Environment.getExternalStorageDirectory();
-        File MY_FILE = new File(sdcard, "social.png");
-
-        String YOUR_IDENTITY_POOL_ID = "POOL_ID";
-
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(context,
-                YOUR_IDENTITY_POOL_ID
-                , Regions.US_EAST_1);
-        AmazonS3Client s3Client = new AmazonS3Client(credentialsProvider);
-        TransferUtility transferUtility = new TransferUtility(s3Client,
-                context);
-        TransferObserver observer = transferUtility.download("BUCKET_NAME",
-                "FILENAME_TO_BE_DOWNLOADED", MY_FILE);
-
-        observer.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                if (state == TransferState.COMPLETED) {
-                    Toast.makeText(context, "Retrieve completed", Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                int percentage = (int) (bytesCurrent / bytesTotal * 100);
-                Log.e("status", "percentage" + percentage);
-
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                Log.e("MY_BUCKET", "Error Downloading: " + ex.getMessage());
-
-
-            }
-        });
-
-
-    }
 
     public static File commonDirPath(String filename) {
 //    public static String commonDirPath(String filename) {

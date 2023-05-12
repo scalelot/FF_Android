@@ -36,6 +36,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
@@ -113,7 +115,7 @@ public class MapsFragment extends Fragment {
     TextView txt_location, latlng, map_username;
     TextInputEditText textInputEditText;
     ImageView iv_search;
-    RelativeLayout mMapViewRoot;
+    RelativeLayout mMapViewRoot,rl_map;
     GoogleMap mGoogleMap;
     Marker marker;
     View view_marker, transparentView, viewdialog, view;
@@ -133,7 +135,7 @@ public class MapsFragment extends Fragment {
     List<String> longList;
     List<String> latList;
     FindFriendsModel findFriendsModel;
-    Bitmap result;
+    LatLng latLng;
     int i, areakm = 0;
     Address address;
 
@@ -148,6 +150,7 @@ public class MapsFragment extends Fragment {
         searchView = view.findViewById(R.id.searchView);
         latlng = view.findViewById(R.id.latlng);
         iv_search = view.findViewById(R.id.iv_search);
+        rl_map = view.findViewById(R.id.rl_map);
 
         queue = Volley.newRequestQueue(getContext());
 
@@ -162,18 +165,21 @@ public class MapsFragment extends Fragment {
                 String location = searchView.getQuery().toString();
                 try {
                     List<Address> addressList = null;
-                    if (location != null || location.equals("")) {
+
+                    if (location != null || location.equals("") || !location.isEmpty()) {
+
                         Geocoder geocoder = new Geocoder(MapsFragment.this.getContext());
 
                         addressList = geocoder.getFromLocationName(location, 1);
-
-
-                        address = addressList.get(0);
-
-                        latitude = address.getLatitude();
-                        longitude = address.getLongitude();
-                        findLocationorName(latitude, longitude);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        if (addressList.size() != 0) {
+                            address = addressList.get(0);
+                            latitude = address.getLatitude();
+                            longitude = address.getLongitude();
+                            findLocationorName(latitude, longitude);
+                            latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        }else {
+                            Toast.makeText(MapsFragment.this.getContext(),"Search Valid Place",Toast.LENGTH_SHORT).show();
+                        }
 
                         if (latLng != null) {
                             showRipples(latLng);
@@ -185,7 +191,6 @@ public class MapsFragment extends Fragment {
                             }, DURATION - 500);
 
                             fetchgetApi();
-
                         } else {
                             Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
 

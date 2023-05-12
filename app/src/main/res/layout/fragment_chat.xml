@@ -28,17 +28,14 @@
                 android:layout_toLeftOf="@id/iv_filter"
                 android:background="@drawable/back_tabs"
                 android:backgroundTint="@color/bg_grey_color"
+                android:paddingRight="@dimen/sp_8"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_8"
-                android:paddingTop="@dimen/margin_4"
-                android:paddingRight="@dimen/margin_8"
-                android:paddingBottom="@dimen/margin_4">
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/edt_search_text"
-                    android:layout_width="@dimen/sp_0"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint="@string/search"

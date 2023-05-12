@@ -1,6 +1,5 @@
 package com.example.friendfield.Model.Profile.Register;
 
-import com.example.friendfield.Model.UserProfile.Hobbies;
 import com.example.friendfield.Model.UserProfile.SocialMediaLink;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

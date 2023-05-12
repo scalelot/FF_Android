@@ -1,6 +1,5 @@
 package com.example.friendfield.Model.UserProfile;
 
-import static com.googlecode.mp4parser.h264.Debug.trace;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -22,7 +21,7 @@ public class SocialMediaLink {
             obj.put("platform", splatform);
             obj.put("link", slink);
         } catch (JSONException e) {
-            trace("DefaultListItem.toString JSONException: "+e.getMessage());
+            e.getMessage();
         }
         return obj;
     }

@@ -19,9 +19,9 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'armeabi', 'x86'
-        }
+//        ndk {
+//            abiFilters 'armeabi-v7a', 'arm64-v8a', 'armeabi', 'x86'
+//        }
     }
 
     buildTypes {
@@ -35,11 +35,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
+//    sourceSets {
+//        main {
+//            jniLibs.srcDirs = ['libs']
+//        }
+//    }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -54,7 +54,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar', "*.aar"], dir: 'libs')
+//    implementation fileTree(include: ['*.jar', "*.aar"], dir: 'libs')
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
@@ -88,19 +88,19 @@ dependencies {
     implementation 'com.github.angads25:toggle:1.1.0'
 
     implementation 'com.github.3llomi:CircularStatusView:V1.0.2'
-    implementation "androidx.exifinterface:exifinterface:1.0.0"
-    implementation 'life.knowledge4:k4l-video-trimmer:1.0'
+//    implementation "androidx.exifinterface:exifinterface:1.0.0"
+//    implementation 'life.knowledge4:k4l-video-trimmer:1.0'
 
-    implementation 'com.github.Piyushkapadia31:FFmpeg:1.0.0'
+//    implementation 'com.github.Piyushkapadia31:FFmpeg:1.0.0'
     implementation 'com.github.shts:StoriesProgressView:3.0.0'
 
     implementation 'com.otaliastudios:cameraview:2.6.2'
 
     implementation 'org.apache.poi:poi-ooxml:3.9'
 
-    implementation 'com.amazonaws:aws-android-sdk-s3:2.17.1'
-    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.16.+") { transitive = true }
-    implementation 'net.gotev:uploadservice:2.1'
+//    implementation 'com.amazonaws:aws-android-sdk-s3:2.17.1'
+//    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.16.+") { transitive = true }
+//    implementation 'net.gotev:uploadservice:2.1'
 
     implementation('io.socket:socket.io-client:2.0.1') {
         exclude group: 'org.json', module: 'json'
@@ -111,10 +111,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.0'
 
-    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
+//    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+//    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
 
-    implementation 'com.github.tizisdeepan:videoeditor:1.0.8'
+//    implementation 'com.github.tizisdeepan:videoeditor:1.0.8'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
     implementation 'com.google.android.libraries.places:places:2.2.0'

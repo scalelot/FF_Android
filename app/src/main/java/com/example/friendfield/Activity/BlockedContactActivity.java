@@ -40,12 +40,12 @@ import java.util.Map;
 public class BlockedContactActivity extends BaseActivity {
 
     RecyclerView recyclerView;
-    BlockedContactAdapter blockeContactAdapter;
+    static BlockedContactAdapter blockeContactAdapter;
     ImageView ic_back;
-    NestedScrollView nestedScroll;
-    RelativeLayout emptyLay;
+    static NestedScrollView nestedScroll;
+    static RelativeLayout emptyLay;
     ProgressBar idPBLoading;
-    ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
+    static ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
     int page = 1, limit = 10;
     String searchData = "";
 
@@ -79,6 +79,21 @@ public class BlockedContactActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public static void removeAt(int adapterPosition) {
+        blockedFriendRegisterModels.remove(adapterPosition);
+        blockeContactAdapter.notifyItemRemoved(adapterPosition);
+        blockeContactAdapter.notifyItemRangeChanged(adapterPosition, blockedFriendRegisterModels.size());
+        blockeContactAdapter.notifyDataSetChanged();
+
+        if (!blockedFriendRegisterModels.isEmpty()) {
+            emptyLay.setVisibility(View.GONE);
+            nestedScroll.setVisibility(View.VISIBLE);
+        } else {
+            emptyLay.setVisibility(View.VISIBLE);
+            nestedScroll.setVisibility(View.GONE);
+        }
     }
 
     private void getBlockedFriends(int page, int limit, String search) {

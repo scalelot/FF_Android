@@ -62,7 +62,6 @@ import com.example.friendfield.BaseActivity;
 import com.example.friendfield.MainActivity;
 import com.example.friendfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.example.friendfield.Model.Profile.Register.ProfileRegisterModel;
-import com.example.friendfield.Model.UserProfile.Hobbies;
 import com.example.friendfield.Model.UserProfile.SocialMediaLink;
 import com.example.friendfield.MyApplication;
 import com.example.friendfield.R;
