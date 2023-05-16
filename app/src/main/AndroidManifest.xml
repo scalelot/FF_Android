@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.festum.festumfield">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
@@ -49,7 +51,7 @@
     </queries>
 
     <application
-        android:name=".MyApplication"
+        android:name="com.festum.festumfield.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_app_logo"
@@ -61,78 +63,78 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activity.ChatProductSelectActivity"
+            android:name="com.festum.festumfield.Activity.ChatProductSelectActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.DisplayProductImageActivity"
+            android:name="com.festum.festumfield.Activity.DisplayProductImageActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activity.MessageInfoActivity"
+            android:name="com.festum.festumfield.Activity.MessageInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ReelsPerviewActivity"
+            android:name="com.festum.festumfield.Activity.ReelsPerviewActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.CreateReelsActivity"
+            android:name="com.festum.festumfield.Activity.CreateReelsActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ReelsActivity"
+            android:name="com.festum.festumfield.Activity.ReelsActivity"
             android:exported="false"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name=".Activity.EditGroupDetalisActivity"
+            android:name="com.festum.festumfield.Activity.EditGroupDetalisActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.GroupProfileDetalisActivity"
+            android:name="com.festum.festumfield.Activity.GroupProfileDetalisActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.MarketingNotificationActivity"
+            android:name="com.festum.festumfield.Activity.MarketingNotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PromotionBillDetailActivity"
+            android:name="com.festum.festumfield.Activity.PromotionBillDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PaymentSuccessfulActivity"
+            android:name="com.festum.festumfield.Activity.PaymentSuccessfulActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PaymentActivity"
+            android:name="com.festum.festumfield.Activity.PaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ApplyCouponActivity"
+            android:name="com.festum.festumfield.Activity.ApplyCouponActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PromotionBillActivity"
+            android:name="com.festum.festumfield.Activity.PromotionBillActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PublishDateTimeActivity"
+            android:name="com.festum.festumfield.Activity.PublishDateTimeActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ChooseUserPromotionActivity"
+            android:name="com.festum.festumfield.Activity.ChooseUserPromotionActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PromotionPlanActivity"
+            android:name="com.festum.festumfield.Activity.PromotionPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.CreateNotificationActivity"
+            android:name="com.festum.festumfield.Activity.CreateNotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.PromotionActivity"
+            android:name="com.festum.festumfield.Activity.PromotionActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ConversationActivity"
+            android:name="com.festum.festumfield.Activity.ConversationActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.DisplayAllProductActivity"
+            android:name="com.festum.festumfield.Activity.DisplayAllProductActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.CreateGroupTitleActivity"
+            android:name="com.festum.festumfield.Activity.CreateGroupTitleActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.CreateNewGroupActivity"
+            android:name="com.festum.festumfield.Activity.CreateNewGroupActivity"
             android:exported="false" />
 
         <meta-data
@@ -140,115 +142,115 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <activity
-            android:name=".Activity.LikeAndCommentActivity"
+            android:name="com.festum.festumfield.Activity.LikeAndCommentActivity"
             android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service
-            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
-            android:enabled="true" />
+<!--        <service-->
+<!--            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"-->
+<!--            android:enabled="true" />-->
 
         <activity
-            android:name=".Activity.VideoCallReciveActivity"
+            android:name="com.festum.festumfield.Activity.VideoCallReciveActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.VideoCallActivity"
+            android:name="com.festum.festumfield.Activity.VideoCallActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.UpcomingCallActivity"
+            android:name="com.festum.festumfield.Activity.UpcomingCallActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ChattingAudioCallActivity"
+            android:name="com.festum.festumfield.Activity.ChattingAudioCallActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.PromotionDetailsActivity"
+            android:name="com.festum.festumfield.Activity.PromotionDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.SelectUserActivity"
+            android:name="com.festum.festumfield.Activity.SelectUserActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.SelectUserPackageActivity"
+            android:name="com.festum.festumfield.Activity.SelectUserPackageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.RequestActivity"
+            android:name="com.festum.festumfield.Activity.RequestActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ChatUserProfileActivity"
+            android:name="com.festum.festumfield.Activity.ChatUserProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ChatingActivity"
+            android:name="com.festum.festumfield.Activity.ChatingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.HelpActivity"
+            android:name="com.festum.festumfield.Activity.HelpActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.Contact_Us_Activity"
+            android:name="com.festum.festumfield.Activity.Contact_Us_Activity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ChangeNumberActivity"
+            android:name="com.festum.festumfield.Activity.ChangeNumberActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.BlockedContactActivity"
+            android:name="com.festum.festumfield.Activity.BlockedContactActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.SettingActivity"
+            android:name="com.festum.festumfield.Activity.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ProductDetailsActivity"
+            android:name="com.festum.festumfield.Activity.ProductDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.UserProfileActivity"
+            android:name="com.festum.festumfield.Activity.UserProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.MapsLocationActivity"
+            android:name="com.festum.festumfield.Activity.MapsLocationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.AddProductActivity"
+            android:name="com.festum.festumfield.Activity.AddProductActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".Activity.ProductActivity"
+            android:name="com.festum.festumfield.Activity.ProductActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name=".Activity.ProfileActivity"
+            android:name="com.festum.festumfield.Activity.ProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.BusinessProfileActivity"
+            android:name="com.festum.festumfield.Activity.BusinessProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.LoginVerifyActivity"
+            android:name="com.festum.festumfield.Activity.LoginVerifyActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name="com.festum.festumfield.Activity.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.SplashActivity"
+            android:name="com.festum.festumfield.Activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -258,14 +260,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.festum.festumfield.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.friendfield.provider"
+            android:authorities="com.festum.festumfield.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -274,7 +276,7 @@
         </provider>
 
         <service
-            android:name=".service.MyFirebaseMessagingService"
+            android:name="com.festum.festumfield.Service.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

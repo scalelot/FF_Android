@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context=".Activity.DisplayAllProductActivity">
+    tools:context="com.festum.festumfield.Activity.DisplayAllProductActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context=".Activity.LoginVerifyActivity">
+    tools:context="com.festum.festumfield.Activity.LoginVerifyActivity">
 
     <ImageView
         android:id="@+id/iv_back"

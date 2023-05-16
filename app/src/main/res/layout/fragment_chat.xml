@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context=".Fragment.ChatFragment">
+    tools:context="com.festum.festumfield.Fragment.ChatFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

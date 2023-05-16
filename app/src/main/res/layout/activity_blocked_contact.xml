@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context=".Activity.BlockedContactActivity">
+    tools:context="com.festum.festumfield.Activity.BlockedContactActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"

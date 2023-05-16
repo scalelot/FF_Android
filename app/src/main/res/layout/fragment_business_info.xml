@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context=".Fragment.BusinessInfoFragment">
+    tools:context="com.festum.festumfield.Fragment.BusinessInfoFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

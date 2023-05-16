@@ -11,7 +11,7 @@ android {
 
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.example.friendfield"
+        applicationId "com.festum.festumfield"
         minSdk 21
         targetSdk 33
         versionCode 1

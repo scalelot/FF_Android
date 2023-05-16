@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context=".Activity.Contact_Us_Activity">
+    tools:context="com.festum.festumfield.Activity.Contact_Us_Activity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"

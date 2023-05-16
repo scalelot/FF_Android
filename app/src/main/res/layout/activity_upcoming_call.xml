@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context=".Activity.UpcomingCallActivity">
+    tools:context="com.festum.festumfield.Activity.UpcomingCallActivity">
 
     <RelativeLayout
         android:id="@+id/toolbar"

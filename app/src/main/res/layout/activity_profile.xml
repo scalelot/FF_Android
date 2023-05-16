@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context=".Activity.ProfileActivity">
+    tools:context="com.festum.festumfield.Activity.ProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
@@ -230,7 +230,7 @@
                 android:textColorHint="@color/edt_hint"
                 android:textSize="@dimen/sp_14" />
 
-            <com.example.friendfield.TagView.ContactsCompletionView
+            <com.festum.festumfield.TagView.ContactsCompletionView
                 android:id="@+id/tagView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/app_bg"
-    tools:context=".Activity.ChatProductSelectActivity">
+    tools:context="com.festum.festumfield.Activity.ChatProductSelectActivity">
 
     <LinearLayout
         android:id="@+id/lin_top"

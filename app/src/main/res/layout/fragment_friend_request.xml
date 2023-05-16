@@ -6,7 +6,7 @@
     android:background="@color/app_bg"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Fragment.FriendRequestFragment">
+    tools:context="com.festum.festumfield.Fragment.FriendRequestFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
