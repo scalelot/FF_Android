@@ -29,7 +29,7 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.ContactUs.ContactDataModel;
 import com.festum.festumfield.Model.ContactUs.ContactModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;

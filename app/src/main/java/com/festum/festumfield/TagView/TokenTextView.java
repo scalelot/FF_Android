@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class TokenTextView extends AppCompatTextView {
 

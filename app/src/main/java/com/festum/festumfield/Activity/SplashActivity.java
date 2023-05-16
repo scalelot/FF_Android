@@ -7,7 +7,7 @@ import android.os.Handler;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class SplashActivity extends BaseActivity {
 

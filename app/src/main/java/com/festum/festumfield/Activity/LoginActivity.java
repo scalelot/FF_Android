@@ -17,7 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.SendOtpModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.google.gson.Gson;

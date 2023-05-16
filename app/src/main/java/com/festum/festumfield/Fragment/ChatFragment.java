@@ -39,7 +39,7 @@ import com.festum.festumfield.Activity.MarketingNotificationActivity;
 import com.festum.festumfield.Adapter.ChatUserAdapter;
 import com.festum.festumfield.Model.AllMyFriends.AllFriendsRegisterModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Activity.ReelsActivity;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.material.bottomsheet.BottomSheetDialog;

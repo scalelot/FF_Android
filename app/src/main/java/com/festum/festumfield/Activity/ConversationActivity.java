@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class ConversationActivity extends BaseActivity {
 

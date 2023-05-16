@@ -11,7 +11,7 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Fragment.FriendRequestFragment;
 import com.festum.festumfield.Fragment.SendRequestFragment;
 import com.festum.festumfield.MainActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class RequestActivity extends BaseActivity {
 

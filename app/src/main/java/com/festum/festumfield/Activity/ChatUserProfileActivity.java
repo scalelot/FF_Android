@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.festum.festumfield.Adapter.ChatViewPagerAdapter;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.material.tabs.TabLayout;
 

@@ -30,7 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.Adapter.TagAdapter;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.flexbox.FlexboxLayoutManager;

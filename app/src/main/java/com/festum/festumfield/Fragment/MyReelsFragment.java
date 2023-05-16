@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.festum.festumfield.Adapter.ReelsAdapter;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 

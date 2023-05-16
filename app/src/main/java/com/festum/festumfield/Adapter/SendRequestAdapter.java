@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.Fragment.SendRequestFragment;
 import com.festum.festumfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 
 import java.text.SimpleDateFormat;

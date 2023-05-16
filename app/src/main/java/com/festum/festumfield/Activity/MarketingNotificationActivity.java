@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.festum.festumfield.Adapter.NotificationAdapter;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 

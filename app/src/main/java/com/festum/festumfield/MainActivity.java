@@ -50,12 +50,12 @@ import com.festum.festumfield.Fragment.ChatFragment;
 import com.festum.festumfield.Fragment.ContactFragment;
 import com.festum.festumfield.Fragment.MapsFragment;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
+//import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -293,15 +293,15 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (task.isComplete()) {
-                    token[0] = task.getResult();
-                    Log.e("AppConstants", "onComplete: new Token got: " + token[0]);
-                }
-            }
-        });
+//        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+//            @Override
+//            public void onComplete(@NonNull Task<String> task) {
+//                if (task.isComplete()) {
+//                    token[0] = task.getResult();
+//                    Log.e("AppConstants", "onComplete: new Token got: " + token[0]);
+//                }
+//            }
+//        });
 
         if (getIntent().getExtras() != null) {
             checkFCMBundle(intent);

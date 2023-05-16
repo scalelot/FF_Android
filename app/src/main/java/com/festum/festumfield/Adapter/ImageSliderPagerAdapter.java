@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.Activity.DisplayProductImageActivity;
 import com.festum.festumfield.Model.ImageSliderModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 
 import java.io.Serializable;

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class PaymentSuccessfulActivity extends BaseActivity {
 

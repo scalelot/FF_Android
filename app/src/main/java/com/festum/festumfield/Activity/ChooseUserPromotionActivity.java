@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;

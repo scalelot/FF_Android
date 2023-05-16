@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.text.DecimalFormat;
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 
 public class PersonAdapter extends FilteredArrayAdapter<Person> {

@@ -53,7 +53,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.festum.festumfield.Model.FindFriends.FindFriendsModel;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

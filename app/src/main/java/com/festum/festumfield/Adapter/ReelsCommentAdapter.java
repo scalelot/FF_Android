@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

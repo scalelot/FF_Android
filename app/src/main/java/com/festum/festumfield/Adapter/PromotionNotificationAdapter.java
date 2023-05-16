@@ -19,7 +19,7 @@ import com.festum.festumfield.Activity.CreateNotificationActivity;
 import com.festum.festumfield.Activity.PromotionDetailsActivity;
 import com.festum.festumfield.Activity.PromotionPlanActivity;
 import com.festum.festumfield.Model.Notification.NotificationDetailsModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 
 import java.util.ArrayList;

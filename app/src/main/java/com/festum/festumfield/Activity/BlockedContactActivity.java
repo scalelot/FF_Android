@@ -25,7 +25,7 @@ import com.festum.festumfield.Adapter.BlockedContactAdapter;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.BlockedFriends.BlockedFriendRegisterModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.google.gson.Gson;
 

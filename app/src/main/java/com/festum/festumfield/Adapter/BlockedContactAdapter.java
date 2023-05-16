@@ -23,7 +23,7 @@ import com.festum.festumfield.Activity.BlockedContactActivity;
 import com.festum.festumfield.Model.BlockedFriends.BlockedFriendRegisterModel;
 import com.festum.festumfield.Model.BlockedFriends.BlockedFriendsModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;

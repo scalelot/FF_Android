@@ -31,7 +31,7 @@ import android.widget.Toast;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.kyleduo.switchbutton.SwitchButton;
 

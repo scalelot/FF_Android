@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.festum.festumfield.Adapter.UserSelectAdapter;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.SelecetdUserModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

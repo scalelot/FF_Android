@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.festum.festumfield.Adapter.HelpAdapter;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.HelpModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 import java.util.List;

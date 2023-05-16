@@ -26,7 +26,7 @@ import com.festum.festumfield.Adapter.ChatProductListAdapter;
 import com.festum.festumfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.festum.festumfield.Model.Product.ProductDetailsModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.google.gson.Gson;

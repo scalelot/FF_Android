@@ -57,7 +57,7 @@ import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.Model.Profile.Register.ProfileRegisterModel;
 import com.festum.festumfield.Model.UserProfile.SocialMediaLink;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.TagView.ContactsCompletionView;
 import com.festum.festumfield.TagView.Person;
 import com.festum.festumfield.TagView.PersonAdapter;

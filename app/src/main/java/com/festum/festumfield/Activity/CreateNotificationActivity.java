@@ -37,7 +37,7 @@ import com.festum.festumfield.Model.Notification.CreateNotificationModel;
 import com.festum.festumfield.Model.Notification.NotificationModel;
 import com.festum.festumfield.Model.Product.ProductImagesModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;

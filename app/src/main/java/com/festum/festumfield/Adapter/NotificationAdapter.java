@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festum.festumfield.Activity.PromotionDetailsActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 

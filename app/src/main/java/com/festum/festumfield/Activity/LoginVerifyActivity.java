@@ -22,7 +22,7 @@ import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.SendOtpModel;
 import com.festum.festumfield.Model.Verifyotp.VerifyOtpModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.google.gson.Gson;

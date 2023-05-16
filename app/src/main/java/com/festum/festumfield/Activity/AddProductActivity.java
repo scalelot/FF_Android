@@ -35,7 +35,7 @@ import com.festum.festumfield.Model.Product.CreateProductModel;
 import com.festum.festumfield.Model.Product.ProductImagesModel;
 import com.festum.festumfield.Model.Product.ProductModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.festum.festumfield.Adapter.LikeAndCommentAdapter;
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 

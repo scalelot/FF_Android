@@ -31,7 +31,7 @@ import com.bumptech.glide.Glide;
 import com.festum.festumfield.Fragment.FriendRequestFragment;
 import com.festum.festumfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.kyleduo.switchbutton.SwitchButton;
 

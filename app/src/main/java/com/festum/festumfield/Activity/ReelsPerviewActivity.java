@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class ReelsPerviewActivity extends AppCompatActivity {
 

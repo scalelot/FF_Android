@@ -13,7 +13,7 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Fragment.HistoryPromotionFragment;
 import com.festum.festumfield.Fragment.RunningPromotionFragment;
 import com.festum.festumfield.MainActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class PromotionActivity extends BaseActivity {
     TextView running, history, send_request, select;

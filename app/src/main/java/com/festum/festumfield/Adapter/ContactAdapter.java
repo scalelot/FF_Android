@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.Fragment.ContactFragment;
 import com.festum.festumfield.Model.AllMyFriends.AllFriendsRegisterModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 
 import java.util.ArrayList;

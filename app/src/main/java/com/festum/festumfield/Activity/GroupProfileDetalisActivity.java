@@ -34,7 +34,7 @@ import android.widget.Toast;
 import com.festum.festumfield.Adapter.GroupProfileAdapter;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.GroupUserModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.kyleduo.switchbutton.SwitchButton;
 

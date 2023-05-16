@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class ApplyCouponActivity extends BaseActivity {
 

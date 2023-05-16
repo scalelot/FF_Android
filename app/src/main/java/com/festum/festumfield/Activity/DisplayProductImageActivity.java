@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.festum.festumfield.Adapter.DisplayProductImageAdapter;
 import com.festum.festumfield.Model.ImageSliderModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -49,7 +49,7 @@ import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.festum.festumfield.Model.ListChat.ListChatsModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
@@ -367,7 +367,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                             sendMessage(toUserIds, edt_chating.getText().toString().trim());
                             messageAdapter.addItem(jsonObject);
 
-                            chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                            chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
 
                         }
                         resetMessageEdit();
@@ -395,7 +395,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                             rel_replay.setVisibility(View.GONE);
                             messageAdapter.addItem(jsonObject);
 
-                            chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                            chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -539,7 +539,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                             send.put("image", "");
                                         }
                                         messageAdapter.addItem(send);
-                                        chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                                        chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
 
                                     }
                                 } catch (Exception e) {
@@ -585,7 +585,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 //                                            send.put("product", proJson);
 //                                        }
                                         messageAdapter.addItem(recive);
-                                        chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                                        chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -707,7 +707,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                     messageAdapter.addItem(jsonObject);
 
-                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                    chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

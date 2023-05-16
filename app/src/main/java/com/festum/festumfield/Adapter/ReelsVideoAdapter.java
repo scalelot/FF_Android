@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festum.festumfield.Model.ReelsModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;

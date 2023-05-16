@@ -38,7 +38,7 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;

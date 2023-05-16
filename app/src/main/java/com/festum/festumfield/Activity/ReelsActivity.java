@@ -11,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.festum.festumfield.Adapter.ReelsVideoAdapter;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.ReelsModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 import java.util.List;

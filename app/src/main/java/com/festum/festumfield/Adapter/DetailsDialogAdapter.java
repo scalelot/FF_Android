@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.festum.festumfield.Activity.PromotionDetailsActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

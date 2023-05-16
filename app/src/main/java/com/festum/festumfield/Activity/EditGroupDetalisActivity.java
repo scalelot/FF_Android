@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.IOException;

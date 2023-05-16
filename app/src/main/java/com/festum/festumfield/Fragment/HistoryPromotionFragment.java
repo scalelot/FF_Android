@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.festum.festumfield.Activity.CreateNotificationActivity;
 import com.festum.festumfield.Adapter.PromotionHistoryAdapter;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 import java.util.ArrayList;
 

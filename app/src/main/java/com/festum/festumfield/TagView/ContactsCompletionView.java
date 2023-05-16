@@ -11,7 +11,7 @@ import android.view.inputmethod.InputConnection;
 
 import androidx.annotation.NonNull;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class ContactsCompletionView extends TokenCompleteTextView<Person> {
 

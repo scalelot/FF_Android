@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.festum.festumfield.Adapter.BuyPlanAdapter;
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class SelectUserPackageActivity extends BaseActivity {
 

@@ -36,7 +36,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.festum.festumfield.MyApplication;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -70,8 +70,7 @@ public class FileUtils {
 
     public static void DismissLoading(Context context) {
 
-        if (mDialog.isShowing())
-            mDialog.dismiss();
+        if (mDialog.isShowing()) mDialog.dismiss();
     }
 
     public static String BitMapToString(Bitmap bitmap) {
@@ -112,35 +111,28 @@ public class FileUtils {
         }
         return dir;
     }
+
     public static void personalProfileImageUpload(Context context, File file) {
-        AndroidNetworking.upload(Constans.set_profile_pic)
-                .addMultipartFile("file", file)
-                .addHeaders("authorization", MyApplication.getAuthToken(context))
-                .setTag("uploadTest")
-                .setPriority(Priority.HIGH)
-                .build()
-                .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                        // do anything with progress
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        Log.e("LLL_image_up--->", response.toString());
-                    }
+        AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(context)).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+            @Override
+            public void onProgress(long bytesUploaded, long totalBytes) {
+                // do anything with progress
+            }
+        }).getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // do anything with response
+                Log.e("LLL_image_up--->", response.toString());
+            }
 
-                    @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        Log.e("LLL_image_err--->", error.toString());
+            @Override
+            public void onError(ANError error) {
+                // handle error
+                Log.e("LLL_image_err--->", error.toString());
 
-                    }
-                });
+            }
+        });
     }
-
 
 
     public static File commonDirPath(String filename) {
@@ -224,8 +216,7 @@ public class FileUtils {
     @SuppressLint("Range")
     public static long getDuration(Context context, Uri uri) {
         long duration = 0L;
-        Cursor cursor = MediaStore.Video.query(context.getContentResolver(), uri,
-                new String[]{MediaStore.Video.VideoColumns.DURATION});
+        Cursor cursor = MediaStore.Video.query(context.getContentResolver(), uri, new String[]{MediaStore.Video.VideoColumns.DURATION});
         if (cursor != null) {
             cursor.moveToFirst();
             duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
@@ -264,18 +255,13 @@ public class FileUtils {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    Log.e("LLL_delete_err-->", "Error: " + error
-                            + "\nStatus Code " + error.networkResponse.statusCode
-                            + "\nCause " + error.getCause()
-                            + "\nnetworkResponse " + error.networkResponse.data.toString()
-                            + "\nmessage" + error.getMessage());
+                    Log.e("LLL_delete_err-->", "Error: " + error + "\nStatus Code " + error.networkResponse.statusCode + "\nCause " + error.getCause() + "\nnetworkResponse " + error.networkResponse.data.toString() + "\nmessage" + error.getMessage());
 
                     NetworkResponse response = error.networkResponse;
 
                     if (error instanceof ServerError && response != null) {
                         try {
-                            String res = new String(response.data,
-                                    HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                            String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                             // Now you can use any deserializer to make sense of data
                             JSONObject obj = new JSONObject(res);
                             Log.e("LLL_dell11-->", obj.toString());

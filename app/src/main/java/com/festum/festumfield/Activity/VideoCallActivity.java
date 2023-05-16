@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.View.VideoCallSurfaceView;
 
 import de.hdodenhof.circleimageview.CircleImageView;

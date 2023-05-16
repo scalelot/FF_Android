@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Model.ListChat.ListChatsModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 
 import org.json.JSONException;
@@ -87,17 +87,17 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private class SentImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ImageView right_send_image;
-        RelativeLayout relative;
+        RelativeLayout send_relative;
         View mView;
 
         public SentImageHolder(@NonNull View itemView) {
             super(itemView);
 
             right_send_image = itemView.findViewById(R.id.right_send_image);
-            relative = itemView.findViewById(R.id.relative);
+            send_relative = itemView.findViewById(R.id.send_relative);
             mView = itemView;
             itemView.setOnLongClickListener(this);
-            relative.setOnClickListener(this);
+            send_relative.setOnClickListener(this);
         }
 
         @Override
@@ -371,8 +371,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     if (ChatingActivity.isInActionMode) {
                         if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
-                            imageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                            imageHolder.mView.setBackgroundResource(R.color.green);
+                            imageHolder.send_relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
                         }
                     }
                 } else {
@@ -391,8 +391,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 //                    Glide.with(activity).load(Constans.Display_Image_URL + json.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
 
                     if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            sentProductHolder.mView.setBackgroundResource(R.color.selected_item);
+                        if (ChatingActivity.selectionList.contains(message)) {
+                            sentProductHolder.mView.setBackgroundResource(R.color.green);
                             sentProductHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
                         }
                     }

@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.View.CameraPreview;
 
 public class VideoCallReciveActivity extends BaseActivity {

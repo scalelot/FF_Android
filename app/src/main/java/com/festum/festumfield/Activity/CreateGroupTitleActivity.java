@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.festum.festumfield.Adapter.UserSelectionfinalAdapter;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.CreateGroupModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.EqualSpacingItemDecoration;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 

@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.festum.festumfield.Adapter.DetailsDialogAdapter;
 import com.festum.festumfield.BaseActivity;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class PromotionDetailsActivity extends BaseActivity {
 

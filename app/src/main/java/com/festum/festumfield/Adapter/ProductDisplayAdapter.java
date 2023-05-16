@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.festum.festumfield.Activity.AddProductActivity;
 import com.festum.festumfield.Activity.ProductDetailsActivity;
 import com.festum.festumfield.Model.Product.ProductDetailsModel;
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 

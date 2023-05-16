@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.friendfield.R;
+import com.festum.festumfield.R;
 
 public class MessageInfoActivity extends AppCompatActivity {
 
