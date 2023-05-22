@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,16 +41,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int TYPE_MESSAGE_RECEIVED = 3;
     private static final int TYPE_IMAGE_RECEIVED = 4;
     private static final int TYPE_PRODUCT_RECEIVED = 5;
-
-    private LayoutInflater inflater;
-    private List<JSONObject> chatMessages = new ArrayList<>();
+    List<JSONObject> chatMessages;
     Activity activity;
 
-
-    public MessageAdapter(ChatingActivity chatingActivity,LayoutInflater inflater) {
+    public MessageAdapter(ChatingActivity chatingActivity, List<JSONObject> objectList) {
         this.activity = chatingActivity;
-        this.inflater = inflater;
+        this.chatMessages = objectList;
     }
+
 
     private class SentMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
@@ -377,18 +376,24 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     }
                 } else {
                     SentProductHolder sentProductHolder = (SentProductHolder) holder;
-                    sentProductHolder.txt_pro_name.setText(message.getString("pro_name"));
-                    sentProductHolder.txt_pro_des.setText(message.getString("pro_des"));
-                    sentProductHolder.txt_pro_price.setText("$"+message.getString("pro_price")+"."+"00");
-                    sentProductHolder.txt_product.setText(message.getString("pro_message"));
-                    Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
-//                    JSONObject json = new JSONObject(String.valueOf(message.getJSONObject("product")));
-//
-//                    sentProductHolder.txt_pro_name.setText(json.getString("pro_name"));
-//                    sentProductHolder.txt_pro_des.setText(json.getString("pro_des"));
-//                    sentProductHolder.txt_pro_price.setText("$"+json.getString("pro_price")+"."+"00");
-//                    sentProductHolder.txt_product.setText(json.getString("pro_message"));
-//                    Glide.with(activity).load(Constans.Display_Image_URL + json.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
+                    String ids = message.getString("pro_name");
+                    if (!ids.isEmpty()){
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        int marginTopDp = 20;
+                        int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
+                        int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
+                        layoutParams.setMargins(0,marginTopPx,marginRightPx,0);
+                        sentProductHolder.itemView.setLayoutParams(layoutParams);
+                        sentProductHolder.txt_pro_name.setText(message.getString("pro_name"));
+                        sentProductHolder.txt_pro_des.setText(message.getString("pro_des"));
+                        sentProductHolder.txt_pro_price.setText("$" + message.getString("pro_price") + "." + "00");
+                        sentProductHolder.txt_product.setText(message.getString("pro_message"));
+                        String str = message.getString("pro_message");
+                        System.out.println("Messages:=="+str);
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
+                    }else{
+                        sentProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+                    }
 
                     if (ChatingActivity.isInActionMode) {
                         if (ChatingActivity.selectionList.contains(message)) {
@@ -442,12 +447,21 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     }
                 } else {
                     ReceivedProductHolder receivedProductHolder = (ReceivedProductHolder) holder;
-                    receivedProductHolder.txt_recvice_name.setText(message.getString("pro_name"));
-                    receivedProductHolder.txt_recvice_des.setText(message.getString("pro_des"));
-                    receivedProductHolder.txt_recvice_price.setText("$"+message.getString("pro_price")+"."+"00");
-                    receivedProductHolder.recvice_product.setText(message.getString("pro_message"));
-                    Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(receivedProductHolder.pro_recvice_image);
-
+                    String ids = message.getString("pro_name");
+                    if (!ids.isEmpty()) {
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        int marginTopDp = 20;
+                        int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
+                        int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
+                        layoutParams.setMargins(0,marginTopPx,marginRightPx,0);
+                        receivedProductHolder.txt_recvice_name.setText(message.getString("pro_name"));
+                        receivedProductHolder.txt_recvice_des.setText(message.getString("pro_des"));
+                        receivedProductHolder.txt_recvice_price.setText("$" + message.getString("pro_price") + "." + "00");
+                        receivedProductHolder.recvice_product.setText(message.getString("pro_message"));
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(receivedProductHolder.pro_recvice_image);
+                    }else{
+                        receivedProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+                    }
                     if (ChatingActivity.isInActionMode) {
                         if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
                             receivedProductHolder.mView.setBackgroundResource(R.color.selected_item);
@@ -483,10 +497,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
         return chatMessages.size();
     }
 
-    public void addItem(JSONObject jsonObject) {
-        chatMessages.add(jsonObject);
-        notifyDataSetChanged();
-    }
+//    public void addItem(JSONObject jsonObject) {
+//        chatMessages.add(jsonObject);
+//        notifyDataSetChanged();
+//    }
 
     public void removeData(ArrayList<ListChatsModel> list) {
         for (ListChatsModel model : list) {
