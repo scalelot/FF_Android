@@ -36,7 +36,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     public static final String CHANNEL_ID = "exampleChannel";
     private Socket mSocket;
     public static SimpleCache simpleCache;
-//    public static final MyApplication.Companion Companion = new MyApplication.Companion((DefaultConstructorMarker) null);
+    //    public static final MyApplication.Companion Companion = new MyApplication.Companion((DefaultConstructorMarker) null);
     public static Context context;
     public static WebSocket webSocket;
     private static int stateCounter;
@@ -50,8 +50,7 @@ public class MyApplication extends Application implements LifecycleObserver {
 
     public static MyApplication getInstance() {
 
-        if(singleton == null)
-        {
+        if (singleton == null) {
             singleton = new MyApplication();
         }
         return singleton;
@@ -62,11 +61,6 @@ public class MyApplication extends Application implements LifecycleObserver {
     public void onCreate() {
         super.onCreate();
 
-        //Dark mode code
-//        singleton = this;
-//        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        this.isNightModeEnabled = mPrefs.getBoolean(NIGHT_MODE, false);
-
         context = this;
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -74,11 +68,9 @@ public class MyApplication extends Application implements LifecycleObserver {
 
         try {
             mSocket = IO.socket(Constans.CHAT_SERVER_URL);
-//            mSocket=new Socket("http://192.168.29.105:","8080");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-//        LocalVideoFilter.init(this);
 
         LeastRecentlyUsedCacheEvictor leastRecentlyUsedCacheEvictor = new LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024);
         DatabaseProvider databaseProvider = (DatabaseProvider) (new ExoDatabaseProvider((Context) this));
@@ -101,19 +93,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         editor1.commit();
     }
 
-//    public boolean isNightModeEnabled() {
-//        return isNightModeEnabled;
-//    }
-//
-//    public void setIsNightModeEnabled(boolean isNightModeEnabled) {
-//        this.isNightModeEnabled = isNightModeEnabled;
-//
-//        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        SharedPreferences.Editor editor = mPrefs.edit();
-//        editor.putBoolean(NIGHT_MODE, isNightModeEnabled);
-//        editor.apply();
-//    }
-
     public static boolean isApplicationOnBackground() {
         return stateCounter == 0;
     }
@@ -130,26 +109,6 @@ public class MyApplication extends Application implements LifecycleObserver {
     public static Context getContext() {
         return context;
     }
-
-
-//    public static final class Companion {
-//        @Nullable
-//        public final SimpleCache getSimpleCache() {
-//            return MyApplication.simpleCache;
-//        }
-//
-//        public final void setSimpleCache(@Nullable SimpleCache var1) {
-//            MyApplication.simpleCache = var1;
-//        }
-//
-//        private Companion() {
-//        }
-//
-//        // $FF: synthetic method
-//        public Companion(DefaultConstructorMarker $constructor_marker) {
-//            this();
-//        }
-//    }
 
     public Socket getSocket() {
         return mSocket;
@@ -186,23 +145,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         editor.putBoolean("isUserActive", useractive);
         editor.commit();
     }
-
-//    public static Boolean isUserActive(Context context) {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-//        Boolean useractive = sharedPreferences.getBoolean("isUserActive", false);
-//
-//        return useractive;
-//    }
-//
-//    public static void setcontactNo(Context context, String contactNo) {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-//        if (null == sharedPreferences) {
-//            return;
-//        }
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString("contactNo", contactNo);
-//        editor.commit();
-//    }
 
     public static String getcontactNo(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
@@ -242,22 +184,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         return cookie;
     }
 
-//    public static void setAccountType(Context context, String accountType) {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-//        if (null == sharedPreferences) {
-//            return;
-//        }
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString("AccountType", accountType);
-//        editor.commit();
-//    }
-//
-//    public static String getAccountType(Context context) {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-//        String cookie = sharedPreferences.getString("AccountType", "");
-//        return cookie;
-//    }
-
     public static void setBusinessProfileRegistered(Context context, Boolean useractive) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         if (null == sharedPreferences) {
@@ -274,16 +200,6 @@ public class MyApplication extends Application implements LifecycleObserver {
 
         return useractive;
     }
-
-//    public static void setPersonalProfileRegistered(Context context, Boolean useractive) {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-//        if (null == sharedPreferences) {
-//            return;
-//        }
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("isPersonalProfileRegistered", useractive);
-//        editor.commit();
-//    }
 
     public static Boolean isPersonalProfileRegistered(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());

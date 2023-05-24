@@ -2,7 +2,8 @@ package com.festum.festumfield.Utils;
 
 public class Constans {
 
-    public static String CHAT_SERVER_URL = "ws://192.168.29.105:8080/socket.io/socket.io.js";
+    public static String CHAT_SERVER_URL = "https://api.festumfield.com/";
+
     public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
     public static String BASE_URL = "https://api.festumfield.com/apis/v1/";
