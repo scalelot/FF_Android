@@ -126,7 +126,7 @@
         android:layout_marginTop="@dimen/margin_5">
 
         <TextView
-            android:id="@+id/recvice_time"
+            android:id="@+id/recvice_left_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time"
@@ -138,7 +138,7 @@
             android:layout_width="@dimen/sp_16"
             android:layout_height="@dimen/sp_16"
             android:layout_marginLeft="@dimen/margin_5"
-            android:layout_toRightOf="@id/recvice_time"
+            android:layout_toRightOf="@id/recvice_left_time"
             android:src="@drawable/ic_unseen" />
     </RelativeLayout>
 

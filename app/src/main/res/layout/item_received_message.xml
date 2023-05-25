@@ -55,7 +55,7 @@
         android:layout_marginTop="@dimen/margin_5">
 
         <TextView
-            android:id="@+id/rec_time"
+            android:id="@+id/left_mess_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time"

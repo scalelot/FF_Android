@@ -296,7 +296,7 @@
                     android:paddingRight="@dimen/margin_8"
                     android:paddingBottom="@dimen/margin_13"
                     android:textColor="@color/edt_dark"
-                    android:textSize="@dimen/text_12"
+                    android:textSize="@dimen/text_14"
                     tools:ignore="InvalidImeActionId" />
             </RelativeLayout>
         </RelativeLayout>

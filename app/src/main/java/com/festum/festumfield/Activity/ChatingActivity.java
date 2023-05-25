@@ -459,32 +459,37 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             Log.d("====", "Left For");
         } else if (item.getItemId() == R.id.item_delete) {
             Log.d("====", "Delete");
-            isInActionMode = false;
-//            ((MessageAdapter) messageAdapter).removeData(selectionList);
-            clearActionMode();
         } else if (item.getItemId() == R.id.item_edit) {
-//            if (selectionList.size() == 1) {
-//                final EditText editText = new EditText(this);
-//                new AlertDialog.Builder(this).setTitle("Edit").setView(editText).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        ListChatsModel model = selectionList.get(0);
-//                        model.getSendAllModelData().getText().setMessage(editText.getText().toString());
-//                        isInActionMode = false;
-//                    }
-//                }).create().show();
-//            }
         } else if (item.getItemId() == R.id.item_copy) {
             Log.d("====", "Copy");
-//            ListChatsModel model = selectionList.get(0);
-//            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-//            ClipData clip = ClipData.newPlainText("label", model.getSendAllModelData().getText().getMessage());
-//            if (clipboard == null || clip == null) ;
-//            clipboard.setPrimaryClip(clip);
-
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = null;
+            try {
+                clip = ClipData.newPlainText("label", selectionList.get(0).getString("message"));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            if (clipboard == null || clip == null) ;
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(ChatingActivity.this, "Copied!!", Toast.LENGTH_SHORT).show();
         } else if (item.getItemId() == R.id.item_right_for) {
             Log.d("====", "Right For");
         } else if (item.getItemId() == R.id.item_info) {
-            System.out.println("productPosition:="+selectionList);
+            try {
+                System.out.println("All:="+selectionList.get(0));
+                if (!selectionList.get(0).getString("pro_name").isEmpty()){
+                    Intent intent = new Intent(ChatingActivity.this,MessageInfoActivity.class);
+                    intent.putExtra("Name",selectionList.get(0).getString("pro_name"));
+                    intent.putExtra("Des",selectionList.get(0).getString("pro_des"));
+                    intent.putExtra("Price",selectionList.get(0).getString("pro_price"));
+                    intent.putExtra("Image",selectionList.get(0).getString("pro_img"));
+                    intent.putExtra("Delivered",selectionList.get(0).getString("Sendtime"));
+                    intent.putExtra("Message",selectionList.get(0).getString("pro_message"));
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
         return true;
     }

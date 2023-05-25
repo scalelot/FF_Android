@@ -2,16 +2,12 @@ package com.festum.festumfield.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,6 +85,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         ImageView right_send_image;
         RelativeLayout send_relative;
+        TextView img_right_time;
         View mView;
 
         public SentImageHolder(@NonNull View itemView) {
@@ -96,6 +93,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             right_send_image = itemView.findViewById(R.id.right_send_image);
             send_relative = itemView.findViewById(R.id.send_relative);
+            img_right_time = itemView.findViewById(R.id.img_right_time);
             mView = itemView;
             itemView.setOnLongClickListener(this);
             send_relative.setOnClickListener(this);
@@ -123,6 +121,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         View mView;
         RelativeLayout relative;
         TextView txt_pro_name, txt_pro_des, txt_pro_price, txt_product;
+        TextView pro_right_time;
 
         public SentProductHolder(View itemView) {
             super(itemView);
@@ -133,6 +132,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             txt_pro_price = itemView.findViewById(R.id.txt_pro_price);
             txt_product = itemView.findViewById(R.id.txt_product);
             relative = itemView.findViewById(R.id.relative);
+            pro_right_time = itemView.findViewById(R.id.pro_right_time);
             mView = itemView;
             itemView.setOnLongClickListener(this);
             relative.setOnClickListener(this);
@@ -156,7 +156,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        TextView rec_time, receivedText, recive_name;
+        TextView left_mess_time, receivedText, recive_name;
         View mView;
         CircleImageView rec_profile_pic;
         RelativeLayout relative;
@@ -164,7 +164,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public ReceivedMessageHolder(@NonNull View itemView) {
             super(itemView);
 
-            rec_time = itemView.findViewById(R.id.rec_time);
+            left_mess_time = itemView.findViewById(R.id.left_mess_time);
             recive_name = itemView.findViewById(R.id.recive_name);
             receivedText = itemView.findViewById(R.id.receivedText);
             relative = itemView.findViewById(R.id.relative);
@@ -195,7 +195,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         ImageView imageView;
         View mView;
-        TextView nameTxt;
+        TextView nameTxt,img_left_time;
         RelativeLayout relative;
 
         public ReceivedImageHolder(@NonNull View itemView) {
@@ -204,6 +204,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             imageView = itemView.findViewById(R.id.imageView);
             relative = itemView.findViewById(R.id.relative);
             nameTxt = itemView.findViewById(R.id.nameTxt);
+            img_left_time = itemView.findViewById(R.id.img_left_time);
             itemView.setOnLongClickListener(this);
             relative.setOnClickListener(this);
         }
@@ -232,7 +233,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         View mView;
         RelativeLayout relative;
         TextView txt_recvice_name, txt_recvice_des, txt_recvice_price;
-        TextView recvice_time, recvice_product, recviceName;
+        TextView recvice_left_time, recvice_product, recviceName;
 
         public ReceivedProductHolder(@NonNull View itemView) {
             super(itemView);
@@ -245,7 +246,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             txt_recvice_price = itemView.findViewById(R.id.txt_recvice_price);
             recvice_product = itemView.findViewById(R.id.recvice_product);
             recvice_seen = itemView.findViewById(R.id.recvice_seen);
-            recvice_time = itemView.findViewById(R.id.recvice_time);
+            recvice_left_time = itemView.findViewById(R.id.recvice_left_time);
             relative = itemView.findViewById(R.id.relative);
             mView = itemView;
             itemView.setOnLongClickListener(this);
@@ -333,7 +334,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             case TYPE_PRODUCT_SENT:
 
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_product, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_send_product, parent, false);
                 return new SentProductHolder(view);
         }
         return null;
@@ -378,6 +379,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     imageHolder.mView.setBackgroundResource(R.color.white);
 
+                    String strTime = String.valueOf(message.getString("Sendtime"));
+                    long timestamp = Long.parseLong(strTime) * 1000L;
+
+                    if (String.valueOf(timestamp) != null) {
+                        String time = getDate(timestamp);
+                        imageHolder.img_right_time.setText(time);
+                    }
+
                     if (ChatingActivity.isInActionMode) {
                         boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
                         if (flag1 == true) {
@@ -409,6 +418,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         sentProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
 
+                    String strTime = String.valueOf(message.getString("Sendtime"));
+                    long timestamp = Long.parseLong(strTime) * 1000L;
+
+                    if (String.valueOf(timestamp) != null) {
+                        String time = getDate(timestamp);
+                        sentProductHolder.pro_right_time.setText(time);
+                    }
+
                     if (ChatingActivity.isInActionMode) {
                         boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
                         if (flag1 == true) {
@@ -433,7 +450,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     long timestamp = Long.parseLong(strTime) * 1000L;
                     if (String.valueOf(timestamp) != null) {
                         String time = getDate(timestamp);
-                        receivedMessageHolder.rec_time.setText(time);
+                        receivedMessageHolder.left_mess_time.setText(time);
                     }
 
                     receivedMessageHolder.mView.setBackgroundResource(R.color.white);
@@ -454,6 +471,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     Glide.with(activity).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(imageHolder.imageView);
 
                     imageHolder.mView.setBackgroundResource(R.color.white);
+
+                    String strTime = String.valueOf(message.getString("Sendtime"));
+                    long timestamp = Long.parseLong(strTime) * 1000L;
+
+                    if (String.valueOf(timestamp) != null) {
+                        String time = getDate(timestamp);
+                        imageHolder.img_left_time.setText(time);
+                    }
 
                     if (ChatingActivity.isInActionMode) {
                         boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
@@ -479,6 +504,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(receivedProductHolder.pro_recvice_image);
                     } else {
                         receivedProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+                    }
+
+                    String strTime = String.valueOf(message.getString("Sendtime"));
+                    long timestamp = Long.parseLong(strTime) * 1000L;
+
+                    if (String.valueOf(timestamp) != null) {
+                        String time = getDate(timestamp);
+                        receivedProductHolder.recvice_left_time.setText(time);
                     }
 
                     if (ChatingActivity.isInActionMode) {
