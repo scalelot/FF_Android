@@ -1,5 +1,6 @@
 package com.festum.festumfield.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -69,7 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         @Override
         public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
             return true;
         }
 
@@ -77,10 +78,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
+                notifyItemChanged(getAbsoluteAdapterPosition());
             }
         }
+
     }
 
     private class SentImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -101,7 +103,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         @Override
         public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
             return true;
         }
 
@@ -109,8 +111,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
+                notifyItemChanged(getAbsoluteAdapterPosition());
             }
         }
     }
@@ -138,7 +140,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         @Override
         public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
             return true;
         }
 
@@ -146,8 +148,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
+                notifyItemChanged(getAbsoluteAdapterPosition());
             }
         }
     }
@@ -172,9 +174,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
             relative.setOnClickListener(this);
         }
 
+
         @Override
         public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
             return true;
         }
 
@@ -182,8 +185,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
+                notifyItemChanged(getAbsoluteAdapterPosition());
             }
         }
     }
@@ -201,14 +204,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
             imageView = itemView.findViewById(R.id.imageView);
             relative = itemView.findViewById(R.id.relative);
             nameTxt = itemView.findViewById(R.id.nameTxt);
-            mView = itemView;
             itemView.setOnLongClickListener(this);
             relative.setOnClickListener(this);
         }
 
+
         @Override
         public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
             return true;
         }
 
@@ -216,8 +219,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
+                notifyItemChanged(getAbsoluteAdapterPosition());
             }
         }
     }
@@ -252,7 +255,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         @Override
         public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAdapterPosition());
+            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
             return true;
         }
 
@@ -260,8 +263,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
 
             if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAdapterPosition());
-                notifyItemChanged(getAdapterPosition());
+                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
+                notifyItemChanged(getAbsoluteAdapterPosition());
             }
         }
     }
@@ -336,10 +339,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
         return null;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         JSONObject message = chatMessages.get(position);
+
         try {
             if (message.getBoolean("isSent")) {
 
@@ -352,15 +357,18 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     }
                     String strTime = String.valueOf(message.getString("Sendtime"));
                     long timestamp = Long.parseLong(strTime) * 1000L;
+
                     if (String.valueOf(timestamp) != null) {
                         String time = getDate(timestamp);
                         messageHolder.txt_time.setText(time);
                     }
 
+                    messageHolder.mView.setBackgroundResource(R.color.white);
+
                     if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            messageHolder.mView.setBackgroundResource(R.color.green);
-                            messageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                        if (flag1 == true) {
+                            messageHolder.mView.setBackgroundResource(R.color.selected_item);
                         }
                     }
                 } else if (!chatMessages.get(position).getString("image").isEmpty()) {
@@ -368,37 +376,43 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     Glide.with(activity).load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(imageHolder.right_send_image);
 
+                    imageHolder.mView.setBackgroundResource(R.color.white);
+
                     if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            imageHolder.mView.setBackgroundResource(R.color.green);
-                            imageHolder.send_relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                        if (flag1 == true) {
+                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
                         }
                     }
+
                 } else {
                     SentProductHolder sentProductHolder = (SentProductHolder) holder;
                     String ids = message.getString("pro_name");
-                    if (!ids.isEmpty()){
+
+                    sentProductHolder.mView.setBackgroundResource(R.color.white);
+
+                    if (!ids.isEmpty()) {
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         int marginTopDp = 20;
                         int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
                         int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
-                        layoutParams.setMargins(0,marginTopPx,marginRightPx,0);
+                        layoutParams.setMargins(0, marginTopPx, marginRightPx, 0);
                         sentProductHolder.itemView.setLayoutParams(layoutParams);
                         sentProductHolder.txt_pro_name.setText(message.getString("pro_name"));
                         sentProductHolder.txt_pro_des.setText(message.getString("pro_des"));
                         sentProductHolder.txt_pro_price.setText("$" + message.getString("pro_price") + "." + "00");
                         sentProductHolder.txt_product.setText(message.getString("pro_message"));
                         String str = message.getString("pro_message");
-                        System.out.println("Messages:=="+str);
+                        System.out.println("Messages:==" + str);
                         Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
-                    }else{
+                    } else {
                         sentProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
 
                     if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(message)) {
-                            sentProductHolder.mView.setBackgroundResource(R.color.green);
-                            sentProductHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                        if (flag1 == true) {
+                            sentProductHolder.mView.setBackgroundResource(R.color.selected_item);
                         }
                     }
                 }
@@ -422,11 +436,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         receivedMessageHolder.rec_time.setText(time);
                     }
 
-                    if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            receivedMessageHolder.mView.setBackgroundResource(R.color.selected_item);
-                            receivedMessageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                    receivedMessageHolder.mView.setBackgroundResource(R.color.white);
 
+                    if (ChatingActivity.isInActionMode) {
+                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                        if (flag1 == true) {
+                            receivedMessageHolder.mView.setBackgroundResource(R.color.selected_item);
                         }
                     }
 
@@ -438,34 +453,40 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     Glide.with(activity).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(imageHolder.imageView);
 
-                    if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
-                            imageHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                    imageHolder.mView.setBackgroundResource(R.color.white);
 
+                    if (ChatingActivity.isInActionMode) {
+                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                        if (flag1 == true) {
+                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
                         }
                     }
+
                 } else {
                     ReceivedProductHolder receivedProductHolder = (ReceivedProductHolder) holder;
                     String ids = message.getString("pro_name");
+                    receivedProductHolder.mView.setBackgroundResource(R.color.white);
                     if (!ids.isEmpty()) {
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         int marginTopDp = 20;
                         int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
                         int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
-                        layoutParams.setMargins(0,marginTopPx,marginRightPx,0);
+                        layoutParams.setMargins(0, marginTopPx, marginRightPx, 0);
                         receivedProductHolder.txt_recvice_name.setText(message.getString("pro_name"));
                         receivedProductHolder.txt_recvice_des.setText(message.getString("pro_des"));
                         receivedProductHolder.txt_recvice_price.setText("$" + message.getString("pro_price") + "." + "00");
                         receivedProductHolder.recvice_product.setText(message.getString("pro_message"));
                         Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(receivedProductHolder.pro_recvice_image);
-                    }else{
+                    } else {
                         receivedProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
+
                     if (ChatingActivity.isInActionMode) {
-                        if (ChatingActivity.selectionList.contains(chatMessages.get(position))) {
-                            receivedProductHolder.mView.setBackgroundResource(R.color.selected_item);
-                            receivedProductHolder.relative.setBackgroundColor(activity.getResources().getColor(R.color.green));
+                        for (int i = 0; i < chatMessages.size(); i++) {
+                            boolean flag1 = ChatingActivity.selectionList.contains(message.getString("pro_ids"));
+                            if (flag1 == true) {
+                                receivedProductHolder.mView.setBackgroundResource(R.color.selected_item);
+                            }
                         }
                     }
                 }
@@ -486,21 +507,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private Bitmap getBitmapFromString(String image) {
-
-        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
-
     @Override
     public int getItemCount() {
         return chatMessages.size();
     }
-
-//    public void addItem(JSONObject jsonObject) {
-//        chatMessages.add(jsonObject);
-//        notifyDataSetChanged();
-//    }
 
     public void removeData(ArrayList<ListChatsModel> list) {
         for (ListChatsModel model : list) {

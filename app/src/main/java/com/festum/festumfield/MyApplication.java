@@ -66,12 +66,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         stateCounter = 0;
 
-        try {
-            mSocket = IO.socket(Constans.CHAT_SERVER_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
         LeastRecentlyUsedCacheEvictor leastRecentlyUsedCacheEvictor = new LeastRecentlyUsedCacheEvictor(90 * 1024 * 1024);
         DatabaseProvider databaseProvider = (DatabaseProvider) (new ExoDatabaseProvider((Context) this));
         if (simpleCache == null) {
@@ -91,6 +85,18 @@ public class MyApplication extends Application implements LifecycleObserver {
         SharedPreferences.Editor editor1 = sharedPreferences.edit();
         editor1.clear();
         editor1.commit();
+
+
+        try {
+            mSocket = IO.socket(Constans.CHAT_SERVER_URL);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public Socket getSocket() {
+        return mSocket;
     }
 
     public static boolean isApplicationOnBackground() {
@@ -108,10 +114,6 @@ public class MyApplication extends Application implements LifecycleObserver {
 
     public static Context getContext() {
         return context;
-    }
-
-    public Socket getSocket() {
-        return mSocket;
     }
 
     public static void setCountryCode(Context context, String code) {

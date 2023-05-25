@@ -286,6 +286,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/img_gallery"
                     android:background="@null"
+                    android:imeActionId="@+id/send"
                     android:fontFamily="@font/roboto_regular"
                     android:hint="@string/typing_here"
                     android:maxHeight="@dimen/sp_400"
@@ -295,7 +296,8 @@
                     android:paddingRight="@dimen/margin_8"
                     android:paddingBottom="@dimen/margin_13"
                     android:textColor="@color/edt_dark"
-                    android:textSize="@dimen/text_12" />
+                    android:textSize="@dimen/text_12"
+                    tools:ignore="InvalidImeActionId" />
             </RelativeLayout>
         </RelativeLayout>
 
