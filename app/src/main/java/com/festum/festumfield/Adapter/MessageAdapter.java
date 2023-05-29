@@ -46,7 +46,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
         this.chatMessages = objectList;
     }
 
-
     private class SentMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView messageTxt, txt_time;
@@ -470,7 +469,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     Glide.with(activity).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(imageHolder.imageView);
 
-                    imageHolder.mView.setBackgroundResource(R.color.white);
+//                    imageHolder.mView.setBackgroundResource(R.color.white);
 
                     String strTime = String.valueOf(message.getString("Sendtime"));
                     long timestamp = Long.parseLong(strTime) * 1000L;

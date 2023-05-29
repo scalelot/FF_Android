@@ -71,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -78,7 +79,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     private Toolbar toolbar;
     public static boolean isInActionMode = false;
-    public static ArrayList<JSONObject>  selectionList = new ArrayList<>();
+    public static ArrayList<JSONObject> selectionList = new ArrayList<>();
     List<JSONObject> objectList = new ArrayList<>();
     ImageView hp_back_arrow, img_video_call, img_contact, iv_close;
     ImageView iv_pro_image, img_gallery, img_camera, img_product;
@@ -101,29 +102,36 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     List<String> userIdList, recivetime;
     JSONObject send, recive;
     LinearLayoutManager linearLayoutManager;
-
-    private Socket mSocket;
-    private boolean mTyping = false;
-    private Boolean isConnected = true;
-    private final Handler mTypingHandler = new Handler();
+    Socket mSocket;
+    MyApplication myApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
 
-        MyApplication app = (MyApplication) getApplicationContext();
-        mSocket = app.getSocket();
-        mSocket.on(Socket.EVENT_CONNECT, onConnect);
-        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on("new message", onNewMessage);
-        mSocket.on("user joined", onUserJoined);
-        mSocket.on("user left", onUserLeft);
-        mSocket.on("typing", onTyping);
-        mSocket.on("stop typing", onStopTyping);
-        mSocket.connect();
+        myApplication = new MyApplication();
 
+        IO.Options options = new IO.Options();
+        options.forceNew = true;
+        options.reconnection = true;
+        options.reconnectionDelay = 2000;
+        options.reconnectionDelayMax = 5000;
+        options.reconnectionAttempts = Integer.MAX_VALUE;
+//        options.query = "644A36571A8B13E3B069D683";
+
+        try {
+            mSocket = IO.socket(Constans.CHAT_SERVER_URL, options);
+            mSocket.on(Socket.EVENT_CONNECT, onConnect);
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+
+            if (mSocket.connected() == false) {
+                mSocket.connect();
+            }
+        } catch (Exception e) {
+            System.out.println("SocketExcetion" + e);
+        }
 
         hp_back_arrow = findViewById(R.id.hp_back_arrow);
         img_video_call = findViewById(R.id.img_video_call);
@@ -219,190 +227,58 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             }
         });
         initView();
+
+        getMessageRecive();
+
+        /*try {
+            mSocket = myApplication.getSocket();
+            if (mSocket.connected() == true) {
+                getMessageRecive();
+            } else {
+                mSocket.connect();
+            }
+        } catch (Exception e) {
+
+            Log.e("ErrorMessage:==",e.toString());
+        }*/
     }
 
     private final Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (!isConnected) {
-//                        if (null != mUsername) mSocket.emit("add user", mUsername);
-//                        Toast.makeText(getActivity().getApplicationContext(), R.string.connect, Toast.LENGTH_LONG).show();
-                        Toast.makeText(ChatingActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-//                        isConnected = true;
-                    }
-                }
-            });
-        }
-    };
 
-    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Disconnect:--" + "diconnected");
-                    isConnected = false;
-                    Toast.makeText(ChatingActivity.this, "diconnected", Toast.LENGTH_SHORT).show();
-                }
-            });
+            System.out.println("AppConnect:===" + mSocket.connected());
         }
     };
 
     private final Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            runOnUiThread(new Runnable() {
+
+            System.out.println("OnConnectError:===" + args);
+        }
+    };
+
+    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+
+            System.out.println("OnDisconnect:===" + "OnDisconnect");
+        }
+    };
+
+    public void getMessageRecive() {
+        try {
+            mSocket.on("newMessage", new Emitter.Listener() {
                 @Override
-                public void run() {
-                    System.out.println("errorConnecting:--" + "Error connecting");
-                    Toast.makeText(ChatingActivity.this, "Error connecting", Toast.LENGTH_SHORT).show();
+                public void call(Object... args) {
+                    System.out.println("GetMessageData:="+args);
                 }
             });
+        } catch (Exception e) {
+            Log.e("Exception:==",e.toString());
         }
-    };
-
-    private final Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    String message;
-                    try {
-                        username = data.getString("username");
-                        message = data.getString("message");
-                    } catch (JSONException e) {
-                        System.out.println("tryCatchMessage:--" + e.getMessage());
-                        return;
-                    }
-
-//                    addMessage(username, message);
-                }
-            });
-        }
-    };
-
-    private final Emitter.Listener onUserJoined = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    int numUsers;
-                    try {
-                        username = data.getString("username");
-                        numUsers = data.getInt("numUsers");
-                    } catch (JSONException e) {
-                        System.out.println("tryCatchUser:--" + e.getMessage());
-                        return;
-                    }
-
-//                    addLog(getResources().getString(R.string.message_user_joined, username));
-//                    addParticipantsLog(numUsers);
-                }
-            });
-        }
-    };
-
-    private final Emitter.Listener onUserLeft = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    int numUsers;
-                    try {
-                        username = data.getString("username");
-                        numUsers = data.getInt("numUsers");
-                    } catch (JSONException e) {
-                        System.out.println("tryCatchUserLeft:--" + e.getMessage());
-                        return;
-                    }
-
-//                    addLog(getResources().getString(R.string.message_user_left, username));
-//                    addParticipantsLog(numUsers);
-//                    removeTyping(username);
-                }
-            });
-        }
-    };
-
-    private final Emitter.Listener onTyping = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    try {
-                        username = data.getString("username");
-                    } catch (JSONException e) {
-                        System.out.println("tryCatchUserType:--" + e.getMessage());
-                        return;
-                    }
-//                    addTyping(username);
-                }
-            });
-        }
-    };
-
-    private final Emitter.Listener onStopTyping = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    try {
-                        username = data.getString("username");
-                    } catch (JSONException e) {
-                        System.out.println("stopUser:--" + e.getMessage());
-                        return;
-                    }
-//                    removeTyping(username);
-                }
-            });
-        }
-    };
-
-    private final Runnable onTypingTimeout = new Runnable() {
-        @Override
-        public void run() {
-            if (!mTyping) return;
-
-            mTyping = false;
-            mSocket.emit("stop typing");
-        }
-    };
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        mSocket.disconnect();
-
-        mSocket.off(Socket.EVENT_CONNECT, onConnect);
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off("new message", onNewMessage);
-        mSocket.off("user joined", onUserJoined);
-        mSocket.off("user left", onUserLeft);
-        mSocket.off("typing", onTyping);
-        mSocket.off("stop typing", onStopTyping);
     }
-
 
     public void prepareToolbar(int position) {
         hp_back_arrow.setVisibility(View.GONE);
@@ -476,15 +352,15 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             Log.d("====", "Right For");
         } else if (item.getItemId() == R.id.item_info) {
             try {
-                System.out.println("All:="+selectionList.get(0));
-                if (!selectionList.get(0).getString("pro_name").isEmpty()){
-                    Intent intent = new Intent(ChatingActivity.this,MessageInfoActivity.class);
-                    intent.putExtra("Name",selectionList.get(0).getString("pro_name"));
-                    intent.putExtra("Des",selectionList.get(0).getString("pro_des"));
-                    intent.putExtra("Price",selectionList.get(0).getString("pro_price"));
-                    intent.putExtra("Image",selectionList.get(0).getString("pro_img"));
-                    intent.putExtra("Delivered",selectionList.get(0).getString("Sendtime"));
-                    intent.putExtra("Message",selectionList.get(0).getString("pro_message"));
+                System.out.println("All:=" + selectionList.get(0));
+                if (!selectionList.get(0).getString("pro_name").isEmpty()) {
+                    Intent intent = new Intent(ChatingActivity.this, MessageInfoActivity.class);
+                    intent.putExtra("Name", selectionList.get(0).getString("pro_name"));
+                    intent.putExtra("Des", selectionList.get(0).getString("pro_des"));
+                    intent.putExtra("Price", selectionList.get(0).getString("pro_price"));
+                    intent.putExtra("Image", selectionList.get(0).getString("pro_img"));
+                    intent.putExtra("Delivered", selectionList.get(0).getString("Sendtime"));
+                    intent.putExtra("Message", selectionList.get(0).getString("pro_message"));
                     startActivity(intent);
                 }
             } catch (JSONException e) {
@@ -549,15 +425,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (!mSocket.connected()) return;
 
-        if (!mTyping) {
-            mTyping = true;
-            mSocket.emit("typing");
-        }
-
-        mTypingHandler.removeCallbacks(onTypingTimeout);
-        mTypingHandler.postDelayed(onTypingTimeout, 600);
     }
 
     @Override
@@ -577,24 +445,11 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
-//        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setReverseLayout(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
 
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
-        chat_recycler.setHasFixedSize(true);
         chat_recycler.setAdapter(messageAdapter);
-
-        edt_chating.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int id, KeyEvent event) {
-                if (id == R.id.send || id == EditorInfo.IME_NULL) {
-                    attemptSend();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         edt_chating.addTextChangedListener(this);
 
@@ -607,10 +462,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void attemptSend() {
-        if (!mSocket.connected()) return;
-
-        mTyping = false;
-
         String message = edt_chating.getText().toString().trim();
         if (TextUtils.isEmpty(message)) {
             edt_chating.requestFocus();
@@ -634,11 +485,16 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT);
                 } else {
                     sendMessage(toUserIds, edt_chating.getText().toString().trim());
-                    mSocket.emit("message", edt_chating.getText().toString().trim());
 
+                    if (mSocket.connected() == true) {
+                        mSocket.emit("newMessage", edt_chating.getText().toString().trim());
+                    }else{
+                        Toast.makeText(myApplication, "Not Connected", Toast.LENGTH_SHORT).show();
+                    }
                     objectList.add(jsonObject);
 
                     messageAdapter.notifyDataSetChanged();
+
                     chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
 
                 }
@@ -663,7 +519,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     jsonObject.put("message", "");
                     jsonObject.put("image", "");
 
-//                            sendProduct(toUserIds, p_ids, edt_mess);
+                            sendProduct(toUserIds, p_ids, edt_mess);
 
                     rel_replay.setVisibility(View.GONE);
 
@@ -680,11 +536,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 e.printStackTrace();
             }
         }
-
-//        mInputMessageView.setText("");
-//        addMessage(mUsername, message);
-
-        // perform the sending message attempt.
     }
 
 
@@ -773,7 +624,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                 JSONObject jsonObject = data_array.getJSONObject(i);
                                 listChatsModel = new Gson().fromJson(jsonObject.toString(), ListChatsModel.class);
                                 listChatsModelArrayList.add(listChatsModel);
-//                                Collections.reverse(listChatsModelArrayList);
                             }
 
                             for (int index = 0; index < listChatsModelArrayList.size(); index++) {
@@ -981,7 +831,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 if (path == null) {
                     Toast.makeText(ChatingActivity.this, "Enter Images", Toast.LENGTH_SHORT).show();
                 } else {
-//                    uploadImage(file);
+                    uploadImage(file);
 
                     objectList.add(jsonObject);
 

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -15,6 +16,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 //import com.bokecc.camerafilter.LocalVideoFilter;
+import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
@@ -28,6 +30,7 @@ import java.net.URISyntaxException;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import okhttp3.WebSocket;
 
@@ -86,18 +89,57 @@ public class MyApplication extends Application implements LifecycleObserver {
         editor1.clear();
         editor1.commit();
 
-
-        try {
-            mSocket = IO.socket(Constans.CHAT_SERVER_URL);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        //Socket
+//        IO.Options options = new IO.Options();
+//        options.forceNew = true;
+//        options.reconnection = true;
+//        options.reconnectionDelay = 2000;
+//        options.reconnectionDelayMax = 5000;
+//        options.reconnectionAttempts = Integer.MAX_VALUE;
+////        options.query = "644A36571A8B13E3B069D683";
+//
+//        try {
+//            mSocket = IO.socket(Constans.CHAT_SERVER_URL, options);
+//            mSocket.on(Socket.EVENT_CONNECT, onConnect);
+//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+//
+//            if (mSocket.connected() == false) {
+//                mSocket.connect();
+//            }
+//        } catch (Exception e) {
+//            System.out.println("SocketExcetion" + e);
+//        }
     }
 
+//    private final Emitter.Listener onConnect = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//
+//            System.out.println("AppConnect:===" + mSocket.connected());
+//        }
+//    };
+//
+//    private final Emitter.Listener onConnectError = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//
+//            System.out.println("OnConnectError:===" + args);
+//        }
+//    };
+//
+//    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//
+//            System.out.println("OnDisconnect:===" + "OnDisconnect");
+//        }
+//    };
 
     public Socket getSocket() {
         return mSocket;
     }
+
 
     public static boolean isApplicationOnBackground() {
         return stateCounter == 0;

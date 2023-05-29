@@ -2,7 +2,7 @@ package com.festum.festumfield.Utils;
 
 public class Constans {
 
-    public static String CHAT_SERVER_URL = "https://api.festumfield.com/";
+    public static String CHAT_SERVER_URL = "https://api.festumfield.com";
 
     public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
