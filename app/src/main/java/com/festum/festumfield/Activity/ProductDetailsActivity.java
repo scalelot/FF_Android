@@ -193,7 +193,7 @@ public class ProductDetailsActivity extends BaseActivity {
                             intent.putExtra("product_name", productModel.getProductDetailsModel().getName());
                             intent.putExtra("product_des", productModel.getProductDetailsModel().getDescription());
                             intent.putExtra("product_ids", productModel.getProductDetailsModel().getId());
-                            intent.putExtra("product_price", "$" + String.format("%,.0f", Float.valueOf(productModel.getProductDetailsModel().getPrice())) + ".00");
+                            intent.putExtra("product_price", productModel.getProductDetailsModel().getPrice());
                             startActivity(intent);
                             finish();
 

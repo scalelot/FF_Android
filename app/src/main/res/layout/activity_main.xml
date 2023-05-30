@@ -18,9 +18,9 @@
             android:id="@+id/user_img"
             android:layout_width="@dimen/sp_45"
             android:layout_height="match_parent"
-            android:padding="@dimen/sp_5"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_10"
+            android:padding="@dimen/sp_5"
             android:src="@drawable/ic_user_profile" />
 
         <TextView
@@ -116,7 +116,6 @@
     </RelativeLayout>
 
     <include layout="@layout/custom_tab" />
-
 
     <FrameLayout
         android:id="@+id/frameLayout"

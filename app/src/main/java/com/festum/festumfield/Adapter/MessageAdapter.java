@@ -17,12 +17,17 @@ import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Model.ListChat.ListChatsModel;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,9 +40,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int TYPE_MESSAGE_SENT = 0;
     private static final int TYPE_IMAGE_SENT = 1;
     private static final int TYPE_PRODUCT_SENT = 2;
-    private static final int TYPE_MESSAGE_RECEIVED = 3;
-    private static final int TYPE_IMAGE_RECEIVED = 4;
-    private static final int TYPE_PRODUCT_RECEIVED = 5;
     List<JSONObject> chatMessages;
     Activity activity;
 
@@ -46,21 +48,29 @@ public class MessageAdapter extends RecyclerView.Adapter {
         this.chatMessages = objectList;
     }
 
-    private class SentMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private class SendMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        TextView messageTxt, txt_time;
-        RelativeLayout relative;
+        TextView sendTxt, sendTxtTime, reciveTxt, reciveTxtTime, reciveUserName;
+        RelativeLayout textRelative,rl_right,rl_left;
+        CircleImageView reciveImgUser;
         View mView;
 
-        public SentMessageHolder(@NonNull View itemView) {
+        public SendMessageHolder(@NonNull View itemView) {
             super(itemView);
 
-            messageTxt = itemView.findViewById(R.id.sentTxt);
-            txt_time = itemView.findViewById(R.id.txt_time);
-            relative = itemView.findViewById(R.id.relative);
+            sendTxt = itemView.findViewById(R.id.sendTxt);
+            sendTxtTime = itemView.findViewById(R.id.sendTxtTime);
+            reciveTxt = itemView.findViewById(R.id.reciveTxt);
+            reciveTxtTime = itemView.findViewById(R.id.reciveTxtTime);
+            reciveUserName = itemView.findViewById(R.id.reciveUserName);
+            reciveImgUser = itemView.findViewById(R.id.reciveImgUser);
+            textRelative = itemView.findViewById(R.id.textRelative);
+            rl_right = itemView.findViewById(R.id.rl_right);
+            rl_left = itemView.findViewById(R.id.rl_left);
+
             mView = itemView;
             itemView.setOnLongClickListener(this);
-            relative.setOnClickListener(this);
+            textRelative.setOnClickListener(this);
         }
 
         @Override
@@ -80,22 +90,30 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     }
 
-    private class SentImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private class SendImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        ImageView right_send_image;
-        RelativeLayout send_relative;
-        TextView img_right_time;
+        ImageView sendImage, reciveImg;
+        RelativeLayout imageRelative, relativeRight, relativeLeft;
+        TextView sendImgTime, reciveImgTime, reciveUserTxt;
+        CircleImageView reciveUserImg;
         View mView;
 
-        public SentImageHolder(@NonNull View itemView) {
+        public SendImageHolder(@NonNull View itemView) {
             super(itemView);
 
-            right_send_image = itemView.findViewById(R.id.right_send_image);
-            send_relative = itemView.findViewById(R.id.send_relative);
-            img_right_time = itemView.findViewById(R.id.img_right_time);
+            sendImage = itemView.findViewById(R.id.sendImage);
+            reciveImg = itemView.findViewById(R.id.reciveImg);
+            imageRelative = itemView.findViewById(R.id.imageRelative);
+            sendImgTime = itemView.findViewById(R.id.sendImgTime);
+            reciveImgTime = itemView.findViewById(R.id.reciveImgTime);
+            reciveUserTxt = itemView.findViewById(R.id.reciveUserTxt);
+            reciveUserImg = itemView.findViewById(R.id.reciveUserImg);
+            relativeRight = itemView.findViewById(R.id.relativeRight);
+            relativeLeft = itemView.findViewById(R.id.relativeLeft);
+
             mView = itemView;
             itemView.setOnLongClickListener(this);
-            send_relative.setOnClickListener(this);
+            imageRelative.setOnClickListener(this);
         }
 
         @Override
@@ -114,144 +132,41 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class SentProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private class SendProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        ImageView pro_chat_image;
-        View mView;
-        RelativeLayout relative;
-        TextView txt_pro_name, txt_pro_des, txt_pro_price, txt_product;
-        TextView pro_right_time;
-
-        public SentProductHolder(View itemView) {
-            super(itemView);
-
-            pro_chat_image = itemView.findViewById(R.id.pro_chat_image);
-            txt_pro_name = itemView.findViewById(R.id.txt_pro_name);
-            txt_pro_des = itemView.findViewById(R.id.txt_pro_des);
-            txt_pro_price = itemView.findViewById(R.id.txt_pro_price);
-            txt_product = itemView.findViewById(R.id.txt_product);
-            relative = itemView.findViewById(R.id.relative);
-            pro_right_time = itemView.findViewById(R.id.pro_right_time);
-            mView = itemView;
-            itemView.setOnLongClickListener(this);
-            relative.setOnClickListener(this);
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
-            return true;
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
-                notifyItemChanged(getAbsoluteAdapterPosition());
-            }
-        }
-    }
-
-    private class ReceivedMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-
-        TextView left_mess_time, receivedText, recive_name;
-        View mView;
-        CircleImageView rec_profile_pic;
-        RelativeLayout relative;
-
-        public ReceivedMessageHolder(@NonNull View itemView) {
-            super(itemView);
-
-            left_mess_time = itemView.findViewById(R.id.left_mess_time);
-            recive_name = itemView.findViewById(R.id.recive_name);
-            receivedText = itemView.findViewById(R.id.receivedText);
-            relative = itemView.findViewById(R.id.relative);
-            rec_profile_pic = itemView.findViewById(R.id.rec_profile_pic);
-            mView = itemView;
-            itemView.setOnLongClickListener(this);
-            relative.setOnClickListener(this);
-        }
-
-
-        @Override
-        public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
-            return true;
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
-                notifyItemChanged(getAbsoluteAdapterPosition());
-            }
-        }
-    }
-
-    private class ReceivedImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-
-        ImageView imageView;
-        View mView;
-        TextView nameTxt,img_left_time;
-        RelativeLayout relative;
-
-        public ReceivedImageHolder(@NonNull View itemView) {
-            super(itemView);
-
-            imageView = itemView.findViewById(R.id.imageView);
-            relative = itemView.findViewById(R.id.relative);
-            nameTxt = itemView.findViewById(R.id.nameTxt);
-            img_left_time = itemView.findViewById(R.id.img_left_time);
-            itemView.setOnLongClickListener(this);
-            relative.setOnClickListener(this);
-        }
-
-
-        @Override
-        public boolean onLongClick(View view) {
-            ((ChatingActivity) activity).prepareToolbar(getAbsoluteAdapterPosition());
-            return true;
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            if (ChatingActivity.isInActionMode) {
-                ((ChatingActivity) activity).prepareSelection(getAbsoluteAdapterPosition());
-                notifyItemChanged(getAbsoluteAdapterPosition());
-            }
-        }
-    }
-
-    private class ReceivedProductHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-
+        TextView sendProname, sendProdes, sendProprice, sendMessage, sendProtime;
+        ImageView sendProImage;
+        RelativeLayout productRelative, sendRelative, reciveRelative;
         CircleImageView recvice_profile_pic;
-        ImageView pro_recvice_image, recvice_seen;
+        TextView recviceProUserName, recviceProName, recviceDes, recvicePrice, recviceMessage, recviceProTime;
+        ImageView recvice_image;
         View mView;
-        RelativeLayout relative;
-        TextView txt_recvice_name, txt_recvice_des, txt_recvice_price;
-        TextView recvice_left_time, recvice_product, recviceName;
 
-        public ReceivedProductHolder(@NonNull View itemView) {
+        public SendProductHolder(View itemView) {
             super(itemView);
 
+            sendProname = itemView.findViewById(R.id.sendProname);
+            sendProdes = itemView.findViewById(R.id.sendProdes);
+            sendProprice = itemView.findViewById(R.id.sendProprice);
+            sendMessage = itemView.findViewById(R.id.sendMessage);
+            sendProtime = itemView.findViewById(R.id.sendProtime);
+            sendProImage = itemView.findViewById(R.id.sendProImage);
+            productRelative = itemView.findViewById(R.id.productRelative);
             recvice_profile_pic = itemView.findViewById(R.id.recvice_profile_pic);
-            recviceName = itemView.findViewById(R.id.recviceName);
-            pro_recvice_image = itemView.findViewById(R.id.pro_recvice_image);
-            txt_recvice_name = itemView.findViewById(R.id.txt_recvice_name);
-            txt_recvice_des = itemView.findViewById(R.id.txt_recvice_des);
-            txt_recvice_price = itemView.findViewById(R.id.txt_recvice_price);
-            recvice_product = itemView.findViewById(R.id.recvice_product);
-            recvice_seen = itemView.findViewById(R.id.recvice_seen);
-            recvice_left_time = itemView.findViewById(R.id.recvice_left_time);
-            relative = itemView.findViewById(R.id.relative);
+            recviceProUserName = itemView.findViewById(R.id.recviceProUserName);
+            recviceProName = itemView.findViewById(R.id.recviceProName);
+            recviceDes = itemView.findViewById(R.id.recviceDes);
+            recvicePrice = itemView.findViewById(R.id.recvicePrice);
+            recviceMessage = itemView.findViewById(R.id.recviceMessage);
+            recviceProTime = itemView.findViewById(R.id.recviceProTime);
+            recvice_image = itemView.findViewById(R.id.recvice_image);
+            sendRelative = itemView.findViewById(R.id.sendRelative);
+            reciveRelative = itemView.findViewById(R.id.reciveRelative);
+
             mView = itemView;
             itemView.setOnLongClickListener(this);
-            relative.setOnClickListener(this);
+            productRelative.setOnClickListener(this);
         }
-
 
         @Override
         public boolean onLongClick(View view) {
@@ -271,31 +186,15 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-
-        JSONObject message = chatMessages.get(position);
-
         try {
-            if (message.getBoolean("isSent")) {
-
-                if (!chatMessages.get(position).getString("message").isEmpty())
-                    return TYPE_MESSAGE_SENT;
-                else if (!chatMessages.get(position).getString("image").isEmpty())
-                    return TYPE_IMAGE_SENT;
-                else return TYPE_PRODUCT_SENT;
-
-            } else if (message.getBoolean("isRecive")) {
-
-                if (!chatMessages.get(position).getString("message").isEmpty())
-                    return TYPE_MESSAGE_RECEIVED;
-                else if (!chatMessages.get(position).getString("image").isEmpty())
-                    return TYPE_IMAGE_RECEIVED;
-                else return TYPE_PRODUCT_RECEIVED;
-
-            }
-        } catch (JSONException e) {
+            if (!chatMessages.get(position).getString("message").isEmpty())
+                return TYPE_MESSAGE_SENT;
+            else if (!chatMessages.get(position).getString("image").isEmpty())
+                return TYPE_IMAGE_SENT;
+            else return TYPE_PRODUCT_SENT;
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return -1;
     }
 
@@ -309,32 +208,17 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             case TYPE_MESSAGE_SENT:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sent_message, parent, false);
-                return new SentMessageHolder(view);
-
-            case TYPE_MESSAGE_RECEIVED:
-
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_received_message, parent, false);
-                return new ReceivedMessageHolder(view);
+                return new SendMessageHolder(view);
 
             case TYPE_IMAGE_SENT:
 
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sent_image, parent, false);
-                return new SentImageHolder(view);
-
-            case TYPE_IMAGE_RECEIVED:
-
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_received_photo, parent, false);
-                return new ReceivedImageHolder(view);
-
-            case TYPE_PRODUCT_RECEIVED:
-
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recive_product, parent, false);
-                return new ReceivedProductHolder(view);
+                return new SendImageHolder(view);
 
             case TYPE_PRODUCT_SENT:
 
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_send_product, parent, false);
-                return new SentProductHolder(view);
+                return new SendProductHolder(view);
         }
         return null;
     }
@@ -346,197 +230,141 @@ public class MessageAdapter extends RecyclerView.Adapter {
         JSONObject message = chatMessages.get(position);
 
         try {
-            if (message.getBoolean("isSent")) {
+            if (!chatMessages.get(position).getString("message").isEmpty()) {
+                SendMessageHolder sendMessageHolder = (SendMessageHolder) holder;
+                if (!message.getBoolean("isSent")) {
+                    sendMessageHolder.rl_right.setVisibility(View.GONE);
+                    sendMessageHolder.rl_left.setVisibility(View.VISIBLE);
 
-                if (!chatMessages.get(position).getString("message").isEmpty()) {
+                    sendMessageHolder.reciveTxt.setText(message.getString("message"));
+                    sendMessageHolder.reciveUserName.setText(message.getString("name"));
+                    String strTime = message.getString("recivetime");
+                    sendMessageHolder.reciveTxtTime.setText(getDate(strTime));
 
-                    SentMessageHolder messageHolder = (SentMessageHolder) holder;
-                    String str = message.getString("message");
-                    if (!str.isEmpty()) {
-                        messageHolder.messageTxt.setText(str);
-                    }
-                    String strTime = String.valueOf(message.getString("Sendtime"));
-                    long timestamp = Long.parseLong(strTime) * 1000L;
+                    String pImg = message.getString("userProfileImg");
 
-                    if (String.valueOf(timestamp) != null) {
-                        String time = getDate(timestamp);
-                        messageHolder.txt_time.setText(time);
-                    }
-
-                    messageHolder.mView.setBackgroundResource(R.color.white);
-
-                    if (ChatingActivity.isInActionMode) {
-                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
-                        if (flag1 == true) {
-                            messageHolder.mView.setBackgroundResource(R.color.selected_item);
-                        }
-                    }
-                } else if (!chatMessages.get(position).getString("image").isEmpty()) {
-                    SentImageHolder imageHolder = (SentImageHolder) holder;
-
-                    Glide.with(activity).load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(imageHolder.right_send_image);
-
-                    imageHolder.mView.setBackgroundResource(R.color.white);
-
-                    String strTime = String.valueOf(message.getString("Sendtime"));
-                    long timestamp = Long.parseLong(strTime) * 1000L;
-
-                    if (String.valueOf(timestamp) != null) {
-                        String time = getDate(timestamp);
-                        imageHolder.img_right_time.setText(time);
-                    }
-
-                    if (ChatingActivity.isInActionMode) {
-                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
-                        if (flag1 == true) {
-                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
-                        }
-                    }
-
+                    Glide.with(activity).load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendMessageHolder.reciveImgUser);
                 } else {
-                    SentProductHolder sentProductHolder = (SentProductHolder) holder;
-                    String ids = message.getString("pro_name");
+                    sendMessageHolder.rl_right.setVisibility(View.VISIBLE);
+                    sendMessageHolder.rl_left.setVisibility(View.GONE);
 
-                    sentProductHolder.mView.setBackgroundResource(R.color.white);
-
-                    if (!ids.isEmpty()) {
-                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        int marginTopDp = 20;
-                        int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
-                        int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
-                        layoutParams.setMargins(0, marginTopPx, marginRightPx, 0);
-                        sentProductHolder.itemView.setLayoutParams(layoutParams);
-                        sentProductHolder.txt_pro_name.setText(message.getString("pro_name"));
-                        sentProductHolder.txt_pro_des.setText(message.getString("pro_des"));
-                        sentProductHolder.txt_pro_price.setText("$" + message.getString("pro_price") + "." + "00");
-                        sentProductHolder.txt_product.setText(message.getString("pro_message"));
-                        String str = message.getString("pro_message");
-                        System.out.println("Messages:==" + str);
-                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sentProductHolder.pro_chat_image);
-                    } else {
-                        sentProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
-                    }
-
-                    String strTime = String.valueOf(message.getString("Sendtime"));
-                    long timestamp = Long.parseLong(strTime) * 1000L;
-
-                    if (String.valueOf(timestamp) != null) {
-                        String time = getDate(timestamp);
-                        sentProductHolder.pro_right_time.setText(time);
-                    }
-
-                    if (ChatingActivity.isInActionMode) {
-                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
-                        if (flag1 == true) {
-                            sentProductHolder.mView.setBackgroundResource(R.color.selected_item);
-                        }
-                    }
+                    sendMessageHolder.sendTxt.setText(message.getString("message"));
+                    String strTime = message.getString("Sendtime");
+                    sendMessageHolder.sendTxtTime.setText(getDate(strTime));
                 }
 
-            } else if (message.getBoolean("isRecive")) {
-
-                if (!chatMessages.get(position).getString("message").isEmpty()) {
-
-                    ReceivedMessageHolder receivedMessageHolder = (ReceivedMessageHolder) holder;
-                    String str = message.getString("message");
-                    String str1 = message.getString("name");
-                    if (!str.isEmpty()) {
-                        receivedMessageHolder.receivedText.setText(str);
-                        receivedMessageHolder.recive_name.setText(str1);
+                if (ChatingActivity.isInActionMode) {
+                    boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                    if (flag1 == true) {
+                        sendMessageHolder.mView.setBackgroundResource(R.color.selected_item);
                     }
+                }
+            } else if (!chatMessages.get(position).getString("image").isEmpty()) {
+                SendImageHolder sendImageHolder = (SendImageHolder) holder;
+                if (!message.getBoolean("isSent")) {
+                    sendImageHolder.relativeRight.setVisibility(View.GONE);
+                    sendImageHolder.relativeLeft.setVisibility(View.VISIBLE);
 
-                    String strTime = String.valueOf(message.getString("recivetime"));
-                    long timestamp = Long.parseLong(strTime) * 1000L;
-                    if (String.valueOf(timestamp) != null) {
-                        String time = getDate(timestamp);
-                        receivedMessageHolder.left_mess_time.setText(time);
-                    }
-
-                    receivedMessageHolder.mView.setBackgroundResource(R.color.white);
-
-                    if (ChatingActivity.isInActionMode) {
-                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
-                        if (flag1 == true) {
-                            receivedMessageHolder.mView.setBackgroundResource(R.color.selected_item);
-                        }
-                    }
-
-                } else if (!chatMessages.get(position).getString("image").isEmpty()) {
-                    ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
-                    imageHolder.nameTxt.setText(message.getString("name"));
+                    sendImageHolder.reciveUserTxt.setText(message.getString("name"));
 
                     String img = message.getString("image");
+                    String pImg = message.getString("userProfileImg");
 
-                    Glide.with(activity).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(imageHolder.imageView);
+                    Picasso.get().load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveImg);
 
-//                    imageHolder.mView.setBackgroundResource(R.color.white);
+                    Glide.with(activity).load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveUserImg);
 
-                    String strTime = String.valueOf(message.getString("Sendtime"));
-                    long timestamp = Long.parseLong(strTime) * 1000L;
-
-                    if (String.valueOf(timestamp) != null) {
-                        String time = getDate(timestamp);
-                        imageHolder.img_left_time.setText(time);
-                    }
-
-                    if (ChatingActivity.isInActionMode) {
-                        boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
-                        if (flag1 == true) {
-                            imageHolder.mView.setBackgroundResource(R.color.selected_item);
-                        }
-                    }
+                    String strTime = String.valueOf(message.getString("recivetime"));
+                    sendImageHolder.reciveImgTime.setText(getDate(strTime));
 
                 } else {
-                    ReceivedProductHolder receivedProductHolder = (ReceivedProductHolder) holder;
-                    String ids = message.getString("pro_name");
-                    receivedProductHolder.mView.setBackgroundResource(R.color.white);
-                    if (!ids.isEmpty()) {
+                    sendImageHolder.relativeRight.setVisibility(View.VISIBLE);
+                    sendImageHolder.relativeLeft.setVisibility(View.GONE);
+
+                    if (message.getString("image").startsWith("/storage")) {
+                        Glide.with(activity).load(message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+                    } else {
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+                    }
+                    String strTime = String.valueOf(message.getString("Sendtime"));
+                    sendImageHolder.sendImgTime.setText(getDate(strTime));
+                }
+
+                if (ChatingActivity.isInActionMode) {
+                    boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                    if (flag1 == true) {
+                        sendImageHolder.mView.setBackgroundResource(R.color.selected_item);
+                    }
+                }
+            } else {
+                SendProductHolder sendProductHolder = (SendProductHolder) holder;
+                if (!message.getBoolean("isSent")) {
+                    sendProductHolder.sendRelative.setVisibility(View.GONE);
+                    sendProductHolder.reciveRelative.setVisibility(View.VISIBLE);
+
+                    if (!message.getString("pro_name").isEmpty()) {
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         int marginTopDp = 20;
                         int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
                         int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
                         layoutParams.setMargins(0, marginTopPx, marginRightPx, 0);
-                        receivedProductHolder.txt_recvice_name.setText(message.getString("pro_name"));
-                        receivedProductHolder.txt_recvice_des.setText(message.getString("pro_des"));
-                        receivedProductHolder.txt_recvice_price.setText("$" + message.getString("pro_price") + "." + "00");
-                        receivedProductHolder.recvice_product.setText(message.getString("pro_message"));
-                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(receivedProductHolder.pro_recvice_image);
+                        sendProductHolder.itemView.setLayoutParams(layoutParams);
+                        sendProductHolder.recviceProName.setText(message.getString("pro_name"));
+                        sendProductHolder.recviceDes.setText(message.getString("pro_des"));
+                        sendProductHolder.recvicePrice.setText("$" + message.getString("pro_price") + "." + "00");
+                        sendProductHolder.recviceMessage.setText(message.getString("pro_message"));
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_image);
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("userProfileImg")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_profile_pic);
+                        String strTime = String.valueOf(message.getString("Sendtime"));
+                        sendProductHolder.recviceProTime.setText(getDate(strTime));
                     } else {
-                        receivedProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+                        sendProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
 
-                    String strTime = String.valueOf(message.getString("Sendtime"));
-                    long timestamp = Long.parseLong(strTime) * 1000L;
+                } else {
+                    sendProductHolder.sendRelative.setVisibility(View.VISIBLE);
+                    sendProductHolder.reciveRelative.setVisibility(View.GONE);
 
-                    if (String.valueOf(timestamp) != null) {
-                        String time = getDate(timestamp);
-                        receivedProductHolder.recvice_left_time.setText(time);
+                    if (!message.getString("pro_name").isEmpty()) {
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        int marginTopDp = 20;
+                        int marginRightPx = (int) (marginTopDp * activity.getResources().getDisplayMetrics().density + 0.5f);
+                        int marginTopPx = (int) (10 * activity.getResources().getDisplayMetrics().density + 0.5f);
+                        layoutParams.setMargins(0, marginTopPx, marginRightPx, 0);
+                        sendProductHolder.itemView.setLayoutParams(layoutParams);
+                        sendProductHolder.sendProname.setText(message.getString("pro_name"));
+                        sendProductHolder.sendProdes.setText(message.getString("pro_des"));
+                        sendProductHolder.sendProprice.setText("$" + message.getString("pro_price") + "." + "00");
+                        sendProductHolder.sendMessage.setText(message.getString("pro_message"));
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.sendProImage);
+                        String strTime = String.valueOf(message.getString("recivetime"));
+                        sendProductHolder.sendProtime.setText(getDate(strTime));
+                    } else {
+                        sendProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
 
-                    if (ChatingActivity.isInActionMode) {
-                        for (int i = 0; i < chatMessages.size(); i++) {
-                            boolean flag1 = ChatingActivity.selectionList.contains(message.getString("pro_ids"));
-                            if (flag1 == true) {
-                                receivedProductHolder.mView.setBackgroundResource(R.color.selected_item);
-                            }
-                        }
+                }
+
+                if (ChatingActivity.isInActionMode) {
+                    boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
+                    if (flag1 == true) {
+                        sendProductHolder.mView.setBackgroundResource(R.color.selected_item);
                     }
                 }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    private String getDate(long timeStamp) {
-        try {
-            DateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
-            Date netDate = (new Date(timeStamp));
-            return sdf.format(netDate);
-        } catch (Exception ex) {
-            return "xx";
-        }
+    private String getDate(String timeStamp) {
+        DateTimeFormatter sourceFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("HH:mm a");
+        LocalDateTime dateTime = LocalDateTime.parse(timeStamp, sourceFormat);
+        String formatedDateTime = dateTime.atZone(ZoneId.of("UTC")).format(targetFormat);
+        return formatedDateTime;
     }
 
     @Override

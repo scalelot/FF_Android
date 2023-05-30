@@ -53,30 +53,42 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.gms:play-services-cast-framework:21.0.1'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    //CountryCodePicker
     implementation 'com.github.inpossoft:CountryCodePickerProject:2.0.0'
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    //Volley
     implementation 'com.android.volley:volley:1.2.1'
 
+    //lottie
     implementation 'com.airbnb.android:lottie:6.0.0'
+    //circleimageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //GoogleMap
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
+    //OtpView
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
+    //RangeView
     implementation 'me.bendik.simplerangeview:simplerangeview:0.1.1'
+    //ImagePicker
     implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
-
+    //Switchbutton
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
-
+    //Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Toggle
     implementation 'com.github.angads25:toggle:1.1.0'
 
     implementation 'com.github.3llomi:CircularStatusView:V1.0.2'
