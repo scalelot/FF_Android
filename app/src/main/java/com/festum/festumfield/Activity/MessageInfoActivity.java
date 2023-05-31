@@ -14,6 +14,9 @@ import com.festum.festumfield.Utils.Constans;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -22,9 +25,9 @@ public class MessageInfoActivity extends AppCompatActivity {
     ImageView ic_back;
     String name, des, image, price, message;
     ImageView pro_chat_image;
-    TextView txt_pro_name,txt_time;
+    TextView txt_pro_name, txt_time;
     TextView txt_pro_des;
-    TextView txt_pro_price,deliver_time;
+    TextView txt_pro_price, deliver_time;
     TextView txt_product;
     String delivered;
 
@@ -59,27 +62,19 @@ public class MessageInfoActivity extends AppCompatActivity {
         Glide.with(MessageInfoActivity.this).load(Constans.Display_Image_URL + image).placeholder(R.drawable.ic_user_img).into(pro_chat_image);
         txt_pro_name.setText(name);
         txt_pro_des.setText(des);
-        txt_pro_price.setText("$"+price+".00");
+        txt_pro_price.setText("$" + price + ".00");
         txt_product.setText(message);
 
-        String strTime = String.valueOf(delivered);
-        long timestamp = Long.parseLong(strTime) * 1000L;
-
-        if (String.valueOf(timestamp) != null) {
-            String time = getDate(timestamp);
-            deliver_time.setText(time);
-            txt_time.setText(time);
-        }
+        deliver_time.setText(getDate(delivered));
+        txt_time.setText(getDate(delivered));
     }
 
-    private String getDate(long timeStamp) {
-        try {
-            DateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.US);
-            Date netDate = (new Date(timeStamp));
-            return sdf.format(netDate);
-        } catch (Exception ex) {
-            return "xx";
-        }
+    private String getDate(String timeStamp) {
+        DateTimeFormatter sourceFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("HH:mm a");
+        LocalDateTime dateTime = LocalDateTime.parse(timeStamp, sourceFormat);
+        String formatedDateTime = dateTime.atZone(ZoneId.of("UTC")).format(targetFormat);
+        return formatedDateTime;
     }
 
     @Override

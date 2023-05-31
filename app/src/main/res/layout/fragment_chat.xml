@@ -28,9 +28,9 @@
                 android:layout_toLeftOf="@id/iv_filter"
                 android:background="@drawable/back_tabs"
                 android:backgroundTint="@color/bg_grey_color"
-                android:paddingRight="@dimen/sp_8"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/sp_8">
 
                 <EditText
                     android:id="@+id/edt_search_text"
@@ -173,8 +173,7 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,11 +189,6 @@
                     android:clipToPadding="false"
                     android:paddingBottom="@dimen/sp_60"
                     tools:listitem="@layout/user_chat_list" />
-
-                <ProgressBar
-                    android:id="@+id/idPBLoading"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

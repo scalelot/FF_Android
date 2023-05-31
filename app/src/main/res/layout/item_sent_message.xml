@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_20"
-        android:visibility="gone">
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/sendTxt"
@@ -58,8 +60,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_10"
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
         android:layout_marginBottom="@dimen/margin_10"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/recive_pro_name"

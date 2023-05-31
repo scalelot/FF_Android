@@ -23,7 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+//import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +61,7 @@ public class ChatFragment extends Fragment {
     RelativeLayout ll_notification;
     FloatingActionButton fb_reels;
     RelativeLayout iv_filter, emptyLay;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
     EditText edt_search_text;
     ImageView iv_search;
     ImageView iv_clear_text;
@@ -83,7 +83,7 @@ public class ChatFragment extends Fragment {
         iv_search = view.findViewById(R.id.iv_search);
         iv_clear_text = view.findViewById(R.id.iv_clear_text);
         emptyLay = view.findViewById(R.id.emptyLay);
-        progressBar = view.findViewById(R.id.idPBLoading);
+//        progressBar = view.findViewById(R.id.idPBLoading);
 
         iv_filter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +115,7 @@ public class ChatFragment extends Fragment {
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                     page++;
-                    progressBar.setVisibility(View.VISIBLE);
+//                    progressBar.setVisibility(View.VISIBLE);
                     getAllMyFriends(page, limit, searchData);
                 }
             }
@@ -174,7 +174,7 @@ public class ChatFragment extends Fragment {
     private void getAllMyFriends(int page, int limit, String search) {
         if (page > limit) {
             Toast.makeText(getContext(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.GONE);
+//            progressBar.setVisibility(View.GONE);
             return;
         }
 
@@ -191,7 +191,7 @@ public class ChatFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_myfriend, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    progressBar.setVisibility(View.GONE);
+//                    progressBar.setVisibility(View.GONE);
                     Log.e("All_my_friends:--", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -230,7 +230,7 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     System.out.println("all_friends_error" + error.toString());
-                    progressBar.setVisibility(View.GONE);
+//                    progressBar.setVisibility(View.GONE);
 
                 }
             }) {
@@ -246,7 +246,7 @@ public class ChatFragment extends Fragment {
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            progressBar.setVisibility(View.GONE);
+//            progressBar.setVisibility(View.GONE);
 
         }
     }

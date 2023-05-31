@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_20"
-        android:visibility="gone">
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/sendRl"
@@ -126,6 +128,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_20"
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
         android:visibility="gone">
 
         <RelativeLayout

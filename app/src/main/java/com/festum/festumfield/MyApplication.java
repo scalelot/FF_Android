@@ -27,30 +27,28 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import io.socket.client.IO;
+import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import io.socket.engineio.client.Transport;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import okhttp3.WebSocket;
 
 public class MyApplication extends Application implements LifecycleObserver {
 
     public static final String CHANNEL_ID = "exampleChannel";
-    private Socket mSocket;
     public static SimpleCache simpleCache;
-    //    public static final MyApplication.Companion Companion = new MyApplication.Companion((DefaultConstructorMarker) null);
     public static Context context;
-    public static WebSocket webSocket;
     private static int stateCounter;
-    private String TAG = getClass().getSimpleName();
+    public static final String TAG = MyApplication.class.getSimpleName();
+    public static Socket mSocket;
     SharedPreferences sharedPreferences;
-
-    public static final String NIGHT_MODE = "N_MODE";
-    private boolean isNightModeEnabled = false;
-
     private static MyApplication singleton = null;
-
     public static MyApplication getInstance() {
 
         if (singleton == null) {
@@ -75,7 +73,6 @@ public class MyApplication extends Application implements LifecycleObserver {
             simpleCache = new SimpleCache(this.getCacheDir(), (CacheEvictor) leastRecentlyUsedCacheEvictor, databaseProvider);
         }
 
-
         createNotificationChannel();
 
         //ReelsActivity SharedPreference
@@ -90,55 +87,72 @@ public class MyApplication extends Application implements LifecycleObserver {
         editor1.commit();
 
         //Socket
-//        IO.Options options = new IO.Options();
-//        options.forceNew = true;
-//        options.reconnection = true;
-//        options.reconnectionDelay = 2000;
-//        options.reconnectionDelayMax = 5000;
-//        options.reconnectionAttempts = Integer.MAX_VALUE;
-////        options.query = "644A36571A8B13E3B069D683";
-//
-//        try {
-//            mSocket = IO.socket(Constans.CHAT_SERVER_URL, options);
-//            mSocket.on(Socket.EVENT_CONNECT, onConnect);
-//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-//
-//            if (mSocket.connected() == false) {
-//                mSocket.connect();
-//            }
-//        } catch (Exception e) {
-//            System.out.println("SocketExcetion" + e);
-//        }
+        IO.Options options = new IO.Options();
+        options.forceNew = true;
+        options.reconnection = true;
+        options.reconnectionDelay = 2000;
+        options.reconnectionDelayMax = 5000;
+
+        try {
+            mSocket = IO.socket("https://api.festumfield.com", options);
+            mSocket.on(Socket.EVENT_CONNECT, onConnect);
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+            mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
+
+
+            if(!mSocket.connected()){
+                mSocket.connect();
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-//    private final Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//
-//            System.out.println("AppConnect:===" + mSocket.connected());
-//        }
-//    };
-//
-//    private final Emitter.Listener onConnectError = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//
-//            System.out.println("OnConnectError:===" + args);
-//        }
-//    };
-//
-//    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//
-//            System.out.println("OnDisconnect:===" + "OnDisconnect");
-//        }
-//    };
+    private final Emitter.Listener onTransport = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
 
-    public Socket getSocket() {
-        return mSocket;
-    }
+            Transport transport = (Transport)args[0];
+            transport.on(Transport.EVENT_REQUEST_HEADERS, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
+                    String authToken = "";
+                    headers.put("authorization", Collections.singletonList(authToken));
+                }
+            }).on(Transport.EVENT_RESPONSE_HEADERS, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                }
+            });
+        }
+    };
+
+    public Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.e(TAG, "Socket Connected!");
+        }
+    };
+
+    private final Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.e(TAG, "onConnectError");
+        }
+    };
+    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.e(TAG, "onDisconnect");
+            if(!mSocket.connected()){
+                mSocket.connect();
+            }
+        }
+    };
 
 
     public static boolean isApplicationOnBackground() {

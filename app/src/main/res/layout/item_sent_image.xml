@@ -13,6 +13,8 @@
         android:layout_marginTop="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_20"
         android:layout_marginBottom="@dimen/margin_10"
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
         android:visibility="gone">
 
         <RelativeLayout
@@ -73,6 +75,8 @@
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_10"
         android:layout_marginBottom="@dimen/margin_10"
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
         android:visibility="gone">
 
         <RelativeLayout

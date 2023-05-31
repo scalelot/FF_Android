@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,16 +23,11 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,7 +47,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private class SendMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView sendTxt, sendTxtTime, reciveTxt, reciveTxtTime, reciveUserName;
-        RelativeLayout textRelative,rl_right,rl_left;
+        RelativeLayout rl_right,rl_left;
+        LinearLayout textRelative;
         CircleImageView reciveImgUser;
         View mView;
 
@@ -93,7 +90,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private class SendImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ImageView sendImage, reciveImg;
-        RelativeLayout imageRelative, relativeRight, relativeLeft;
+        RelativeLayout relativeRight, relativeLeft;
+        LinearLayout imageRelative;
         TextView sendImgTime, reciveImgTime, reciveUserTxt;
         CircleImageView reciveUserImg;
         View mView;
@@ -136,7 +134,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         TextView sendProname, sendProdes, sendProprice, sendMessage, sendProtime;
         ImageView sendProImage;
-        RelativeLayout productRelative, sendRelative, reciveRelative;
+        RelativeLayout sendRelative, reciveRelative;
+        LinearLayout productRelative;
         CircleImageView recvice_profile_pic;
         TextView recviceProUserName, recviceProName, recviceDes, recvicePrice, recviceMessage, recviceProTime;
         ImageView recvice_image;
@@ -235,6 +234,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 if (!message.getBoolean("isSent")) {
                     sendMessageHolder.rl_right.setVisibility(View.GONE);
                     sendMessageHolder.rl_left.setVisibility(View.VISIBLE);
+                    sendMessageHolder.mView.setBackgroundResource(R.color.white);
 
                     sendMessageHolder.reciveTxt.setText(message.getString("message"));
                     sendMessageHolder.reciveUserName.setText(message.getString("name"));
@@ -247,6 +247,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 } else {
                     sendMessageHolder.rl_right.setVisibility(View.VISIBLE);
                     sendMessageHolder.rl_left.setVisibility(View.GONE);
+                    sendMessageHolder.mView.setBackgroundResource(R.color.white);
 
                     sendMessageHolder.sendTxt.setText(message.getString("message"));
                     String strTime = message.getString("Sendtime");
@@ -264,6 +265,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 if (!message.getBoolean("isSent")) {
                     sendImageHolder.relativeRight.setVisibility(View.GONE);
                     sendImageHolder.relativeLeft.setVisibility(View.VISIBLE);
+                    sendImageHolder.mView.setBackgroundResource(R.color.white);
 
                     sendImageHolder.reciveUserTxt.setText(message.getString("name"));
 
@@ -272,7 +274,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
                     Picasso.get().load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveImg);
 
-                    Glide.with(activity).load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveUserImg);
+                    Picasso.get().load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveUserImg);
 
                     String strTime = String.valueOf(message.getString("recivetime"));
                     sendImageHolder.reciveImgTime.setText(getDate(strTime));
@@ -280,11 +282,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 } else {
                     sendImageHolder.relativeRight.setVisibility(View.VISIBLE);
                     sendImageHolder.relativeLeft.setVisibility(View.GONE);
+                    sendImageHolder.mView.setBackgroundResource(R.color.white);
 
                     if (message.getString("image").startsWith("/storage")) {
-                        Glide.with(activity).load(message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+                        Picasso.get().load(message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
                     } else {
-                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+                        Picasso.get().load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
                     }
                     String strTime = String.valueOf(message.getString("Sendtime"));
                     sendImageHolder.sendImgTime.setText(getDate(strTime));
@@ -298,9 +301,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 }
             } else {
                 SendProductHolder sendProductHolder = (SendProductHolder) holder;
+                sendProductHolder.mView.setBackgroundResource(R.color.white);
+
                 if (!message.getBoolean("isSent")) {
                     sendProductHolder.sendRelative.setVisibility(View.GONE);
                     sendProductHolder.reciveRelative.setVisibility(View.VISIBLE);
+                    sendProductHolder.mView.setBackgroundResource(R.color.white);
 
                     if (!message.getString("pro_name").isEmpty()) {
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -313,10 +319,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         sendProductHolder.recviceDes.setText(message.getString("pro_des"));
                         sendProductHolder.recvicePrice.setText("$" + message.getString("pro_price") + "." + "00");
                         sendProductHolder.recviceMessage.setText(message.getString("pro_message"));
-                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_image);
-                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("userProfileImg")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_profile_pic);
-                        String strTime = String.valueOf(message.getString("Sendtime"));
-                        sendProductHolder.recviceProTime.setText(getDate(strTime));
+                        Picasso.get().load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_image);
+                        Picasso.get().load(Constans.Display_Image_URL + message.getString("userProfileImg")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_profile_pic);
+
+//                        String strTime = String.valueOf(message.getString("Sendtime"));
+//                        sendProductHolder.recviceProTime.setText(getDate(strTime));
                     } else {
                         sendProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
@@ -337,20 +344,21 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         sendProductHolder.sendProprice.setText("$" + message.getString("pro_price") + "." + "00");
                         sendProductHolder.sendMessage.setText(message.getString("pro_message"));
                         Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.sendProImage);
-                        String strTime = String.valueOf(message.getString("recivetime"));
-                        sendProductHolder.sendProtime.setText(getDate(strTime));
+
+//                        String strTime = String.valueOf(message.getString("recivetime"));
+//                        sendProductHolder.sendProtime.setText(getDate(strTime));
                     } else {
                         sendProductHolder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                     }
 
                 }
-
                 if (ChatingActivity.isInActionMode) {
                     boolean flag1 = ChatingActivity.selectionList.contains(chatMessages.get(position));
                     if (flag1 == true) {
                         sendProductHolder.mView.setBackgroundResource(R.color.selected_item);
                     }
                 }
+
             }
 
         } catch (JSONException e) {

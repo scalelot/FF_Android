@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,10 +14,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,7 +24,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,16 +60,12 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 public class ChatingActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
 
@@ -107,28 +99,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
 
-        myApplication = new MyApplication();
-//
-//        IO.Options options = new IO.Options();
-//        options.forceNew = true;
-//        options.reconnection = true;
-//        options.reconnectionDelay = 2000;
-//        options.reconnectionDelayMax = 5000;
-//        options.reconnectionAttempts = Integer.MAX_VALUE;
-////        options.query = "644A36571A8B13E3B069D683";
-//
-//        try {
-//            mSocket = IO.socket(Constans.CHAT_SERVER_URL, options);
-//            mSocket.on(Socket.EVENT_CONNECT, onConnect);
-//            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-//            mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-//
-//            if (mSocket.connected() == false) {
-//                mSocket.connect();
-//            }
-//        } catch (Exception e) {
-//            System.out.println("SocketExcetion" + e);
-//        }
+        mSocket = MyApplication.mSocket;
+
+        System.out.println("SocketConnect:====="+mSocket.connected());
 
         hp_back_arrow = findViewById(R.id.hp_back_arrow);
         img_video_call = findViewById(R.id.img_video_call);
@@ -225,57 +198,20 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         });
         initView();
 
-//        getMessageRecive();
-
-        /*try {
-            mSocket = myApplication.getSocket();
-            if (mSocket.connected() == true) {
-                getMessageRecive();
-            } else {
-                mSocket.connect();
-            }
-        } catch (Exception e) {
-
-            Log.e("ErrorMessage:==",e.toString());
-        }*/
     }
 
-//    private final Emitter.Listener onConnect = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//
-//            System.out.println("AppConnect:===" + mSocket.connected());
-//        }
-//    };
-//
-//    private final Emitter.Listener onConnectError = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//
-//            System.out.println("OnConnectError:===" + args);
-//        }
-//    };
-//
-//    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//
-//            System.out.println("OnDisconnect:===" + "OnDisconnect");
-//        }
-//    };
-//
-//    public void getMessageRecive() {
-//        try {
-//            mSocket.on("newMessage", new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    System.out.println("GetMessageData:="+args);
-//                }
-//            });
-//        } catch (Exception e) {
-//            Log.e("Exception:==",e.toString());
-//        }
-//    }
+    /*public void getMessageRecive() {
+        try {
+            mSocket.on("newMessage", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    System.out.println("GetMessageData:=" + args);
+                }
+            });
+        } catch (Exception e) {
+            Log.e("Exception:==", e.toString());
+        }
+    }*/
 
     public void prepareToolbar(int position) {
         hp_back_arrow.setVisibility(View.GONE);
@@ -484,12 +420,12 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 } else {
                     sendMessage(toUserIds, edt_chating.getText().toString().trim());
 
+                    objectList.add(jsonObject);
 //                    if (mSocket.connected() == true) {
 //                        mSocket.emit("newMessage", edt_chating.getText().toString().trim());
 //                    }else{
 //                        Toast.makeText(myApplication, "Not Connected", Toast.LENGTH_SHORT).show();
 //                    }
-                    objectList.add(jsonObject);
 
                     messageAdapter.notifyDataSetChanged();
 

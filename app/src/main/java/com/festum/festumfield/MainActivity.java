@@ -28,6 +28,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -162,7 +165,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
+        Fragment fragment = new ChatFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.commit();
 
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +184,11 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).addToBackStack(null).commit();
+                Fragment fragment = new ChatFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout, fragment);
+                fragmentTransaction.commit();
             }
         });
 
@@ -195,7 +206,11 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new MapsFragment()).addToBackStack(null).commit();
+                Fragment fragment = new MapsFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout, fragment);
+                fragmentTransaction.commit();
             }
         });
 
@@ -212,7 +227,11 @@ public class MainActivity extends BaseActivity {
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CallsFragment()).addToBackStack(null).commit();
+                Fragment fragment = new CallsFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout, fragment);
+                fragmentTransaction.commit();
             }
         });
 
@@ -229,7 +248,11 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ContactFragment()).addToBackStack(null).commit();
+                Fragment fragment = new ContactFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayout, fragment);
+                fragmentTransaction.commit();
 
             }
         });
@@ -293,16 +316,6 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-//        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-//            @Override
-//            public void onComplete(@NonNull Task<String> task) {
-//                if (task.isComplete()) {
-//                    token[0] = task.getResult();
-//                    Log.e("AppConstants", "onComplete: new Token got: " + token[0]);
-//                }
-//            }
-//        });
-
         if (getIntent().getExtras() != null) {
             checkFCMBundle(intent);
         }
@@ -363,7 +376,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA,android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
