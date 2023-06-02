@@ -42,6 +42,7 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
@@ -192,9 +193,11 @@ public class UserProfileActivity extends BaseActivity {
     private void getApiCalling() {
         JsonObjectRequest jsonObjectRequest = null;
         try {
+            FileUtils.DisplayLoading(UserProfileActivity.this);
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(UserProfileActivity.this);
                     GetPersonalProfileModel userProfileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                     u_name.setText(userProfileRegisterModel.getData().getFullName());
@@ -350,6 +353,7 @@ public class UserProfileActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(UserProfileActivity.this);
                     Log.e("error", error.toString());
                 }
             }) {
@@ -365,6 +369,7 @@ public class UserProfileActivity extends BaseActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(UserProfileActivity.this);
             e.printStackTrace();
         }
 
@@ -406,7 +411,6 @@ public class UserProfileActivity extends BaseActivity {
             }
         });
     }
-
 
     @Override
     protected void onResume() {

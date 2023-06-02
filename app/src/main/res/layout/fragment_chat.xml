@@ -190,6 +190,11 @@
                     android:paddingBottom="@dimen/sp_60"
                     tools:listitem="@layout/user_chat_list" />
 
+                <ProgressBar
+                    android:id="@+id/idPBLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

@@ -58,11 +58,6 @@ public class SettingActivity extends BaseActivity {
     LinearLayout ll_txt, ll_phone_email, ll_sample_txt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        if (MyApplication.getInstance().isNightModeEnabled()) {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//        } else {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
@@ -77,37 +72,6 @@ public class SettingActivity extends BaseActivity {
         conversation = findViewById(R.id.conversation);
         sign_out = findViewById(R.id.sign_out);
         upload_excel = findViewById(R.id.upload_excel);
-//        dark_mode_switch=findViewById(R.id.dark_mode_switch);
-//        img_dark_mode=findViewById(R.id.img_dark_mode);
-
-//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-//            dark_mode_switch.setChecked(true);
-//            img_dark_mode.setImageResource(R.drawable.ic_light_mode);
-//        } else {
-//            dark_mode_switch.setChecked(false);
-//            img_dark_mode.setImageResource(R.drawable.ic_dark_mode);
-//        }
-//
-//        dark_mode_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//                if (isChecked) {
-//                    img_dark_mode.setImageResource(R.drawable.ic_light_mode);
-//                    MyApplication.getInstance().setIsNightModeEnabled(true);
-//                    finish();
-//                    startActivity(getIntent());
-//                    overridePendingTransition(0, 0);
-//                    overridePendingTransition(0, 0);
-//                } else {
-//                    img_dark_mode.setImageResource(R.drawable.ic_dark_mode);
-//                    MyApplication.getInstance().setIsNightModeEnabled(false);
-//                    finish();
-//                    startActivity(getIntent());
-//                    overridePendingTransition(0, 0);
-//                    overridePendingTransition(0, 0);
-//                }
-//            }
-//        });
         ic_back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

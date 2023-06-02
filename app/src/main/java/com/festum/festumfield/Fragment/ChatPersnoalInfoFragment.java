@@ -33,6 +33,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -94,6 +95,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
         block_hunter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FileUtils.DisplayLoading(ChatPersnoalInfoFragment.this.getContext());
                 str = "blocked";
                 set_unfriendorblock(strIds, str);
             }
@@ -132,6 +134,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileUtils.DisplayLoading(ChatPersnoalInfoFragment.this.getContext());
                 setauthorizedDialog(strIds);
                 dialog.dismiss();
             }
@@ -219,18 +222,21 @@ public class ChatPersnoalInfoFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_authorized_permissions, js, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     Log.e("set_auth_permission:--", response.toString());
                     Toast.makeText(getContext(), "Authorized Permission Done", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     Log.e("set_auth_per_error:--", error.toString());
                 }
             });
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
             e.printStackTrace();
         }
     }
@@ -244,6 +250,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_friends_unfriendorblock, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     Log.e("unfriends_block:--", response.toString());
                     startActivity(new Intent(ChatPersnoalInfoFragment.this.getContext(), MainActivity.class));
                     getActivity().finish();
@@ -252,6 +259,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     System.out.println("unfriends_error:--" + error);
                 }
             }) {
@@ -265,6 +273,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
             e.printStackTrace();
         }
     }

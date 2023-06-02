@@ -66,6 +66,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class ChatingActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
 
@@ -91,7 +92,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     NestedScrollView nestedScrollView;
     LinearLayoutManager linearLayoutManager;
     Socket mSocket;
-    MyApplication myApplication;
     JSONObject send, recive;
 
     @Override
@@ -101,7 +101,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         mSocket = MyApplication.mSocket;
 
-        System.out.println("SocketConnect:====="+mSocket.connected());
+        mSocket.connect();
+
+        getMessageRecive();
 
         hp_back_arrow = findViewById(R.id.hp_back_arrow);
         img_video_call = findViewById(R.id.img_video_call);
@@ -200,180 +202,23 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-    /*public void getMessageRecive() {
-        try {
-            mSocket.on("newMessage", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    System.out.println("GetMessageData:=" + args);
+    public void getMessageRecive() {
+        mSocket.on("newMessage", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject js = (JSONObject) args[0];
+                            System.out.println("GetMessageData:=" + js.toString());
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            Log.e("Exception:==", e.toString());
-        }
-    }*/
-
-    public void prepareToolbar(int position) {
-        hp_back_arrow.setVisibility(View.GONE);
-        rl_user.setVisibility(View.GONE);
-        img_product.setVisibility(View.GONE);
-        img_video_call.setVisibility(View.GONE);
-        img_contact.setVisibility(View.GONE);
-        toolbar.getMenu().clear();
-        toolbar.inflateMenu(R.menu.menu_action_mode);
-        isInActionMode = true;
-        messageAdapter.notifyDataSetChanged();
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        prepareSelection(position);
-    }
-
-    public void prepareSelection(int position) {
-
-        if (!selectionList.contains(objectList.get(position))) {
-            selectionList.add(objectList.get(position));
-        } else {
-            selectionList.remove(objectList.get(position));
-        }
-
-        updateViewCounter();
-    }
-
-    private void updateViewCounter() {
-        if (!selectionList.isEmpty()) {
-            toolbar.getMenu().getItem(0).setVisible(true);
-        } else {
-            isInActionMode = false;
-            toolbar.getMenu().clear();
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
-            toolbar.setTitle("");
-            hp_back_arrow.setVisibility(View.VISIBLE);
-            rl_user.setVisibility(View.VISIBLE);
-            img_product.setVisibility(View.VISIBLE);
-            img_video_call.setVisibility(View.VISIBLE);
-            img_contact.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            clearActionMode();
-            messageAdapter.notifyDataSetChanged();
-        } else if (item.getItemId() == R.id.item_left_for) {
-            Log.d("====", "Left For");
-        } else if (item.getItemId() == R.id.item_delete) {
-            Log.d("====", "Delete");
-        } else if (item.getItemId() == R.id.item_edit) {
-        } else if (item.getItemId() == R.id.item_copy) {
-            Log.d("====", "Copy");
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = null;
-            try {
-                clip = ClipData.newPlainText("label", selectionList.get(0).getString("message"));
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            if (clipboard == null || clip == null) ;
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(ChatingActivity.this, "Copied!!", Toast.LENGTH_SHORT).show();
-        } else if (item.getItemId() == R.id.item_right_for) {
-            Log.d("====", "Right For");
-        } else if (item.getItemId() == R.id.item_info) {
-            try {
-                System.out.println("All:=" + selectionList.get(0));
-                if (!selectionList.get(0).getString("pro_name").isEmpty()) {
-                    Intent intent = new Intent(ChatingActivity.this, MessageInfoActivity.class);
-                    intent.putExtra("Name", selectionList.get(0).getString("pro_name"));
-                    intent.putExtra("Des", selectionList.get(0).getString("pro_des"));
-                    intent.putExtra("Price", selectionList.get(0).getString("pro_price"));
-                    intent.putExtra("Image", selectionList.get(0).getString("pro_img"));
-                    intent.putExtra("Delivered", selectionList.get(0).getString("Sendtime"));
-                    intent.putExtra("Message", selectionList.get(0).getString("pro_message"));
-                    startActivity(intent);
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return true;
-    }
-
-    public void clearActionMode() {
-        isInActionMode = false;
-        toolbar.getMenu().clear();
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-        toolbar.setTitle("");
-        hp_back_arrow.setVisibility(View.VISIBLE);
-        rl_user.setVisibility(View.VISIBLE);
-        img_product.setVisibility(View.VISIBLE);
-        img_video_call.setVisibility(View.VISIBLE);
-        img_contact.setVisibility(View.VISIBLE);
-        selectionList.clear();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.hp_back_arrow:
-                startActivity(new Intent(ChatingActivity.this, MainActivity.class));
-                finish();
-                break;
-            case R.id.img_video_call:
-                startActivity(new Intent(ChatingActivity.this, VideoCallActivity.class));
-                finish();
-                break;
-            case R.id.img_contact:
-                startActivity(new Intent(ChatingActivity.this, ChattingAudioCallActivity.class));
-                finish();
-                break;
-            case R.id.rl_user:
-                startActivity(new Intent(ChatingActivity.this, ChatUserProfileActivity.class));
-                finish();
-                break;
-            case R.id.img_camera:
-                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                    requestPermissions(permission, PERMISSION_CODE);
-                } else {
-                    openCamera();
-                }
-            case R.id.img_gallery:
-                openCamera();
-                break;
-        }
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        edt_str = s.toString().trim();
-
-        if (edt_str.isEmpty()) {
-            resetMessageEdit();
-        }
-    }
-
-    private void resetMessageEdit() {
-        edt_chating.removeTextChangedListener(this);
-        edt_chating.setText("");
-        edt_chating.addTextChangedListener(this);
+        });
     }
 
     private void initView() {
@@ -381,6 +226,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
+        chat_recycler.setHasFixedSize(true);
 
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
         chat_recycler.setAdapter(messageAdapter);
@@ -413,23 +259,18 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 jsonObject.put("pro_img", "");
                 jsonObject.put("pro_message", "");
                 jsonObject.put("isSent", true);
+
                 jsonObject.put("isRecive", false);
 
                 if (edt_chating.getText().toString().equals("")) {
-                    Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT);
+                    Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT).show();
                 } else {
                     sendMessage(toUserIds, edt_chating.getText().toString().trim());
 
                     objectList.add(jsonObject);
-//                    if (mSocket.connected() == true) {
-//                        mSocket.emit("newMessage", edt_chating.getText().toString().trim());
-//                    }else{
-//                        Toast.makeText(myApplication, "Not Connected", Toast.LENGTH_SHORT).show();
-//                    }
 
                     messageAdapter.notifyDataSetChanged();
-
-                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() -1);
+                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
 
                 }
                 resetMessageEdit();
@@ -461,7 +302,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                     messageAdapter.notifyDataSetChanged();
 
-                    chat_recycler.smoothScrollToPosition(objectList.size() - 1);
 
                 } else {
                     Toast.makeText(ChatingActivity.this, "Enter Message", Toast.LENGTH_SHORT).show();
@@ -647,6 +487,170 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 e.printStackTrace();
             }
         }
+    }
+
+    public void prepareToolbar(int position) {
+        hp_back_arrow.setVisibility(View.GONE);
+        rl_user.setVisibility(View.GONE);
+        img_product.setVisibility(View.GONE);
+        img_video_call.setVisibility(View.GONE);
+        img_contact.setVisibility(View.GONE);
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_action_mode);
+        isInActionMode = true;
+        messageAdapter.notifyDataSetChanged();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        prepareSelection(position);
+    }
+
+    public void prepareSelection(int position) {
+
+        if (!selectionList.contains(objectList.get(position))) {
+            selectionList.add(objectList.get(position));
+        } else {
+            selectionList.remove(objectList.get(position));
+        }
+
+        updateViewCounter();
+    }
+
+    private void updateViewCounter() {
+        if (!selectionList.isEmpty()) {
+            toolbar.getMenu().getItem(0).setVisible(true);
+        } else {
+            isInActionMode = false;
+            toolbar.getMenu().clear();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+            toolbar.setTitle("");
+            hp_back_arrow.setVisibility(View.VISIBLE);
+            rl_user.setVisibility(View.VISIBLE);
+            img_product.setVisibility(View.VISIBLE);
+            img_video_call.setVisibility(View.VISIBLE);
+            img_contact.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            clearActionMode();
+            messageAdapter.notifyDataSetChanged();
+        } else if (item.getItemId() == R.id.item_left_for) {
+            Log.d("====", "Left For");
+        } else if (item.getItemId() == R.id.item_delete) {
+            Log.d("====", "Delete");
+        } else if (item.getItemId() == R.id.item_edit) {
+        } else if (item.getItemId() == R.id.item_copy) {
+            Log.d("====", "Copy");
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = null;
+            try {
+                clip = ClipData.newPlainText("label", selectionList.get(0).getString("message"));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            if (clipboard == null || clip == null) ;
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(ChatingActivity.this, "Copied!!", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.item_right_for) {
+            Log.d("====", "Right For");
+        } else if (item.getItemId() == R.id.item_info) {
+            try {
+                System.out.println("All:=" + selectionList.get(0));
+                if (!selectionList.get(0).getString("pro_name").isEmpty()) {
+                    Intent intent = new Intent(ChatingActivity.this, MessageInfoActivity.class);
+                    intent.putExtra("Name", selectionList.get(0).getString("pro_name"));
+                    intent.putExtra("Des", selectionList.get(0).getString("pro_des"));
+                    intent.putExtra("Price", selectionList.get(0).getString("pro_price"));
+                    intent.putExtra("Image", selectionList.get(0).getString("pro_img"));
+                    intent.putExtra("Delivered", selectionList.get(0).getString("Sendtime"));
+                    intent.putExtra("Message", selectionList.get(0).getString("pro_message"));
+                    startActivity(intent);
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return true;
+    }
+
+    public void clearActionMode() {
+        isInActionMode = false;
+        toolbar.getMenu().clear();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+        toolbar.setTitle("");
+        hp_back_arrow.setVisibility(View.VISIBLE);
+        rl_user.setVisibility(View.VISIBLE);
+        img_product.setVisibility(View.VISIBLE);
+        img_video_call.setVisibility(View.VISIBLE);
+        img_contact.setVisibility(View.VISIBLE);
+        selectionList.clear();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.hp_back_arrow:
+                startActivity(new Intent(ChatingActivity.this, MainActivity.class));
+                finish();
+                break;
+            case R.id.img_video_call:
+                startActivity(new Intent(ChatingActivity.this, VideoCallActivity.class));
+                finish();
+                break;
+            case R.id.img_contact:
+                startActivity(new Intent(ChatingActivity.this, ChattingAudioCallActivity.class));
+                finish();
+                break;
+            case R.id.rl_user:
+                startActivity(new Intent(ChatingActivity.this, ChatUserProfileActivity.class));
+                finish();
+                break;
+            case R.id.img_camera:
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    requestPermissions(permission, PERMISSION_CODE);
+                } else {
+                    openCamera();
+                }
+            case R.id.img_gallery:
+                openCamera();
+                break;
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        edt_str = s.toString().trim();
+
+        if (edt_str.isEmpty()) {
+            resetMessageEdit();
+        }
+    }
+
+
+    private void resetMessageEdit() {
+        edt_chating.removeTextChangedListener(this);
+        edt_chating.setText("");
+        edt_chating.addTextChangedListener(this);
     }
 
     private void openCamera() {

@@ -25,6 +25,7 @@ import com.festum.festumfield.Model.BlockedFriends.BlockedFriendsModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;
 
@@ -66,13 +67,12 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
         holder.btn_unblock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileUtils.DisplayLoading(activity);
                 setUnblockUser(strIds);
                 BlockedContactActivity.removeAt(holder.getAdapterPosition());
             }
         });
     }
-
-
 
     private void setUnblockUser(String strIds) {
         HashMap<String, String> stringHashMap = new HashMap<>();
@@ -84,6 +84,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_friends_unblock, new JSONObject(stringHashMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(activity);
                     Log.e("UnBlockUser=>", response.toString());
 
                     BlockedFriendsModel blockedFriendsModel = new Gson().fromJson(response.toString(), BlockedFriendsModel.class);
@@ -92,6 +93,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(activity);
                     Log.e("UnBlockUser_Error=>", error.toString());
                 }
             }) {
@@ -105,6 +107,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
             RequestQueue requestQueue = Volley.newRequestQueue(activity);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(activity);
             e.printStackTrace();
         }
     }

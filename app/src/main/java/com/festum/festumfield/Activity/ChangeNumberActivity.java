@@ -110,6 +110,7 @@ public class ChangeNumberActivity extends BaseActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.change_number, new JSONObject(map), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(ChangeNumberActivity.this);
                     Log.e("ChangeNumber=>", response.toString());
                     ChangeNumberVerify();
                     edt_old_number.setText("");
@@ -118,6 +119,7 @@ public class ChangeNumberActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(ChangeNumberActivity.this);
                     Log.e("ChangeNumber_Error=>", error.toString());
                 }
             }) {
@@ -131,6 +133,7 @@ public class ChangeNumberActivity extends BaseActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(ChangeNumberActivity.this);
             e.printStackTrace();
         }
     }
@@ -167,6 +170,7 @@ public class ChangeNumberActivity extends BaseActivity {
         dialog_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileUtils.DismissLoading(ChangeNumberActivity.this);
                 changeNumber(edt_old_number.getText().toString(), code_old, edt_new_number.getText().toString(), code_new);
                 dialog.cancel();
             }

@@ -31,6 +31,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.BaseActivity;
+import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.Product.CreateProductModel;
 import com.festum.festumfield.Model.Product.ProductImagesModel;
 import com.festum.festumfield.Model.Product.ProductModel;
@@ -198,7 +199,6 @@ public class AddProductActivity extends BaseActivity {
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
                 uploadImage(0, file);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -244,6 +244,7 @@ public class AddProductActivity extends BaseActivity {
 
     public void uploadImage(int pos, File file) {
         try {
+            FileUtils.DisplayLoading(AddProductActivity.this);
             AndroidNetworking.upload(Constans.set_product_image).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
@@ -252,6 +253,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        FileUtils.DismissLoading(AddProductActivity.this);
                         Log.e("ProUploadImages=>", response.toString());
                         ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
                         if (edit_pro != null) {
@@ -271,11 +273,13 @@ public class AddProductActivity extends BaseActivity {
 
                 @Override
                 public void onError(ANError error) {
+                    FileUtils.DismissLoading(  AddProductActivity.this);
                     Log.e("ProUploadImagesError=>", error.toString());
 
                 }
             });
         } catch (Exception e) {
+            FileUtils.DismissLoading(  AddProductActivity.this);
             Toast.makeText(context, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
         }
     }
@@ -301,6 +305,7 @@ public class AddProductActivity extends BaseActivity {
                 }
             }
         } catch (JSONException e) {
+            FileUtils.DismissLoading(  AddProductActivity.this);
             e.printStackTrace();
         }
 
@@ -338,6 +343,7 @@ public class AddProductActivity extends BaseActivity {
             queue.add(jsonObjectRequest);
 
         } catch (Exception e) {
+            FileUtils.DismissLoading(AddProductActivity.this);
             e.printStackTrace();
         }
     }
@@ -402,15 +408,18 @@ public class AddProductActivity extends BaseActivity {
             queue.add(jsonObjectRequest);
 
         } catch (Exception e) {
+            FileUtils.DismissLoading(AddProductActivity.this);
             e.printStackTrace();
         }
     }
 
     public void getProductDetails(String id) {
         try {
+            FileUtils.DisplayLoading(AddProductActivity.this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_product + "?pid=" + id, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(AddProductActivity.this);
                     Log.e("FetchSingleProduct=>", response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
@@ -472,6 +481,7 @@ public class AddProductActivity extends BaseActivity {
 
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(AddProductActivity.this);
             e.printStackTrace();
         }
 

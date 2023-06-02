@@ -211,6 +211,7 @@ public class ContactFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressBar.setVisibility(View.GONE);
                     System.out.println("all_friends_error" + error.toString());
                 }
             }) {
@@ -225,6 +226,7 @@ public class ContactFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
             e.printStackTrace();
         }
     }

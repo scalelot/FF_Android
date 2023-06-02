@@ -3,6 +3,7 @@ package com.festum.festumfield.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -118,6 +119,7 @@ public class LoginVerifyActivity extends BaseActivity {
             public void onClick(View view) {
                 try {
                     SendOtp(MobileNo);
+                    FileUtils.DisplayLoading(LoginVerifyActivity.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -201,6 +203,7 @@ public class LoginVerifyActivity extends BaseActivity {
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(LoginVerifyActivity.this);
                     Log.e("VerifySendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
@@ -209,6 +212,7 @@ public class LoginVerifyActivity extends BaseActivity {
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(LoginVerifyActivity.this);
                     Toast.makeText(LoginVerifyActivity.this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
                     Log.e("VerifySendOtp_Error=>", error.getMessage());
                 }
@@ -224,6 +228,7 @@ public class LoginVerifyActivity extends BaseActivity {
             };
         } catch (Exception e) {
             e.printStackTrace();
+            FileUtils.DismissLoading(LoginVerifyActivity.this);
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
         }
 
@@ -232,6 +237,7 @@ public class LoginVerifyActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        startActivity(new Intent(LoginVerifyActivity.this,LoginActivity.class));
         finish();
     }
 }

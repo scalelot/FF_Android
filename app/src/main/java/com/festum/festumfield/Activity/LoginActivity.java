@@ -61,6 +61,7 @@ public class LoginActivity extends BaseActivity {
                 if (!edtPhone.getText().toString().equals("")) {
                     if (FileUtils.isValidPhoneNumber(edtPhone.getText().toString())) {
                         SendOtp(countycode, edtPhone.getText().toString());
+                        FileUtils.DisplayLoading(LoginActivity.this);
                     } else {
                         edtPhone.setError(getResources().getString(R.string.please_enter_mno));
                     }
@@ -71,6 +72,7 @@ public class LoginActivity extends BaseActivity {
         });
 
     }
+
     public void SendOtp(String countyCode, String phone_number) {
         JsonObjectRequest request = null;
         try {
@@ -80,6 +82,7 @@ public class LoginActivity extends BaseActivity {
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(LoginActivity.this);
                     Log.e("SendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
@@ -89,6 +92,7 @@ public class LoginActivity extends BaseActivity {
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(LoginActivity.this);
                     System.out.println("SendOtp_Error=>" + error.toString());
                 }
             }) {
@@ -103,6 +107,7 @@ public class LoginActivity extends BaseActivity {
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
             queue.add(request);
         } catch (Exception e) {
+            FileUtils.DismissLoading(LoginActivity.this);
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }

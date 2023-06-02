@@ -95,6 +95,7 @@ public class Contact_Us_Activity extends BaseActivity {
                 } else if (description.getText().toString().trim().isEmpty()) {
                     description.setError(getResources().getString(R.string.enter_description));
                 } else {
+                    FileUtils.DisplayLoading(Contact_Us_Activity.this);
                     getContactApi(full_name.getText().toString().trim(), phone_number.getText().toString().trim(), email_id.getText().toString().trim(), description.getText().toString().trim());
                 }
             }
@@ -131,6 +132,7 @@ public class Contact_Us_Activity extends BaseActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.contact_us, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(Contact_Us_Activity.this);
                     Log.e("ContactUs=>", response.toString());
                     ContactDataModel contactDataModel = new Gson().fromJson(response.toString(), ContactDataModel.class);
                     full_name.setText("");
@@ -144,6 +146,7 @@ public class Contact_Us_Activity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(Contact_Us_Activity.this);
                     System.out.println("ContactUs_Error=>" + error.toString());
                     Toast.makeText(Contact_Us_Activity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
@@ -187,44 +190,6 @@ public class Contact_Us_Activity extends BaseActivity {
             Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    private Uri getImageUri(Contact_Us_Activity youractivity, Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        String path = MediaStore.Images.Media.insertImage(youractivity.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
-    }
-
-    private String getRealPathFromUri(Uri tempUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = this.getContentResolver().query(tempUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
     }
 }

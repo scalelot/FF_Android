@@ -131,6 +131,7 @@ public class FriendRequestFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    idPBLoading.setVisibility(View.GONE);
                     Log.e("friends_request_error=>", error.toString());
                 }
             }) {
@@ -146,6 +147,7 @@ public class FriendRequestFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            idPBLoading.setVisibility(View.GONE);
             e.printStackTrace();
         }
     }

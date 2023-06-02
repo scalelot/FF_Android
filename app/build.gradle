@@ -100,6 +100,8 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    implementation 'com.github.nkzawa:socket.io-client:0.5.0' //websocket
+
     implementation('io.socket:socket.io-client:2.1.0') {
         exclude group: 'org.json', module: 'json'
     }

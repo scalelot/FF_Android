@@ -122,9 +122,11 @@ public class ProductDetailsActivity extends BaseActivity {
     public void getProductDetails(String id) {
 
         try {
+            FileUtils.DisplayLoading(ProductDetailsActivity.this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_product + "?pid=" + id, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(ProductDetailsActivity.this);
                     Log.e("ProductDetail",response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
@@ -205,6 +207,7 @@ public class ProductDetailsActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("ProductDetailError",error.toString());
+                    FileUtils.DismissLoading(ProductDetailsActivity.this);
                 }
             }) {
                 @Override
@@ -219,6 +222,7 @@ public class ProductDetailsActivity extends BaseActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(ProductDetailsActivity.this);
             e.printStackTrace();
         }
 

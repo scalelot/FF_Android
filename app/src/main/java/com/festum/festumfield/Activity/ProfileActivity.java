@@ -373,7 +373,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     Toast.makeText(ProfileActivity.this, getResources().getString(R.string.enter_emailid), Toast.LENGTH_SHORT).show();
                 } else {
                     FileUtils.DisplayLoading(ProfileActivity.this);
-
                     postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
                 }
             }
@@ -681,9 +680,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     private void fetchgetApi() {
         JsonObjectRequest jsonObjectRequest = null;
         try {
+            FileUtils.DisplayLoading(ProfileActivity.this);
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(ProfileActivity.this);
                     Log.e("GetPersonalInfo=>", response.toString());
 
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
@@ -772,6 +773,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(ProfileActivity.this);
                     Log.e("GetPersonalInfo_Error=>", error.toString());
                 }
             }) {
@@ -787,6 +789,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             RequestQueue requestQueue = Volley.newRequestQueue(ProfileActivity.this);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(ProfileActivity.this);
             e.printStackTrace();
         }
     }

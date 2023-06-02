@@ -126,7 +126,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 } else if (link.isEmpty()) {
                     edt_notification_link.setError("Enter Link");
                 } else {
-                    FileUtils.DisplayLoading(context);
+                    FileUtils.DisplayLoading(CreateNotificationActivity.this);
                     if (edit_noti != null) {
                         updateNotification(notificationId, edt_notification_title.getText().toString().trim(), edt_notification_des.getText().toString().trim(), edt_notification_link.getText().toString().trim(), image_url);
                     } else {
@@ -257,7 +257,7 @@ public class CreateNotificationActivity extends BaseActivity {
             request = new JsonObjectRequest(POST, Constans.create_notification, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(context);
+                    FileUtils.DismissLoading(CreateNotificationActivity.this);
                     Log.e("CreateNotification=>", response.toString());
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
@@ -269,7 +269,7 @@ public class CreateNotificationActivity extends BaseActivity {
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(getApplicationContext());
+                    FileUtils.DismissLoading(CreateNotificationActivity.this);
                     System.out.println("CreateNoti_Error=>" + error.toString());
                     error.printStackTrace();
                 }
@@ -310,7 +310,7 @@ public class CreateNotificationActivity extends BaseActivity {
             request = new JsonObjectRequest(POST, Constans.update_notification, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(context);
+                    FileUtils.DismissLoading(CreateNotificationActivity.this);
                     Log.e("UpdateNoti=>", response.toString());
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
@@ -321,7 +321,7 @@ public class CreateNotificationActivity extends BaseActivity {
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(getApplicationContext());
+                    FileUtils.DismissLoading(CreateNotificationActivity.this);
                     System.out.println("UpdateNoti_Error=>" + error.toString());
                     error.printStackTrace();
                 }

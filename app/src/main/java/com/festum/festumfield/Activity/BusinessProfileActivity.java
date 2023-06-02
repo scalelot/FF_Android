@@ -208,7 +208,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 } else if (edt_interested_subcategory.getText().toString().equals("")) {
                     edt_interested_subcategory.setError(getResources().getString(R.string.please_enter_interested_subcategory));
                 } else {
-                    FileUtils.DisplayLoading(context);
+                    FileUtils.DisplayLoading(BusinessProfileActivity.this);
                     CreateBusinessAccount(Request.Method.POST, Constans.business_register, edt_bussiness_name.getText().toString().trim(), edt_category.getText().toString().trim(), edt_subcategory.getText().toString().trim(), edt_description.getText().toString().trim(), String.valueOf(Const.b_longitude), String.valueOf(Const.b_lattitude), edt_interested_category.getText().toString().trim(), edt_interested_subcategory.getText().toString().trim());
                 }
             }
@@ -246,7 +246,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     Toast.makeText(context, getResources().getString(R.string.please_enter_b_location), Toast.LENGTH_SHORT).show();
                 } else {
                     if (img_add_brochure.getDrawable() == null) {
-                        FileUtils.DisplayLoading(context);
+                        FileUtils.DisplayLoading(BusinessProfileActivity.this);
                         rl_add_brochur.setVisibility(View.GONE);
                         rl_upload.setVisibility(View.VISIBLE);
                     } else {
@@ -334,13 +334,12 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     }
 
     public void getBusinessProfileInfo() {
-        Log.d("Api", "work");
-//        FileUtils.DisplayLoading(BusinessProfileActivity.this);
         try {
+            FileUtils.DisplayLoading(BusinessProfileActivity.this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_business_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-//                    FileUtils.DismissLoading(BusinessProfileActivity.this);
+                    FileUtils.DismissLoading(BusinessProfileActivity.this);
 
                     Log.e("FetchBusinessInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
@@ -390,7 +389,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("FetchBusiness_Error=>", error.toString());
-//                    FileUtils.DismissLoading(BusinessProfileActivity.this);
+                    FileUtils.DismissLoading(BusinessProfileActivity.this);
                     error.printStackTrace();
                 }
             }) {
@@ -591,6 +590,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     public void uploadImage(File file) {
         try {
+            FileUtils.DisplayLoading(BusinessProfileActivity.this);
             AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
@@ -598,6 +598,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }).getAsJSONObject(new JSONObjectRequestListener() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(BusinessProfileActivity.this);
                     Log.e("BusinessProImage=>", response.toString());
                     getBusinessProfileInfo();
                     status = true;
@@ -605,11 +606,13 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
                 @Override
                 public void onError(ANError error) {
+                    FileUtils.DismissLoading(BusinessProfileActivity.this);
                     Log.e("BusinProImage_Error--->", error.toString());
                     status = false;
                 }
             });
         } catch (Exception e) {
+            FileUtils.DismissLoading(BusinessProfileActivity.this);
             e.printStackTrace();
         }
     }

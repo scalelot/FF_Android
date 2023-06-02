@@ -27,17 +27,12 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import io.socket.client.IO;
-import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.client.Transport;
-import kotlin.jvm.internal.DefaultConstructorMarker;
-import okhttp3.WebSocket;
 
 public class MyApplication extends Application implements LifecycleObserver {
 
@@ -86,19 +81,23 @@ public class MyApplication extends Application implements LifecycleObserver {
         editor1.clear();
         editor1.commit();
 
+
+        String authToken = MyApplication.getChannelId(context.getApplicationContext());
         //Socket
         IO.Options options = new IO.Options();
         options.forceNew = true;
         options.reconnection = true;
         options.reconnectionDelay = 2000;
         options.reconnectionDelayMax = 5000;
+        options.query = authToken;
 
         try {
+
             mSocket = IO.socket("https://api.festumfield.com", options);
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-            mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
+//            mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
 
 
             if(!mSocket.connected()){
@@ -115,17 +114,12 @@ public class MyApplication extends Application implements LifecycleObserver {
         public void call(Object... args) {
 
             Transport transport = (Transport)args[0];
-            transport.on(Transport.EVENT_REQUEST_HEADERS, new Emitter.Listener() {
+            transport.on(Transport.EVENT_RESPONSE_HEADERS, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    @SuppressWarnings("unchecked")
-                    Map<String, List<String>> headers = (Map<String, List<String>>) args[0];
-                    String authToken = "";
-                    headers.put("authorization", Collections.singletonList(authToken));
-                }
-            }).on(Transport.EVENT_RESPONSE_HEADERS, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
+                    Map<String, String> headers = (Map<String, String>) args[0];
+
+//                    headers.put("channelID", authToken);
                 }
             });
         }
@@ -153,7 +147,6 @@ public class MyApplication extends Application implements LifecycleObserver {
             }
         }
     };
-
 
     public static boolean isApplicationOnBackground() {
         return stateCounter == 0;
@@ -240,6 +233,22 @@ public class MyApplication extends Application implements LifecycleObserver {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String cookie = sharedPreferences.getString("AuthToken", "");
         return cookie;
+    }
+
+    public static void setChannelId(Context context,String channelId){
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        if (sharedPreferences1 == null){
+            return;
+        }
+        SharedPreferences.Editor editor = sharedPreferences1.edit();
+        editor.putString("ChannelIds",channelId);
+        editor.commit();
+    }
+
+    public static String getChannelId(Context context){
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        String str = sharedPreferences1.getString("ChannelIds","");
+        return str;
     }
 
     public static void setBusinessProfileRegistered(Context context, Boolean useractive) {

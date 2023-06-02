@@ -43,6 +43,7 @@ import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Activity.CreateNewGroupActivity;
 import com.festum.festumfield.Activity.DisplayAllProductActivity;
 import com.festum.festumfield.Activity.LikeAndCommentActivity;
+import com.festum.festumfield.Activity.LoginActivity;
 import com.festum.festumfield.Activity.PromotionActivity;
 import com.festum.festumfield.Activity.RequestActivity;
 import com.festum.festumfield.Activity.ProfileActivity;
@@ -122,7 +123,6 @@ public class MainActivity extends BaseActivity {
         noti_message = findViewById(R.id.noti_message);
 
         getAllPersonalData();
-        fetchProfileApi();
 
         def = txt_find_friend.getTextColors();
         Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));
@@ -347,6 +347,64 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void getAllPersonalData() {
+        try {
+            FileUtils.DisplayLoading(MainActivity.this);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        FileUtils.DismissLoading(MainActivity.this);
+                        Log.e("PersonalGetInfo=>", response.toString());
+                        JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                        GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
+
+                        MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
+                        MyApplication.setChannelId(getApplicationContext(),peronalInfoModel.getData().getChannelID());
+
+                        if (MyApplication.getuserName(getApplicationContext()).equals("")) {
+                            user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
+                        } else {
+                            user_name.setText(MyApplication.getuserName(getApplicationContext()));
+                        }
+
+                        String fullName = peronalInfoModel.getData().getFullName();
+                        if (fullName.isEmpty()) {
+                            CustomDialog();
+                        } else {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(MainActivity.this);
+                    Log.e("PersonalGetInfo_Error=>", error.toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Content-Type", "application/json");
+                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    return map;
+                }
+            };
+
+            RequestQueue referenceQueue = Volley.newRequestQueue(getApplicationContext());
+            referenceQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            FileUtils.DismissLoading(MainActivity.this);
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -396,90 +454,6 @@ public class MainActivity extends BaseActivity {
             Log.e("Per:==", e.toString());
         }
         return p;
-    }
-
-    private void getAllPersonalData() {
-        try {
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        Log.e("PersonalGetInfo=>", response.toString());
-                        JSONObject jsonObject = new JSONObject(String.valueOf(response));
-                        GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
-
-                        MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
-
-                        if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-                            user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
-                        } else {
-                            user_name.setText(MyApplication.getuserName(getApplicationContext()));
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("PersonalGetInfo_Error=>", error.toString());
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
-                    return map;
-                }
-            };
-
-            RequestQueue referenceQueue = Volley.newRequestQueue(getApplicationContext());
-            referenceQueue.add(jsonObjectRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void fetchProfileApi() {
-        JsonObjectRequest jsonObjectRequest = null;
-        try {
-            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.e("ProfileInfo=>", response.toString());
-
-                    GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
-
-                    String fullName = profileRegisterModel.getData().getFullName();
-                    if (fullName.isEmpty()) {
-                        CustomDialog();
-                    } else {
-
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("ProfileInfoError==>>", error.toString());
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
-                    return map;
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-            requestQueue.add(jsonObjectRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void CustomDialog() {
@@ -537,8 +511,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchProfileApi();
-
         if (PackageManager.PERMISSION_GRANTED == 0) {
             ActivityCompat.requestPermissions(this, permissions(), 1);
         } else {

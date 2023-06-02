@@ -55,6 +55,7 @@ import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -148,6 +149,7 @@ public class MapsFragment extends Fragment {
                             address = addressList.get(0);
                             latitude = address.getLatitude();
                             longitude = address.getLongitude();
+                            FileUtils.DisplayLoading(MapsFragment.this.getContext());
                             findLocationorName(latitude, longitude);
                             latLng = new LatLng(address.getLatitude(), address.getLongitude());
                         }else {
@@ -248,6 +250,7 @@ public class MapsFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_find_friends_location_or_name, new JSONObject(maplatlog), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(MapsFragment.this.getContext());
                     Log.e("LL_findfriends-->", response.toString());
 
                     findFriendsModel = new Gson().fromJson(response.toString(), FindFriendsModel.class);
@@ -321,6 +324,7 @@ public class MapsFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(MapsFragment.this.getContext());
                     Log.e("LL_findfriends_Error-->", error.toString());
                     error.printStackTrace();
                 }
@@ -334,6 +338,7 @@ public class MapsFragment extends Fragment {
             };
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(   MapsFragment.this.getContext());
             e.printStackTrace();
         }
     }

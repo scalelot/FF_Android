@@ -231,10 +231,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
         try {
             if (!chatMessages.get(position).getString("message").isEmpty()) {
                 SendMessageHolder sendMessageHolder = (SendMessageHolder) holder;
+                sendMessageHolder.mView.setBackgroundResource(R.color.app_bg);
                 if (!message.getBoolean("isSent")) {
                     sendMessageHolder.rl_right.setVisibility(View.GONE);
                     sendMessageHolder.rl_left.setVisibility(View.VISIBLE);
-                    sendMessageHolder.mView.setBackgroundResource(R.color.white);
 
                     sendMessageHolder.reciveTxt.setText(message.getString("message"));
                     sendMessageHolder.reciveUserName.setText(message.getString("name"));
@@ -247,7 +247,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 } else {
                     sendMessageHolder.rl_right.setVisibility(View.VISIBLE);
                     sendMessageHolder.rl_left.setVisibility(View.GONE);
-                    sendMessageHolder.mView.setBackgroundResource(R.color.white);
+
 
                     sendMessageHolder.sendTxt.setText(message.getString("message"));
                     String strTime = message.getString("Sendtime");
@@ -262,10 +262,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 }
             } else if (!chatMessages.get(position).getString("image").isEmpty()) {
                 SendImageHolder sendImageHolder = (SendImageHolder) holder;
+                sendImageHolder.mView.setBackgroundResource(R.color.app_bg);
                 if (!message.getBoolean("isSent")) {
                     sendImageHolder.relativeRight.setVisibility(View.GONE);
                     sendImageHolder.relativeLeft.setVisibility(View.VISIBLE);
-                    sendImageHolder.mView.setBackgroundResource(R.color.white);
 
                     sendImageHolder.reciveUserTxt.setText(message.getString("name"));
 
@@ -282,7 +282,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 } else {
                     sendImageHolder.relativeRight.setVisibility(View.VISIBLE);
                     sendImageHolder.relativeLeft.setVisibility(View.GONE);
-                    sendImageHolder.mView.setBackgroundResource(R.color.white);
 
                     if (message.getString("image").startsWith("/storage")) {
                         Picasso.get().load(message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
@@ -301,12 +300,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 }
             } else {
                 SendProductHolder sendProductHolder = (SendProductHolder) holder;
-                sendProductHolder.mView.setBackgroundResource(R.color.white);
+                sendProductHolder.mView.setBackgroundResource(R.color.app_bg);
 
                 if (!message.getBoolean("isSent")) {
                     sendProductHolder.sendRelative.setVisibility(View.GONE);
                     sendProductHolder.reciveRelative.setVisibility(View.VISIBLE);
-                    sendProductHolder.mView.setBackgroundResource(R.color.white);
 
                     if (!message.getString("pro_name").isEmpty()) {
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

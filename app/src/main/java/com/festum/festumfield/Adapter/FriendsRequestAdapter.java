@@ -33,6 +33,7 @@ import com.festum.festumfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterMod
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.Utils.FileUtils;
 import com.kyleduo.switchbutton.SwitchButton;
 
 import org.json.JSONException;
@@ -211,6 +212,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         button_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileUtils.DisplayLoading(fragment.getContext());
                 status = "accepted";
                 setFriendsResponseApi(freindsIds, status);
                 acceptdialog.dismiss();
@@ -262,6 +264,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         button_block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileUtils.DisplayLoading(fragment.getContext());
                 status = "blocked";
                 setFriendsResponseApi(freindsIds, status);
                 rejectdialog.dismiss();
@@ -356,6 +359,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.response_friend_request, js, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    FileUtils.DismissLoading(fragment.getContext());
                     Log.e("LL_friends_response", response.toString());
 
                     FriendsRequestAdapter.this.notifyDataSetChanged();
@@ -364,6 +368,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(fragment.getContext());
                     System.out.println("friends_response_error:-- " + error.toString());
                 }
             }) {
@@ -379,6 +384,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            FileUtils.DismissLoading(fragment.getContext());
         }
     }
 }

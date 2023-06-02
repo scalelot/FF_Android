@@ -99,12 +99,13 @@ public class BusinessInfoFragment extends Fragment {
     }
 
     private void getApiCalling() {
-
+        FileUtils.DisplayLoading(BusinessInfoFragment.this.getContext());
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_business_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     if (response != null) {
+                        FileUtils.DismissLoading(BusinessInfoFragment.this.getContext());
                         Log.e("BusinessInfo=>", response.toString());
                         BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
@@ -142,6 +143,7 @@ public class BusinessInfoFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    FileUtils.DismissLoading(BusinessInfoFragment.this.getContext());
                     Log.e("BusinessInfo_Error=>", error.toString());
                 }
             }) {
@@ -157,6 +159,7 @@ public class BusinessInfoFragment extends Fragment {
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
+            FileUtils.DismissLoading(BusinessInfoFragment.this.getContext());
             e.printStackTrace();
         }
     }

@@ -290,7 +290,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:hint="@string/typing_here"
                     android:maxHeight="@dimen/sp_400"
-                    android:maxLines="4"
+                    android:maxLines="1"
                     android:paddingLeft="@dimen/margin_15"
                     android:paddingTop="@dimen/margin_13"
                     android:paddingRight="@dimen/margin_8"

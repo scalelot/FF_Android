@@ -172,7 +172,7 @@
                         android:layout_below="@+id/txt_apply"
                         android:layout_marginTop="@dimen/margin_5"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/txt_save"
