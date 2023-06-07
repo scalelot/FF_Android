@@ -272,9 +272,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     String img = message.getString("image");
                     String pImg = message.getString("userProfileImg");
 
-                    Picasso.get().load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveImg);
-
-                    Picasso.get().load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveUserImg);
+                    Glide.with(activity).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveImg);
+                    Glide.with(activity).load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveUserImg);
 
                     String strTime = String.valueOf(message.getString("recivetime"));
                     sendImageHolder.reciveImgTime.setText(getDate(strTime));
@@ -284,9 +283,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     sendImageHolder.relativeLeft.setVisibility(View.GONE);
 
                     if (message.getString("image").startsWith("/storage")) {
-                        Picasso.get().load(message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+                        Glide.with(activity).load(message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
                     } else {
-                        Picasso.get().load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+                        Glide.with(activity).load(Constans.Display_Image_URL + message.getString("image")).placeholder(R.drawable.ic_user_img).into(sendImageHolder.sendImage);
+
                     }
                     String strTime = String.valueOf(message.getString("Sendtime"));
                     sendImageHolder.sendImgTime.setText(getDate(strTime));

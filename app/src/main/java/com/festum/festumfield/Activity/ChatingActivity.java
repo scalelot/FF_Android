@@ -101,8 +101,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         mSocket = MyApplication.mSocket;
 
-        mSocket.connect();
-
         getMessageRecive();
 
         hp_back_arrow = findViewById(R.id.hp_back_arrow);
@@ -203,22 +201,57 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void getMessageRecive() {
-        mSocket.on("newMessage", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                try {
-                    runOnUiThread(new Runnable() {
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSocket.on("newMessage", new Emitter.Listener() {
                         @Override
-                        public void run() {
+                        public void call(Object... args) {
                             JSONObject js = (JSONObject) args[0];
-                            System.out.println("GetMessageData:=" + js.toString());
+                            System.out.println("NewMessage:==" + js.toString());
+//                            try {
+//                                JSONObject jsonObject = new JSONObject(js.toString());
+//                                String toUserIds = jsonObject.getString("from");
+//                                String name = jsonObject.getString("customername");
+//                                JSONObject content = jsonObject.getJSONObject("content");
+//
+//                                if (!toUserIds.equals(loginUserId)) {
+//                                    recive = new JSONObject();
+//
+//                                    recive.put("name", name);
+//                                    if (!content.has("text")) {
+//                                        String message = content.getJSONObject("text").getString("message");
+//                                        recive.put("message", message);
+//                                    } else {
+//                                        recive.put("message", "");
+//                                    }
+//                                    if (!content.has("media")) {
+//                                        String media = content.getJSONObject("media").getString("path");
+//                                        recive.put("image", media);
+//                                    } else {
+//                                        recive.put("image", "");
+//                                    }
+////                                    recive.put("recivetime", listChatsModelArrayList.get(i).getCreatedAt());
+//                                    recive.put("userProfileImg", p_img);
+//                                    recive.put("isRecive", true);
+//                                    recive.put("isSent", false);
+//                                }
+//
+//                                List<JSONObject> fr = new ArrayList<>();
+//                                fr.add(recive);
+//
+////                                objectList.add(recive);
+//                            } catch (JSONException e) {
+//                                throw new RuntimeException(e);
+//                            }
                         }
                     });
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+
+        }
     }
 
     private void initView() {
@@ -226,7 +259,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
-        chat_recycler.setHasFixedSize(true);
 
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
         chat_recycler.setAdapter(messageAdapter);
@@ -259,7 +291,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 jsonObject.put("pro_img", "");
                 jsonObject.put("pro_message", "");
                 jsonObject.put("isSent", true);
-
                 jsonObject.put("isRecive", false);
 
                 if (edt_chating.getText().toString().equals("")) {
@@ -270,6 +301,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     objectList.add(jsonObject);
 
                     messageAdapter.notifyDataSetChanged();
+
                     chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
 
                 }

@@ -25,6 +25,8 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -44,6 +46,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     public static Socket mSocket;
     SharedPreferences sharedPreferences;
     private static MyApplication singleton = null;
+
     public static MyApplication getInstance() {
 
         if (singleton == null) {
@@ -81,54 +84,42 @@ public class MyApplication extends Application implements LifecycleObserver {
         editor1.clear();
         editor1.commit();
 
-
-        String authToken = MyApplication.getChannelId(context.getApplicationContext());
         //Socket
         IO.Options options = new IO.Options();
         options.forceNew = true;
         options.reconnection = true;
         options.reconnectionDelay = 2000;
         options.reconnectionDelayMax = 5000;
-        options.query = authToken;
 
         try {
-
-            mSocket = IO.socket("https://api.festumfield.com", options);
+            mSocket = IO.socket(Constans.CHAT_SERVER_URL, options);
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-//            mSocket.io().on(Manager.EVENT_TRANSPORT, onTransport);
 
-
-            if(!mSocket.connected()){
+            if (!mSocket.connected()) {
                 mSocket.connect();
             }
+
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
     }
-
-    private final Emitter.Listener onTransport = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-
-            Transport transport = (Transport)args[0];
-            transport.on(Transport.EVENT_RESPONSE_HEADERS, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Map<String, String> headers = (Map<String, String>) args[0];
-
-//                    headers.put("channelID", authToken);
-                }
-            });
-        }
-    };
 
     public Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             Log.e(TAG, "Socket Connected!");
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                String channleIds = MyApplication.getChannelId(context);
+                jsonObject.put("channelID", channleIds);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            mSocket.emit("init", jsonObject);
         }
     };
 
@@ -142,7 +133,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         @Override
         public void call(Object... args) {
             Log.e(TAG, "onDisconnect");
-            if(!mSocket.connected()){
+            if (!mSocket.connected()) {
                 mSocket.connect();
             }
         }
@@ -235,19 +226,19 @@ public class MyApplication extends Application implements LifecycleObserver {
         return cookie;
     }
 
-    public static void setChannelId(Context context,String channelId){
+    public static void setChannelId(Context context, String channelId) {
         SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        if (sharedPreferences1 == null){
+        if (sharedPreferences1 == null) {
             return;
         }
         SharedPreferences.Editor editor = sharedPreferences1.edit();
-        editor.putString("ChannelIds",channelId);
+        editor.putString("ChannelIds", channelId);
         editor.commit();
     }
 
-    public static String getChannelId(Context context){
+    public static String getChannelId(Context context) {
         SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        String str = sharedPreferences1.getString("ChannelIds","");
+        String str = sharedPreferences1.getString("ChannelIds", "");
         return str;
     }
 
