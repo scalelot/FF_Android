@@ -121,7 +121,9 @@ public class BusinessInfoFragment extends Fragment {
                         txt_business_location.setText(FileUtils.getAddressFromLatLng(getContext(), latLng));
                         txt_business_category.setText(businessInfoRegisterModel.getData().getInterestedCategory());
                         txt_business_subcategory.setText(businessInfoRegisterModel.getData().getInterestedSubCategory());
-                        txt_business_brochure.setText(businessInfoRegisterModel.getData().getBrochure());
+                        String brochure = businessInfoRegisterModel.getData().getBrochure();
+                        String pdfName = brochure.substring(brochure.lastIndexOf('/')+1);
+                        txt_business_brochure.setText(pdfName);
 
                         Glide.with(BusinessInfoFragment.this.getContext()).asBitmap().load(Constans.Display_Image_URL + businessInfoRegisterModel.getData().getBusinessimage()).placeholder(R.drawable.ic_user).into(cir_business_img);
 

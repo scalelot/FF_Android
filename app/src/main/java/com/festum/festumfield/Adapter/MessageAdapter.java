@@ -315,8 +315,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         sendProductHolder.itemView.setLayoutParams(layoutParams);
                         sendProductHolder.recviceProName.setText(message.getString("pro_name"));
                         sendProductHolder.recviceDes.setText(message.getString("pro_des"));
-                        sendProductHolder.recvicePrice.setText("$" + message.getString("pro_price") + "." + "00");
                         sendProductHolder.recviceMessage.setText(message.getString("pro_message"));
+                        sendProductHolder.recvicePrice.setText("$" + message.getString("pro_price") + "." + "00");
                         Picasso.get().load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_image);
                         Picasso.get().load(Constans.Display_Image_URL + message.getString("userProfileImg")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.recvice_profile_pic);
 
@@ -339,8 +339,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         sendProductHolder.itemView.setLayoutParams(layoutParams);
                         sendProductHolder.sendProname.setText(message.getString("pro_name"));
                         sendProductHolder.sendProdes.setText(message.getString("pro_des"));
-                        sendProductHolder.sendProprice.setText("$" + message.getString("pro_price") + "." + "00");
                         sendProductHolder.sendMessage.setText(message.getString("pro_message"));
+                        sendProductHolder.sendProprice.setText("$" + message.getString("pro_price") + "." + "00");
                         Glide.with(activity).load(Constans.Display_Image_URL + message.getString("pro_img")).placeholder(R.drawable.ic_user_img).into(sendProductHolder.sendProImage);
 
 //                        String strTime = String.valueOf(message.getString("recivetime"));

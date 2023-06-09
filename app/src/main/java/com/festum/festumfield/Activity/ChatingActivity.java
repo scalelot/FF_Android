@@ -1,5 +1,7 @@
 package com.festum.festumfield.Activity;
 
+import static com.android.volley.Request.Method.GET;
+
 import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -47,6 +49,7 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.festum.festumfield.Model.ListChat.ListChatsModel;
+import com.festum.festumfield.Model.Product.ProductModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
@@ -92,7 +95,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     NestedScrollView nestedScrollView;
     LinearLayoutManager linearLayoutManager;
     Socket mSocket;
-    JSONObject send, recive;
+    JSONObject send, recive,reciveMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,8 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         nestedScrollView = findViewById(R.id.nestedScrollView);
         img_product = findViewById(R.id.img_product);
         toolbar = findViewById(R.id.toolbar);
+
+        initView();
 
         setSupportActionBar(toolbar);
         toUserIds = getSharedPreferences("ToUserIds", MODE_PRIVATE).getString("ids", null);
@@ -192,74 +197,144 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         img_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChatingActivity.this, ChatProductSelectActivity.class));
+                Intent intent = new Intent(ChatingActivity.this, ChatProductSelectActivity.class);
+                intent.putExtra("friendid", toUserIds);
+                startActivity(intent);
                 finish();
             }
         });
-        initView();
+
 
     }
 
+    String proName, proDesc, proPrice, proImage;
+
     public void getMessageRecive() {
         try {
-            runOnUiThread(new Runnable() {
+            mSocket.on("newMessage", new Emitter.Listener() {
                 @Override
-                public void run() {
-                    mSocket.on("newMessage", new Emitter.Listener() {
+                public void call(Object... args) {
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void call(Object... args) {
+                        public void run() {
                             JSONObject js = (JSONObject) args[0];
                             System.out.println("NewMessage:==" + js.toString());
-//                            try {
-//                                JSONObject jsonObject = new JSONObject(js.toString());
-//                                String toUserIds = jsonObject.getString("from");
-//                                String name = jsonObject.getString("customername");
-//                                JSONObject content = jsonObject.getJSONObject("content");
-//
-//                                if (!toUserIds.equals(loginUserId)) {
-//                                    recive = new JSONObject();
-//
-//                                    recive.put("name", name);
-//                                    if (!content.has("text")) {
-//                                        String message = content.getJSONObject("text").getString("message");
-//                                        recive.put("message", message);
-//                                    } else {
-//                                        recive.put("message", "");
-//                                    }
-//                                    if (!content.has("media")) {
-//                                        String media = content.getJSONObject("media").getString("path");
-//                                        recive.put("image", media);
-//                                    } else {
-//                                        recive.put("image", "");
-//                                    }
-////                                    recive.put("recivetime", listChatsModelArrayList.get(i).getCreatedAt());
-//                                    recive.put("userProfileImg", p_img);
-//                                    recive.put("isRecive", true);
-//                                    recive.put("isSent", false);
-//                                }
-//
-//                                List<JSONObject> fr = new ArrayList<>();
-//                                fr.add(recive);
-//
-////                                objectList.add(recive);
-//                            } catch (JSONException e) {
-//                                throw new RuntimeException(e);
-//                            }
+                            try {
+                                JSONObject jsonObject = new JSONObject(js.toString());
+                                String fromIds = jsonObject.getString("from");
+                                String name = jsonObject.getString("customername");
+                                JSONObject content = jsonObject.getJSONObject("content");
+                                JSONObject txtJS = content.getJSONObject("text");
+                                JSONObject medJS = content.getJSONObject("media");
+                                JSONObject proJS = content.getJSONObject("product");
+
+                                if (!fromIds.equals(loginUserId)) {
+                                    reciveMessage = new JSONObject();
+
+                                    //Message Only
+                                    if (txtJS.length() != 0 && proJS.length() == 0) {
+                                        String strTxt = txtJS.getString("message");
+                                        reciveMessage.put("message", strTxt);
+                                    } else {
+                                        reciveMessage.put("message", "");
+                                    }
+
+                                    //Message and Product
+                                    if (txtJS.length() != 0 && proJS.length() != 0) {
+                                        String strTxt = txtJS.getString("message");
+                                        reciveMessage.put("pro_message", strTxt);
+                                    } else {
+                                        reciveMessage.put("pro_message", "");
+                                    }
+                                    //Image
+                                    if (medJS.length() != 0 ) {
+                                        String psthTxt = medJS.getString("path");
+                                        reciveMessage.put("image", psthTxt);
+                                    } else {
+                                        reciveMessage.put("image", "");
+                                    }
+                                    //Product
+                                    if (proJS.length() != 0) {
+                                        String proIds = proJS.getString("productid");
+                                        getReciveProduct(proIds);
+                                        reciveMessage.put("pro_name", proName);
+                                        reciveMessage.put("pro_des", proDesc);
+                                        reciveMessage.put("pro_price", proPrice);
+                                        reciveMessage.put("pro_img", proImage);
+                                    } else {
+                                        System.out.println("e");
+                                        reciveMessage.put("pro_name", "");
+                                        reciveMessage.put("pro_des", "");
+                                        reciveMessage.put("pro_price", "");
+                                        reciveMessage.put("pro_img", "");
+                                        reciveMessage.put("pro_message", "");
+                                    }
+
+                                    reciveMessage.put("name", name);
+                                    reciveMessage.put("userProfileImg", p_img);
+                                    reciveMessage.put("isRecive", true);
+                                    reciveMessage.put("isSent", false);
+
+                                    if (fromIds.equals(toUserIds)) {
+                                        objectList.add(reciveMessage);
+
+                                        messageAdapter.notifyDataSetChanged();
+
+                                        chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
+                                    } else {
+                                        System.out.println("UserId Wrong");
+                                    }
+                                } else {
+                                    System.out.println("Error");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }
             });
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void getReciveProduct(String proIds) {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_product + "?pid=" + proIds, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("FetchSingleProduct=>", response.toString());
+
+                    ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
+
+                    proName = productModel.getProductDetailsModel().getName();
+                    proDesc = productModel.getProductDetailsModel().getDescription();
+                    proPrice = String.valueOf(productModel.getProductDetailsModel().getPrice());
+                    proImage = String.valueOf(productModel.getProductDetailsModel().getImages().get(0));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("FetchSingleProduct_Error=> " + error.toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Content-Type", "application/json");
+                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    return map;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(ChatingActivity.this);
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void initView() {
-        linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        chat_recycler.setLayoutManager(linearLayoutManager);
-
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
         chat_recycler.setAdapter(messageAdapter);
 
@@ -316,7 +391,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 if (p_ids != null && !TextUtils.isEmpty(edt_mess)) {
                     jsonObject.put("to", toUserIds);
                     jsonObject.put("productIds", p_ids);
-                    jsonObject.put("pro_message", edt_mess);
+                    jsonObject.put("pro_message", edt_chating.getText().toString().trim());
                     jsonObject.put("pro_name", p_name);
                     jsonObject.put("pro_img", pro_img);
                     jsonObject.put("pro_price", p_price);
@@ -326,7 +401,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     jsonObject.put("message", "");
                     jsonObject.put("image", "");
 
-                    sendProduct(toUserIds, p_ids, edt_mess);
+//                    sendProduct(toUserIds, p_ids, edt_mess);
 
                     rel_replay.setVisibility(View.GONE);
 
@@ -334,7 +409,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                     messageAdapter.notifyDataSetChanged();
 
-
+                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
                 } else {
                     Toast.makeText(ChatingActivity.this, "Enter Message", Toast.LENGTH_SHORT).show();
                 }
@@ -496,6 +571,11 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                             messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
                             chat_recycler.setAdapter(messageAdapter);
+
+                            messageAdapter.notifyDataSetChanged();
+
+                            chat_recycler.scrollToPosition(messageAdapter.getItemCount() - 1);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -61,7 +61,7 @@ public class UserProfileActivity extends BaseActivity {
     TextView u_name, u_nickname;
     CircleImageView user_profile_image;
     ImageView ic_back, ic_fb, ic_insta, ic_twitter, ic_linkedin, ic_pinterest, ic_youtube;
-
+    Boolean isBusinessProfile = false;
     public static AppCompatButton btn_edit_profile;
     LinearLayout ll_business_product;
     int pos;
@@ -135,6 +135,11 @@ public class UserProfileActivity extends BaseActivity {
                 pos = tab.getPosition();
                 if (tab.getPosition() == 1) {
                     btn_edit_profile.setText(getResources().getString(R.string.edit_business_profile));
+                    if (isBusinessProfile) {
+                        ll_business_product.setVisibility(View.VISIBLE);
+                    } else {
+                        ll_business_product.setVisibility(View.GONE);
+                    }
                     btn_edit_profile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -145,6 +150,7 @@ public class UserProfileActivity extends BaseActivity {
                     });
                 } else {
                     btn_edit_profile.setText(getResources().getString(R.string.edit_personal_profile));
+                    ll_business_product.setVisibility(View.GONE);
                     btn_edit_profile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -170,7 +176,7 @@ public class UserProfileActivity extends BaseActivity {
     public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO,Manifest.permission.CAMERA};
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA};
     String[] p;
 
     public String[] permissions() {
@@ -193,11 +199,11 @@ public class UserProfileActivity extends BaseActivity {
     private void getApiCalling() {
         JsonObjectRequest jsonObjectRequest = null;
         try {
-            FileUtils.DisplayLoading(UserProfileActivity.this);
+//            FileUtils.DisplayLoading(UserProfileActivity.this);
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(UserProfileActivity.this);
+//                    FileUtils.DismissLoading(UserProfileActivity.this);
                     GetPersonalProfileModel userProfileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                     u_name.setText(userProfileRegisterModel.getData().getFullName());
@@ -226,12 +232,7 @@ public class UserProfileActivity extends BaseActivity {
                         }
                     }
 
-
-                    if (!userProfileRegisterModel.getData().getIsBusinessProfileCreated()) {
-                        ll_business_product.setVisibility(View.GONE);
-                    } else {
-                        ll_business_product.setVisibility(View.VISIBLE);
-                    }
+                    isBusinessProfile = userProfileRegisterModel.getData().getIsBusinessProfileCreated();
 
                     ic_fb.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -353,7 +354,7 @@ public class UserProfileActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(UserProfileActivity.this);
+//                    FileUtils.DismissLoading(UserProfileActivity.this);
                     Log.e("error", error.toString());
                 }
             }) {
@@ -369,7 +370,7 @@ public class UserProfileActivity extends BaseActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
-            FileUtils.DismissLoading(UserProfileActivity.this);
+//            FileUtils.DismissLoading(UserProfileActivity.this);
             e.printStackTrace();
         }
 
@@ -386,7 +387,7 @@ public class UserProfileActivity extends BaseActivity {
             System.out.println("SetFilePath:==" + path);
             File file = new File(path);
             personalProfileImageUpload(file);
-        }  else {
+        } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }

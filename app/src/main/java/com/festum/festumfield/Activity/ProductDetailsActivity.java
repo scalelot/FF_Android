@@ -187,6 +187,9 @@ public class ProductDetailsActivity extends BaseActivity {
                         }
                     });
 
+                    String price = String.format("%,.0f", Float.valueOf(productModel.getProductDetailsModel().getPrice()));
+
+
                     btn_inquiry_message.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -195,10 +198,8 @@ public class ProductDetailsActivity extends BaseActivity {
                             intent.putExtra("product_name", productModel.getProductDetailsModel().getName());
                             intent.putExtra("product_des", productModel.getProductDetailsModel().getDescription());
                             intent.putExtra("product_ids", productModel.getProductDetailsModel().getId());
-                            intent.putExtra("product_price", productModel.getProductDetailsModel().getPrice());
+                            intent.putExtra("product_price", price);
                             startActivity(intent);
-                            finish();
-
                         }
                     });
 

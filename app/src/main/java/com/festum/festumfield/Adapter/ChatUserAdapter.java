@@ -1,6 +1,7 @@
 package com.festum.festumfield.Adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyDataViewHolder>  {
+public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyDataViewHolder> {
 
     Fragment fragment;
     ArrayList<AllFriendsRegisterModel> registerModels;
@@ -48,19 +49,12 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyDataViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull MyDataViewHolder holder,int position) {
         Glide.with(fragment).load(Constans.Display_Image_URL + registerModels.get(position).getProfileimage()).placeholder(R.drawable.ic_user_img).into(holder.img_user);
 
         holder.txt_user_name.setText(registerModels.get(position).getFullName());
 
-        String strTime = String.valueOf(registerModels.get(position).getTimestamp());
-        long timestamp = Long.parseLong(strTime) * 1000L;
-        if (String.valueOf(timestamp) != null) {
-            String time = getFormattedDate(timestamp);
-            holder.chat_user_time.setText(time);
-        }
-
-        holder.ll_user_view.setOnClickListener(new View.OnClickListener() {
+        holder.rl_chat_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences sharedPreferences = fragment.getActivity().getSharedPreferences("ToUserIds", 0);
@@ -70,13 +64,45 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
                 editor.putString("images", registerModels.get(position).getProfileimage());
                 editor.putString("nickName", registerModels.get(position).getNickName());
                 editor.apply();
-                editor.commit();
 
                 Intent intent = new Intent(fragment.getContext(), ChatingActivity.class);
                 intent.putExtra("UserName", registerModels.get(position).getFullName());
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 fragment.startActivity(intent);
             }
         });
+
+        String strTime = String.valueOf(registerModels.get(position).getTimestamp());
+        long timestamp = Long.parseLong(strTime) * 1000L;
+        if (String.valueOf(timestamp) != null) {
+            String time = getFormattedDate(timestamp);
+            holder.chat_user_time.setText(time);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return registerModels.size();
+    }
+
+    static class MyDataViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView img_user;
+        TextView txt_user_name, chat_user_time, txt_message, txt_chat_count;
+        RelativeLayout iv_circle_image, rl_chat_layout;
+        ImageView iv_type_img;
+
+        public MyDataViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            img_user = itemView.findViewById(R.id.img_user);
+            txt_user_name = itemView.findViewById(R.id.txt_user_name);
+            chat_user_time = itemView.findViewById(R.id.chat_user_time);
+            txt_message = itemView.findViewById(R.id.txt_message);
+            txt_chat_count = itemView.findViewById(R.id.txt_chat_count);
+            rl_chat_layout = itemView.findViewById(R.id.rl_chat_layout);
+            iv_circle_image = itemView.findViewById(R.id.iv_circle_image);
+            iv_type_img = itemView.findViewById(R.id.iv_type_img);
+        }
     }
 
     public String getFormattedDate(long smsTimeInMilis) {
@@ -100,36 +126,8 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return registerModels.size();
-    }
-
     public void filterList(ArrayList<AllFriendsRegisterModel> filterlist) {
         registerModels = filterlist;
         notifyDataSetChanged();
-    }
-
-    class MyDataViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView img_user;
-        TextView txt_user_name, chat_user_time, txt_message, txt_chat_count;
-        LinearLayout ll_user_view;
-        RelativeLayout iv_circle_image;
-        ImageView iv_type_img;
-
-        public MyDataViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            img_user = itemView.findViewById(R.id.img_user);
-            txt_user_name = itemView.findViewById(R.id.txt_user_name);
-            chat_user_time = itemView.findViewById(R.id.chat_user_time);
-            txt_message = itemView.findViewById(R.id.txt_message);
-            txt_chat_count = itemView.findViewById(R.id.txt_chat_count);
-            ll_user_view = itemView.findViewById(R.id.ll_user_view);
-
-            iv_circle_image = itemView.findViewById(R.id.iv_circle_image);
-            iv_type_img = itemView.findViewById(R.id.iv_type_img);
-
-        }
     }
 }

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_chat_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_bg">
+    android:background="@color/app_bg"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
-        android:id="@+id/ll_user_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_20"
@@ -17,8 +19,7 @@
         <RelativeLayout
             android:id="@+id/user_image"
             android:layout_width="@dimen/sp_50"
-            android:layout_height="@dimen/sp_50"
-            android:layout_centerHorizontal="true">
+            android:layout_height="@dimen/sp_50">
 
             <RelativeLayout
                 android:id="@+id/iv_circle_image"
@@ -64,6 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/sp_19"
                     android:layout_marginRight="@dimen/margin_10"
+                    android:layout_toLeftOf="@+id/chat_user_time"
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="top"
                     android:text="@string/notification"

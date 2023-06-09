@@ -106,6 +106,7 @@
                 android:id="@+id/ll_business_product"
                 android:layout_width="@dimen/sp_40"
                 android:layout_height="@dimen/sp_40"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/margin_15"
                 android:background="@drawable/icon_bg"
                 android:backgroundTint="@color/white"

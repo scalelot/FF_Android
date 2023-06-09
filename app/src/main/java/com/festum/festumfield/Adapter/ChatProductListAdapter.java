@@ -36,17 +36,17 @@ public class ChatProductListAdapter extends RecyclerView.Adapter<ChatProductList
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.item_product_list, parent, false);
+        View view = inflater.inflate(R.layout.item_all_product_display, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txt_chat_name.setText(productDetailsModelArrayList.get(position).getName());
-        holder.txt_chat_des.setText(productDetailsModelArrayList.get(position).getDescription());
-        holder.txt_chat_price.setText("$" + String.format(String.valueOf(productDetailsModelArrayList.get(position).getPrice())) + ".00");
+        holder.txt_title_name.setText(productDetailsModelArrayList.get(position).getName());
+        holder.txt_des.setText(productDetailsModelArrayList.get(position).getDescription());
+        holder.txt_price.setText("$" + String.format(String.valueOf(productDetailsModelArrayList.get(position).getPrice())) + ".00");
 
-        Glide.with(activity).load(Constans.Display_Image_URL + productDetailsModelArrayList.get(position).getImages().get(0)).placeholder(R.drawable.ic_user_img).into(holder.iv_chat_image);
+        Glide.with(activity).load(Constans.Display_Image_URL + productDetailsModelArrayList.get(position).getImages().get(0)).placeholder(R.drawable.ic_user_img).into(holder.iv_image);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,16 +66,16 @@ public class ChatProductListAdapter extends RecyclerView.Adapter<ChatProductList
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView iv_chat_image;
-        TextView txt_chat_name, txt_chat_des, txt_chat_price;
+        ImageView iv_image;
+        TextView txt_title_name, txt_des, txt_price;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            iv_chat_image = itemView.findViewById(R.id.iv_chat_image);
-            txt_chat_name = itemView.findViewById(R.id.txt_chat_name);
-            txt_chat_des = itemView.findViewById(R.id.txt_chat_des);
-            txt_chat_price = itemView.findViewById(R.id.txt_chat_price);
+            iv_image = itemView.findViewById(R.id.iv_image);
+            txt_title_name = itemView.findViewById(R.id.txt_title_name);
+            txt_des = itemView.findViewById(R.id.txt_des);
+            txt_price = itemView.findViewById(R.id.txt_price);
         }
     }
 }

@@ -165,11 +165,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        Fragment fragment = new ChatFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
 
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,11 +180,7 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                Fragment fragment = new ChatFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout, fragment);
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
             }
         });
 
@@ -206,11 +198,7 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                Fragment fragment = new MapsFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout, fragment);
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new MapsFragment()).commit();
             }
         });
 
@@ -227,11 +215,8 @@ public class MainActivity extends BaseActivity {
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
 
-                Fragment fragment = new CallsFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout, fragment);
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CallsFragment()).commit();
+
             }
         });
 
@@ -248,11 +233,7 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getResources().getColor(R.color.grey));
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
 
-                Fragment fragment = new ContactFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frameLayout, fragment);
-                fragmentTransaction.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ContactFragment()).commit();
 
             }
         });
@@ -360,7 +341,7 @@ public class MainActivity extends BaseActivity {
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                         MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
-                        MyApplication.setChannelId(getApplicationContext(),peronalInfoModel.getData().getChannelID());
+                        MyApplication.setChannelId(getApplicationContext(), peronalInfoModel.getData().getChannelID());
 
                         if (MyApplication.getuserName(getApplicationContext()).equals("")) {
                             user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
@@ -434,7 +415,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA,android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};

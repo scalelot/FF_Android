@@ -57,6 +57,9 @@ public class FriendRequestFragment extends Fragment {
         emptyLay = view.findViewById(R.id.emptyLay);
         idPBLoading = view.findViewById(R.id.idPBLoading);
 
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        recycle_request.setLayoutManager(manager);
+
         getFriendsRequest(page, limit, searchData);
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -118,8 +121,6 @@ public class FriendRequestFragment extends Fragment {
                         }
 
                         friendsRequestAdapter = new FriendsRequestAdapter(FriendRequestFragment.this, receivefriendrequestsModelArrayList);
-                        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-                        recycle_request.setLayoutManager(manager);
                         recycle_request.setAdapter(friendsRequestAdapter);
                         friendsRequestAdapter.notifyDataSetChanged();
 

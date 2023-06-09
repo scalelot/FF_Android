@@ -33,6 +33,8 @@ public class Constans {
     public static String remove_product = BASE_URL + "product/remove";
     public static String fetch_single_product = BASE_URL + "product/single";
 
+    public static String get_friends_product_list = BASE_URL + "product/friendsproducts";
+
     //Notification
     public static String create_notification = BASE_URL + "notification/create";
     public static String update_notification = BASE_URL + "notification/edit";

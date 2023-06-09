@@ -335,11 +335,11 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     public void getBusinessProfileInfo() {
         try {
-            FileUtils.DisplayLoading(BusinessProfileActivity.this);
+//            FileUtils.DisplayLoading(BusinessProfileActivity.this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_business_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(BusinessProfileActivity.this);
+//                    FileUtils.DismissLoading(BusinessProfileActivity.this);
 
                     Log.e("FetchBusinessInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
@@ -389,7 +389,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("FetchBusiness_Error=>", error.toString());
-                    FileUtils.DismissLoading(BusinessProfileActivity.this);
+//                    FileUtils.DismissLoading(BusinessProfileActivity.this);
                     error.printStackTrace();
                 }
             }) {
@@ -405,7 +405,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            FileUtils.DismissLoading(BusinessProfileActivity.this);
+//            FileUtils.DismissLoading(BusinessProfileActivity.this);
 
         }
     }

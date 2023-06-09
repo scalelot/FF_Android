@@ -73,6 +73,8 @@ public class AddProductActivity extends BaseActivity {
     ArrayList<String> imagesArrayList = new ArrayList<>();
     JSONArray imageJsonArray = new JSONArray();
 
+    File file;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,7 +155,9 @@ public class AddProductActivity extends BaseActivity {
         btn_save_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edt_pro_name.getText().toString().equals("")) {
+                if (file == null) {
+                    Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
+                } else if (edt_pro_name.getText().toString().equals("")) {
                     edt_pro_name.setError(getResources().getString(R.string.please_enter_pro_name));
 
                 } else if (edt_pro_price.getText().toString().equals("")) {
@@ -181,6 +185,7 @@ public class AddProductActivity extends BaseActivity {
                     } else {
                         addProductInfo(edt_pro_name.getText().toString().trim(), edt_pro_price.getText().toString().trim(), edt_pro_des.getText().toString().trim(), edt_category.getText().toString().trim(), edt_subcategory.getText().toString().trim(), edt_offer.getText().toString().trim(), edt_pro_code.getText().toString().trim(), imagesArrayList);
                     }
+
                 }
             }
         });
@@ -197,8 +202,12 @@ public class AddProductActivity extends BaseActivity {
                 Glide.with(AddProductActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(img_add_image);
 
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
-                File file = new File(path);
-                uploadImage(0, file);
+                file = new File(path);
+                if (file != null) {
+                    uploadImage(0, file);
+                } else {
+                    Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -209,7 +218,12 @@ public class AddProductActivity extends BaseActivity {
 
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
-                uploadImage(1, file);
+                if (file != null) {
+                    uploadImage(1, file);
+                } else {
+                    Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -220,7 +234,11 @@ public class AddProductActivity extends BaseActivity {
 
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
-                uploadImage(2, file);
+                if (file != null) {
+                    uploadImage(2, file);
+                } else {
+                    Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -231,7 +249,11 @@ public class AddProductActivity extends BaseActivity {
 
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
-                uploadImage(3, file);
+                if (file != null) {
+                    uploadImage(3, file);
+                } else {
+                    Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -273,13 +295,13 @@ public class AddProductActivity extends BaseActivity {
 
                 @Override
                 public void onError(ANError error) {
-                    FileUtils.DismissLoading(  AddProductActivity.this);
+                    FileUtils.DismissLoading(AddProductActivity.this);
                     Log.e("ProUploadImagesError=>", error.toString());
 
                 }
             });
         } catch (Exception e) {
-            FileUtils.DismissLoading(  AddProductActivity.this);
+            FileUtils.DismissLoading(AddProductActivity.this);
             Toast.makeText(context, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
         }
     }
@@ -305,7 +327,7 @@ public class AddProductActivity extends BaseActivity {
                 }
             }
         } catch (JSONException e) {
-            FileUtils.DismissLoading(  AddProductActivity.this);
+            FileUtils.DismissLoading(AddProductActivity.this);
             e.printStackTrace();
         }
 
@@ -436,25 +458,25 @@ public class AddProductActivity extends BaseActivity {
                         imagesArrayList.add(productModel.getProductDetailsModel().getImages().get(i).toString());
                     }
 
-                    if (productModel.getProductDetailsModel().getImages().size() == 4) {
+                    if (productModel.getProductDetailsModel().getImages().size() == 3) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(2)).into(img_product2);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(3)).into(img_product3);
                         }
-                    } else if (productModel.getProductDetailsModel().getImages().size() == 3) {
+                    } else if (productModel.getProductDetailsModel().getImages().size() == 2) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(2)).into(img_product2);
                         }
-                    } else if (productModel.getProductDetailsModel().getImages().size() == 2) {
+                    } else if (productModel.getProductDetailsModel().getImages().size() == 1) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                         }
-                    } else if (productModel.getProductDetailsModel().getImages().size() == 1) {
+                    } else if (productModel.getProductDetailsModel().getImages().size() == 0) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                         }
