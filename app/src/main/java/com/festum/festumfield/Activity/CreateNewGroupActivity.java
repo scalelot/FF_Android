@@ -115,7 +115,6 @@ public class CreateNewGroupActivity extends BaseActivity {
         userSelectionAdapter.setOnItemClickListener(new UserSelectionAdapter.RemoveClickListener() {
             @Override
             public void onItemClick(CreateGroupModel createGroupModel, int position, View v) {
-                Log.e("LLL_de_posi-->", String.valueOf(position));
                 if (arraylist.size() > 0) {
 
                     arraylist.get(arraylist.indexOf(createGroupModel)).setSelected(false);

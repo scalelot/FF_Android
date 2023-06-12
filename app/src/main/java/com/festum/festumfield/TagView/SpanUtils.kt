@@ -8,9 +8,12 @@ import android.text.TextUtils
 internal object SpanUtils {
     @JvmStatic
     fun ellipsizeWithSpans(
-        prefix: CharSequence?, countSpan: CountSpan?,
-        tokenCount: Int, paint: TextPaint,
-        originalText: CharSequence, maxWidth: Float
+        prefix: CharSequence?,
+        countSpan: CountSpan?,
+        tokenCount: Int,
+        paint: TextPaint,
+        originalText: CharSequence,
+        maxWidth: Float
     ): Spanned? {
         var countWidth = 0f
         if (countSpan != null) {
@@ -20,18 +23,17 @@ internal object SpanUtils {
         }
         val ellipsizeCallback = EllipsizeCallback()
         val tempEllipsized = TextUtils.ellipsize(
-            originalText, paint, maxWidth - countWidth,
-            TextUtils.TruncateAt.END, false, ellipsizeCallback
+            originalText,
+            paint,
+            maxWidth - countWidth,
+            TextUtils.TruncateAt.END,
+            false,
+            ellipsizeCallback
         )
         val ellipsized = SpannableStringBuilder(tempEllipsized)
         if (tempEllipsized is Spanned) {
             TextUtils.copySpansFrom(
-                tempEllipsized,
-                0,
-                tempEllipsized.length,
-                Any::class.java,
-                ellipsized,
-                0
+                tempEllipsized, 0, tempEllipsized.length, Any::class.java, ellipsized, 0
             )
         }
         if (prefix != null && prefix.length > ellipsizeCallback.start) {
@@ -42,18 +44,20 @@ internal object SpanUtils {
         }
         if (ellipsizeCallback.start != ellipsizeCallback.end) {
             if (countSpan != null) {
-                val visibleCount =
-                    ellipsized.getSpans(0, ellipsized.length, TokenCompleteTextView.TokenImageSpan::class.java).size
+                val visibleCount = ellipsized.getSpans(
+                    0, ellipsized.length, TokenCompleteTextView.TokenImageSpan::class.java
+                ).size
                 countSpan.setCount(tokenCount - visibleCount)
                 ellipsized.replace(ellipsizeCallback.start, ellipsized.length, countSpan.countText)
                 ellipsized.setSpan(
-                    countSpan, ellipsizeCallback.start, ellipsized.length,
+                    countSpan,
+                    ellipsizeCallback.start,
+                    ellipsized.length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
             }
             return ellipsized
         }
-        //No ellipses necessary
         return null
     }
 

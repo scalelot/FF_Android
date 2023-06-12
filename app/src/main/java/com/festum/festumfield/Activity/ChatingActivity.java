@@ -218,7 +218,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         @Override
                         public void run() {
                             JSONObject js = (JSONObject) args[0];
-                            System.out.println("NewMessage:==" + js.toString());
+                            Log.e("NewMessage:==" , js.toString());
                             try {
                                 JSONObject jsonObject = new JSONObject(js.toString());
                                 String fromIds = jsonObject.getString("from");
@@ -304,7 +304,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_product + "?pid=" + proIds, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("FetchSingleProduct=>", response.toString());
+                    Log.e("GetSingleProduct=>", response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
 
@@ -316,7 +316,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("FetchSingleProduct_Error=> " + error.toString());
+                    System.out.println("GetSingleProductError=> " + error.toString());
                 }
             }) {
                 @Override
@@ -428,12 +428,12 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             }).getAsJSONObject(new JSONObjectRequestListener() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("ChatSendMessage=>", response.toString());
+                    Log.e("SendMessage=>", response.toString());
                 }
 
                 @Override
                 public void onError(ANError error) {
-                    Log.e("SendMessage_Error=>", error.toString());
+                    Log.e("SendMessageError=>", error.toString());
                 }
             });
         } catch (Exception e) {
@@ -450,13 +450,13 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             }).getAsJSONObject(new JSONObjectRequestListener() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("ProductSendMessage=>", response.toString());
+                    Log.e("SendProduct=>", response.toString());
 
                 }
 
                 @Override
                 public void onError(ANError error) {
-                    Log.e("ProductMessage_Error=>", error.toString());
+                    Log.e("SendProductError=>", error.toString());
                 }
             });
         } catch (Exception e) {
@@ -583,7 +583,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("ListMessage_error=>", error.toString());
+                        Log.e("ListMessageError=>", error.toString());
                     }
                 }) {
                     @Override
@@ -833,14 +833,14 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onResponse(JSONObject response) {
                     // do anything with response
-                    Log.e("SendImage=>", response.toString());
+                    Log.e("SendChatImage=>", response.toString());
                 }
 
                 @Override
                 public void onError(ANError error) {
                     // handle error
                     Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
-                    Log.e("SendImage_Error=>", error.toString());
+                    Log.e("SendChatImageError=>", error.toString());
 
                 }
             });
@@ -854,15 +854,14 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("Chat_PersonalInfo=>", response.toString());
+                    Log.e("ChatPersonalInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
                     loginUserId = businessInfoRegisterModel.getData().getId();
-                    Log.e("Ids", loginUserId);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Chat_Personal_Error=>", error.toString());
+                    Log.e("ChatPersonalInfoError=>", error.toString());
                 }
             }) {
                 @Override

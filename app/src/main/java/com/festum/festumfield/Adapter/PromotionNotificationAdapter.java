@@ -87,7 +87,6 @@ public class PromotionNotificationAdapter extends RecyclerView.Adapter<RecyclerV
                 public void onClick(View v) {
                     activity.startActivity(new Intent(activity, CreateNotificationActivity.class).putExtra("Edit_Noti", activity.getResources().getString(R.string.edit_product)).putExtra("noti_id", listNotificationModelArrayList.get(position).getId()));
                     activity.finish();
-
                 }
             });
         } else {

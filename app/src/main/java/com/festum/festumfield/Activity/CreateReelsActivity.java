@@ -130,7 +130,6 @@ public class CreateReelsActivity extends AppCompatActivity {
                     contentURI = data.getData();
 
                     String selectedVideoPath = getPath(contentURI);
-                    Log.d("path", selectedVideoPath);
 
                     ll_upload.setVisibility(View.GONE);
                     rl_thumbnail.setVisibility(View.VISIBLE);

@@ -44,7 +44,5 @@ public class UpcomingCallActivity extends BaseActivity {
                 Toast.makeText(UpcomingCallActivity.this, "Call Recive", Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }

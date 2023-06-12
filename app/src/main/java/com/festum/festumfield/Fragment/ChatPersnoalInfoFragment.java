@@ -223,14 +223,14 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
-                    Log.e("set_auth_permission:--", response.toString());
+                    Log.e("AuthorizedPermission:--", response.toString());
                     Toast.makeText(getContext(), "Authorized Permission Done", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
-                    Log.e("set_auth_per_error:--", error.toString());
+                    Log.e("AuthorizedPermissionError:--", error.toString());
                 }
             });
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -251,7 +251,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
-                    Log.e("unfriends_block:--", response.toString());
+                    Log.e("BlockFriends:--", response.toString());
                     startActivity(new Intent(ChatPersnoalInfoFragment.this.getContext(), MainActivity.class));
                     getActivity().finish();
                     Toast.makeText(getContext(), "Block Successfully!!!", Toast.LENGTH_SHORT).show();
@@ -260,7 +260,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
-                    System.out.println("unfriends_error:--" + error);
+                    System.out.println("BlockFriendsError:--" + error);
                 }
             }) {
                 @Override

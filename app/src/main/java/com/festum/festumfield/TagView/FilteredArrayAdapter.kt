@@ -6,7 +6,7 @@ import android.widget.Filter
 import java.util.*
 
 abstract class FilteredArrayAdapter<T>
-(
+    (
     context: Context,
     resource: Int,
     textViewResourceId: Int,

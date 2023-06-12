@@ -65,7 +65,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
                 Location location = locationManager.getLastKnownLocation(bestProvider);
                 if (location != null) {
-                    Log.e("TAG", "GPS is on");
+                    Log.e("Gps=>", "GPS is on");
 
                     if (isProfileLocation) {
                         Const.lattitude = location.getLatitude();
@@ -74,7 +74,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                         Const.b_lattitude = location.getLatitude();
                         Const.b_longitude = location.getLongitude();
                     }
-                    Log.e("LLL_map_Latitude1: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
+                    Log.e("MapLatLog: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
                     centreMapOnLocation(location, bestProvider);
 
                 } else {
@@ -82,10 +82,9 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                 }
 
             } else {
-                Toast.makeText(getApplicationContext(), "Accetta i permessi", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Access Permission", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Log.e("LLL_bproerr1--->", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -99,7 +98,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
                 Const.mCurrLocationMarker = marker;
-                Log.e("LLL_map_System out", "onMarkerEnd..." + marker.getPosition().latitude + "..." + marker.getPosition().longitude);
+                Log.e("MapClick=>", "onMarkerEnd..." + marker.getPosition().latitude + "..." + marker.getPosition().longitude);
                 LatLng latLng1 = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
                 Const.latLngvalue = latLng1;
 
@@ -135,7 +134,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                 Const.mCurrLocationMarker = mMap.addMarker(markerOptions);
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1, 12));
-                Log.e("LLL_final_location-->", "latitude: " + latLng.latitude + " longitude: " + latLng.longitude);
+                Log.e("FinalLocation-->", "latitude: " + latLng.latitude + " longitude: " + latLng.longitude);
 
                 if (isProfileLocation) {
                     Const.lattitude = latLng.latitude;
@@ -165,7 +164,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.e("LLL_map_Latitude: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
+        Log.e("LocationChange=>: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
 
         if (isProfileLocation) {
             Const.lattitude = location.getLatitude();
@@ -178,7 +177,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
         if (Const.mCurrLocationMarker != null) {
             Const.mCurrLocationMarker.remove();
         }
-        Log.e("LLL_lati--: ", Const.longitude + " : longi : " + Const.lattitude);
+        Log.e("LocationChangeLatLog--: ", Const.longitude + " : longi : " + Const.lattitude);
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         MarkerOptions markerOptions = new MarkerOptions();

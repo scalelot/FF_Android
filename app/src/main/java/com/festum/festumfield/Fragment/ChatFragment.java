@@ -193,7 +193,7 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     progressBar.setVisibility(View.GONE);
-                    Log.e("All_my_friends:--", response.toString());
+                    Log.e("GetAllMyFriends:--", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -205,8 +205,6 @@ public class ChatFragment extends Fragment {
                             AllFriendsRegisterModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), AllFriendsRegisterModel.class);
                             receivefriendrequestsModelArrayList.add(productDetailsModel);
                         }
-
-                        Log.e("friends_request_all-->", String.valueOf(receivefriendrequestsModelArrayList.size()));
 
                         if (!receivefriendrequestsModelArrayList.isEmpty()) {
                             emptyLay.setVisibility(View.GONE);
@@ -224,13 +222,11 @@ public class ChatFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("all_friends_error" + error.toString());
+                    System.out.println("GetAllMyFriendsError" + error.toString());
                     progressBar.setVisibility(View.GONE);
 
                 }

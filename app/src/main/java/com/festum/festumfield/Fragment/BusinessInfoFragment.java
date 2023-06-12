@@ -106,7 +106,7 @@ public class BusinessInfoFragment extends Fragment {
                 public void onResponse(JSONObject response) {
                     if (response != null) {
                         FileUtils.DismissLoading(BusinessInfoFragment.this.getContext());
-                        Log.e("BusinessInfo=>", response.toString());
+                        Log.e("GetFragBusinessInfo=>", response.toString());
                         BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
                         Double longitude = businessInfoRegisterModel.getData().getLocation().getCoordinates().get(0);
@@ -139,14 +139,14 @@ public class BusinessInfoFragment extends Fragment {
                         ll_create_profile.setVisibility(View.GONE);
                         create_profile.setVisibility(View.VISIBLE);
                     } else {
-                        Log.e("BussinessGetProfile==>>", "Not Get BussinessProfile");
+                        Log.e("GetFragBusinessInfo==>>", "Not Get BussinessProfile");
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(BusinessInfoFragment.this.getContext());
-                    Log.e("BusinessInfo_Error=>", error.toString());
+                    Log.e("GetFragBusinessInfoError=>", error.toString());
                 }
             }) {
                 @Override
@@ -168,7 +168,6 @@ public class BusinessInfoFragment extends Fragment {
 
     private void openGallery() {
         ImagePicker.Companion.with(getActivity()).crop().maxResultSize(1080, 1080).start(PICK_IMAGE1);
-
     }
 
     @Override

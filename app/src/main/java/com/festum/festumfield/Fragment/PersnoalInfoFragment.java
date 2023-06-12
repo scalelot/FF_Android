@@ -108,7 +108,7 @@ public class PersnoalInfoFragment extends Fragment {
                 public void onResponse(JSONObject response) {
 
                     try {
-                        Log.e("FetchPersonal=>", response.toString());
+                        Log.e("FetchPersonal =>", response.toString());
                         JSONObject jsonObject = new JSONObject(String.valueOf(response));
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
@@ -151,7 +151,7 @@ public class PersnoalInfoFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("FetchPersonal_Error=>", error.toString());
+                    Log.e("FetchPersonalError=>", error.toString());
                 }
             }) {
                 @Override

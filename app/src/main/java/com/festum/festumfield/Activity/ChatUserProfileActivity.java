@@ -27,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatUserProfileActivity extends BaseActivity {
 
     ImageView ic_back;
-    TextView u_name, u_nickname, chat_name;
+    TextView  u_nickname, chat_name;
     LinearLayout l_product;
     TabLayout tabLayout;
     ViewPager viewPager;

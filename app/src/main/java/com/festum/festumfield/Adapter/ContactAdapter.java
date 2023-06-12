@@ -31,7 +31,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyDataVi
         this.registerModels = allFriendsModelsList;
     }
 
-
     @NonNull
     @Override
     public MyDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

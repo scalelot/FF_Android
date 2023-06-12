@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 
 import com.festum.festumfield.R;
 
-
 public class PersonAdapter extends FilteredArrayAdapter<Person> {
     @LayoutRes private int layoutId;
 

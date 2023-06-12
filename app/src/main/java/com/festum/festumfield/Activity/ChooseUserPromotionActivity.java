@@ -244,8 +244,6 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                 } catch (IOException ex) {
                     return;
                 }
-
-
                 bottomSheetDialog.show();
             }
         });
@@ -320,7 +318,7 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                         }
                     } else if (uriString.startsWith("file://")) {
                         displayName = myFile.getName();
-                        Log.d("ExcelUpload=>", displayName);
+                        Log.e("ExcelUpload=>", displayName);
                     }
 
 
@@ -389,7 +387,7 @@ public class ChooseUserPromotionActivity extends BaseActivity {
             } else {
             }
         } catch (Exception e) {
-            Log.e("LLL_bproerr--->", e.getMessage());
+            Log.e("LocationError--->", e.getMessage());
             e.printStackTrace();
         }
 

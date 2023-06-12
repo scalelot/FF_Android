@@ -45,7 +45,6 @@ public class BaseActivity extends AppCompatActivity {
                 .setTitle("Biometric Authentication")
                 .setSubtitle("Login using Figerprint & Face")
                 .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-//                .setAllowedAuthenticators(BIOMETRIC_STRONG)
                 .build();
     }
 

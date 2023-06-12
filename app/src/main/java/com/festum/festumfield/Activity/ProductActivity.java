@@ -157,7 +157,7 @@ public class ProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProductActivity.this);
 
-                    Log.e("ProBusinessInfo=>", response.toString());
+                    Log.e("ProductGetBusinessInfo=>", response.toString());
 
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
@@ -171,7 +171,7 @@ public class ProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProductActivity.this);
-                    Log.e("ProBusinessInfoError=>", error.toString());
+                    Log.e("ProductGetBusinessInfoError=>", error.toString());
                 }
             }) {
                 @Override
@@ -216,7 +216,7 @@ public class ProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
                     productDetailsModelArrayList.clear();
-                    Log.e("ProList=>", response.toString());
+                    Log.e("GetProductLists=>", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -255,7 +255,7 @@ public class ProductActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("ProList_Error", error.toString());
+                    Log.e("GetProductListsError", error.toString());
                 }
             }) {
                 @Override

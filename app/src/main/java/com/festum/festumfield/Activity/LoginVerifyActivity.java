@@ -89,7 +89,6 @@ public class LoginVerifyActivity extends BaseActivity {
             @Override
             public void onOTPComplete(String otp) {
                 OtpValue = otp;
-                Log.e("onOtpCompleted=>", otp);
             }
         });
 
@@ -153,14 +152,13 @@ public class LoginVerifyActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
-                    Log.e("Verify_Otp=>", response.toString());
+                    Log.e("LoginVerifyOtp=>", response.toString());
 
                     VerifyOtpModel verifyOtpModel = new Gson().fromJson(response.toString(), VerifyOtpModel.class);
 
                     Toast.makeText(LoginVerifyActivity.this, verifyOtpModel.getMessage(), Toast.LENGTH_LONG).show();
 
                     MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
-                    Log.e("AuthToken=>", verifyOtpModel.getData().getToken());
 
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
@@ -170,7 +168,7 @@ public class LoginVerifyActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
-                    System.out.println("Verify_Otp_Error=> " + error.toString());
+                    System.out.println("LoginVerifyOtpError=> " + error.toString());
                 }
             }) {
 
@@ -204,7 +202,7 @@ public class LoginVerifyActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
-                    Log.e("VerifySendOtp=>", response.toString());
+                    Log.e("LoginVerifySendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
 
@@ -214,7 +212,7 @@ public class LoginVerifyActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
                     Toast.makeText(LoginVerifyActivity.this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
-                    Log.e("VerifySendOtp_Error=>", error.getMessage());
+                    Log.e("LoginVerifySendOtpError=>", error.getMessage());
                 }
             }) {
 

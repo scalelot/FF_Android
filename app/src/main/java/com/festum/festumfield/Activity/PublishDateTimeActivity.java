@@ -95,7 +95,6 @@ public class PublishDateTimeActivity extends BaseActivity {
                 } else if (txt_select_time.getText().toString().trim().isEmpty()) {
                     Toast.makeText(PublishDateTimeActivity.this,"Enter Time", Toast.LENGTH_LONG).show();
                 } else {
-                    System.out.println("chk--->>" + txt_select_date);
                     SharedPreferences sharedPreferences = getSharedPreferences("Datetime", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("date_time", txt_select_date.getText().toString());
@@ -114,42 +113,27 @@ public class PublishDateTimeActivity extends BaseActivity {
 
         timepickerdialog = new TimePickerDialog(PublishDateTimeActivity.this,
                 new TimePickerDialog.OnTimeSetListener() {
-
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-
                         if (hourOfDay == 0) {
-
                             hourOfDay += 12;
-
                             format = "AM";
                         } else if (hourOfDay == 12) {
-
                             format = "PM";
-
                         } else if (hourOfDay > 12) {
-
                             hourOfDay -= 12;
-
                             format = "PM";
-
                         } else {
-
                             format = "AM";
                         }
-
-
                         txt_select_time.setText(hourOfDay + ":" + minute + "\n" + format);
                     }
                 }, CalendarHour, CalendarMinute, false);
         timepickerdialog.show();
-
-
     }
 
     private void buttonSelectDate() {
-
         // Date Select Listener.
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
@@ -177,11 +161,9 @@ public class PublishDateTimeActivity extends BaseActivity {
         DatePickerDialog datePickerDialog = null;
         datePickerDialog = new DatePickerDialog(this,
                 dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDayOfMonth);
-
         // Show
         datePickerDialog.show();
     }
-
 
     @Override
     public void onBackPressed() {

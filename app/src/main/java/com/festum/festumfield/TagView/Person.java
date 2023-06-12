@@ -15,7 +15,7 @@ public class Person implements Parcelable {
                 new Person("Playing"),
                 new Person("Running"),
                 new Person("Reading"),
-                new Person("Learnning"),
+                new Person("Learning"),
                 new Person("Singing")
         };
     }

@@ -46,12 +46,7 @@ public class Contact_Us_Activity extends BaseActivity {
     EditText full_name, phone_number, email_id, description;
     AppCompatButton btn_send;
     ImageView ic_back_arrow, img_add_image;
-    ContactModel contactDataModel;
-    Uri uri;
-    private Bitmap bitmap;
     public static final int PICK_IMAGE = 1;
-    protected static final int CAMERA_REQUEST = 0;
-    protected static final int GALLERY_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +103,6 @@ public class Contact_Us_Activity extends BaseActivity {
     String[] per;
 
     public String[] permissions() {
-
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 per = storge_permissions_33;
@@ -116,6 +110,7 @@ public class Contact_Us_Activity extends BaseActivity {
                 per = storge_permissions;
             }
         } catch (Exception e) {
+            Log.e("CameraPermission:==", e.toString());
         }
         return per;
     }

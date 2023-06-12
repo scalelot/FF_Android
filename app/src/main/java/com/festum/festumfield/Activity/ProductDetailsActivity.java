@@ -127,7 +127,7 @@ public class ProductDetailsActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProductDetailsActivity.this);
-                    Log.e("ProductDetail",response.toString());
+                    Log.e("GetProductDetail",response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
 
@@ -207,7 +207,7 @@ public class ProductDetailsActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("ProductDetailError",error.toString());
+                    Log.e("GetProductDetailError",error.toString());
                     FileUtils.DismissLoading(ProductDetailsActivity.this);
                 }
             }) {

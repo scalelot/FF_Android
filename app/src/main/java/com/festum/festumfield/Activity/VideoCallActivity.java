@@ -23,7 +23,6 @@ public class VideoCallActivity extends BaseActivity {
     CircleImageView videocall_image;
     TextView videocall_username, videocall_txt;
     LinearLayout ll_videoCall, ll_camera_swipe, ll_mute, ll_call_cut;
-    SurfaceView surfaceView;
     private Context myContext1;
     private Camera mCamera1;
     private boolean cameraFront = false;
@@ -42,7 +41,6 @@ public class VideoCallActivity extends BaseActivity {
         ll_camera_swipe = findViewById(R.id.ll_camera_swipe);
         ll_mute = findViewById(R.id.ll_mute);
         ll_call_cut = findViewById(R.id.ll_call_cut);
-        surfaceView = findViewById(R.id.surfaceView);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         myContext1 = this;

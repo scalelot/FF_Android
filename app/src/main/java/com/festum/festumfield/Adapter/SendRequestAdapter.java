@@ -36,7 +36,6 @@ public class SendRequestAdapter extends RecyclerView.Adapter<SendRequestAdapter.
         inflater = LayoutInflater.from(fragment.getContext());
     }
 
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

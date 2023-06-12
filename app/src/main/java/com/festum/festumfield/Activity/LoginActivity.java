@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(LoginActivity.this);
-                    Log.e("SendOtp=>", response.toString());
+                    Log.e("LoginSendOtp=>", response.toString());
 
                     SendOtpModel sendOtpModel = new Gson().fromJson(response.toString(), SendOtpModel.class);
 
@@ -93,7 +93,7 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(LoginActivity.this);
-                    System.out.println("SendOtp_Error=>" + error.toString());
+                    System.out.println("LoginSendOtpError=>" + error.toString());
                 }
             }) {
 

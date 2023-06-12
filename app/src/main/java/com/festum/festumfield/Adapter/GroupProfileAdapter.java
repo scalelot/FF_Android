@@ -71,7 +71,6 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
                 ll_remove = dialog.findViewById(R.id.ll_remove);
                 txt_message = dialog.findViewById(R.id.txt_message);
                 ImageView btn_close = dialog.findViewById(R.id.btn_close);
-
                 txt_message.setText("Message " + elements.get(position).getName());
 
                 btn_close.setOnClickListener(new View.OnClickListener() {
@@ -80,8 +79,6 @@ public class GroupProfileAdapter extends RecyclerView.Adapter<GroupProfileAdapte
                         dialog.dismiss();
                     }
                 });
-
-
                 dialog.show();
             }
         });

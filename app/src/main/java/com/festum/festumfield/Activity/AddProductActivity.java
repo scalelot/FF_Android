@@ -276,7 +276,7 @@ public class AddProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         FileUtils.DismissLoading(AddProductActivity.this);
-                        Log.e("ProUploadImages=>", response.toString());
+                        Log.e("ProUploadImg=>", response.toString());
                         ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
                         if (edit_pro != null) {
                             if (pos >= imagesArrayList.size() || pos < 0) {
@@ -296,7 +296,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onError(ANError error) {
                     FileUtils.DismissLoading(AddProductActivity.this);
-                    Log.e("ProUploadImagesError=>", error.toString());
+                    Log.e("ProUploadImgError=>", error.toString());
 
                 }
             });
@@ -347,7 +347,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(context);
-                    Log.e("AddProduct_Error=>", error.toString());
+                    Log.e("AddProductError=>", error.toString());
                     error.printStackTrace();
 
                 }
@@ -412,7 +412,7 @@ public class AddProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(context);
-                    Log.e("UpdateProduct_Error=>", error.toString());
+                    Log.e("UpdateProductError=>", error.toString());
                     error.printStackTrace();
 
                 }

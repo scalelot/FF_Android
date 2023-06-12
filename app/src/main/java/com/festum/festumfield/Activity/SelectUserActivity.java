@@ -138,8 +138,8 @@ public class SelectUserActivity extends BaseActivity {
         CheckBox check_excel_fnd = bottomSheetDialog.findViewById(R.id.check_excel_fnd);
         ImageView dialog_close = bottomSheetDialog.findViewById(R.id.dialog_close);
 
-        AppCompatButton btn_cancel = bottomSheetDialog.findViewById(R.id.btn_cancel);
-        AppCompatButton btn_apply = bottomSheetDialog.findViewById(R.id.btn_apply);
+        AppCompatButton btnCancel = bottomSheetDialog.findViewById(R.id.btnClear);
+        AppCompatButton btnApply = bottomSheetDialog.findViewById(R.id.btnApply);
 
         dialog_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,14 +175,14 @@ public class SelectUserActivity extends BaseActivity {
             }
         });
 
-        btn_apply.setOnClickListener(new View.OnClickListener() {
+        btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();

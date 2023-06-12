@@ -36,7 +36,6 @@ public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
                                         int position,
                                         int itemCount) {
 
-        // Resolve display mode automatically
         if (displayMode == -1) {
             displayMode = resolveDisplayMode(layoutManager);
         }

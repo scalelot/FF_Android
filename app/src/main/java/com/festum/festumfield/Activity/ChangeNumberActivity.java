@@ -120,7 +120,7 @@ public class ChangeNumberActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChangeNumberActivity.this);
-                    Log.e("ChangeNumber_Error=>", error.toString());
+                    Log.e("ChangeNumberError=>", error.toString());
                 }
             }) {
                 @Override
@@ -245,13 +245,13 @@ public class ChangeNumberActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChangeNumberActivity.this);
-                    Log.e("ChnageOtp=>", response.toString());
+                    Log.e("ChangeNumOtp=>", response.toString());
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ChangeNumberActivity.this);
-                    System.out.println("ChnageOtp_Error=>" + error.toString());
+                    System.out.println("ChangeNumOtpError=>" + error.toString());
                 }
             }) {
 

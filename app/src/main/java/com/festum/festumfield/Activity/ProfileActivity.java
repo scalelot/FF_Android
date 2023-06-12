@@ -329,16 +329,13 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         relative_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("RelMap=>", "isClick");
                 startActivity(new Intent(getApplicationContext(), MapsLocationActivity.class).putExtra("isProfileLocation", true));
-
             }
         });
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (edt_name.getText().toString().isEmpty()) {
                     edt_name.setError(getResources().getString(R.string.enter_full_name));
                 } else if (edt_nickname.getText().toString().isEmpty()) {
@@ -391,8 +388,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
         mapFragment.getMapAsync(this);
         mapview.getMapAsync(this);
-
-        Log.e("Lati: ", Const.longitude + " : Longi : " + Const.lattitude);
 
         if (profile_title != null) {
             title.setText(profile_title);
@@ -504,16 +499,13 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             e.printStackTrace();
         }
 
-        Log.e("LLL_jsonArray", jsonArray.toString());
-
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.profile_register, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    Log.e("ProfileUpdate=>", response.toString());
+                    Log.e("UpdateProfile=>", response.toString());
                     ProfileRegisterModel profileRegisterModel = new Gson().fromJson(response.toString(), ProfileRegisterModel.class);
 
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -523,7 +515,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    System.out.println("ProfileUpdate_Error=>" + error.toString());
+                    System.out.println("UpdateProfileError=>" + error.toString());
                     error.printStackTrace();
                     Toast.makeText(ProfileActivity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
@@ -631,15 +623,13 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             e.printStackTrace();
         }
 
-        Log.e("LLL_jsonArray", jsonArray.toString());
-
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.profile_register, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    Log.e("CreateProfileDone=>", response.toString());
+                    Log.e("ProfileRegister=>", response.toString());
                     ProfileRegisterModel profileRegisterModel = new Gson().fromJson(response.toString(), ProfileRegisterModel.class);
                     Toast.makeText(ProfileActivity.this, profileRegisterModel.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -655,7 +645,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    System.out.println("CreateProfileError=>" + error.toString());
+                    System.out.println("ProfileRegisterError=>" + error.toString());
                     Toast.makeText(ProfileActivity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -685,7 +675,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    Log.e("GetPersonalInfo=>", response.toString());
+                    Log.e("GetProfileRegister=>", response.toString());
 
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
@@ -747,7 +737,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
 
                     if (profileRegisterModel.getData().getProfileimage().equals("")) {
-                        Log.e("LLL_data-->", "No Image Found");
                         profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
                     } else {
                         Glide.with(ProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + profileRegisterModel.getData().getProfileimage()).placeholder(R.drawable.ic_user).into(profile_image);
@@ -774,7 +763,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProfileActivity.this);
-                    Log.e("GetPersonalInfo_Error=>", error.toString());
+                    Log.e("GetProfileRegisterError=>", error.toString());
                 }
             }) {
                 @Override
@@ -800,7 +789,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     String[] per;
 
     public String[] permissions() {
-
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 per = storge_permissions_33;
@@ -808,18 +796,15 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 per = storge_permissions;
             }
         } catch (Exception e) {
+            Log.e("CameraPermission:==", e.toString());
         }
         return per;
     }
 
     private void openGallery() {
-//        ImagePicker.Companion.with(ProfileActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
-
-        // pass the constant to compare it
-        // with the returned requestCode
         startActivityForResult(Intent.createChooser(i, "Select Picture"), PICK_IMAGE);
     }
 
@@ -830,9 +815,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             Uri selectedImageUri;
             try {
                 selectedImageUri = data.getData();
-                Log.e("ProfileImageUri=>", selectedImageUri.getPath());
                 selectedImage = selectedImageUri.getPath();
-                Log.e("ProfileImageUri1=>", selectedImageUri.toString());
                 Bitmap bitmap = null;
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                 Const.bitmap_profile_image = bitmap;
@@ -850,15 +833,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
-
-//        if (requestCode == PICK_IMAGE) {
-//
-//            Uri selectedImageUri = data.getData();
-//            if (null != selectedImageUri) {
-//                // update the preview image in the layout
-//                profile_image.setImageURI(selectedImageUri);
-//            }
-//        }
     }
 
     @SuppressLint("Range")
@@ -880,7 +854,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.e("Latitude: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
         longitude = String.valueOf(location.getLongitude());
         lattitude = String.valueOf(location.getLatitude());
 

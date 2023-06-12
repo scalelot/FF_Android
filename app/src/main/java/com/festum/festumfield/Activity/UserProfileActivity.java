@@ -65,7 +65,6 @@ public class UserProfileActivity extends BaseActivity {
     public static AppCompatButton btn_edit_profile;
     LinearLayout ll_business_product;
     int pos;
-    ActivityResultLauncher<Intent> resultLauncher;
     private static final int PICK_IMAGE = 1;
 
     @Override
@@ -187,10 +186,8 @@ public class UserProfileActivity extends BaseActivity {
             } else {
                 p = storge_permissions;
             }
-            Log.e("Hello:--", String.valueOf(p));
-
         } catch (Exception e) {
-            Log.e("Per:==", e.toString());
+            Log.e("CameraPermission:==", e.toString());
         }
         return p;
     }
@@ -210,7 +207,7 @@ public class UserProfileActivity extends BaseActivity {
                     u_nickname.setText(userProfileRegisterModel.getData().getNickName());
 
                     if (userProfileRegisterModel.getData().getProfileimage().equals("")) {
-                        Log.e("LLL_data-->", "No Image Found");
+                        Log.e("GetPersonalInfo-->", "No Image Found");
                         user_profile_image.setImageDrawable(getResources().getDrawable(R.drawable.ic_user));
                     } else {
                         Glide.with(UserProfileActivity.this).asBitmap().load(Constans.Display_Image_URL + userProfileRegisterModel.getData().getProfileimage()).placeholder(R.drawable.ic_user).into(user_profile_image);
@@ -242,7 +239,6 @@ public class UserProfileActivity extends BaseActivity {
                             } else {
                                 for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
                                     if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Facebook")) {
-
                                         String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
                                         if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
                                             Uri uri = Uri.parse(url);
@@ -355,7 +351,7 @@ public class UserProfileActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 //                    FileUtils.DismissLoading(UserProfileActivity.this);
-                    Log.e("error", error.toString());
+                    Log.e("GetPersonalInfoError=>", error.toString());
                 }
             }) {
                 @Override
@@ -384,7 +380,6 @@ public class UserProfileActivity extends BaseActivity {
             Glide.with(UserProfileActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(user_profile_image);
 
             String path = RealPathUtil.getRealPath(UserProfileActivity.this, selectImage);
-            System.out.println("SetFilePath:==" + path);
             File file = new File(path);
             personalProfileImageUpload(file);
         } else {
@@ -401,13 +396,13 @@ public class UserProfileActivity extends BaseActivity {
         }).getAsJSONObject(new JSONObjectRequestListener() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.e("LLL_image_up--->", response.toString());
+                Log.e("ProfileImgUpload=>", response.toString());
                 getApiCalling();
             }
 
             @Override
             public void onError(ANError error) {
-                Log.e("LLL_image_err--->", error.toString());
+                Log.e("ProfileImgUploadError=>", error.toString());
 
             }
         });

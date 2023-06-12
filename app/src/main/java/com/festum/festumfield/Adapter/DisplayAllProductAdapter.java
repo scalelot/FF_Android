@@ -48,10 +48,6 @@ public class DisplayAllProductAdapter extends RecyclerView.Adapter<DisplayAllPro
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(activity, ProductDetailsActivity.class);
-//                intent.putExtra("product", "AllProduct");
-//                intent.putExtra("ProductDetailsId", arrayList.get(position).getId());
-//                activity.startActivity(intent);
             }
         });
     }

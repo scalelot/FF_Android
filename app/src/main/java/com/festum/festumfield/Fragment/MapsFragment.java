@@ -251,7 +251,7 @@ public class MapsFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(MapsFragment.this.getContext());
-                    Log.e("LL_findfriends-->", response.toString());
+                    Log.e("FindFirends-->", response.toString());
 
                     findFriendsModel = new Gson().fromJson(response.toString(), FindFriendsModel.class);
 
@@ -325,7 +325,7 @@ public class MapsFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(MapsFragment.this.getContext());
-                    Log.e("LL_findfriends_Error-->", error.toString());
+                    Log.e("FindFirendsError-->", error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -349,6 +349,7 @@ public class MapsFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    Log.e("GetMapProfileInfo", response.toString());
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                     areakm = profileRegisterModel.getData().getAreaRange();
@@ -358,7 +359,7 @@ public class MapsFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LL_location_area-->", error.toString());
+                    Log.e("GetMapProfileInfoError-->", error.toString());
                 }
             }) {
                 @Override
@@ -418,12 +419,12 @@ public class MapsFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_new_friend_request, new JSONObject(hMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("Sendrequest:--", response.toString());
+                    Log.e("SendFirendRequest:--", response.toString());
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Sendrequest_error", error.toString());
+                    Log.e("SendFirendRequestError", error.toString());
                 }
             }) {
                 @Override

@@ -94,7 +94,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(activity);
-                    Log.e("UnBlockUser_Error=>", error.toString());
+                    Log.e("UnBlockUserError=>", error.toString());
                 }
             }) {
                 @Override

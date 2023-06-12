@@ -90,7 +90,7 @@
                 android:weightSum="2">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_cancel"
+                    android:id="@+id/btnClear"
                     android:layout_width="@dimen/sp_155"
                     android:layout_height="@dimen/margin_40"
                     android:layout_marginRight="@dimen/margin_13"
@@ -102,7 +102,7 @@
                     android:textSize="@dimen/text_14" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_apply"
+                    android:id="@+id/btnApply"
                     android:layout_width="@dimen/sp_155"
                     android:layout_height="@dimen/margin_40"
                     android:layout_marginLeft="@dimen/margin_13"

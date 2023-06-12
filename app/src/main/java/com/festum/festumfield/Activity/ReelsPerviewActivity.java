@@ -26,9 +26,6 @@ public class ReelsPerviewActivity extends AppCompatActivity {
 
         String urip = getSharedPreferences("Reels", MODE_PRIVATE).getString("uri", null);
 
-        System.out.println("Uri:----"+urip);
-        Log.e("Uri",urip);
-
         back_arrow = findViewById(R.id.back_arrow);
         videoView = findViewById(R.id.videoView);
 

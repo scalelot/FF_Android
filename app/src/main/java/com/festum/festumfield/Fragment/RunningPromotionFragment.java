@@ -116,7 +116,7 @@ public class RunningPromotionFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
-                    Log.e("FetchNotifi=>", response.toString());
+                    Log.e("FetchNotification=>", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
                         JSONArray data_array = dataJsonObject.getJSONArray("docs");
@@ -142,8 +142,6 @@ public class RunningPromotionFragment extends Fragment {
                             nestedScrollView.setVisibility(View.GONE);
                         }
 
-                        Log.e("LLL_product_listsize-->", String.valueOf(arraylist.size()));
-
                         PromotionNotificationAdapter notificationAdapter = new PromotionNotificationAdapter(getActivity(), arraylist);
                         recycler_noti.setAdapter(notificationAdapter);
 
@@ -154,7 +152,7 @@ public class RunningPromotionFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("FetchNotifi_Error=>", error.toString());
+                    Log.e("FetchNotificationError=>", error.toString());
                 }
             }) {
                 @Override

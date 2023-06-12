@@ -360,7 +360,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(fragment.getContext());
-                    Log.e("LL_friends_response", response.toString());
+                    Log.e("SetFriendRequest=>", response.toString());
 
                     FriendsRequestAdapter.this.notifyDataSetChanged();
 
@@ -369,7 +369,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(fragment.getContext());
-                    System.out.println("friends_response_error:-- " + error.toString());
+                    System.out.println("SetFriendRequestError:-- " + error.toString());
                 }
             }) {
                 @Override

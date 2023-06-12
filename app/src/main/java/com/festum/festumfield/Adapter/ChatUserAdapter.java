@@ -49,7 +49,7 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyDataViewHolder holder,int position) {
+    public void onBindViewHolder(@NonNull MyDataViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Glide.with(fragment).load(Constans.Display_Image_URL + registerModels.get(position).getProfileimage()).placeholder(R.drawable.ic_user_img).into(holder.img_user);
 
         holder.txt_user_name.setText(registerModels.get(position).getFullName());

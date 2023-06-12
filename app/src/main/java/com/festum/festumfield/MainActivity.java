@@ -317,7 +317,7 @@ public class MainActivity extends BaseActivity {
                     while (pCur.moveToNext()) {
                         String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         Log.i("ContactName=>", "Name: " + name);
-                        Log.i("ContactNum=>", "Phone Number: " + phoneNo);
+                        Log.i("ContactNumber=>", "Phone Number: " + phoneNo);
                     }
                     pCur.close();
                 }
@@ -336,7 +336,7 @@ public class MainActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         FileUtils.DismissLoading(MainActivity.this);
-                        Log.e("PersonalGetInfo=>", response.toString());
+                        Log.e("GetProfileData=>", response.toString());
                         JSONObject jsonObject = new JSONObject(String.valueOf(response));
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
@@ -365,7 +365,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(MainActivity.this);
-                    Log.e("PersonalGetInfo_Error=>", error.toString());
+                    Log.e("GetProfileDataError=>", error.toString());
                 }
             }) {
                 @Override
@@ -400,9 +400,6 @@ public class MainActivity extends BaseActivity {
             String str1 = bundle.getString("body");
             String push = bundle.getString("pushType");
 
-            Log.d("str", str.toString());
-            Log.d("str1", str1);
-
             switch (push) {
 
                 case "TYPE_ONE":
@@ -429,10 +426,8 @@ public class MainActivity extends BaseActivity {
             } else {
                 p = storge_permissions;
             }
-            Log.e("Hello:--", String.valueOf(p));
-
         } catch (Exception e) {
-            Log.e("Per:==", e.toString());
+            Log.e("Permission:==", e.toString());
         }
         return p;
     }

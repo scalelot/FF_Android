@@ -150,7 +150,7 @@ public class BlockedContactActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("AllBlockFriends_error=>" + error.toString());
+                    Log.e("AllBlockFriendsError=>" , error.toString());
                 }
             }) {
                 @Override

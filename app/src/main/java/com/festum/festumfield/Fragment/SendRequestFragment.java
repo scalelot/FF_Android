@@ -95,7 +95,7 @@ public class SendRequestFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
-                    Log.e("friends_request_dis-->", response.toString());
+                    Log.e("SendFriendsRequest-->", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -107,8 +107,6 @@ public class SendRequestFragment extends Fragment {
                             ReceiveFriendsRegisterModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ReceiveFriendsRegisterModel.class);
                             receivefriendrequestsModelArrayList.add(productDetailsModel);
                         }
-
-                        Log.e("friends_request_all-->", String.valueOf(receivefriendrequestsModelArrayList.size()));
 
                         if (!receivefriendrequestsModelArrayList.isEmpty()) {
                             emptyLay.setVisibility(View.GONE);
@@ -131,7 +129,7 @@ public class SendRequestFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("LLL_pro_Error", error.toString());
+                    Log.e("SendFriendsRequestError", error.toString());
                 }
             }) {
                 @Override

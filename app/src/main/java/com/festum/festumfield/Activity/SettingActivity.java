@@ -255,7 +255,6 @@ public class SettingActivity extends BaseActivity {
                     myFile = new File(uri.getPath());
                     String displayName = null;
                     onReadClick(uri);
-                    Log.e("uriString>>>>", uri.toString());
 
                     if (uriString.startsWith("content://")) {
                         Cursor cursor = null;
@@ -263,7 +262,7 @@ public class SettingActivity extends BaseActivity {
                             cursor = this.getContentResolver().query(uri, null, null, null, null);
                             if (cursor != null && cursor.moveToFirst()) {
                                 displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                                Log.e("nameeeee>>>>", displayName);
+                                Log.e("ExcelSheetName>>>>", displayName);
                                 txt_file_name.setText(displayName);
                                 ll_txt.setVisibility(View.VISIBLE);
                                 ll_phone_email.setVisibility(View.VISIBLE);
@@ -276,7 +275,7 @@ public class SettingActivity extends BaseActivity {
                         }
                     } else if (uriString.startsWith("file://")) {
                         displayName = myFile.getName();
-                        Log.d("nameeeee>>>>  ", displayName);
+                        Log.d("ExcelSheetName>>>>  ", displayName);
                     }
 
 
@@ -285,10 +284,7 @@ public class SettingActivity extends BaseActivity {
                 }
             }
         }
-
-
     }
-
     private void onReadClick(Uri uriString) {
         try {
             InputStream stream = getContentResolver().openInputStream(uriString);
@@ -336,8 +332,6 @@ public class SettingActivity extends BaseActivity {
             ioException.printStackTrace();
         }
     }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

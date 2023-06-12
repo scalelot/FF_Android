@@ -311,7 +311,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(getApplicationContext());
-                    System.out.println("BusinessRegister_Error=>" + error.toString());
+                    System.out.println("BusinessRegisterError=>" + error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -341,7 +341,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 public void onResponse(JSONObject response) {
 //                    FileUtils.DismissLoading(BusinessProfileActivity.this);
 
-                    Log.e("FetchBusinessInfo=>", response.toString());
+                    Log.e("GetBusinessInfo=>", response.toString());
                     BusinessInfoRegisterModel businessInfoRegisterModel = new Gson().fromJson(response.toString(), BusinessInfoRegisterModel.class);
 
                     Double logitude = businessInfoRegisterModel.getData().getLocation().getCoordinates().get(0);
@@ -352,7 +352,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     latLng = latLng1;
 
                     String str = businessInfoRegisterModel.getData().getBrochure();
-                    Log.e("GetBrochure=>", str.toString());
+                    Log.e("GetBrochure=>", str);
 
                     edt_bussiness_name.setText(businessInfoRegisterModel.getData().getName());
                     edt_category.setText(businessInfoRegisterModel.getData().getCategory());
@@ -388,7 +388,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("FetchBusiness_Error=>", error.toString());
+                    Log.e("GetBusinessError=>", error.toString());
 //                    FileUtils.DismissLoading(BusinessProfileActivity.this);
                     error.printStackTrace();
                 }
@@ -424,6 +424,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 per = storge_permissions;
             }
         } catch (Exception e) {
+            Log.e("CameraPermission:==", e.toString());
         }
         return per;
     }
@@ -474,7 +475,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     cursor = this.getContentResolver().query(uri, null, null, null, null);
                     if (cursor != null && cursor.moveToFirst()) {
                         displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        Log.d("PDFName=>", displayName);
+                        Log.e("PDFName=>", displayName);
                         SharedPreferences sharedPreferences = getSharedPreferences("name", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("displayName", displayName);
@@ -495,7 +496,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 }
             } else if (uriString.startsWith("file://")) {
                 displayName = myFile.getName();
-                Log.d("PDFName=>", displayName);
+                Log.e("PDFName=>", displayName);
             }
         }
     }
@@ -510,7 +511,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, Constans.set_Setbrochure_pdf, new Response.Listener<NetworkResponse>() {
                 @Override
                 public void onResponse(NetworkResponse response) {
-                    Log.d("PdfUpload=>", new String(response.data));
+                    Log.e("PdfUpload=>", new String(response.data));
                     rQueue.getCache().clear();
                     JSONObject jsonObject;
                     try {
@@ -520,7 +521,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                         jsonObject.toString().replace("\\\\", "");
 
                         if (jsonObject.getString("IsSuccess").equals("true")) {
-                            Log.d("come::: >>>  ", "yessssss");
+                            Log.e("come::: >>>  ", "yessssss");
                             arraylist = new ArrayList<HashMap<String, String>>();
                         }
                     } catch (JSONException e) {
@@ -530,7 +531,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("PdfUpload_Error=>" + error.getMessage());
+                    System.out.println("PdfUploadError=>" + error.getMessage());
                 }
             }) {
 
@@ -599,7 +600,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(BusinessProfileActivity.this);
-                    Log.e("BusinessProImage=>", response.toString());
+                    Log.e("BusinessProfileImg=>", response.toString());
                     getBusinessProfileInfo();
                     status = true;
                 }
@@ -607,7 +608,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onError(ANError error) {
                     FileUtils.DismissLoading(BusinessProfileActivity.this);
-                    Log.e("BusinProImage_Error--->", error.toString());
+                    Log.e("BusinProImgError--->", error.toString());
                     status = false;
                 }
             });
@@ -641,17 +642,17 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     @Override
     public void onProviderDisabled(String provider) {
-        Log.d("Latitude", "disable");
+        Log.e("Latitude", "disable");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        Log.d("Latitude", "enable");
+        Log.e("Latitude", "enable");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d("Latitude", "status");
+        Log.e("Latitude", "status");
     }
 
     public void fetchLocation() {
@@ -665,7 +666,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
         } catch (Exception e) {
-            Log.e("LLL_bproerr--->", e.getMessage());
+            Log.e("GetLocationError=>", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -701,7 +702,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     Log.e("TAG", "GPS is on");
                     Const.b_lattitude = location.getLatitude();
                     Const.b_longitude = location.getLongitude();
-                    Log.e("LLL_Latitude: ", +location.getLatitude() + ", Longitude:" + location.getLongitude());
+                    Log.e("LatLog=>", +location.getLatitude() + ", Longitude:" + location.getLongitude());
 
                     centreMapOnLocation(location, bestProvider);
 
@@ -728,7 +729,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 Toast.makeText(getApplicationContext(), "Accetta i permessi", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Log.e("LLL_bproerr1--->", e.getMessage());
+            Log.e("LL_MapError", e.getMessage());
             e.printStackTrace();
         }
 
@@ -782,7 +783,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng latLng) {
-                        Log.e("LLL_onclick_map==>", "false");
+                        Log.e("LLL_OnClickMap==>", "false");
                     }
                 });
             }

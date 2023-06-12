@@ -101,7 +101,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.get_friends_product_list, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("ListProduct=>", response.toString());
+                    Log.e("GetProductItem=>", response.toString());
                     loaderLay.setVisibility(View.GONE);
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -136,7 +136,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("ListProduct_Error=>", error.toString());
+                    Log.e("GetProductItemError=>", error.toString());
                 }
             }) {
                 @Override

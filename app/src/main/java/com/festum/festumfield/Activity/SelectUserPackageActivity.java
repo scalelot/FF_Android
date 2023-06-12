@@ -62,7 +62,6 @@ public class SelectUserPackageActivity extends BaseActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            System.out.println("Plaese Select Package ");
                             Toast.makeText(SelectUserPackageActivity.this, "Plaese Select Package", Toast.LENGTH_SHORT).show();
                         }
                     }

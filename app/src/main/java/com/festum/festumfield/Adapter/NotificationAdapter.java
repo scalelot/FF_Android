@@ -23,7 +23,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     Activity activity;
     ArrayList<String> txt_usernae;
-    ArrayList<Integer> img;
     LayoutInflater inflater;
     private static final int CONTENT_TYPE = 0;
     private static final int AD_TYPE = 1;

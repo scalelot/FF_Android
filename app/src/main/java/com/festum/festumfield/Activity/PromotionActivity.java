@@ -16,7 +16,7 @@ import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.R;
 
 public class PromotionActivity extends BaseActivity {
-    TextView running, history, send_request, select;
+    TextView running, history, select;
     ColorStateList def;
     ImageView ic_back;
     NotificationManagerCompat notificationManager;

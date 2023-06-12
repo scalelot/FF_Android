@@ -54,26 +54,19 @@ import java.util.Map;
 
 public class CreateNotificationActivity extends BaseActivity {
 
-    ImageView back_arrow_ic, add_image, img;
+    ImageView back_arrow_ic, add_image;
     EditText edt_notification_title, edt_notification_link;
     TextInputEditText edt_notification_des;
     AppCompatButton btn_notification_done;
     RelativeLayout ic_edit_img;
     public static final int PICK_IMAGE = 1;
-    Bitmap bitmap = null;
     boolean status = true;
-    protected static final int CAMERA_REQUEST = 0;
-    protected static final int GALLERY_REQUEST = 1;
-    Uri uri;
-    Intent picIntent = null;
     RequestQueue queue;
     Context context;
     String image_url = "";
     String edit_noti;
     TextView txt_title;
     String notificationId;
-    File file;
-    Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +163,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 per = storge_permissions;
             }
         } catch (Exception e) {
+            Log.e("CameraPermission:==", e.toString());
         }
         return per;
     }
@@ -183,7 +177,6 @@ public class CreateNotificationActivity extends BaseActivity {
                 Glide.with(CreateNotificationActivity.this).load(selectImage).placeholder(R.drawable.ic_user).into(add_image);
 
                 String path = RealPathUtil.getRealPath(CreateNotificationActivity.this, selectImage);
-                System.out.println("SetFilePath:==" + path);
                 File file = new File(path);
                 uploadImage(file);
             } catch (Exception e) {
@@ -232,7 +225,7 @@ public class CreateNotificationActivity extends BaseActivity {
 
                         @Override
                         public void onError(ANError error) {
-                            Log.e("NotiBanner_Error=>", error.toString());
+                            Log.e("NotiBannerError=>", error.toString());
 
                         }
                     });
@@ -270,7 +263,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(CreateNotificationActivity.this);
-                    System.out.println("CreateNoti_Error=>" + error.toString());
+                    System.out.println("CreateNotificationError=>" + error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -290,7 +283,6 @@ public class CreateNotificationActivity extends BaseActivity {
             FileUtils.DismissLoading(CreateNotificationActivity.this);
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-            Log.e("LLL_bserror-->", e.getMessage());
         }
     }
 
@@ -311,7 +303,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(CreateNotificationActivity.this);
-                    Log.e("UpdateNoti=>", response.toString());
+                    Log.e("UpdateNotification=>", response.toString());
 
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
 
@@ -322,7 +314,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(CreateNotificationActivity.this);
-                    System.out.println("UpdateNoti_Error=>" + error.toString());
+                    System.out.println("UpdateNotificationError=>" + error.toString());
                     error.printStackTrace();
                 }
             }) {
@@ -343,7 +335,6 @@ public class CreateNotificationActivity extends BaseActivity {
             FileUtils.DismissLoading(CreateNotificationActivity.this);
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-            Log.e("LLL_bserror-->", e.getMessage());
         }
     }
 
@@ -352,7 +343,7 @@ public class CreateNotificationActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, Constans.fetch_single_notification + "?nid=" + id, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("SingleNotification=>", response.toString());
+                    Log.e("GetSingleNotification=>", response.toString());
                     NotificationModel notificationModel = new Gson().fromJson(response.toString(), NotificationModel.class);
 
                     edt_notification_title.setText(notificationModel.getNotificationDetailsModel().getTitle());
@@ -363,7 +354,6 @@ public class CreateNotificationActivity extends BaseActivity {
                         ic_edit_img.setVisibility(View.GONE);
                     } else {
                         image_url = notificationModel.getNotificationDetailsModel().getImageUrl();
-                        Log.e("LLL_imge--->", image_url);
                         ic_edit_img.setVisibility(View.VISIBLE);
                         add_image.setEnabled(false);
                         Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + notificationModel.getNotificationDetailsModel().getImageUrl()).into(add_image);
@@ -374,7 +364,7 @@ public class CreateNotificationActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 //                    FileUtils.DismissLoading(CreateNotificationActivity.this);
-                    System.out.println("SingleNoti_Error=>" + error.toString());
+                    System.out.println("GetSingleNotificationError=>" + error.toString());
                 }
             }) {
                 @Override

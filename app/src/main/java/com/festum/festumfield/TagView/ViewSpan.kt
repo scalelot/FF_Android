@@ -15,7 +15,6 @@ open class ViewSpan(var view: View, private val layout: Layout) : ReplacementSpa
             cachedMaxWidth = layout.maxViewSpanWidth
             var spec = View.MeasureSpec.AT_MOST
             if (cachedMaxWidth == 0) {
-                //If the width is 0, allow the view to choose it's own content size
                 spec = View.MeasureSpec.UNSPECIFIED
             }
             val widthSpec = View.MeasureSpec.makeMeasureSpec(cachedMaxWidth, spec)
@@ -42,10 +41,8 @@ open class ViewSpan(var view: View, private val layout: Layout) : ReplacementSpa
     ): Int {
         prepView()
         if (fontMetricsInt != null) {
-            //We need to make sure the layout allots enough space for the view
             val height = view.measuredHeight
             var adjustedBaseline = view.baseline
-            //-1 means the view doesn't support baseline alignment, so align bottom to font baseline
             if (adjustedBaseline == -1) {
                 adjustedBaseline = height
             }

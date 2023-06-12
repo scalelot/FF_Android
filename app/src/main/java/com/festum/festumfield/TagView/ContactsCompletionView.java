@@ -40,7 +40,6 @@ public class ContactsCompletionView extends TokenCompleteTextView<Person> {
 
     @Override
     protected Person defaultObject(String completionText) {
-        //Stupid simple example of guessing if we have an email or not
         int index = completionText.indexOf('@');
         if (index == -1) {
             return new Person(completionText);
@@ -49,7 +48,6 @@ public class ContactsCompletionView extends TokenCompleteTextView<Person> {
         }
     }
 
-    //Methods for testing
     @Override
     public InputConnection onCreateInputConnection(@NonNull EditorInfo outAttrs) {
         testAccessibleInputConnection = super.onCreateInputConnection(outAttrs);

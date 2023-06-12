@@ -22,7 +22,6 @@ public class BuyPlanAdapter extends RecyclerView.Adapter<BuyPlanAdapter.ViewHold
     String[] plan_sms;
     String[] plan_email;
     String[] plan_all;
-    TextView count;
     public static int selectedPosition = -1;
     private static ClickListener clickListener;
 
@@ -33,7 +32,6 @@ public class BuyPlanAdapter extends RecyclerView.Adapter<BuyPlanAdapter.ViewHold
     public void setOnItemClickListener(ClickListener clickListener) {
         BuyPlanAdapter.clickListener = clickListener;
     }
-
 
     public BuyPlanAdapter(SelectUserPackageActivity selectUserPackageActivity, String[] plan_name, String[] plan_notification, String[] plan_sms, String[] plan_email, String[] plan_all) {
         this.activity = selectUserPackageActivity;
@@ -82,7 +80,6 @@ public class BuyPlanAdapter extends RecyclerView.Adapter<BuyPlanAdapter.ViewHold
                 } else {
                     selectedPosition = position;
                     notifyDataSetChanged();
-                    System.out.println("count " + plan_name[position]);
                     clickListener.onItemClick(plan_name[position], true);
 
                 }

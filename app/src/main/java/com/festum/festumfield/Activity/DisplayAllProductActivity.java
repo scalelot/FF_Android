@@ -173,7 +173,7 @@ public class DisplayAllProductActivity extends BaseActivity {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.list_product, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.e("DisAllProduct=>", response.toString());
+                    Log.e("GetAllProductItem=>", response.toString());
                     idPBLoading.setVisibility(View.GONE);
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -205,7 +205,7 @@ public class DisplayAllProductActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("DisAllProduct_Error=>", error.toString());
+                    Log.e("GetAllProductItemError=>", error.toString());
                 }
             }) {
                 @Override

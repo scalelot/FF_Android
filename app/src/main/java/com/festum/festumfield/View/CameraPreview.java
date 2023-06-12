@@ -29,13 +29,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder = getHolder();
         mHolder.addCallback(this);
         setFocusable(true);
-        // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-            // create the surface and start camera preview
             if (mCamera == null) {
                 mCamera.setPreviewDisplay(holder);
                 mCamera.startPreview();
@@ -47,18 +45,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void refreshCamera(Camera camera) {
         if (mHolder.getSurface() == null) {
-            // preview surface does not exist
             return;
         }
-        // stop preview before making changes
         try {
             mCamera.stopPreview();
         } catch (Exception e) {
-            // ignore: tried to stop a non-existent preview
         }
-        // set preview size and make any resize, rotate or
-        // reformatting changes here
-        // start preview with new settings
         setCamera(camera);
         try {
 
@@ -102,7 +94,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void setCamera(Camera camera) {
-        //method to set a camera instance
         mCamera = camera;
     }
 
@@ -130,8 +121,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         else
             mCamera.setDisplayOrientation(0);
 
-        // Setting BestPreviewSize for Current Pixels
-
         Camera.Size size = null;
         List<Camera.Size> list = params.getSupportedPreviewSizes();
 
@@ -145,7 +134,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if (size != null) {
             params.setPreviewSize(size.width, size.height);
             params.setPictureSize(size.width, size.height);
-//            mCamera.setParameters(params);
         }
 
         mCamera.setParameters(params);

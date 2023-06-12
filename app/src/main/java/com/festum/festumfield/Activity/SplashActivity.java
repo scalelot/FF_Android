@@ -1,6 +1,6 @@
 package com.festum.festumfield.Activity;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +10,6 @@ import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 
-@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
 
     @Override

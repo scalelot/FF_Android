@@ -175,7 +175,7 @@ public class ContactFragment extends Fragment {
                 @Override
                 public void onResponse(JSONObject response) {
                     progressBar.setVisibility(View.GONE);
-                    Log.e("All_my_friends:--", response.toString());
+                    Log.e("GetAllMFriends:--", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -187,8 +187,6 @@ public class ContactFragment extends Fragment {
                             productDetailsModel = new Gson().fromJson(jsonObject.toString(), AllFriendsRegisterModel.class);
                             allFriendsModelsList.add(productDetailsModel);
                         }
-
-                        Log.e("friends_request_all-->", String.valueOf(allFriendsModelsList.size()));
 
                         if (!allFriendsModelsList.isEmpty()) {
                             emptyLay.setVisibility(View.GONE);
@@ -212,7 +210,7 @@ public class ContactFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     progressBar.setVisibility(View.GONE);
-                    System.out.println("all_friends_error" + error.toString());
+                    System.out.println("GetAllMFriendsError" + error.toString());
                 }
             }) {
                 @Override
