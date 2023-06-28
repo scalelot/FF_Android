@@ -2,6 +2,7 @@ package com.festum.festumfield.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -366,11 +368,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
     }
 
     private String getDate(String timeStamp) {
-        DateTimeFormatter sourceFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("HH:mm a");
-        LocalDateTime dateTime = LocalDateTime.parse(timeStamp, sourceFormat);
-        String formatedDateTime = dateTime.atZone(ZoneId.of("UTC")).format(targetFormat);
-        return formatedDateTime;
+        try {
+            Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+            cal.setTimeInMillis(Long.valueOf(timeStamp) * 1000L);
+            String date = DateFormat.format("hh:mm a", cal).toString();
+            return date;
+        } catch (Exception ex) {
+            return "00:00";
+        }
     }
 
     @Override

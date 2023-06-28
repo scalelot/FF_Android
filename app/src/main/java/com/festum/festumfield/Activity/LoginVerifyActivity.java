@@ -89,6 +89,11 @@ public class LoginVerifyActivity extends BaseActivity {
             @Override
             public void onOTPComplete(String otp) {
                 OtpValue = otp;
+                if (otp.isEmpty()){
+                    btn_verify.setBackground(getResources().getDrawable(R.drawable.verify_btn_bg));
+                }else{
+                    btn_verify.setBackground(getResources().getDrawable(R.drawable.login_btn_bg));
+                }
             }
         });
 
@@ -102,7 +107,6 @@ public class LoginVerifyActivity extends BaseActivity {
                 try {
                     if (!OtpValue.equals("")) {
                         FileUtils.DisplayLoading(LoginVerifyActivity.this);
-                        btn_verify.setBackground(getResources().getDrawable(R.drawable.login_btn_bg));
                         VerifyOtp(OtpValue);
                     } else {
                         Toast.makeText(LoginVerifyActivity.this, "Please Enter Otp", Toast.LENGTH_LONG).show();
