@@ -53,34 +53,41 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.gms:play-services-cast-framework:21.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //CountryCodePicker
     implementation 'com.github.inpossoft:CountryCodePickerProject:2.0.0'
+
+    //Gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
     //Volley
     implementation 'com.android.volley:volley:1.2.1'
 
     //lottie
-    implementation 'com.airbnb.android:lottie:6.0.0'
+    implementation 'com.airbnb.android:lottie:6.0.1'
+
     //circleimageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
     //GoogleMap
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
     //OtpView
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
+
     //RangeView
     implementation 'me.bendik.simplerangeview:simplerangeview:0.1.1'
+
     //ImagePicker
     implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
+
     //Switchbutton
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
+
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
@@ -91,42 +98,38 @@ dependencies {
     //Toggle
     implementation 'com.github.angads25:toggle:1.1.0'
 
-    implementation 'com.github.3llomi:CircularStatusView:V1.0.2'
-    implementation 'com.github.shts:StoriesProgressView:3.0.0'
-
-    implementation 'com.otaliastudios:cameraview:2.7.2'
-
+    //Org.apache.poi
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-
-    implementation 'com.github.nkzawa:socket.io-client:0.5.0' //websocket
-
+    //IO.socket
     implementation('io.socket:socket.io-client:2.1.0') {
         exclude group: 'org.json', module: 'json'
     }
+
+    //ExoPlayer
     implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
+
+    //Kotlin
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
-    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.21'
 
-    implementation 'com.intuit.sdp:sdp-android:1.1.0'
-
+    //Places
     implementation 'com.google.android.libraries.places:places:3.1.0'
-    implementation 'com.google.android.gms:play-services-ads:22.1.0'
 
+    //TagView
     implementation 'com.github.mahimrocky:TagView:1.0.1'
+
+    //Flexbox
     implementation 'com.google.android:flexbox:1.0.0'
 
+    //Biometric
     implementation 'androidx.biometric:biometric:1.2.0-alpha05'
 
-    implementation 'androidx.work:work-runtime-ktx:2.8.1'
-
-    implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.14'
+    //Android Networking
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
 
-    implementation "androidx.lifecycle:lifecycle-runtime:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.6.1"
+    //processLifecycle
+    implementation 'androidx.lifecycle:lifecycle-process:2.6.1'
+
 }
