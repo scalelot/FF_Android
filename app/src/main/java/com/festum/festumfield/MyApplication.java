@@ -8,15 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-//import com.bokecc.camerafilter.LocalVideoFilter;
-import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Utils.Constans;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
@@ -24,17 +21,14 @@ import com.google.android.exoplayer2.upstream.cache.CacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
-import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import io.socket.engineio.client.Transport;
 
 public class MyApplication extends Application implements LifecycleObserver {
 
@@ -104,6 +98,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public Emitter.Listener onConnect = new Emitter.Listener() {
@@ -155,6 +150,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     public static Context getContext() {
         return context;
     }
+
 
     public static void setCountryCode(Context context, String code) {
         if (code == null) {
@@ -264,6 +260,20 @@ public class MyApplication extends Application implements LifecycleObserver {
         Boolean useractive = sharedPreferences.getBoolean("isPersonalProfileRegistered", false);
 
         return useractive;
+    }
+
+    public static void setNotificationToken(Context context, String newToken) {
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences1.edit();
+        editor.putString("newToken", newToken);
+        editor.apply();
+        editor.commit();
+    }
+
+    public static String getNotificationToken(Context context) {
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        String newTokenGet = sharedPreferences1.getString("newToken", "");
+        return newTokenGet;
     }
 
     private void createNotificationChannel() {

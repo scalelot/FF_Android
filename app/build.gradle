@@ -132,4 +132,6 @@ dependencies {
     //processLifecycle
     implementation 'androidx.lifecycle:lifecycle-process:2.6.1'
 
+    //Firebase Notification
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
 }

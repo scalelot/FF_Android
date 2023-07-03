@@ -93,7 +93,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     private static final int PERMISSION_CODE = 1000;
     int page = 1, limit = 10;
     NestedScrollView nestedScrollView;
-    LinearLayoutManager linearLayoutManager;
+    String proName, proDesc, proPrice, proImage;
     Socket mSocket;
     JSONObject send, recive,reciveMessage;
 
@@ -206,8 +206,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
 
     }
-
-    String proName, proDesc, proPrice, proImage;
 
     public void getMessageRecive() {
         try {

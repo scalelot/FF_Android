@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.android.volley.AuthFailureError;
@@ -17,9 +18,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.SendOtpModel;
+import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.Utils.Utilities;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.hbb20.CountryCodePicker;
 
@@ -44,6 +50,20 @@ public class LoginActivity extends BaseActivity {
         edtPhone = findViewById(R.id.edtPhone);
         btn_continue = findViewById(R.id.btn_continue);
 
+        //Firebase GetToken
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Log.e(Utilities.TAG, s);
+                MyApplication.setNotificationToken(LoginActivity.this, s);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(Utilities.TAG, e.toString());
+            }
+        });
+
         countycode = ccp.getDefaultCountryCode();
 
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
@@ -57,10 +77,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 FileUtils.hideKeyboard(LoginActivity.this);
+                String newToken = MyApplication.getNotificationToken(LoginActivity.this);
 
                 if (!edtPhone.getText().toString().equals("")) {
                     if (FileUtils.isValidPhoneNumber(edtPhone.getText().toString())) {
-                        SendOtp(countycode, edtPhone.getText().toString());
+                        SendOtp(countycode, edtPhone.getText().toString(),newToken);
                         FileUtils.DisplayLoading(LoginActivity.this);
                     } else {
                         edtPhone.setError(getResources().getString(R.string.please_enter_mno));
@@ -73,12 +94,13 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    public void SendOtp(String countyCode, String phone_number) {
+    public void SendOtp(String countyCode, String phone_number, String newToken) {
         JsonObjectRequest request = null;
         try {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("countryCode", countyCode);
             params.put("contactNo", phone_number);
+            params.put("fcmtoken",newToken);
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
