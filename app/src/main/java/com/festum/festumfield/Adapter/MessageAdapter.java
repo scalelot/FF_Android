@@ -40,10 +40,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int TYPE_PRODUCT_SENT = 2;
     List<JSONObject> chatMessages;
     Activity activity;
+    LayoutInflater inflater;
 
     public MessageAdapter(ChatingActivity chatingActivity, List<JSONObject> objectList) {
         this.activity = chatingActivity;
         this.chatMessages = objectList;
+        inflater = LayoutInflater.from(activity);
     }
 
     private class SendMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -208,18 +210,19 @@ public class MessageAdapter extends RecyclerView.Adapter {
         switch (viewType) {
 
             case TYPE_MESSAGE_SENT:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sent_message, parent, false);
+                view = inflater.inflate(R.layout.item_sent_message, parent, false);
                 return new SendMessageHolder(view);
 
             case TYPE_IMAGE_SENT:
 
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sent_image, parent, false);
+                view = inflater.inflate(R.layout.item_sent_image, parent, false);
                 return new SendImageHolder(view);
 
             case TYPE_PRODUCT_SENT:
 
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_send_product, parent, false);
+                view = inflater.inflate(R.layout.item_send_product, parent, false);
                 return new SendProductHolder(view);
+
         }
         return null;
     }

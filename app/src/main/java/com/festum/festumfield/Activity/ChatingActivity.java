@@ -93,6 +93,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     private static final int PERMISSION_CODE = 1000;
     int page = 1, limit = 10;
     NestedScrollView nestedScrollView;
+    LinearLayoutManager linearLayoutManager;
     String proName, proDesc, proPrice, proImage;
     Socket mSocket;
     JSONObject send, recive,reciveMessage;
@@ -333,6 +334,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        chat_recycler.setLayoutManager(linearLayoutManager);
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
         chat_recycler.setAdapter(messageAdapter);
 
@@ -366,17 +370,17 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 jsonObject.put("isSent", true);
                 jsonObject.put("isRecive", false);
 
-                if (edt_chating.getText().toString().equals("")) {
+                Log.e("TAG", "attemptSend: " + jsonObject.toString() );
+
+                if (edt_chating.getText().toString().trim().equals("")) {
                     Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT).show();
                 } else {
                     sendMessage(toUserIds, edt_chating.getText().toString().trim());
 
                     objectList.add(jsonObject);
-
                     messageAdapter.notifyDataSetChanged();
-
-                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
-
+                    messageAdapter.notifyItemInserted(messageAdapter.getItemCount());
+                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
                 }
                 resetMessageEdit();
             } catch (JSONException e) {
@@ -407,7 +411,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                     messageAdapter.notifyDataSetChanged();
 
-                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount());
                 } else {
                     Toast.makeText(ChatingActivity.this, "Enter Message", Toast.LENGTH_SHORT).show();
                 }

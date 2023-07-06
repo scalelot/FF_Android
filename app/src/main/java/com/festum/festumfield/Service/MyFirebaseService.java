@@ -1,19 +1,27 @@
 package com.festum.festumfield.Service;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.festum.festumfield.MyApplication;
+import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Utilities;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
-
 public class MyFirebaseService extends FirebaseMessagingService {
 
-//    String channelId = MyApplication.getChannelId(getApplicationContext());
+    String channelId;
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -24,14 +32,29 @@ public class MyFirebaseService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
+        try {
+            channelId = MyApplication.getChannelId(this);
 
-        Map<String, String> data = message.getData();
+            if (message.getNotification().getTitle() != null) {
+                String title = message.getNotification().getTitle();
+                String body = message.getNotification().getBody();
 
-        // Loop through the data payload and print the values.
-        for (String key : data.keySet()) {
-            Log.d("dataRecive:--", "Key: " + key + ", Value: " + data.get(key));
+                NotificationChannel channel = new NotificationChannel(channelId, "Message Notification", NotificationManager.IMPORTANCE_HIGH);
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.createNotificationChannel(channel);
+                channel.enableLights(true);
+
+                Notification notification = new Notification.Builder(this, channelId).
+                        setContentTitle(title).
+                        setContentText(body).
+                        setSmallIcon(R.mipmap.ic_app_logo).
+                        setAutoCancel(true).
+                            build();
+
+                manager.notify(1, notification);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-//        Log.d("recive", message.getData().toString());
     }
 }

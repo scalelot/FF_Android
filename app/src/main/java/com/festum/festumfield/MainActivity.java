@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new ChatFragment()).commit();
 
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override

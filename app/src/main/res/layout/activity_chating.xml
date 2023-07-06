@@ -129,11 +129,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/chat_recycler"
                 android:layout_width="match_parent"
-                app:reverseLayout="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_height="match_parent" />
-            <!--         app:reverseLayout="true"
-         app:stackFromEnd="true"-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

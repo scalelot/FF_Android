@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FestumField</string>
-    <string name="google_maps_key">AIzaSyBtnrzIQpD4MqzvmkeaQdbGUngVZ8YNpwQ</string>
+    <string name="google_maps_key">AIzaSyC2Axe4uEoZW8dDrJjce7XzoM0jLyhESR8</string>
 
     <!--Login Screen-->
     <string name="welcome_txt">Welcome!</string>

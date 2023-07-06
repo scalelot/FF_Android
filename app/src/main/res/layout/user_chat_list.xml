@@ -3,9 +3,7 @@
     android:id="@+id/rl_chat_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_bg"
-    android:clickable="true"
-    android:focusable="true">
+    android:background="@color/app_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,8 +55,7 @@
             <RelativeLayout
                 android:id="@+id/lin_top"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/txt_user_name"
@@ -89,9 +86,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lin_top"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                android:layout_below="@id/lin_top">
 
                 <TextView
                     android:id="@+id/txt_message"

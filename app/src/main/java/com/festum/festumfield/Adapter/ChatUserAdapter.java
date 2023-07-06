@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +68,8 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
 
                 Intent intent = new Intent(fragment.getContext(), ChatingActivity.class);
                 intent.putExtra("UserName", registerModels.get(position).getFullName());
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 fragment.startActivity(intent);
+                Log.e("btnClick=>", String.valueOf(position));
             }
         });
 

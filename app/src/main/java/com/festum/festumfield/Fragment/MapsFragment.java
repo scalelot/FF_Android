@@ -89,14 +89,14 @@ public class MapsFragment extends Fragment {
     TextView txt_location, latlng, map_username;
     TextInputEditText textInputEditText;
     ImageView iv_search;
-    RelativeLayout mMapViewRoot,rl_map;
+    RelativeLayout mMapViewRoot, rl_map;
     GoogleMap mGoogleMap;
     Marker marker;
     View view_marker, transparentView, viewdialog, view;
     PopupWindow popview;
     private static final int DURATION = 3000;
     Double latitude, longitude;
-    String apiKeys = "AIzaSyAP9ViAFSCQHr4i_DjkbKcj0Lj2BarZNIk";
+    String apiKeys = "AIzaSyC2Axe4uEoZW8dDrJjce7XzoM0jLyhESR8";
     List<Place.Field> fields;
     SearchView searchView;
     LatLng m3;
@@ -128,10 +128,25 @@ public class MapsFragment extends Fragment {
 
         queue = Volley.newRequestQueue(getContext());
 
+        mMapViewRoot = (RelativeLayout) view.findViewById(R.id.mapview_root);
+        transparentView = View.inflate(getContext(), R.layout.transparent_layout, mMapViewRoot);
+
+        view_marker = transparentView.findViewById(R.id.view_marker);
+        mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(callback);
+
         MapsInitializer.initialize(getActivity());
         Places.initialize(getContext(), apiKeys);
 
         fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        if (Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            txt_location.setText(getResources().getString(R.string.location_ust_be_on));
+            Toast.makeText(getActivity(), "GPS is Enabled in your device", Toast.LENGTH_SHORT).show();
+        } else {
+            showGPSDisabledAlertToUser();
+        }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -152,8 +167,9 @@ public class MapsFragment extends Fragment {
                             FileUtils.DisplayLoading(MapsFragment.this.getContext());
                             findLocationorName(latitude, longitude);
                             latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                        }else {
-                            Toast.makeText(MapsFragment.this.getContext(),"Search Valid Place",Toast.LENGTH_SHORT).show();
+                            Log.e("LatLog==>>", String.valueOf(latLng));
+                        } else {
+                            Toast.makeText(MapsFragment.this.getContext(), "Search Valid Place", Toast.LENGTH_SHORT).show();
                         }
 
                         if (latLng != null) {
@@ -185,49 +201,11 @@ public class MapsFragment extends Fragment {
             }
         });
 
-        mMapViewRoot = (RelativeLayout) view.findViewById(R.id.mapview_root);
-        transparentView = View.inflate(
-
-                getContext(), R.layout.transparent_layout, mMapViewRoot);
-
-        view_marker = transparentView.findViewById(R.id.view_marker);
-        if (
-
-                getActivity() != null) {
-            mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-            if (mapFragment != null) {
-                mapFragment.getMapAsync(callback);
-            }
-        }
-
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        if (Objects.requireNonNull(locationManager).
-
-                isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            txt_location.setText(getResources().getString(R.string.location_ust_be_on));
-            Toast.makeText(getActivity(), "GPS is Enabled in your device", Toast.LENGTH_SHORT).show();
-        } else {
-            showGPSDisabledAlertToUser();
-        }
-
         fetchgetApi();
+        findLocationorName(Double.valueOf("21.170240"),Double.valueOf("72.831062"));
         return view;
     }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mapFragment != null)
-            getFragmentManager().beginTransaction().remove(mapFragment).commitAllowingStateLoss();
-    }
-
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
@@ -291,13 +269,12 @@ public class MapsFragment extends Fragment {
                             public void onLoadCleared(@Nullable Drawable placeholder) {
                             }
                         });
-
-
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(m3));
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(m3).zoom(20).build();
-
-                        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     }
+
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(m3));
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(m3).zoom(8).build();
+
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                     mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
@@ -338,7 +315,7 @@ public class MapsFragment extends Fragment {
             };
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
-            FileUtils.DismissLoading(   MapsFragment.this.getContext());
+            FileUtils.DismissLoading(MapsFragment.this.getContext());
             e.printStackTrace();
         }
     }
@@ -499,6 +476,13 @@ public class MapsFragment extends Fragment {
         });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mapFragment != null)
+            getFragmentManager().beginTransaction().remove(mapFragment).commitAllowingStateLoss();
     }
 
     @Override

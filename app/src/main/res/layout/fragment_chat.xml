@@ -192,7 +192,7 @@
 
                 <ProgressBar
                     android:id="@+id/idPBLoading"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
@@ -204,7 +204,7 @@
         android:id="@+id/fb_reels"
         android:layout_width="@dimen/sp_70"
         android:layout_height="@dimen/sp_70"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/sp_20"

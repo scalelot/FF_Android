@@ -69,11 +69,12 @@ public class ChatFragment extends Fragment {
     int page = 1, limit = 10;
     String searchData = "";
     NestedScrollView nestedScrollView;
+    View view;
     ArrayList<AllFriendsRegisterModel> receivefriendrequestsModelArrayList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_chat, container, false);
 
         chat_recyclerview = view.findViewById(R.id.chat_recyclerview);
         ll_notification = view.findViewById(R.id.ll_notification);
@@ -85,6 +86,18 @@ public class ChatFragment extends Fragment {
         iv_clear_text = view.findViewById(R.id.iv_clear_text);
         emptyLay = view.findViewById(R.id.emptyLay);
         progressBar = view.findViewById(R.id.idPBLoading);
+
+        getAllMyFriends(page, limit, searchData);
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    page++;
+                    progressBar.setVisibility(View.VISIBLE);
+                    getAllMyFriends(page, limit, searchData);
+                }
+            }
+        });
 
         iv_filter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,19 +119,6 @@ public class ChatFragment extends Fragment {
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), ReelsActivity.class));
                 getActivity().finish();
-            }
-        });
-
-        getAllMyFriends(page, limit, searchData);
-
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                    page++;
-                    progressBar.setVisibility(View.VISIBLE);
-                    getAllMyFriends(page, limit, searchData);
-                }
             }
         });
 
@@ -247,8 +247,6 @@ public class ChatFragment extends Fragment {
 
         }
     }
-
-
     public void showFilterDialog() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.AppBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.filter_dialog);
