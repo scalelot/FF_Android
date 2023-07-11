@@ -1,17 +1,12 @@
 package com.festum.festumfield.Service;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
@@ -35,9 +30,14 @@ public class MyFirebaseService extends FirebaseMessagingService {
         try {
             channelId = MyApplication.getChannelId(this);
 
+            if (message.getNotification().getImageUrl() != null){
+                String img = String.valueOf(message.getNotification().getImageUrl());
+                System.out.println("img="+img);
+            }
             if (message.getNotification().getTitle() != null) {
                 String title = message.getNotification().getTitle();
                 String body = message.getNotification().getBody();
+
 
                 NotificationChannel channel = new NotificationChannel(channelId, "Message Notification", NotificationManager.IMPORTANCE_HIGH);
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

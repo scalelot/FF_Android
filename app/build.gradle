@@ -83,7 +83,7 @@ dependencies {
     implementation 'me.bendik.simplerangeview:simplerangeview:0.1.1'
 
     //ImagePicker
-    implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 
     //Switchbutton
     implementation 'com.kyleduo.switchbutton:library:2.1.0'

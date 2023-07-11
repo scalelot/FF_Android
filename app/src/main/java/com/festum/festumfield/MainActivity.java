@@ -246,28 +246,27 @@ public class MainActivity extends BaseActivity {
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.requests:
-                                startActivity(new Intent(MainActivity.this, RequestActivity.class));
-                                finish();
-                                return true;
-                            case R.id.setting:
-                                startActivity(new Intent(MainActivity.this, SettingActivity.class));
-                                finish();
-                                return true;
-                            case R.id.new_broadcast:
-                                startActivity(new Intent(MainActivity.this, CreateNewGroupActivity.class));
-                                finish();
-                                return true;
-                            case R.id.new_group:
-                                startActivity(new Intent(MainActivity.this, CreateNewGroupActivity.class));
-                                finish();
-                                return true;
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.requests) {
+                            startActivity(new Intent(MainActivity.this, RequestActivity.class));
+                            finish();
+                            return true;
+                        } else if (itemId == R.id.setting) {
+                            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                            finish();
+                            return true;
+                        } else if (itemId == R.id.new_broadcast) {
+                            startActivity(new Intent(MainActivity.this, CreateNewGroupActivity.class));
+                            finish();
+                            return true;
+                        } else if (itemId == R.id.new_group) {
+                            startActivity(new Intent(MainActivity.this, CreateNewGroupActivity.class));
+                            finish();
+                            return true;
                         }
                         return true;
                     }
                 });
-
                 popup.show();
             }
         });
@@ -330,12 +329,12 @@ public class MainActivity extends BaseActivity {
 
     private void getAllPersonalData() {
         try {
-            FileUtils.DisplayLoading(MainActivity.this);
+//            FileUtils.DisplayLoading(MainActivity.this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constans.fetch_personal_info, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        FileUtils.DismissLoading(MainActivity.this);
+//                        FileUtils.DismissLoading(MainActivity.this);
                         Log.e("GetProfileData=>", response.toString());
                         JSONObject jsonObject = new JSONObject(String.valueOf(response));
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
@@ -364,7 +363,7 @@ public class MainActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(MainActivity.this);
+//                    FileUtils.DismissLoading(MainActivity.this);
                     Log.e("GetProfileDataError=>", error.toString());
                 }
             }) {
@@ -380,7 +379,7 @@ public class MainActivity extends BaseActivity {
             RequestQueue referenceQueue = Volley.newRequestQueue(getApplicationContext());
             referenceQueue.add(jsonObjectRequest);
         } catch (Exception e) {
-            FileUtils.DismissLoading(MainActivity.this);
+//            FileUtils.DismissLoading(MainActivity.this);
             e.printStackTrace();
         }
 
@@ -415,7 +414,7 @@ public class MainActivity extends BaseActivity {
     public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO,Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
     String[] p;
 
     public String[] permissions() {
@@ -481,18 +480,13 @@ public class MainActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         FileUtils.hideKeyboard(MainActivity.this);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (PackageManager.PERMISSION_GRANTED == 0) {
-            ActivityCompat.requestPermissions(this, permissions(), 1);
-        } else {
-            getAllPersonalData();
-            getContactList();
-        }
+        getAllPersonalData();
+        getContactList();
     }
 
     @Override

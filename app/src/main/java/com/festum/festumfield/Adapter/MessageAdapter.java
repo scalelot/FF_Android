@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,7 +34,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MessageAdapter extends RecyclerView.Adapter {
+public class    MessageAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_MESSAGE_SENT = 0;
     private static final int TYPE_IMAGE_SENT = 1;
@@ -372,10 +373,17 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private String getDate(String timeStamp) {
         try {
-            Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-            cal.setTimeInMillis(Long.valueOf(timeStamp) * 1000L);
-            String date = DateFormat.format("hh:mm a", cal).toString();
-            return date;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date date = null;
+            try {
+                date = sdf.parse(timeStamp);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
+            String formattedDate = outputFormat.format(date);
+            return formattedDate;
         } catch (Exception ex) {
             return "00:00";
         }

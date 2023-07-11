@@ -118,7 +118,13 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_maps, container, false);
 
-        viewdialog = LayoutInflater.from(getActivity()).inflate(R.layout.map_request_dialog, null);
+        mMapViewRoot = (RelativeLayout) view.findViewById(R.id.mapview_root);
+        transparentView = View.inflate(getContext(), R.layout.transparent_layout, mMapViewRoot);
+        viewdialog = LayoutInflater.from(getContext()).inflate(R.layout.map_request_dialog, null);
+
+        view_marker = transparentView.findViewById(R.id.view_marker);
+        mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(callback);
 
         txt_location = view.findViewById(R.id.txt_location);
         searchView = view.findViewById(R.id.searchView);
@@ -128,12 +134,7 @@ public class MapsFragment extends Fragment {
 
         queue = Volley.newRequestQueue(getContext());
 
-        mMapViewRoot = (RelativeLayout) view.findViewById(R.id.mapview_root);
-        transparentView = View.inflate(getContext(), R.layout.transparent_layout, mMapViewRoot);
 
-        view_marker = transparentView.findViewById(R.id.view_marker);
-        mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(callback);
 
         MapsInitializer.initialize(getActivity());
         Places.initialize(getContext(), apiKeys);
@@ -228,7 +229,7 @@ public class MapsFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_find_friends_location_or_name, new JSONObject(maplatlog), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    FileUtils.DismissLoading(MapsFragment.this.getContext());
+//                    FileUtils.DismissLoading(MapsFragment.this.getContext());
                     Log.e("FindFirends-->", response.toString());
 
                     findFriendsModel = new Gson().fromJson(response.toString(), FindFriendsModel.class);
@@ -301,7 +302,7 @@ public class MapsFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    FileUtils.DismissLoading(MapsFragment.this.getContext());
+//                    FileUtils.DismissLoading(MapsFragment.this.getContext());
                     Log.e("FindFirendsError-->", error.toString());
                     error.printStackTrace();
                 }
@@ -315,7 +316,7 @@ public class MapsFragment extends Fragment {
             };
             queue.add(jsonObjectRequest);
         } catch (Exception e) {
-            FileUtils.DismissLoading(MapsFragment.this.getContext());
+//            FileUtils.DismissLoading(MapsFragment.this.getContext());
             e.printStackTrace();
         }
     }
