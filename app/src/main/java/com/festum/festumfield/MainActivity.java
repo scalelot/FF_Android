@@ -24,13 +24,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,7 +39,6 @@ import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Activity.CreateNewGroupActivity;
 import com.festum.festumfield.Activity.DisplayAllProductActivity;
 import com.festum.festumfield.Activity.LikeAndCommentActivity;
-import com.festum.festumfield.Activity.LoginActivity;
 import com.festum.festumfield.Activity.PromotionActivity;
 import com.festum.festumfield.Activity.RequestActivity;
 import com.festum.festumfield.Activity.ProfileActivity;
@@ -54,12 +49,8 @@ import com.festum.festumfield.Fragment.ChatFragment;
 import com.festum.festumfield.Fragment.ContactFragment;
 import com.festum.festumfield.Fragment.MapsFragment;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
-import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-//import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -85,18 +76,21 @@ public class MainActivity extends BaseActivity {
     ImageView iv_promotion;
     ImageView iv_business_account, popup_btn;
     TextView noti_title, noti_message;
-    final String[] token = {""};
     ColorStateList def;
     TextView user_name;
     CircleImageView user_img;
-    private Intent intent;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActivityCompat.requestPermissions(this, permissions(), 1);
+        if (PackageManager.PERMISSION_GRANTED == 0) {
+            ActivityCompat.requestPermissions(this, permissions(), 1);
+        } else {
+            getContactList();
+        }
 
         txt_chats = findViewById(R.id.txt_chats);
         txt_find_friend = findViewById(R.id.txt_find_friend);
@@ -121,8 +115,6 @@ public class MainActivity extends BaseActivity {
         popup_btn = findViewById(R.id.popup_btn);
         noti_title = findViewById(R.id.noti_title);
         noti_message = findViewById(R.id.noti_message);
-
-        getAllPersonalData();
 
         def = txt_find_friend.getTextColors();
         Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));
@@ -414,7 +406,7 @@ public class MainActivity extends BaseActivity {
     public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO,Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] storge_permissions_33 = {Manifest.permission.POST_NOTIFICATIONS, android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
     String[] p;
 
     public String[] permissions() {
@@ -486,7 +478,6 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getAllPersonalData();
-        getContactList();
     }
 
     @Override

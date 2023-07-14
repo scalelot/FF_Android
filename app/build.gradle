@@ -107,7 +107,7 @@ dependencies {
     }
 
     //ExoPlayer
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
+    implementation 'com.google.android.exoplayer:exoplayer:2.19.0'
 
     //Kotlin
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21'
@@ -115,7 +115,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.21'
 
     //Places
-    implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'com.google.android.libraries.places:places:3.2.0'
 
     //TagView
     implementation 'com.github.mahimrocky:TagView:1.0.1'

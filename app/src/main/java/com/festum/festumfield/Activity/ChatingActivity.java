@@ -2,16 +2,13 @@ package com.festum.festumfield.Activity;
 
 import static com.android.volley.Request.Method.GET;
 
-import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -64,7 +60,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +87,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     ListChatsModel listChatsModel;
     List<ListChatsModel> listChatsModelArrayList = new ArrayList<>();
     protected static final int GALLERY_REQUEST = 1;
-    private static final int PERMISSION_CODE = 1000;
     int page = 1, limit = 10;
     NestedScrollView nestedScrollView;
     LinearLayoutManager linearLayoutManager;
@@ -328,6 +322,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
 
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
         chat_recycler.setAdapter(messageAdapter);
@@ -368,12 +363,12 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 if (edt_chating.getText().toString().trim().equals("")) {
                     Toast.makeText(ChatingActivity.this, "Enter Text", Toast.LENGTH_SHORT).show();
                 } else {
-//                    sendMessage(toUserIds, edt_chating.getText().toString().trim());
+                    sendMessage(toUserIds, edt_chating.getText().toString().trim());
 
                     objectList.add(jsonObject);
                     messageAdapter.notifyDataSetChanged();
-                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
-
+//                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
+                    chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount());
                 }
                 resetMessageEdit();
             } catch (JSONException e) {
@@ -396,7 +391,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     jsonObject.put("message", "");
                     jsonObject.put("image", "");
 
-//                    sendProduct(toUserIds, p_ids, edt_mess);
+                    sendProduct(toUserIds, p_ids, edt_mess);
 
                     rel_replay.setVisibility(View.GONE);
 
@@ -492,7 +487,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                 listChatsModelArrayList.add(listChatsModel);
                             }
 
-                            Collections.reverse(listChatsModelArrayList);
+//                            Collections.reverse(listChatsModelArrayList);
 
                             for (int i = 0; i < listChatsModelArrayList.size(); i++) {
                                 if (listChatsModelArrayList.get(i).getFrom().getId().equals(loginUserId)) {
