@@ -458,30 +458,30 @@ public class AddProductActivity extends BaseActivity {
                         imagesArrayList.add(productModel.getProductDetailsModel().getImages().get(i).toString());
                     }
 
-                    if (productModel.getProductDetailsModel().getImages().size() == 3) {
+                    if (productModel.getProductDetailsModel().getImages().size() == 4) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(2)).into(img_product2);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(3)).into(img_product3);
                         }
-                    } else if (productModel.getProductDetailsModel().getImages().size() == 2) {
+                    } else if (productModel.getProductDetailsModel().getImages().size() == 3) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(2)).into(img_product2);
                         }
-                    } else if (productModel.getProductDetailsModel().getImages().size() == 1) {
+                    } else if (productModel.getProductDetailsModel().getImages().size() == 2) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                         }
-                    } else if (productModel.getProductDetailsModel().getImages().size() == 0) {
+                    } else if (productModel.getProductDetailsModel().getImages().size() == 1) {
                         for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                         }
                     } else {
-
+                        Log.e("productImages:","ProductImagesError");
                     }
 
                 }

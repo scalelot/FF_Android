@@ -349,6 +349,9 @@ public class SettingActivity extends BaseActivity {
         dialog.setContentView(view);
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 50);
+        dialog.getWindow().setBackgroundDrawable(insetDrawable);
 
         AppCompatButton button_cancle = view.findViewById(R.id.button_cancle);
         AppCompatButton button_backup = view.findViewById(R.id.button_backup);

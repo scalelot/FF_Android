@@ -165,7 +165,7 @@ public class MapsFragment extends Fragment {
                             address = addressList.get(0);
                             latitude = address.getLatitude();
                             longitude = address.getLongitude();
-                            FileUtils.DisplayLoading(MapsFragment.this.getContext());
+//                            FileUtils.DisplayLoading(MapsFragment.this.getContext());
                             findLocationorName(latitude, longitude);
                             latLng = new LatLng(address.getLatitude(), address.getLongitude());
                             Log.e("LatLog==>>", String.valueOf(latLng));

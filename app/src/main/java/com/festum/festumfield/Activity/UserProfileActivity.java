@@ -231,121 +231,121 @@ public class UserProfileActivity extends BaseActivity {
 
                     isBusinessProfile = userProfileRegisterModel.getData().getIsBusinessProfileCreated();
 
-                    ic_fb.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (u_name.equals("")) {
-                                Toast.makeText(UserProfileActivity.this, "Enter Data", Toast.LENGTH_SHORT).show();
-                            } else {
-                                for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
-                                    if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Facebook")) {
-                                        String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                        if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-                                            Uri uri = Uri.parse(url);
-                                            Intent i_fb = new Intent(Intent.ACTION_VIEW, uri);
-                                            startActivity(i_fb);
-
-                                        } else {
-                                            Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    ic_insta.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
-                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Instagram")) {
-
-                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-
-                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-                                        Uri uri = Uri.parse(url);
-                                        Intent i_insta = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(i_insta);
-                                    } else {
-                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    ic_twitter.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
-                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Twitter")) {
-                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-                                        Uri uri = Uri.parse(url);
-                                        Intent i_twitter = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(i_twitter);
-                                    } else {
-                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    ic_linkedin.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
-                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Linkedin")) {
-                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-                                        Uri uri = Uri.parse(url);
-                                        Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(i_linkedin);
-                                    } else {
-                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    ic_pinterest.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
-                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Pinterest")) {
-                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-                                        Uri uri = Uri.parse(url);
-                                        Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(i_linkedin);
-                                    } else {
-                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    ic_youtube.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
-                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Youtube")) {
-                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
-                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
-                                        Uri uri = Uri.parse(url);
-                                        Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(i_linkedin);
-                                    } else {
-                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        }
-                    });
+//                    ic_fb.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            if (u_name.equals("")) {
+//                                Toast.makeText(UserProfileActivity.this, "Enter Data", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
+//                                    if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Facebook")) {
+//                                        String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
+//                                        if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
+//                                            Uri uri = Uri.parse(url);
+//                                            Intent i_fb = new Intent(Intent.ACTION_VIEW, uri);
+//                                            startActivity(i_fb);
+//
+//                                        } else {
+//                                            Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//                    ic_insta.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//
+//                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
+//                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Instagram")) {
+//
+//                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
+//
+//                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
+//                                        Uri uri = Uri.parse(url);
+//                                        Intent i_insta = new Intent(Intent.ACTION_VIEW, uri);
+//                                        startActivity(i_insta);
+//                                    } else {
+//                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//                    ic_twitter.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
+//                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Twitter")) {
+//                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
+//                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
+//                                        Uri uri = Uri.parse(url);
+//                                        Intent i_twitter = new Intent(Intent.ACTION_VIEW, uri);
+//                                        startActivity(i_twitter);
+//                                    } else {
+//                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//                    ic_linkedin.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
+//                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Linkedin")) {
+//                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
+//                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
+//                                        Uri uri = Uri.parse(url);
+//                                        Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
+//                                        startActivity(i_linkedin);
+//                                    } else {
+//                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//                    ic_pinterest.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
+//                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Pinterest")) {
+//                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
+//                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
+//                                        Uri uri = Uri.parse(url);
+//                                        Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
+//                                        startActivity(i_linkedin);
+//                                    } else {
+//                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//                    ic_youtube.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            for (int i = 0; i < userProfileRegisterModel.getData().getSocialMediaLinks().size(); i++) {
+//                                if (userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getPlatform().equals("Youtube")) {
+//                                    String url = userProfileRegisterModel.getData().getSocialMediaLinks().get(i).getLink();
+//                                    if (url.startsWith("www") || url.startsWith("https://") || url.startsWith("http://")) {
+//                                        Uri uri = Uri.parse(url);
+//                                        Intent i_linkedin = new Intent(Intent.ACTION_VIEW, uri);
+//                                        startActivity(i_linkedin);
+//                                    } else {
+//                                        Toast.makeText(UserProfileActivity.this, "Invalid Url", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
                 }
             }, new Response.ErrorListener() {
                 @Override

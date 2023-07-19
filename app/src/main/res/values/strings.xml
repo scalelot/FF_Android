@@ -321,6 +321,7 @@
 
     <!--    all user New products-->
     <string name="new_product">New Products</string>
+    <string name="product_imges">Product Images</string>
 
     <!--ConversationActivity-->
     <string name="complain_about_payment">Complain about Payment</string>
