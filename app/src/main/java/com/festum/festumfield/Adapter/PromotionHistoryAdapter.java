@@ -48,8 +48,7 @@ public class PromotionHistoryAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemViewType(int position) {
-        if (txt_username.get(position) == null && img_noti.get(position) == null)
-            return AD_TYPE;
+        if (txt_username.get(position) == null && img_noti.get(position) == null) return AD_TYPE;
         return CONTENT_TYPE;
     }
 
@@ -71,7 +70,7 @@ public class PromotionHistoryAdapter extends RecyclerView.Adapter<RecyclerView.V
                     activity.startActivity(img_intent);
                 }
             });
-        }else {
+        } else {
             AdRecyclerHolder adRecyclerHolder = (AdRecyclerHolder) holder;
 
         }

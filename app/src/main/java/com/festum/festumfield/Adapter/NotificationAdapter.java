@@ -47,8 +47,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (txt_usernae.get(position) == null)
-            return AD_TYPE;
+        if (txt_usernae.get(position) == null) return AD_TYPE;
         return CONTENT_TYPE;
     }
 
@@ -94,7 +93,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            notification_btn  = itemView.findViewById(R.id.notification_btn );
+            notification_btn = itemView.findViewById(R.id.notification_btn);
             btn_edit_promotion = itemView.findViewById(R.id.btn_edit_promotion);
             notification_link = itemView.findViewById(R.id.notification_link);
             notification_des = itemView.findViewById(R.id.notification_des);

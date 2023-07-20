@@ -16,8 +16,8 @@ public class UpcomingCallActivity extends BaseActivity {
 
     ImageView ic_back;
     CircleImageView upcoingcall_user_img;
-    TextView upcoming_username,upcoming_txt;
-    LinearLayout ll_call_cut,ll_call_recive;
+    TextView upcoming_username, upcoming_txt;
+    LinearLayout ll_call_cut, ll_call_recive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

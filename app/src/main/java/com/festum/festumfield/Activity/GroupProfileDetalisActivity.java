@@ -104,7 +104,6 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
             }
         });
 
-
         edit_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,7 +154,6 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
         edt_search_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -237,10 +235,7 @@ public class GroupProfileDetalisActivity extends AppCompatActivity {
     }
 
     private void openGallery() {
-        ImagePicker.Companion.with(GroupProfileDetalisActivity.this)
-                .crop()
-                .maxResultSize(1080, 1080)
-                .start(PICK_IMAGE);
+        ImagePicker.Companion.with(GroupProfileDetalisActivity.this).crop().maxResultSize(1080, 1080).start(PICK_IMAGE);
 
     }
 

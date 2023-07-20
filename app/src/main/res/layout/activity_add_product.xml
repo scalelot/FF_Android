@@ -100,10 +100,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/sp_56"
                     android:layout_marginTop="@dimen/margin_15"
-                    android:layout_marginRight="@dimen/margin_20"
                     android:background="@android:color/transparent"
                     android:orientation="horizontal"
-                    android:paddingLeft="@dimen/margin_20">
+                    android:paddingLeft="@dimen/margin_20"
+                    android:paddingRight="@dimen/sp_20">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"

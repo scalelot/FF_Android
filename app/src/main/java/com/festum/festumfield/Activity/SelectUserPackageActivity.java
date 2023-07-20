@@ -56,7 +56,7 @@ public class SelectUserPackageActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         if (isToAdd == true) {
-                            System.out.println("count "+plan_name);
+                            System.out.println("count " + plan_name);
                             Intent intent = new Intent(SelectUserPackageActivity.this, ChooseUserPromotionActivity.class);
                             intent.putExtra("package_name", plan_name);
                             startActivity(intent);

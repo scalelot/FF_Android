@@ -191,44 +191,37 @@ public class CreateNotificationActivity extends BaseActivity {
 
     public void uploadImage(File file) {
         try {
-            AndroidNetworking.upload(Constans.set_notification_banner)
-                    .addMultipartFile("file", file)
-                    .addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext()))
-                    .setTag("uploadTest")
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .setUploadProgressListener(new UploadProgressListener() {
-                        @Override
-                        public void onProgress(long bytesUploaded, long totalBytes) {
-                        }
-                    })
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                Log.e("NotiBanner=>", response.toString());
-                                ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
-                                image_url = productImagesModel.getData().getKey();
+            AndroidNetworking.upload(Constans.set_notification_banner).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+                @Override
+                public void onProgress(long bytesUploaded, long totalBytes) {
+                }
+            }).getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Log.e("NotiBanner=>", response.toString());
+                        ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
+                        image_url = productImagesModel.getData().getKey();
 
-                                if (image_url != null) {
-                                    status = true;
-                                    ic_edit_img.setVisibility(View.VISIBLE);
-                                } else {
-                                    status = false;
-                                    ic_edit_img.setVisibility(View.GONE);
-                                }
-                                getNotification(notificationId);
-                            } catch (JsonSyntaxException e) {
-                                e.printStackTrace();
-                            }
+                        if (image_url != null) {
+                            status = true;
+                            ic_edit_img.setVisibility(View.VISIBLE);
+                        } else {
+                            status = false;
+                            ic_edit_img.setVisibility(View.GONE);
                         }
+                        getNotification(notificationId);
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                        @Override
-                        public void onError(ANError error) {
-                            Log.e("NotiBannerError=>", error.toString());
+                @Override
+                public void onError(ANError error) {
+                    Log.e("NotiBannerError=>", error.toString());
 
-                        }
-                    });
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

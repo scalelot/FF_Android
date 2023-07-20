@@ -2,6 +2,7 @@ package com.festum.festumfield.Activity;
 
 import static com.android.volley.Request.Method.GET;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -367,7 +368,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                     objectList.add(jsonObject);
                     messageAdapter.notifyDataSetChanged();
-//                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
                     chat_recycler.smoothScrollToPosition(messageAdapter.getItemCount());
                 }
                 resetMessageEdit();
@@ -399,7 +399,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                     messageAdapter.notifyDataSetChanged();
 
-                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
+                    linearLayoutManager.smoothScrollToPosition(chat_recycler, null, messageAdapter.getItemCount());
                 } else {
                     Toast.makeText(ChatingActivity.this, "Enter Message", Toast.LENGTH_SHORT).show();
                 }
@@ -441,7 +441,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.e("SendProduct=>", response.toString());
-
                 }
 
                 @Override
@@ -487,8 +486,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                 listChatsModelArrayList.add(listChatsModel);
                             }
 
-//                            Collections.reverse(listChatsModelArrayList);
-
                             for (int i = 0; i < listChatsModelArrayList.size(); i++) {
                                 if (listChatsModelArrayList.get(i).getFrom().getId().equals(loginUserId)) {
 
@@ -523,7 +520,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                     send.put("isRecive", false);
                                     objectList.add(send);
                                     messageAdapter.notifyDataSetChanged();
-                                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
+                                    linearLayoutManager.smoothScrollToPosition(chat_recycler, null, messageAdapter.getItemCount());
                                 } else {
 
                                     recive = new JSONObject();
@@ -560,7 +557,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
                                     objectList.add(recive);
                                     messageAdapter.notifyDataSetChanged();
-                                    linearLayoutManager.smoothScrollToPosition(chat_recycler,null,messageAdapter.getItemCount());
+                                    linearLayoutManager.smoothScrollToPosition(chat_recycler, null, messageAdapter.getItemCount());
                                 }
                             }
                         } catch (JSONException e) {
@@ -588,6 +585,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void prepareToolbar(int position) {
         hp_back_arrow.setVisibility(View.GONE);
         rl_user.setVisibility(View.GONE);
@@ -601,18 +599,15 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         prepareSelection(position);
     }
 
     public void prepareSelection(int position) {
-
         if (!selectionList.contains(objectList.get(position))) {
             selectionList.add(objectList.get(position));
         } else {
             selectionList.remove(objectList.get(position));
         }
-
         updateViewCounter();
     }
 
@@ -632,7 +627,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             img_video_call.setVisibility(View.VISIBLE);
             img_contact.setVisibility(View.VISIBLE);
         }
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -693,43 +687,34 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         selectionList.clear();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.hp_back_arrow:
-                startActivity(new Intent(ChatingActivity.this, MainActivity.class));
-                finish();
-                break;
-            case R.id.img_video_call:
-                startActivity(new Intent(ChatingActivity.this, VideoCallActivity.class));
-                finish();
-                break;
-            case R.id.img_contact:
-                startActivity(new Intent(ChatingActivity.this, ChattingAudioCallActivity.class));
-                finish();
-                break;
-            case R.id.rl_user:
-                startActivity(new Intent(ChatingActivity.this, ChatUserProfileActivity.class));
-                finish();
-                break;
-            case R.id.img_camera:
-                ImagePicker.with(ChatingActivity.this).crop().cameraOnly().compress(1024).maxResultSize(1080, 1080).start();
-                break;
-            case R.id.img_gallery:
-                openCamera();
-                break;
+        int id = v.getId();
+        if (id == R.id.hp_back_arrow) {
+            startActivity(new Intent(ChatingActivity.this, MainActivity.class));
+            finish();
+        } else if (id == R.id.img_video_call) {
+            startActivity(new Intent(ChatingActivity.this, VideoCallActivity.class));
+            finish();
+        } else if (id == R.id.img_contact) {
+            startActivity(new Intent(ChatingActivity.this, ChattingAudioCallActivity.class));
+            finish();
+        } else if (id == R.id.rl_user) {
+            startActivity(new Intent(ChatingActivity.this, ChatUserProfileActivity.class));
+            finish();
+        } else if (id == R.id.img_camera) {
+            ImagePicker.with(ChatingActivity.this).crop().cameraOnly().compress(1024).maxResultSize(1080, 1080).start();
+        } else if (id == R.id.img_gallery) {
+            openCamera();
         }
     }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
     }
 
     @Override
@@ -740,7 +725,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             resetMessageEdit();
         }
     }
-
 
     private void resetMessageEdit() {
         edt_chating.removeTextChangedListener(this);
@@ -829,13 +813,11 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             }).getAsJSONObject(new JSONObjectRequestListener() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    // do anything with response
                     Log.e("SendChatImage=>", response.toString());
                 }
 
                 @Override
                 public void onError(ANError error) {
-                    // handle error
                     Toast.makeText(ChatingActivity.this, "Not Upload Image", Toast.LENGTH_SHORT).show();
                     Log.e("SendChatImageError=>", error.toString());
 

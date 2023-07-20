@@ -81,7 +81,6 @@ public class CreateNewGroupActivity extends BaseActivity {
             recyclerview_selected_list.setVisibility(View.GONE);
         } else {
             recyclerview_selected_list.setVisibility(View.VISIBLE);
-
         }
 
         userSelectionAdapter = new UserSelectionAdapter(CreateNewGroupActivity.this, selectedarraylist);

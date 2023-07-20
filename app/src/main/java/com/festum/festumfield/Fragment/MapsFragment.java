@@ -135,7 +135,6 @@ public class MapsFragment extends Fragment {
         queue = Volley.newRequestQueue(getContext());
 
 
-
         MapsInitializer.initialize(getActivity());
         Places.initialize(getContext(), apiKeys);
 
@@ -203,9 +202,10 @@ public class MapsFragment extends Fragment {
         });
 
         fetchgetApi();
-        findLocationorName(Double.valueOf("21.170240"),Double.valueOf("72.831062"));
+        findLocationorName(Double.valueOf("21.170240"), Double.valueOf("72.831062"));
         return view;
     }
+
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {

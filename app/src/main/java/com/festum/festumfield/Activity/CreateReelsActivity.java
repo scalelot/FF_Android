@@ -58,12 +58,7 @@ public class CreateReelsActivity extends AppCompatActivity {
             rl_thumbnail.setVisibility(View.VISIBLE);
             ll_upload.setVisibility(View.GONE);
             RequestOptions requestOptions = new RequestOptions();
-            Glide.with(CreateReelsActivity.this)
-                    .load(uriString)
-                    .apply(requestOptions)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .thumbnail(Glide.with(CreateReelsActivity.this).load(uriString))
-                    .into(img_thumnail);
+            Glide.with(CreateReelsActivity.this).load(uriString).apply(requestOptions).placeholder(R.drawable.ic_launcher_background).thumbnail(Glide.with(CreateReelsActivity.this).load(uriString)).into(img_thumnail);
         }
 
         mediaController = new MediaController(this);
@@ -78,8 +73,7 @@ public class CreateReelsActivity extends AppCompatActivity {
         ll_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
 
                 startActivityForResult(galleryIntent, GALLERY);
             }
@@ -100,7 +94,6 @@ public class CreateReelsActivity extends AppCompatActivity {
                 System.out.println("file Deleted :" + String.valueOf(contentURI));
             }
         });
-
 
         img_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,12 +131,7 @@ public class CreateReelsActivity extends AppCompatActivity {
                     if (contentURI != null) {
 
                         RequestOptions requestOptions = new RequestOptions();
-                        Glide.with(CreateReelsActivity.this)
-                                .load(contentURI)
-                                .apply(requestOptions)
-                                .placeholder(R.drawable.ic_launcher_background)
-                                .thumbnail(Glide.with(CreateReelsActivity.this).load(contentURI))
-                                .into(img_thumnail);
+                        Glide.with(CreateReelsActivity.this).load(contentURI).apply(requestOptions).placeholder(R.drawable.ic_launcher_background).thumbnail(Glide.with(CreateReelsActivity.this).load(contentURI)).into(img_thumnail);
 
                         sharedPreferences = getSharedPreferences("Reels", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -163,14 +151,11 @@ public class CreateReelsActivity extends AppCompatActivity {
         String[] projection = {MediaStore.Video.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
-        } else
-            return null;
+        } else return null;
     }
-
 
     @Override
     public void onBackPressed() {

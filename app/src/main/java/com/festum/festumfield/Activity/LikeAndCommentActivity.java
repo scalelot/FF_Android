@@ -21,9 +21,6 @@ public class LikeAndCommentActivity extends BaseActivity {
     String[] user_name = {"John Bryan", "Bryan", "Hunter Bryan", "Doris Collins", "Deann Sumpter", "John Bryan", "John Bryan", "John Bryan", "Deann Sumpter", "Collins Bryan", "John Bryan", "Deann Sumpter", "Collins Bryan"};
     LikeAndCommentAdapter likeAndCommentAdapter;
     ArrayList<String> arraylist = new ArrayList<String>();
-    ArrayList<Integer> imagearraylist = new ArrayList<Integer>();
-    private static final int LIST_AD_DELTA = 5;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +33,13 @@ public class LikeAndCommentActivity extends BaseActivity {
 
         int adPos = 0;
         for (int i = 0; i < user_name.length; i++) {
-            if(adPos == 5) {
+            if (adPos == 5) {
                 arraylist.add(null);
-                adPos=0;
+                adPos = 0;
             }
             arraylist.add(user_name[i]);
             adPos++;
         }
-
 
         recyclerview_like.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         likeAndCommentAdapter = new LikeAndCommentAdapter(this, arraylist);
@@ -55,8 +51,6 @@ public class LikeAndCommentActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-
-
     }
 
     @Override

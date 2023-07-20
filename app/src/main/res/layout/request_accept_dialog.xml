@@ -45,14 +45,18 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/sp_40"
             android:layout_below="@+id/audio_call"
+            android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_10"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_cancle"
                 android:layout_width="@dimen/sp_130"
                 android:layout_height="@dimen/sp_40"
+                android:layout_weight="1"
                 android:background="@drawable/grey_boader_btn"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/cancel"
@@ -67,6 +71,7 @@
                 android:id="@+id/button_accpet"
                 android:layout_width="@dimen/sp_130"
                 android:layout_height="@dimen/sp_40"
+                android:layout_weight="1"
                 android:background="@drawable/rectangle_150"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/accept"
@@ -87,7 +92,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_18" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -524,6 +529,6 @@
                         app:kswThumbDrawable="@drawable/switch_thumb_selector" />
                 </RelativeLayout>
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </RelativeLayout>

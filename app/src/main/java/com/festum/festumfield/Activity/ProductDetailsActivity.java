@@ -127,7 +127,7 @@ public class ProductDetailsActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ProductDetailsActivity.this);
-                    Log.e("GetProductDetail",response.toString());
+                    Log.e("GetProductDetail", response.toString());
 
                     ProductModel productModel = new Gson().fromJson(response.toString(), ProductModel.class);
 
@@ -189,7 +189,6 @@ public class ProductDetailsActivity extends BaseActivity {
 
                     String price = String.format("%,.0f", Float.valueOf(productModel.getProductDetailsModel().getPrice()));
 
-
                     btn_inquiry_message.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -207,7 +206,7 @@ public class ProductDetailsActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("GetProductDetailError",error.toString());
+                    Log.e("GetProductDetailError", error.toString());
                     FileUtils.DismissLoading(ProductDetailsActivity.this);
                 }
             }) {
@@ -219,16 +218,13 @@ public class ProductDetailsActivity extends BaseActivity {
                     return map;
                 }
             };
-
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             FileUtils.DismissLoading(ProductDetailsActivity.this);
             e.printStackTrace();
         }
-
     }
-
     public void deleteDialog() {
         Dialog dialog = new Dialog(this);
         View view = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.delete_dialog_product, null);

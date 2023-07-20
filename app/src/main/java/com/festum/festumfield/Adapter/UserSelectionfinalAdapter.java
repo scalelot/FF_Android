@@ -28,8 +28,9 @@ public class UserSelectionfinalAdapter extends RecyclerView.Adapter<UserSelectio
 
     private static RemoveClickListener removeClickListener;
 
+
     public interface RemoveClickListener {
-        void onItemClick(CreateGroupModel createGroupModel, int position,View v);
+        void onItemClick(CreateGroupModel createGroupModel, int position, View v);
     }
 
     public void setOnItemClickListener(RemoveClickListener clickListener) {
@@ -60,7 +61,7 @@ public class UserSelectionfinalAdapter extends RecyclerView.Adapter<UserSelectio
             @Override
             public void onClick(View view) {
 
-                removeClickListener.onItemClick(arraylist.get(position),position, view);
+                removeClickListener.onItemClick(arraylist.get(position), position, view);
             }
         });
     }

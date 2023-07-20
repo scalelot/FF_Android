@@ -49,8 +49,7 @@ public class SendRequestFragment extends Fragment {
     ProgressBar idPBLoading;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_send_request, container, false);
 
         send_recylerview = view.findViewById(R.id.send_recylerview);

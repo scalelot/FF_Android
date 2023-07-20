@@ -22,7 +22,6 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
-import com.festum.festumfield.Utils.Utilities;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -54,13 +53,13 @@ public class LoginActivity extends BaseActivity {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
             public void onSuccess(String s) {
-                Log.e(Utilities.TAG, s);
+                Log.e("TAG", s);
                 MyApplication.setNotificationToken(LoginActivity.this, s);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e(Utilities.TAG, e.toString());
+                Log.e("TAG", e.toString());
             }
         });
 
@@ -81,7 +80,7 @@ public class LoginActivity extends BaseActivity {
 
                 if (!edtPhone.getText().toString().equals("")) {
                     if (FileUtils.isValidPhoneNumber(edtPhone.getText().toString())) {
-                        SendOtp(countycode, edtPhone.getText().toString(),newToken);
+                        SendOtp(countycode, edtPhone.getText().toString(), newToken);
                         FileUtils.DisplayLoading(LoginActivity.this);
                     } else {
                         edtPhone.setError(getResources().getString(R.string.please_enter_mno));
@@ -100,7 +99,7 @@ public class LoginActivity extends BaseActivity {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("countryCode", countyCode);
             params.put("contactNo", phone_number);
-            params.put("fcmtoken",newToken);
+            params.put("fcmtoken", newToken);
             request = new JsonObjectRequest(Request.Method.POST, Constans.send_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

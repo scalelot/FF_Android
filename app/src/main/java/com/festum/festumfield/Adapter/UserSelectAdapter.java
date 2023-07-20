@@ -2,6 +2,7 @@ package com.festum.festumfield.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.txt_username.setText(selecetdUserModelArrayList.get(position).getuserName());
         holder.txt_gmail.setText(selecetdUserModelArrayList.get(position).getuserName());
-        
+
         holder.chkBox.setChecked(selecetdUserModelArrayList.get(position).isSelected);
 
         holder.chkBox.setTag(selecetdUserModelArrayList.get(position));
@@ -67,13 +68,11 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
                 if (!selecetdUserModelArrayList.get(position).isSelected) {
                     model.setSelected(cb.isChecked());
                     selecetdUserModelArrayList.get(position).setSelected(cb.isChecked());
-                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), true,position);
-                    notifyDataSetChanged();
+                    clickListener.onItemClick(model, true, position);
                 } else {
                     model.setSelected(!cb.isChecked());
                     selecetdUserModelArrayList.get(position).setSelected(false);
-                    clickListener.onItemClick(selecetdUserModelArrayList.get(position), false,position);
-                    notifyDataSetChanged();
+                    clickListener.onItemClick(model, false, position);
                 }
             }
         });

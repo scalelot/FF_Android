@@ -49,8 +49,7 @@ public class PromotionNotificationAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemViewType(int position) {
-        if (listNotificationModelArrayList.get(position) == null)
-            return AD_TYPE;
+        if (listNotificationModelArrayList.get(position) == null) return AD_TYPE;
         return CONTENT_TYPE;
     }
 

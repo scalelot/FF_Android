@@ -43,8 +43,8 @@ public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.ViewHolder> {
 
         boolean isExpandable = helpModels.get(position).isExpandable();
         holder.expandable_layout.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
-        holder.img_down_arrow.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
-        holder.img_up_arrow.setVisibility(isExpandable ? View.GONE : View.VISIBLE);
+        holder.img_down_arrow.setVisibility(isExpandable ? View.GONE : View.VISIBLE);
+        holder.img_up_arrow.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
     }
 
     @Override

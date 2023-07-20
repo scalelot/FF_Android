@@ -75,12 +75,12 @@ public class Contact_Us_Activity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, PICK_IMAGE);            }
+                startActivityForResult(intent, PICK_IMAGE);
+            }
         });
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (full_name.getText().toString().trim().isEmpty()) {
                     full_name.setError(getResources().getString(R.string.enter_full_name));
                 } else if (phone_number.getText().toString().trim().isEmpty()) {
@@ -98,7 +98,6 @@ public class Contact_Us_Activity extends BaseActivity {
     }
 
     public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
-
     public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
     String[] per;
 
@@ -155,20 +154,13 @@ public class Contact_Us_Activity extends BaseActivity {
                     return map;
                 }
             };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(Contact_Us_Activity.this);
+            requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             FileUtils.DismissLoading(Contact_Us_Activity.this);
             Toast.makeText(this, getResources().getString(R.string.something_want_to_wrong), Toast.LENGTH_SHORT).show();
         }
-
-        RequestQueue requestQueue = Volley.newRequestQueue(Contact_Us_Activity.this);
-        requestQueue.add(jsonObjectRequest);
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(Contact_Us_Activity.this, SettingActivity.class));
-        finish();
     }
 
     @Override
@@ -187,4 +179,11 @@ public class Contact_Us_Activity extends BaseActivity {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Contact_Us_Activity.this, SettingActivity.class));
+        finish();
+    }
+
 }

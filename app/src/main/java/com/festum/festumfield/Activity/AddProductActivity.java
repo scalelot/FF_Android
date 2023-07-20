@@ -481,7 +481,7 @@ public class AddProductActivity extends BaseActivity {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                         }
                     } else {
-                        Log.e("productImages:","ProductImagesError");
+                        Log.e("productImages:", "ProductImagesError");
                     }
 
                 }

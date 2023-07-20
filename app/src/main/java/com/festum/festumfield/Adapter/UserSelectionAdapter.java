@@ -52,7 +52,6 @@ public class UserSelectionAdapter extends RecyclerView.Adapter<UserSelectionAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyDataViewHolder holder, @SuppressLint("RecyclerView") int position) {
-//        holder.img_user.setImageResource(user_img[position]);
         holder.txt_user_name.setText(arraylist.get(position).getUsername());
 
         holder.iv_close.setOnClickListener(new View.OnClickListener() {

@@ -74,7 +74,6 @@ public class DisplayProductImageActivity extends AppCompatActivity {
             }
         });
 
-
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

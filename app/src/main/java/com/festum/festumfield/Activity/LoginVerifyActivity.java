@@ -89,9 +89,9 @@ public class LoginVerifyActivity extends BaseActivity {
             @Override
             public void onOTPComplete(String otp) {
                 OtpValue = otp;
-                if (otp.isEmpty()){
+                if (otp.isEmpty()) {
                     btn_verify.setBackground(getResources().getDrawable(R.drawable.verify_btn_bg));
-                }else{
+                } else {
                     btn_verify.setBackground(getResources().getDrawable(R.drawable.login_btn_bg));
                 }
             }
@@ -239,7 +239,7 @@ public class LoginVerifyActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(LoginVerifyActivity.this,LoginActivity.class));
+        startActivity(new Intent(LoginVerifyActivity.this, LoginActivity.class));
         finish();
     }
 }

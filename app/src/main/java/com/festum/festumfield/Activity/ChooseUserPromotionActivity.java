@@ -61,9 +61,9 @@ public class ChooseUserPromotionActivity extends BaseActivity {
     Spinner spinner;
     EditText edt_addres;
     LocationManager locationManager;
-    private static final int REQUEST_CODE = 101;
     String select_text;
     SharedPreferences sharedPreferences;
+    private static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,39 +291,36 @@ public class ChooseUserPromotionActivity extends BaseActivity {
 
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
+                Cursor cursor = null;
+                String displayName = null;
                 try {
                     uri = data.getData();
                     String uriString = uri.toString();
                     myFile = new File(uri.getPath());
-                    String displayName = null;
                     onReadClick(uri);
 
                     if (uriString.startsWith("content://")) {
-                        Cursor cursor = null;
-                        try {
-                            cursor = this.getContentResolver().query(uri, null, null, null, null);
-                            if (cursor != null && cursor.moveToFirst()) {
-                                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                                Log.e("ExcelUpload=>", displayName);
-                                txt_file_name.setText(displayName);
-                                txt_file_name.setPaintFlags(txt_file_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                                ll_txt.setVisibility(View.VISIBLE);
-                                ll_phone_email.setVisibility(View.VISIBLE);
-                                ll_sample_txt.setVisibility(View.GONE);
-                                ic_close.setVisibility(View.VISIBLE);
-                                ll_upload_file.setVisibility(View.GONE);
-                            }
-                        } finally {
-                            cursor.close();
+                        cursor = this.getContentResolver().query(uri, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                            Log.e("ExcelUpload=>", displayName);
+                            txt_file_name.setText(displayName);
+                            txt_file_name.setPaintFlags(txt_file_name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                            ll_txt.setVisibility(View.VISIBLE);
+                            ll_phone_email.setVisibility(View.VISIBLE);
+                            ll_sample_txt.setVisibility(View.GONE);
+                            ic_close.setVisibility(View.VISIBLE);
+                            ll_upload_file.setVisibility(View.GONE);
                         }
                     } else if (uriString.startsWith("file://")) {
                         displayName = myFile.getName();
                         Log.e("ExcelUpload=>", displayName);
                     }
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    cursor.close();
                 }
             }
         }
@@ -370,10 +367,8 @@ public class ChooseUserPromotionActivity extends BaseActivity {
                 }
             }
 
-        } catch (FileNotFoundException fileNotFoundException) {
+        } catch (IOException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 
@@ -383,15 +378,12 @@ public class ChooseUserPromotionActivity extends BaseActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-                return;
             } else {
             }
         } catch (Exception e) {
             Log.e("LocationError--->", e.getMessage());
             e.printStackTrace();
         }
-
-
     }
 
     @Override

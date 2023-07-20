@@ -33,14 +33,14 @@ public class PaymentActivity extends BaseActivity {
         button_pay_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PaymentActivity.this,PaymentSuccessfulActivity.class));
+                startActivity(new Intent(PaymentActivity.this, PaymentSuccessfulActivity.class));
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(PaymentActivity.this,PromotionBillActivity.class));
+        startActivity(new Intent(PaymentActivity.this, PromotionBillActivity.class));
         finish();
     }
 }

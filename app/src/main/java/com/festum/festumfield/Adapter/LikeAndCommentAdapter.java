@@ -23,7 +23,6 @@ public class LikeAndCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     ArrayList<String> user_name;
     LayoutInflater inflater;
     ArrayList<String> arraylist;
-    private static final int LIST_AD_DELTA = 6;
     private static final int CONTENT_TYPE = 0;
     private static final int AD_TYPE = 1;
 
@@ -49,8 +48,7 @@ public class LikeAndCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if (arraylist.get(position) == null)
-            return AD_TYPE;
+        if (arraylist.get(position) == null) return AD_TYPE;
         return CONTENT_TYPE;
     }
 
@@ -76,7 +74,7 @@ public class LikeAndCommentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     class MyDataViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_user;
-        TextView txt_user_name, txt_message,txt_time;
+        TextView txt_user_name, txt_message, txt_time;
         LinearLayout ll_user_view;
         ImageView iv_user_item;
 

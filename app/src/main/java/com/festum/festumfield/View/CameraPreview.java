@@ -116,10 +116,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         List<Size> sizes = mCamera.getParameters().getSupportedPreviewSizes();
         Size optimalSize = getOptimalPreviewSize(sizes, w, h);
 
-        if (h > w)
-            mCamera.setDisplayOrientation(90);
-        else
-            mCamera.setDisplayOrientation(0);
+        if (h > w) mCamera.setDisplayOrientation(90);
+        else mCamera.setDisplayOrientation(0);
 
         Camera.Size size = null;
         List<Camera.Size> list = params.getSupportedPreviewSizes();

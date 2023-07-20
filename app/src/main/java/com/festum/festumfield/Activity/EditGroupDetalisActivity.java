@@ -91,7 +91,6 @@ public class EditGroupDetalisActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
-
             try {
                 selectedImageUri = data.getData();
                 uri = String.valueOf(selectedImageUri);
@@ -105,14 +104,12 @@ public class EditGroupDetalisActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void onBackPressed() {

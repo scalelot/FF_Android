@@ -38,7 +38,6 @@ public class VideoCallReciveActivity extends BaseActivity {
         myContext = this;
         mCamera = Camera.open();
         mCamera.setDisplayOrientation(90);
-//        cameraPreview = (LinearLayout) findViewById(R.id.cPreview);
         cameraPreview = (LinearLayout) findViewById(R.id.cPreview1);
         mPreview = new CameraPreview(myContext, mCamera);
         cameraPreview.addView(mPreview);

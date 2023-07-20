@@ -13,7 +13,8 @@ import androidx.annotation.NonNull;
 import com.festum.festumfield.R;
 
 public class PersonAdapter extends FilteredArrayAdapter<Person> {
-    @LayoutRes private int layoutId;
+    @LayoutRes
+    private int layoutId;
 
     public PersonAdapter(Context context, @LayoutRes int layoutId, Person[] people) {
         super(context, layoutId, people);
@@ -24,12 +25,12 @@ public class PersonAdapter extends FilteredArrayAdapter<Person> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
 
-            LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = l.inflate(layoutId, parent, false);
         }
 
         Person p = getItem(position);
-        ((TextView)convertView.findViewById(R.id.name)).setText(p.getName());
+        ((TextView) convertView.findViewById(R.id.name)).setText(p.getName());
 
         return convertView;
     }

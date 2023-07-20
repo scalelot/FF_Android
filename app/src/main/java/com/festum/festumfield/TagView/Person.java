@@ -11,19 +11,17 @@ public class Person implements Parcelable {
     }
 
     public static Person[] samplePeople() {
-        return new Person[]{
-                new Person("Playing"),
-                new Person("Running"),
-                new Person("Reading"),
-                new Person("Learning"),
-                new Person("Singing")
-        };
+        return new Person[]{new Person("Playing"), new Person("Running"), new Person("Reading"), new Person("Learning"), new Person("Singing")};
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     @Override
-    public String toString() { return name; }
+    public String toString() {
+        return name;
+    }
 
     @Override
     public int describeContents() {

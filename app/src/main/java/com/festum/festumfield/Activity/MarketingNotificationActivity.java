@@ -38,9 +38,9 @@ public class MarketingNotificationActivity extends BaseActivity {
 
         int adPos = 0;
         for (int i = 0; i < txt_userName.length; i++) {
-            if(adPos == 1) {
+            if (adPos == 1) {
                 arraylist.add(null);
-                adPos=0;
+                adPos = 0;
             }
             arraylist.add(txt_userName[i]);
             adPos++;
@@ -63,7 +63,7 @@ public class MarketingNotificationActivity extends BaseActivity {
         img_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MarketingNotificationActivity.this,GroupProfileDetalisActivity.class));
+                startActivity(new Intent(MarketingNotificationActivity.this, GroupProfileDetalisActivity.class));
                 finish();
             }
         });

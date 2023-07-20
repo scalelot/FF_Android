@@ -58,9 +58,7 @@ public class DisplayAllProductActivity extends BaseActivity {
     NestedScrollView nestedScrollView;
     RelativeLayout emptyLay;
     DisplayAllProductAdapter productDisplayAdapter;
-
     GridLayoutManager gridLayoutManager;
-    private boolean loading = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +78,7 @@ public class DisplayAllProductActivity extends BaseActivity {
             productDetailsModelArrayList.clear();
         }
 
-        gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
-
+        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerview_product.setLayoutManager(gridLayoutManager);
 
         ic_back.setOnClickListener(new View.OnClickListener() {

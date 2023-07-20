@@ -22,7 +22,7 @@ public class ReelsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int CONTENT_TYPE = 0;
     private static final int AD_TYPE = 1;
 
-    public ReelsAdapter(FragmentActivity activity,  ArrayList<Integer> img_noti) {
+    public ReelsAdapter(FragmentActivity activity, ArrayList<Integer> img_noti) {
         this.activity = activity;
         this.img_noti = img_noti;
         inflater = LayoutInflater.from(activity);
@@ -42,8 +42,7 @@ public class ReelsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        if ( img_noti.get(position) == null)
-            return AD_TYPE;
+        if (img_noti.get(position) == null) return AD_TYPE;
         return CONTENT_TYPE;
     }
 
@@ -60,7 +59,7 @@ public class ReelsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onClick(View v) {
                 }
             });
-        }else {
+        } else {
             AdRecyclerHolder adRecyclerHolder = (AdRecyclerHolder) holder;
 
         }

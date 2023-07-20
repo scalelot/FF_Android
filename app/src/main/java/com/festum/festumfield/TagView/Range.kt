@@ -5,6 +5,7 @@ import java.util.*
 class Range(start: Int, end: Int) {
     @JvmField
     val start: Int
+
     @JvmField
     val end: Int
     fun length(): Int {
@@ -31,8 +32,7 @@ class Range(start: Int, end: Int) {
     init {
         require(start <= end) {
             String.format(
-                Locale.ENGLISH,
-                "Start (%d) cannot be greater than end (%d)", start, end
+                Locale.ENGLISH, "Start (%d) cannot be greater than end (%d)", start, end
             )
         }
         this.start = start

@@ -23,7 +23,7 @@ public class PaymentSuccessfulActivity extends BaseActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PaymentSuccessfulActivity.this,PromotionBillDetailActivity.class));
+                startActivity(new Intent(PaymentSuccessfulActivity.this, PromotionBillDetailActivity.class));
                 finish();
             }
         });

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.MyDataHolder> {
 
     Context context;
-    int[] call_img;
     LayoutInflater inflater;
     ArrayList<String> user_name;
     ArrayList<String> arraylist;
@@ -48,7 +47,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.MyDataHolder> {
 
     class MyDataHolder extends RecyclerView.ViewHolder {
 
-      TokenTextView name;
+        TokenTextView name;
 
         public MyDataHolder(@NonNull View itemView) {
             super(itemView);

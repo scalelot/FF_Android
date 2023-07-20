@@ -16,7 +16,7 @@ import com.festum.festumfield.R;
 public class RequestActivity extends BaseActivity {
 
     ImageView ic_back;
-    TextView friend_request,send_request,select;
+    TextView friend_request, send_request, select;
     ColorStateList def;
 
     @Override
@@ -38,9 +38,7 @@ public class RequestActivity extends BaseActivity {
 
         def = send_request.getTextColors();
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fram_layout,
-                        new FriendRequestFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new FriendRequestFragment()).commit();
 
         friend_request.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +46,7 @@ public class RequestActivity extends BaseActivity {
                 friend_request.setTextColor(getResources().getColor(R.color.app_color));
                 send_request.setTextColor(def);
                 select.animate().x(0).setDuration(100);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fram_layout,
-                                new FriendRequestFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new FriendRequestFragment()).commit();
             }
         });
 
@@ -61,9 +57,7 @@ public class RequestActivity extends BaseActivity {
                 send_request.setTextColor(getResources().getColor(R.color.app_color));
                 int size = send_request.getWidth();
                 select.animate().x(size).setDuration(100);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fram_layout,
-                                new SendRequestFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new SendRequestFragment()).commit();
             }
         });
     }

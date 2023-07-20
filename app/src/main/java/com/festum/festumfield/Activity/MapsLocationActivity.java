@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsLocationActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
-    Context context;
     public Criteria criteria;
     public String bestProvider;
     LocationManager locationManager;
@@ -46,8 +45,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -141,13 +139,12 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                     Const.longitude = latLng.longitude;
                 } else {
                     Const.b_lattitude = latLng.latitude;
-                    Const.b_longitude =latLng.longitude;
+                    Const.b_longitude = latLng.longitude;
                 }
 
                 finish();
             }
         });
-
 
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 

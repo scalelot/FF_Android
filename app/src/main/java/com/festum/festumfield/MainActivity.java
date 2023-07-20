@@ -426,7 +426,7 @@ public class MainActivity extends BaseActivity {
     public void CustomDialog() {
 
         Dialog dialog = new Dialog(MainActivity.this);
-        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_dialog, null);
+        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.create_profile_dialog, null);
         dialog.setContentView(view);
 
         dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

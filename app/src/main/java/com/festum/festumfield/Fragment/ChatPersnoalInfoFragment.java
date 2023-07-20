@@ -55,8 +55,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
     public static ArrayList<String> taglist = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_chat_persnoal_info, container, false);
 
         txt_about = inflate.findViewById(R.id.txt_about);

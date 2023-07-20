@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
-import com.festum.festumfield.Utils.Utilities;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -23,7 +22,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.e(Utilities.TAG, token);
+        Log.e("Tag", token);
     }
 
     @Override
@@ -56,17 +55,9 @@ public class MyFirebaseService extends FirebaseMessagingService {
                     pictureStyle.setBigContentTitle(title);
                     pictureStyle.bigPicture(Glide.with(this).asBitmap().load(imageUri).submit().get());
 
-                    notification = new NotificationCompat.Builder(this, channelId)
-                            .setContentTitle(title)
-                            .setSmallIcon(R.drawable.noti_icon)
-                            .setAutoCancel(true)
-                            .setStyle(pictureStyle);
+                    notification = new NotificationCompat.Builder(this, channelId).setContentTitle(title).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true).setStyle(pictureStyle);
                 } else {
-                    notification = new NotificationCompat.Builder(this, channelId)
-                            .setContentTitle(title)
-                            .setContentText(txtMessage)
-                            .setSmallIcon(R.drawable.noti_icon)
-                            .setAutoCancel(true);
+                    notification = new NotificationCompat.Builder(this, channelId).setContentTitle(title).setContentText(txtMessage).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true);
                 }
 
                 manager.notify(1, notification.build());

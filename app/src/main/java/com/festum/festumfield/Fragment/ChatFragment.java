@@ -247,6 +247,7 @@ public class ChatFragment extends Fragment {
 
         }
     }
+
     public void showFilterDialog() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.AppBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.filter_dialog);

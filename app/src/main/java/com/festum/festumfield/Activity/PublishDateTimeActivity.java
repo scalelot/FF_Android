@@ -91,9 +91,9 @@ public class PublishDateTimeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (txt_select_date.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getBaseContext(),"Enter Date",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Enter Date", Toast.LENGTH_LONG).show();
                 } else if (txt_select_time.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(PublishDateTimeActivity.this,"Enter Time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PublishDateTimeActivity.this, "Enter Time", Toast.LENGTH_LONG).show();
                 } else {
                     SharedPreferences sharedPreferences = getSharedPreferences("Datetime", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -111,25 +111,23 @@ public class PublishDateTimeActivity extends BaseActivity {
         CalendarHour = calendar.get(Calendar.HOUR_OF_DAY);
         CalendarMinute = calendar.get(Calendar.MINUTE);
 
-        timepickerdialog = new TimePickerDialog(PublishDateTimeActivity.this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-                        if (hourOfDay == 0) {
-                            hourOfDay += 12;
-                            format = "AM";
-                        } else if (hourOfDay == 12) {
-                            format = "PM";
-                        } else if (hourOfDay > 12) {
-                            hourOfDay -= 12;
-                            format = "PM";
-                        } else {
-                            format = "AM";
-                        }
-                        txt_select_time.setText(hourOfDay + ":" + minute + "\n" + format);
-                    }
-                }, CalendarHour, CalendarMinute, false);
+        timepickerdialog = new TimePickerDialog(PublishDateTimeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (hourOfDay == 0) {
+                    hourOfDay += 12;
+                    format = "AM";
+                } else if (hourOfDay == 12) {
+                    format = "PM";
+                } else if (hourOfDay > 12) {
+                    hourOfDay -= 12;
+                    format = "PM";
+                } else {
+                    format = "AM";
+                }
+                txt_select_time.setText(hourOfDay + ":" + minute + "\n" + format);
+            }
+        }, CalendarHour, CalendarMinute, false);
         timepickerdialog.show();
     }
 
@@ -138,8 +136,7 @@ public class PublishDateTimeActivity extends BaseActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
-            public void onDateSet(DatePicker view, int year,
-                                  int monthOfYear, int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                 int year1 = view.getYear();
                 int month1 = view.getMonth();
@@ -159,8 +156,7 @@ public class PublishDateTimeActivity extends BaseActivity {
         };
 
         DatePickerDialog datePickerDialog = null;
-        datePickerDialog = new DatePickerDialog(this,
-                dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDayOfMonth);
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDayOfMonth);
         // Show
         datePickerDialog.show();
     }

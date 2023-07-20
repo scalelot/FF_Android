@@ -42,9 +42,10 @@
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/sp_20"
         android:layout_below="@+id/appbar_layout">
 
         <RelativeLayout
@@ -161,5 +162,5 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_16" />
         </RelativeLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

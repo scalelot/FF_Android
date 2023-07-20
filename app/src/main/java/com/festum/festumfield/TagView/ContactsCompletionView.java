@@ -32,7 +32,7 @@ public class ContactsCompletionView extends TokenCompleteTextView<Person> {
 
     @Override
     protected View getViewForObject(Person person) {
-        LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         TokenTextView token = (TokenTextView) l.inflate(R.layout.contact_token, (ViewGroup) getParent(), false);
         token.setText(person.getName());
         return token;

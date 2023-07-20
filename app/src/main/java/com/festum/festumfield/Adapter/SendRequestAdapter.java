@@ -63,27 +63,6 @@ public class SendRequestAdapter extends RecyclerView.Adapter<SendRequestAdapter.
 
     }
 
-    public String getFormattedDate(long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeInMillis(smsTimeInMilis);
-
-        Calendar now = Calendar.getInstance();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.US);
-        Date netDate = (new Date(smsTimeInMilis));
-        final String dateTimeFormatString = "EEEE, MMMM d, h:mm aa";
-        final long HOURS = 60 * 60 * 60;
-        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return sdf.format(netDate);
-        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
-            return "Yesterday";
-        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
-            return android.text.format.DateFormat.format(dateTimeFormatString, smsTime).toString();
-        } else {
-            return android.text.format.DateFormat.format("dd/MM/yy", smsTime).toString();
-        }
-    }
-
     @Override
     public int getItemCount() {
         return receiveFriendsRequestModels.size();
@@ -102,6 +81,27 @@ public class SendRequestAdapter extends RecyclerView.Adapter<SendRequestAdapter.
             send_text_time = itemView.findViewById(R.id.send_text_time);
             text_dis = itemView.findViewById(R.id.text_dis);
             txt_request_check = itemView.findViewById(R.id.txt_request_check);
+        }
+    }
+
+    public String getFormattedDate(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        Calendar now = Calendar.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm", Locale.US);
+        Date netDate = (new Date(smsTimeInMilis));
+        final String dateTimeFormatString = "EEEE, MMMM d, h:mm aa";
+        final long HOURS = 60 * 60 * 60;
+        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
+            return sdf.format(netDate);
+        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
+            return "Yesterday";
+        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return android.text.format.DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return android.text.format.DateFormat.format("dd/MM/yy", smsTime).toString();
         }
     }
 }

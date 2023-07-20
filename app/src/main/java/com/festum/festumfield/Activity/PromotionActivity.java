@@ -22,7 +22,6 @@ public class PromotionActivity extends BaseActivity {
     NotificationManagerCompat notificationManager;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promotion);

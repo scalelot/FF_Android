@@ -34,7 +34,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class    MessageAdapter extends RecyclerView.Adapter {
+public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_MESSAGE_SENT = 0;
     private static final int TYPE_IMAGE_SENT = 1;
@@ -52,7 +52,7 @@ public class    MessageAdapter extends RecyclerView.Adapter {
     private class SendMessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView sendTxt, sendTxtTime, reciveTxt, reciveTxtTime, reciveUserName;
-        RelativeLayout rl_right,rl_left;
+        RelativeLayout rl_right, rl_left;
         LinearLayout textRelative;
         CircleImageView reciveImgUser;
         View mView;

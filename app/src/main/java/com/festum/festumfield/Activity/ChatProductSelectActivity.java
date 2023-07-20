@@ -75,7 +75,6 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void getProductItem(String friendid, int page, int limit, String search, String short_field, int short_option) {
@@ -124,7 +123,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                         }
 
                         chatProductListAdapter = new ChatProductListAdapter(ChatProductSelectActivity.this, productDetailsModelArrayList);
-                        GridLayoutManager linearLayoutManager = new GridLayoutManager(ChatProductSelectActivity.this,2);
+                        GridLayoutManager linearLayoutManager = new GridLayoutManager(ChatProductSelectActivity.this, 2);
                         recycle_chat_product.setLayoutManager(linearLayoutManager);
                         recycle_chat_product.setAdapter(chatProductListAdapter);
 

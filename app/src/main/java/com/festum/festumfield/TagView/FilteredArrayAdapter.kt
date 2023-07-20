@@ -7,10 +7,7 @@ import java.util.*
 
 abstract class FilteredArrayAdapter<T>
     (
-    context: Context,
-    resource: Int,
-    textViewResourceId: Int,
-    objects: List<T>
+    context: Context, resource: Int, textViewResourceId: Int, objects: List<T>
 ) : ArrayAdapter<T>(
     context, resource, textViewResourceId, ArrayList(objects)
 ) {
@@ -18,25 +15,16 @@ abstract class FilteredArrayAdapter<T>
     private var filter: Filter? = null
 
     constructor(context: Context, resource: Int, objects: Array<T>) : this(
-        context,
-        resource,
-        0,
-        objects
+        context, resource, 0, objects
     )
 
     constructor(
-        context: Context,
-        resource: Int,
-        textViewResourceId: Int,
-        objects: Array<T>
+        context: Context, resource: Int, textViewResourceId: Int, objects: Array<T>
     ) : this(context, resource, textViewResourceId, ArrayList<T>(listOf(*objects)))
 
     @Suppress("unused")
     constructor(context: Context, resource: Int, objects: List<T>) : this(
-        context,
-        resource,
-        0,
-        objects
+        context, resource, 0, objects
     )
 
     override fun getFilter(): Filter {
@@ -68,8 +56,7 @@ abstract class FilteredArrayAdapter<T>
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
             clear()
             if (results.count > 0) {
-                @Suppress("unchecked_cast")
-                this@FilteredArrayAdapter.addAll(results.values as Collection<T>)
+                @Suppress("unchecked_cast") this@FilteredArrayAdapter.addAll(results.values as Collection<T>)
                 notifyDataSetChanged()
             } else {
                 notifyDataSetInvalidated()

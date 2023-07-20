@@ -152,7 +152,6 @@ public class ChangeNumberActivity extends BaseActivity {
         AppCompatButton dialog_skip = dialog.findViewById(R.id.dialog_no);
         AppCompatButton dialog_continue = dialog.findViewById(R.id.dialog_yes);
 
-
         dialog_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,6 +182,7 @@ public class ChangeNumberActivity extends BaseActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.change_number_verify_dialog, null);
         dialog.setContentView(view);
 
+        dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
         InsetDrawable insetDrawable = new InsetDrawable(back, 50);
@@ -205,15 +205,12 @@ public class ChangeNumberActivity extends BaseActivity {
             }
         });
 
-        dialog.setCanceledOnTouchOutside(false);
-
         img_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.cancel();
             }
         });
-
 
         btn_verify.setOnClickListener(new View.OnClickListener() {
             @Override

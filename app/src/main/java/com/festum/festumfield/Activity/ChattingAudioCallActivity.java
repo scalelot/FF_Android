@@ -73,7 +73,7 @@ public class ChattingAudioCallActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ChattingAudioCallActivity.this,ChatingActivity.class));
+        startActivity(new Intent(ChattingAudioCallActivity.this, ChatingActivity.class));
         finish();
     }
 }

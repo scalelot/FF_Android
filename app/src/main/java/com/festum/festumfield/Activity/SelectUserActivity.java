@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -35,6 +36,7 @@ public class SelectUserActivity extends BaseActivity {
     FloatingActionButton fb_map;
     ArrayList<SelecetdUserModel> selecetdUserModelArrayList = new ArrayList<>();
     ArrayList<SelecetdUserModel> selectedarraylist = new ArrayList<>();
+    ArrayList<SelecetdUserModel> arraylist = new ArrayList<>();
     RelativeLayout iv_filter;
     String str_count;
     SharedPreferences.Editor editor;
@@ -68,7 +70,7 @@ public class SelectUserActivity extends BaseActivity {
             }
         });
 
-        sharedPreferences = getSharedPreferences("countUser",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("countUser", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         userSelectAdapter.setOnItemClickListener(new UserSelectAdapter.ClickListener() {
@@ -76,15 +78,30 @@ public class SelectUserActivity extends BaseActivity {
             public void onItemClick(SelecetdUserModel model, boolean isAddTo, int position) {
                 if (isAddTo) {
                     selectedarraylist.add(model);
+
                 } else {
                     selectedarraylist.remove(model);
                 }
+
                 txt_people_count.setText(String.valueOf(selectedarraylist.size()));
-                str_count = String.valueOf(selectedarraylist.size()+ " People Selected");
-                editor.putInt("Count",selectedarraylist.size());
                 userSelectAdapter.notifyDataSetChanged();
+
+
+//                Log.e(TAG, "onItemClick: ", );
+
+//                if (isAddTo) {
+//                    selectedarraylist.add(model);
+//                } else {
+//                    selectedarraylist.remove(model);
+//                    img_select_all.setChecked(false);
+//                }
+//
+//                str_count = String.valueOf(selectedarraylist.size() + " People Selected");
+//                editor.putInt("Count", selectedarraylist.size());
+//                userSelectAdapter.notifyDataSetChanged();
             }
         });
+
 
         img_select_all.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -99,11 +116,10 @@ public class SelectUserActivity extends BaseActivity {
                             selectedarraylist.clear();
                             userSelectAdapter.selectAllItem(true);
                             txt_people_count.setText(String.valueOf(user_name.length));
-                            str_count = String.valueOf(user_name.length+" People Selected");
-                            editor.putInt("Count",user_name.length);
+                            str_count = String.valueOf(user_name.length + " People Selected");
+                            editor.putInt("Count", user_name.length);
                             userSelectAdapter.notifyDataSetChanged();
                         }
-                        break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

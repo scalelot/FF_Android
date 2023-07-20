@@ -40,13 +40,10 @@ import java.io.Serializable
 import java.lang.reflect.ParameterizedType
 import java.util.*
 
-abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, OnEditorActionListener,
-    ViewSpan.Layout {
+abstract class TokenCompleteTextView<T : Any> : AppCompatAutoCompleteTextView,
+    OnEditorActionListener, ViewSpan.Layout {
     enum class TokenClickStyle(val isSelectable: Boolean) {
-        None(false),
-        Delete(false),
-        Select(true),
-        SelectDeselect(true);
+        None(false), Delete(false), Select(true), SelectDeselect(true);
 
     }
 
@@ -108,42 +105,40 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         setTextIsSelectable(false)
         isLongClickable = false
 
-        inputType = inputType or
-                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or
-                InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
+        inputType =
+            inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
         setHorizontallyScrolling(false)
 
         setOnEditorActionListener(this)
 
-        filters =
-            arrayOf(InputFilter { source, _, _, _, destinationStart, destinationEnd ->
-                if (internalEditInProgress) {
-                    return@InputFilter null
-                }
-                if (tokenLimit != -1 && objects.size == tokenLimit) {
+        filters = arrayOf(InputFilter { source, _, _, _, destinationStart, destinationEnd ->
+            if (internalEditInProgress) {
+                return@InputFilter null
+            }
+            if (tokenLimit != -1 && objects.size == tokenLimit) {
+                return@InputFilter ""
+            }
+
+            if (tokenizer!!.containsTokenTerminator(source)) {
+                if (preventFreeFormText || currentCompletionText().isNotEmpty()) {
+                    performCompletion()
                     return@InputFilter ""
                 }
+            }
 
-                if (tokenizer!!.containsTokenTerminator(source)) {
-                    if (preventFreeFormText || currentCompletionText().isNotEmpty()) {
-                        performCompletion()
-                        return@InputFilter ""
+            prefix?.also { prefix ->
+                if (destinationStart < prefix.length) {
+                    if (destinationStart == 0 && destinationEnd == 0) {
+                        return@InputFilter null
+                    } else return@InputFilter if (destinationEnd <= prefix.length) {
+                        prefix.subSequence(destinationStart, destinationEnd)
+                    } else {
+                        prefix.subSequence(destinationStart, prefix.length)
                     }
                 }
-
-                prefix?.also { prefix ->
-                    if (destinationStart < prefix.length) {
-                        if (destinationStart == 0 && destinationEnd == 0) {
-                            return@InputFilter null
-                        } else return@InputFilter if (destinationEnd <= prefix.length) {
-                            prefix.subSequence(destinationStart, destinationEnd)
-                        } else {
-                            prefix.subSequence(destinationStart, prefix.length)
-                        }
-                    }
-                }
-                null
-            })
+            }
+            null
+        })
         initialized = true
     }
 
@@ -156,9 +151,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
+        context, attrs, defStyle
     ) {
         init()
     }
@@ -213,8 +206,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                 text = hiddenContent
             }
             for (span in text.getSpans(0, text.length, TokenImageSpan::class.java)) {
-                @Suppress("unchecked_cast")
-                objects.add(span.token as T)
+                @Suppress("unchecked_cast") objects.add(span.token as T)
             }
             return objects
         }
@@ -296,6 +288,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             event.itemCount = text.length
         }
     }
+
     private val currentCandidateTokenRange: Range
         get() {
             val editable = text
@@ -306,7 +299,8 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                 candidateStringEnd = candidateStringStart
             }
 
-            val spans = editable.getSpans(prefix?.length ?: 0, editable.length, TokenImageSpan::class.java)
+            val spans =
+                editable.getSpans(prefix?.length ?: 0, editable.length, TokenImageSpan::class.java)
             for (span in spans) {
                 val spanEnd = editable.getSpanEnd(span)
                 if (spanEnd in (candidateStringStart + 1)..cursorEndPosition) {
@@ -320,13 +314,13 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             val tokenRanges =
                 tokenizer!!.findTokenRanges(editable, candidateStringStart, candidateStringEnd)
             for (range in tokenRanges) {
-                @Suppress("unused")
-                if (range.start <= cursorEndPosition && cursorEndPosition <= range.end) {
+                @Suppress("unused") if (range.start <= cursorEndPosition && cursorEndPosition <= range.end) {
                     return range
                 }
             }
             return Range(cursorEndPosition, cursorEndPosition)
         }
+
     @Suppress("MemberVisibilityCanBePrivate")
     protected open fun tokenToString(token: T): CharSequence {
         return token.toString()
@@ -357,10 +351,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             text.removeSpan(DummySpan.INSTANCE)
         } else {
             text.setSpan(
-                DummySpan.INSTANCE,
-                0,
-                textLength,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                DummySpan.INSTANCE, 0, textLength, Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
         }
     }
@@ -375,8 +366,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         }
         val currentCandidateRange = currentCandidateTokenRange
 
-        @Suppress("MemberVisibilityCanBePrivate")
-        return currentCandidateRange.length() >= threshold.coerceAtLeast(1)
+        @Suppress("MemberVisibilityCanBePrivate") return currentCandidateRange.length() >= threshold.coerceAtLeast(
+            1
+        )
     }
 
     override fun performCompletion() {
@@ -425,6 +417,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                 shouldFocusNext = true
                 handled = true
             }
+
             KeyEvent.KEYCODE_DEL -> handled = !canDeleteSelection(1) || deleteSelectedObject()
         }
         return handled || super.onKeyDown(keyCode, event)
@@ -433,8 +426,8 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
     private fun deleteSelectedObject(): Boolean {
         if (tokenClickStyle?.isSelectable == true) {
             val text = text ?: return false
-            @Suppress("unchecked_cast")
-            val spans: Array<TokenImageSpan> =
+
+            @Suppress("unchecked_cast") val spans: Array<TokenImageSpan> =
                 text.getSpans(0, text.length, TokenImageSpan::class.java) as Array<TokenImageSpan>
             for (span in spans) {
                 if (span.view.isSelected) {
@@ -464,9 +457,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         if (isFocused && text != null && lastLayout != null && action == MotionEvent.ACTION_UP) {
             val offset = getOffsetForPosition(event.x, event.y)
             if (offset != -1) {
-                @Suppress("unchecked_cast")
-                val links: Array<TokenImageSpan> =
-                    text.getSpans(offset, offset, TokenImageSpan::class.java) as Array<TokenImageSpan>
+                @Suppress("unchecked_cast") val links: Array<TokenImageSpan> = text.getSpans(
+                    offset, offset, TokenImageSpan::class.java
+                ) as Array<TokenImageSpan>
                 if (links.isNotEmpty()) {
                     links[0].onClick()
                     handled = true
@@ -498,9 +491,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         } else {
             val text = text
             if (text != null) {
-                @Suppress("unchecked_cast")
-                val spans: Array<TokenImageSpan> =
-                    text.getSpans(selectionStart, selectionEnd, TokenImageSpan::class.java) as Array<TokenImageSpan>
+                @Suppress("unchecked_cast") val spans: Array<TokenImageSpan> = text.getSpans(
+                    selectionStart, selectionEnd, TokenImageSpan::class.java
+                ) as Array<TokenImageSpan>
                 for (span in spans) {
                     val spanEnd = text.getSpanEnd(span)
                     if (selectionStart <= spanEnd && text.getSpanStart(span) < selectionStart) {
@@ -527,32 +520,28 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                 text.removeSpan(spanWatcher)
                 val temp = if (preventFreeFormText) countSpan else null
                 val ellipsized = SpanUtils.ellipsizeWithSpans(
-                    prefix, temp, objects.size,
-                    lastLayout!!.paint, text, maxTextWidth()
+                    prefix, temp, objects.size, lastLayout!!.paint, text, maxTextWidth()
                 )
                 if (ellipsized != null) {
                     hiddenContent = SpannableStringBuilder(text)
                     setText(ellipsized)
                     TextUtils.copySpansFrom(
-                        ellipsized, 0, ellipsized.length,
-                        TokenImageSpan::class.java, getText(), 0
+                        ellipsized, 0, ellipsized.length, TokenImageSpan::class.java, getText(), 0
                     )
                     TextUtils.copySpansFrom(
-                        text, 0, hiddenContent!!.length,
-                        TokenImageSpan::class.java, hiddenContent, 0
-                    )
-                    hiddenContent!!.setSpan(
-                        spanWatcher,
+                        text,
                         0,
                         hiddenContent!!.length,
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE
+                        TokenImageSpan::class.java,
+                        hiddenContent,
+                        0
+                    )
+                    hiddenContent!!.setSpan(
+                        spanWatcher, 0, hiddenContent!!.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 } else {
                     getText().setSpan(
-                        spanWatcher,
-                        0,
-                        getText().length,
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE
+                        spanWatcher, 0, getText().length, Spanned.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
             }
@@ -560,8 +549,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             if (hiddenContent != null) {
                 text = hiddenContent
                 TextUtils.copySpansFrom(
-                    hiddenContent, 0, hiddenContent!!.length,
-                    TokenImageSpan::class.java, text, 0
+                    hiddenContent, 0, hiddenContent!!.length, TokenImageSpan::class.java, text, 0
                 )
                 hiddenContent = null
                 if (hintVisible) {
@@ -569,9 +557,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                 } else {
                     post { setSelection(text.length) }
                 }
-                @Suppress("unchecked_cast")
-                val watchers: Array<TokenSpanWatcher> =
-                    text.getSpans(0, text.length, TokenSpanWatcher::class.java) as Array<TokenSpanWatcher>
+                @Suppress("unchecked_cast") val watchers: Array<TokenSpanWatcher> = text.getSpans(
+                    0, text.length, TokenSpanWatcher::class.java
+                ) as Array<TokenSpanWatcher>
                 if (watchers.isEmpty()) {
                     text.setSpan(spanWatcher, 0, text.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
                 }
@@ -589,8 +577,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
     }
 
     override fun convertSelectionToString(selectedObject: Any?): CharSequence {
-        @Suppress("unchecked_cast")
-        this.selectedObject = selectedObject as T?
+        @Suppress("unchecked_cast") this.selectedObject = selectedObject as T?
         return ""
     }
 
@@ -627,7 +614,8 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                     listener?.onTokenIgnored(tokenSpan.token)
                 }
             } else {
-                val ssb = SpannableStringBuilder(tokenizer!!.wrapTokenValue(tokenToString(tokenSpan.token)))
+                val ssb =
+                    SpannableStringBuilder(tokenizer!!.wrapTokenValue(tokenToString(tokenSpan.token)))
                 editable.replace(candidateRange.start, candidateRange.end, ssb)
                 editable.setSpan(
                     tokenSpan,
@@ -676,8 +664,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         }
 
         for (text in texts) {
-            @Suppress("unchecked_cast")
-            val spans: Array<TokenImageSpan> =
+            @Suppress("unchecked_cast") val spans: Array<TokenImageSpan> =
                 text.getSpans(0, text.length, TokenImageSpan::class.java) as Array<TokenImageSpan>
             for (span in spans) {
                 if (span.token == obj) {
@@ -709,10 +696,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         countSpan.setCount(objects.size - visibleCount)
         val spannedCountText = SpannableStringBuilder(countSpan.countText)
         spannedCountText.setSpan(
-            countSpan,
-            0,
-            spannedCountText.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            countSpan, 0, spannedCountText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         internalEditInProgress = true
         val countStart = text.getSpanStart(countSpan)
@@ -755,10 +739,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             editable.insert(offset, ssb)
             editable.insert(offset + ssb.length, " ")
             editable.setSpan(
-                tokenSpan,
-                offset,
-                offset + ssb.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                tokenSpan, offset, offset + ssb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             internalEditInProgress = false
         } else {
@@ -771,10 +752,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             hiddenContent!!.append(tokenText)
             hiddenContent!!.append(" ")
             hiddenContent!!.setSpan(
-                tokenSpan,
-                start,
-                start + tokenText.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                tokenSpan, start, start + tokenText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             updateCountSpan()
         }
@@ -809,7 +787,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                 val hintSpan = HintSpan(null, style, textSize.toInt(), colors, colors)
                 internalEditInProgress = true
                 val spannedHint = SpannableString(hintText)
-                spannedHint.setSpan(hintSpan, 0, spannedHint.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spannedHint.setSpan(
+                    hintSpan, 0, spannedHint.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
                 text.insert(prefix?.length ?: 0, spannedHint)
                 internalEditInProgress = false
                 setSelection(prefix?.length ?: 0)
@@ -833,8 +813,8 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
     private fun clearSelections() {
         if (tokenClickStyle?.isSelectable != true) return
         val text = text ?: return
-        @Suppress("unchecked_cast")
-        val tokens: Array<TokenImageSpan> =
+
+        @Suppress("unchecked_cast") val tokens: Array<TokenImageSpan> =
             text.getSpans(0, text.length, TokenImageSpan::class.java) as Array<TokenImageSpan>
         var shouldRedrawTokens = false
         for (token in tokens) {
@@ -858,19 +838,25 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
                         clearSelections()
                         view.isSelected = true
                         redrawTokens()
-                    } else if (tokenClickStyle == TokenClickStyle.SelectDeselect || !isTokenRemovable(token)) {
+                    } else if (tokenClickStyle == TokenClickStyle.SelectDeselect || !isTokenRemovable(
+                            token
+                        )
+                    ) {
                         view.isSelected = false
                         redrawTokens()
                     } else if (isTokenRemovable(token)) {
                         removeSpan(text, this)
                     }
                 }
+
                 TokenClickStyle.Delete -> if (isTokenRemovable(token)) {
                     removeSpan(text, this)
                 }
+
                 TokenClickStyle.None -> if (selectionStart != text.getSpanEnd(this)) {
                     setSelection(text.getSpanEnd(this))
                 }
+
                 else -> {}
             }
         }
@@ -887,21 +873,18 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             if (what is TokenCompleteTextView<*>.TokenImageSpan && !savingState) {
 
                 if (!isFocused && allowCollapse) performCollapse(false)
-                @Suppress("unchecked_cast")
-                if (listener != null) listener?.onTokenAdded(what.token as T)
+                @Suppress("unchecked_cast") if (listener != null) listener?.onTokenAdded(what.token as T)
             }
         }
 
         override fun onSpanRemoved(text: Spannable, what: Any, start: Int, end: Int) {
             if (what is TokenCompleteTextView<*>.TokenImageSpan && !savingState) {
-                @Suppress("unchecked_cast")
-                if (listener != null) listener?.onTokenRemoved(what.token as T)
+                @Suppress("unchecked_cast") if (listener != null) listener?.onTokenRemoved(what.token as T)
             }
         }
 
         override fun onSpanChanged(
-            text: Spannable, what: Any,
-            oldStart: Int, oldEnd: Int, newStart: Int, newEnd: Int
+            text: Spannable, what: Any, oldStart: Int, oldEnd: Int, newStart: Int, newEnd: Int
         ) {
         }
     }
@@ -918,8 +901,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             if (count > 0 && text != null) {
                 val text = text
                 val end = start + count
-                @Suppress("unchecked_cast")
-                val spans = text.getSpans(start, end, TokenImageSpan::class.java) as Array<TokenImageSpan>
+
+                @Suppress("unchecked_cast") val spans =
+                    text.getSpans(start, end, TokenImageSpan::class.java) as Array<TokenImageSpan>
 
                 val spansToRemove = ArrayList<TokenImageSpan>()
                 for (token in spans) {
@@ -975,8 +959,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
 
     @Suppress("MemberVisibilityCanBePrivate")
     protected open fun convertSerializableObjectsToTypedObjects(s: List<*>?): List<T>? {
-        @Suppress("unchecked_cast")
-        return s as List<T>?
+        @Suppress("unchecked_cast") return s as List<T>?
     }
 
     private fun reifyParameterizedTypeClass(): Class<*> {
@@ -1034,12 +1017,12 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         tokenClickStyle = state.tokenClickStyle
         tokenizer = state.tokenizer
         addListeners()
-        val objects: List<T>? = if (SavedState.SERIALIZABLE_PLACEHOLDER == state.parcelableClassName) {
-            convertSerializableObjectsToTypedObjects(state.baseObjects)
-        } else {
-            @Suppress("unchecked_cast")
-            state.baseObjects as List<T>?
-        }
+        val objects: List<T>? =
+            if (SavedState.SERIALIZABLE_PLACEHOLDER == state.parcelableClassName) {
+                convertSerializableObjectsToTypedObjects(state.baseObjects)
+            } else {
+                @Suppress("unchecked_cast") state.baseObjects as List<T>?
+            }
 
         if (objects != null) {
             for (obj in objects) {
@@ -1112,25 +1095,27 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
         }
 
         override fun toString(): String {
-            val str = ("TokenCompleteTextView.SavedState{"
-                    + Integer.toHexString(System.identityHashCode(this))
-                    + " tokens=" + baseObjects)
+            val str = ("TokenCompleteTextView.SavedState{" + Integer.toHexString(
+                System.identityHashCode(this)
+            ) + " tokens=" + baseObjects)
             return "$str}"
         }
 
         companion object {
             const val SERIALIZABLE_PLACEHOLDER = "Serializable"
+
             @Suppress("unused")
             @JvmField
-            val CREATOR: Parcelable.Creator<SavedState?> = object : Parcelable.Creator<SavedState?> {
-                override fun createFromParcel(parcel: Parcel): SavedState {
-                    return SavedState(parcel)
-                }
+            val CREATOR: Parcelable.Creator<SavedState?> =
+                object : Parcelable.Creator<SavedState?> {
+                    override fun createFromParcel(parcel: Parcel): SavedState {
+                        return SavedState(parcel)
+                    }
 
-                override fun newArray(size: Int): Array<SavedState?> {
-                    return arrayOfNulls(size)
+                    override fun newArray(size: Int): Array<SavedState?> {
+                        return arrayOfNulls(size)
+                    }
                 }
-            }
         }
     }
 
@@ -1146,16 +1131,13 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             val startTokenSelection = text.getSpanStart(span)
             val endTokenSelection = text.getSpanEnd(span)
 
-            @Suppress("unchecked_cast")
-            if (isTokenRemovable(span.token as T)) continue
+            @Suppress("unchecked_cast") if (isTokenRemovable(span.token as T)) continue
             if (startSelection == endSelection) {
                 if (endTokenSelection + 1 == endSelection) {
                     return false
                 }
             } else {
-                if (startSelection <= startTokenSelection
-                    && endTokenSelection + 1 <= endSelection
-                ) {
+                if (startSelection <= startTokenSelection && endTokenSelection + 1 <= endSelection) {
                     return false
                 }
             }
@@ -1164,14 +1146,12 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
     }
 
     private inner class TokenInputConnection(
-        target: InputConnection?,
-        mutable: Boolean
+        target: InputConnection?, mutable: Boolean
     ) : InputConnectionWrapper(target, mutable) {
 
         private val needsWorkaround: Boolean
             get() {
-                return Build.VERSION_CODES.O <= Build.VERSION.SDK_INT  &&
-                        Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
+                return Build.VERSION_CODES.O <= Build.VERSION.SDK_INT && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q
 
             }
 
@@ -1198,8 +1178,7 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
             if (selectionStart <= prefix?.length ?: 0) {
                 fixedBeforeLength = 0
                 return deleteSelectedObject() || super.deleteSurroundingText(
-                    fixedBeforeLength,
-                    afterLength
+                    fixedBeforeLength, afterLength
                 )
             }
             return super.deleteSurroundingText(fixedBeforeLength, afterLength)
@@ -1227,7 +1206,9 @@ abstract class TokenCompleteTextView<T: Any> : AppCompatAutoCompleteTextView, On
 
             lastCompletionText?.also { lastCompletion ->
                 fixedText?.also { fixed ->
-                    if (fixed.length == lastCompletion.length + 1 && fixed.toString().startsWith(lastCompletion)) {
+                    if (fixed.length == lastCompletion.length + 1 && fixed.toString()
+                            .startsWith(lastCompletion)
+                    ) {
                         fixedText = fixed.subSequence(fixed.length - 1, fixed.length)
                         lastCompletionText = null
                     }

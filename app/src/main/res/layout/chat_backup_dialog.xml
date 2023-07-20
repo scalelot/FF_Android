@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/local"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/google_drive"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
@@ -111,7 +111,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/google_account"
             android:textColor="@color/black"
             android:textSize="@dimen/text_14" />
@@ -135,23 +135,29 @@
         android:layout_marginRight="@dimen/margin_10"
         android:layout_marginBottom="@dimen/margin_10"
         android:gravity="center"
+        android:weightSum="2"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_cancle"
-            android:layout_width="@dimen/sp_130"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/sp_40"
-            android:layout_marginRight="@dimen/margin_15"
             android:background="@drawable/grey_boader_btn"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/cancel"
+            android:layout_weight="1"
             android:textColor="@color/grey"
             android:textSize="@dimen/text_14" />
 
+        <View
+            android:layout_width="@dimen/sp_15"
+            android:layout_height="@dimen/sp_40"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_backup"
-            android:layout_width="@dimen/sp_130"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/sp_40"
+            android:layout_weight="1"
             android:background="@drawable/rectangle_150"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/back_up"

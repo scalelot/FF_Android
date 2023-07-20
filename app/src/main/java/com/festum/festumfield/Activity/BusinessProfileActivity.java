@@ -76,7 +76,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +108,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     public static final int PICK_IMAGE = 1;
     private static final int REQUEST_CODE = 101;
     private RequestQueue rQueue;
-    private ArrayList<HashMap<String, String>> arraylist;
     boolean status = false;
 
 
@@ -146,7 +144,11 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
         btn_change = findViewById(R.id.btn_change);
         edt_brochure = findViewById(R.id.edt_brochure);
 
+        getBusinessProfileInfo();
+
         edit_profile = getIntent().getStringExtra("edit_profile");
+        String strName = getSharedPreferences("name", MODE_PRIVATE).getString("displayName", null);
+        edt_brochure.setText(strName);
 
         edt_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,9 +171,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             }
         });
 
-        String strName = getSharedPreferences("name", MODE_PRIVATE).getString("displayName", null);
-        edt_brochure.setText(strName);
-
         ic_back.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -184,10 +183,8 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MapsLocationActivity.class).putExtra("isBusinessLocation", true));
-
             }
         });
-        getBusinessProfileInfo();
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -254,7 +251,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                         rl_upload.setVisibility(View.GONE);
                     }
                     CreateBusinessAccount(Request.Method.POST, Constans.business_register, edt_bussiness_name.getText().toString().trim(), edt_category.getText().toString().trim(), edt_subcategory.getText().toString().trim(), edt_description.getText().toString().trim(), String.valueOf(Const.b_longitude), String.valueOf(Const.b_lattitude), edt_interested_category.getText().toString().trim(), edt_interested_subcategory.getText().toString().trim());
-
                 }
             }
         });
@@ -347,7 +343,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     Double logitude = businessInfoRegisterModel.getData().getLocation().getCoordinates().get(0);
                     Double latitiude = businessInfoRegisterModel.getData().getLocation().getCoordinates().get(1);
 
-
                     LatLng latLng1 = new LatLng(latitiude, logitude);
                     latLng = latLng1;
 
@@ -390,7 +385,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 public void onErrorResponse(VolleyError error) {
                     Log.e("GetBusinessError=>", error.toString());
 //                    FileUtils.DismissLoading(BusinessProfileActivity.this);
-                    error.printStackTrace();
                 }
             }) {
                 @Override
@@ -406,7 +400,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
         } catch (Exception e) {
             e.printStackTrace();
 //            FileUtils.DismissLoading(BusinessProfileActivity.this);
-
         }
     }
 
@@ -429,7 +422,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
         return per;
     }
 
-
     private void selectPdf() {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -437,13 +429,11 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
         startActivityForResult(intent, PICK_FILE);
     }
 
-
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE);
     }
-
 
     @SuppressLint("Range")
     @Override
@@ -461,7 +451,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             Uri uri = data.getData();
             String uriString = uri.toString();
             File myFile = new File(uriString);
-            String path = myFile.getAbsolutePath();
             String displayName = null;
 
             if (uriString.startsWith("content://")) {
@@ -522,7 +511,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
                         if (jsonObject.getString("IsSuccess").equals("true")) {
                             Log.e("come::: >>>  ", "yessssss");
-                            arraylist = new ArrayList<HashMap<String, String>>();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -534,7 +522,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                     System.out.println("PdfUploadError=>" + error.getMessage());
                 }
             }) {
-
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
@@ -559,7 +546,6 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             rQueue = Volley.newRequestQueue(BusinessProfileActivity.this);
             rQueue.add(volleyMultipartRequest);
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -9,8 +9,9 @@ import java.util.*
 
 @Parcelize
 @SuppressLint("ParcelCreator")
-open class CharacterTokenizer(private val splitChar: List<Char>, private val tokenTerminator: String) :
-    Tokenizer {
+open class CharacterTokenizer(
+    private val splitChar: List<Char>, private val tokenTerminator: String
+) : Tokenizer {
     override fun containsTokenTerminator(charSequence: CharSequence): Boolean {
         for (element in charSequence) {
             if (splitChar.contains(element)) {
@@ -35,8 +36,7 @@ open class CharacterTokenizer(private val splitChar: List<Char>, private val tok
 
             if (splitChar.contains(character) || cursor == end - 1) {
                 val hasTokenContent =
-                    cursor > tokenStart ||
-                            cursor == tokenStart && !splitChar.contains(character)
+                    cursor > tokenStart || cursor == tokenStart && !splitChar.contains(character)
                 if (hasTokenContent) {
                     result.add(Range(tokenStart, cursor + 1))
                 }
@@ -51,8 +51,7 @@ open class CharacterTokenizer(private val splitChar: List<Char>, private val tok
         return if (unwrappedTokenValue is Spanned) {
             val sp = SpannableString(wrappedText)
             TextUtils.copySpansFrom(
-                unwrappedTokenValue, 0, unwrappedTokenValue.length,
-                Any::class.java, sp, 0
+                unwrappedTokenValue, 0, unwrappedTokenValue.length, Any::class.java, sp, 0
             )
             sp
         } else {

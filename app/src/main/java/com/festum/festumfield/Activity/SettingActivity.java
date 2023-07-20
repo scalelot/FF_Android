@@ -1,6 +1,5 @@
 package com.festum.festumfield.Activity;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -48,14 +47,15 @@ import java.util.ArrayList;
 
 public class SettingActivity extends BaseActivity {
 
-    ImageView ic_back_arrow, img_close, ic_close,img_dark_mode;
+    ImageView ic_back_arrow, img_close, ic_close;
     AppCompatButton btn_clear_data, btn_select_file;
-    SwitchButton noti_switch,dark_mode_switch;
+    SwitchButton noti_switch;
     RelativeLayout chat_backup, block_contact, change_number, contact_us, help, conversation, sign_out, upload_excel;
     File myFile;
     Uri uri;
     TextView txt_ph_no, txt_file_name, txt_email_id;
     LinearLayout ll_txt, ll_phone_email, ll_sample_txt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,8 +171,7 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (ActivityCompat.checkSelfPermission(SettingActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(SettingActivity.this, new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    ActivityCompat.requestPermissions(SettingActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 } else {
                     selectExcel();
                 }
@@ -182,7 +181,7 @@ public class SettingActivity extends BaseActivity {
         ic_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               btn_select_file.setVisibility(View.VISIBLE);
+                btn_select_file.setVisibility(View.VISIBLE);
                 ll_sample_txt.setVisibility(View.VISIBLE);
                 ll_phone_email.setVisibility(View.GONE);
                 ll_txt.setVisibility(View.GONE);
@@ -227,12 +226,6 @@ public class SettingActivity extends BaseActivity {
         });
 
         dialog.show();
-    }
-
-    private String getPathFromExtSD(String[] pathData) {
-        final String relativePath = "/" + pathData[1];
-
-        return relativePath;
     }
 
     private void selectExcel() {
@@ -285,6 +278,7 @@ public class SettingActivity extends BaseActivity {
             }
         }
     }
+
     private void onReadClick(Uri uriString) {
         try {
             InputStream stream = getContentResolver().openInputStream(uriString);
@@ -332,6 +326,7 @@ public class SettingActivity extends BaseActivity {
             ioException.printStackTrace();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

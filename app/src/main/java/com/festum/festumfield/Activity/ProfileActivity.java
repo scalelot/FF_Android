@@ -375,7 +375,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             }
         });
 
-
         radioGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -784,7 +783,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
-
     public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
     String[] per;
 
@@ -997,7 +995,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             hobbiesArrayList.clear();
         }
         StringBuilder sb = new StringBuilder();
-        StringBuilder sb1 = new StringBuilder();
         for (Object token : completionView.getObjects()) {
             sb.append(token.toString());
             sb.append(",");

@@ -1,11 +1,8 @@
 package com.festum.festumfield;
 
 import android.app.Application;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -32,23 +29,12 @@ import io.socket.emitter.Emitter;
 
 public class MyApplication extends Application implements LifecycleObserver {
 
-    public static final String CHANNEL_ID = "exampleChannel";
     public static SimpleCache simpleCache;
     public static Context context;
     private static int stateCounter;
     public static final String TAG = MyApplication.class.getSimpleName();
     public static Socket mSocket;
     SharedPreferences sharedPreferences;
-    private static MyApplication singleton = null;
-
-    public static MyApplication getInstance() {
-
-        if (singleton == null) {
-            singleton = new MyApplication();
-        }
-        return singleton;
-    }
-
 
     @Override
     public void onCreate() {
@@ -64,8 +50,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         if (simpleCache == null) {
             simpleCache = new SimpleCache(this.getCacheDir(), (CacheEvictor) leastRecentlyUsedCacheEvictor, databaseProvider);
         }
-
-        createNotificationChannel();
 
         //ReelsActivity SharedPreference
         sharedPreferences = getSharedPreferences("Reels", Context.MODE_PRIVATE);
@@ -274,15 +258,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String newTokenGet = sharedPreferences1.getString("newToken", "");
         return newTokenGet;
-    }
-
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Example Channel", NotificationManager.IMPORTANCE_HIGH);
-
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
