@@ -682,7 +682,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     Double latitude = profileRegisterModel.getData().getLocationModel().getCoordinates().get(1);
 
                     LatLng latLng1 = new LatLng(latitude, longitude);
-                    latLng = latLng1;
                     String getadd = FileUtils.getAddressFromLatLng(getApplicationContext(), latitude, longitude);
 
                     edt_address.setText(getadd);

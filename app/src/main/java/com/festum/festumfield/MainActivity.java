@@ -35,6 +35,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Activity.CreateNewGroupActivity;
 import com.festum.festumfield.Activity.DisplayAllProductActivity;
@@ -339,6 +340,8 @@ public class MainActivity extends BaseActivity {
                         } else {
                             user_name.setText(MyApplication.getuserName(getApplicationContext()));
                         }
+
+                        Glide.with(MainActivity.this).load(Constans.Display_Image_URL + peronalInfoModel.getData().getProfileimage()).placeholder(R.drawable.ic_user).into(user_img);
 
                         String fullName = peronalInfoModel.getData().getFullName();
                         if (fullName.isEmpty()) {

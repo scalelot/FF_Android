@@ -32,6 +32,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/dialog_txt"
         android:layout_marginBottom="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_10"
         android:background="@drawable/dialog_bg">
 
         <androidx.recyclerview.widget.RecyclerView

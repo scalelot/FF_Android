@@ -69,7 +69,6 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
                 Intent intent = new Intent(fragment.getContext(), ChatingActivity.class);
                 intent.putExtra("UserName", registerModels.get(position).getFullName());
                 fragment.startActivity(intent);
-                Log.e("btnClick=>", String.valueOf(position));
             }
         });
 

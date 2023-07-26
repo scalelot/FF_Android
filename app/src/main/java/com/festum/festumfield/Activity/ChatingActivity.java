@@ -327,7 +327,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
         chat_recycler.setAdapter(messageAdapter);
+        chat_recycler.setHasFixedSize(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
+        chat_recycler.smoothScrollToPosition(0);
 
         edt_chating.addTextChangedListener(this);
 
