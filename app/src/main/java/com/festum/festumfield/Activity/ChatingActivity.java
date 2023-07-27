@@ -102,6 +102,14 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         mSocket = MyApplication.mSocket;
 
+        mSocket.on("answerCall", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject js = (JSONObject) args[0];
+                Log.e("CallAnswer:==", js.toString());
+            }
+        });
+
         getMessageRecive();
 
         hp_back_arrow = findViewById(R.id.hp_back_arrow);
@@ -696,7 +704,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             startActivity(new Intent(ChatingActivity.this, MainActivity.class));
             finish();
         } else if (id == R.id.img_video_call) {
-            startActivity(new Intent(ChatingActivity.this, VideoCallActivity.class));
+            startActivity(new Intent(ChatingActivity.this, VideoCallReciveActivity.class));
             finish();
         } else if (id == R.id.img_contact) {
             startActivity(new Intent(ChatingActivity.this, ChattingAudioCallActivity.class));
