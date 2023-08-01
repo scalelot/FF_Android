@@ -3,6 +3,7 @@ package com.festum.festumfield.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -71,6 +72,18 @@ public class HistoryPromotionFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recycler_noti.setLayoutManager(linearLayoutManager);
         recycler_noti.setAdapter(promotionHistoryAdapter);
+
+        recycler_noti.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
+            }
+        });
 
         return inflate;
     }

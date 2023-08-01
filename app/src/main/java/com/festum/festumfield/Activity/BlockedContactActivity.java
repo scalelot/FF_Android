@@ -40,10 +40,10 @@ import java.util.Map;
 public class BlockedContactActivity extends BaseActivity {
 
     RecyclerView recyclerView;
-    static BlockedContactAdapter blockeContactAdapter;
+    BlockedContactAdapter blockeContactAdapter;
     ImageView ic_back;
-    static NestedScrollView nestedScroll;
-    static RelativeLayout emptyLay;
+    NestedScrollView nestedScroll;
+    RelativeLayout emptyLay;
     ProgressBar idPBLoading;
     static ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
     int page = 1, limit = 10;
@@ -59,6 +59,9 @@ public class BlockedContactActivity extends BaseActivity {
         nestedScroll = findViewById(R.id.nestedScroll);
         emptyLay = findViewById(R.id.emptyLay);
         idPBLoading = findViewById(R.id.idPBLoading);
+
+        LinearLayoutManager manager = new LinearLayoutManager(BlockedContactActivity.this);
+        recyclerView.setLayoutManager(manager);
 
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,21 +82,20 @@ public class BlockedContactActivity extends BaseActivity {
                 }
             }
         });
-    }
 
-    public static void removeAt(int adapterPosition) {
-        blockedFriendRegisterModels.remove(adapterPosition);
-        blockeContactAdapter.notifyItemRemoved(adapterPosition);
-        blockeContactAdapter.notifyItemRangeChanged(adapterPosition, blockedFriendRegisterModels.size());
-        blockeContactAdapter.notifyDataSetChanged();
+        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
 
-        if (!blockedFriendRegisterModels.isEmpty()) {
-            emptyLay.setVisibility(View.GONE);
-            nestedScroll.setVisibility(View.VISIBLE);
-        } else {
-            emptyLay.setVisibility(View.VISIBLE);
-            nestedScroll.setVisibility(View.GONE);
-        }
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
+            }
+        });
+
+
     }
 
     private void getBlockedFriends(int page, int limit, String search) {
@@ -139,8 +141,6 @@ public class BlockedContactActivity extends BaseActivity {
                         }
 
                         blockeContactAdapter = new BlockedContactAdapter(BlockedContactActivity.this, blockedFriendRegisterModels);
-                        LinearLayoutManager manager = new LinearLayoutManager(BlockedContactActivity.this);
-                        recyclerView.setLayoutManager(manager);
                         recyclerView.setAdapter(blockeContactAdapter);
                         blockeContactAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {

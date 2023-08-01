@@ -3,6 +3,7 @@ package com.festum.festumfield.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -132,6 +133,18 @@ public class ContactFragment extends Fragment {
                     progressBar.setVisibility(View.VISIBLE);
                     getAllMyFriends(page, limit, searchData);
                 }
+            }
+        });
+
+        recyclerview_contact.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
             }
         });
 

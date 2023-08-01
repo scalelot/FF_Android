@@ -33,7 +33,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_16" />
     </RelativeLayout>
-    <!--    <include layout="@layout/layout_loader" />-->
 
     <include layout="@layout/layout_empty" />
 

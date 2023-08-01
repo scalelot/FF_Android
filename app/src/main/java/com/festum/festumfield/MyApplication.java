@@ -55,12 +55,12 @@ public class MyApplication extends Application implements LifecycleObserver {
         sharedPreferences = getSharedPreferences("Reels", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
 
         sharedPreferences = getSharedPreferences("countUser", MODE_PRIVATE);
         SharedPreferences.Editor editor1 = sharedPreferences.edit();
         editor1.clear();
-        editor1.commit();
+        editor1.apply();
 
         //Socket
         IO.Options options = new IO.Options();
@@ -148,7 +148,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("CountryCode", code);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getCountryCode(Context context) {
@@ -165,7 +165,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isUserActive", useractive);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getcontactNo(Context context) {
@@ -229,7 +229,7 @@ public class MyApplication extends Application implements LifecycleObserver {
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isBusinessProfileRegistered", useractive);
-        editor.commit();
+        editor.apply();
     }
 
     public static Boolean isBusinessProfileRegistered(Context context) {

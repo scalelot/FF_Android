@@ -2,6 +2,7 @@ package com.festum.festumfield.Fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -69,6 +70,19 @@ public class SendRequestFragment extends Fragment {
                 }
             }
         });
+
+        send_recylerview.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
+            }
+        });
+
 
         return view;
     }

@@ -1,5 +1,6 @@
 package com.festum.festumfield.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -143,6 +144,18 @@ public class DisplayAllProductActivity extends BaseActivity {
                     idPBLoading.setVisibility(View.VISIBLE);
                     getProductItem(page, limit, searchData, "price", -1);
                 }
+            }
+        });
+
+        recyclerview_product.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
             }
         });
 

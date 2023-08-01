@@ -45,11 +45,6 @@ public class DisplayAllProductAdapter extends RecyclerView.Adapter<DisplayAllPro
 
         Glide.with(activity).load(Constans.Display_Image_URL + arrayList.get(position).getImages().get(0)).placeholder(R.drawable.ic_user_img).into(holder.iv_image);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.festum.festumfield.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -73,6 +74,18 @@ public class ChatProductSelectActivity extends AppCompatActivity {
                     loaderLay.setVisibility(View.VISIBLE);
                     getProductItem(friendid, page, limit, searchData, "name", -1);
                 }
+            }
+        });
+
+        recycle_chat_product.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
             }
         });
     }

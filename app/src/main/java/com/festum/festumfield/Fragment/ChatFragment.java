@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -166,6 +167,18 @@ public class ChatFragment extends Fragment {
                 edt_search_text.setText("");
                 iv_clear_text.setVisibility(View.GONE);
                 iv_search.setVisibility(View.VISIBLE);
+            }
+        });
+
+        chat_recyclerview.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
             }
         });
 

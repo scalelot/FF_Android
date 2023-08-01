@@ -90,6 +90,19 @@ public class RunningPromotionFragment extends Fragment {
 
         getNotificationItem(page, limit, searchData, "", "title", 1);
 
+        recycler_noti.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                emptyLay.setVisibility(View.VISIBLE);
+            }
+        });
+
+
         return inflate;
     }
 
