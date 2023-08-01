@@ -5,6 +5,7 @@ import static android.content.Context.LOCATION_SERVICE;
 import android.animation.FloatEvaluator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -111,6 +112,8 @@ public class MapsFragment extends Fragment {
     LatLng latLng;
     int i, areakm = 0;
     Address address;
+    String lat, log;
+    ValueAnimator valueAnimator;
 
     @Nullable
     @Override
@@ -154,6 +157,7 @@ public class MapsFragment extends Fragment {
                 String location = searchView.getQuery().toString();
                 try {
                     List<Address> addressList = null;
+                    valueAnimator.cancel();
 
                     if (location != null || location.equals("") || !location.isEmpty()) {
 
@@ -201,7 +205,10 @@ public class MapsFragment extends Fragment {
             }
         });
 
-        findLocationorName(Double.valueOf("21.170240"), Double.valueOf("72.831062"));
+        lat = getContext().getSharedPreferences("MapFragment", Context.MODE_PRIVATE).getString("lat", "");
+        log = getContext().getSharedPreferences("MapFragment", Context.MODE_PRIVATE).getString("log", "");
+
+        findLocationorName(Double.valueOf(lat), Double.valueOf(log));
         return view;
     }
 
@@ -271,11 +278,25 @@ public class MapsFragment extends Fragment {
                         });
                     }
 
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(m3));
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(m3).zoom(10.5F).build();
+                    LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(log));
+                    if (loc == null) {
+                        Log.e("onResponse: ", "latlog null");
+                    } else {
+                        showRipples(loc);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showRipples(loc);
+                            }
+                        }, DURATION - 500);
 
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(8).build();
+
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                    }
                     mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
@@ -440,7 +461,7 @@ public class MapsFragment extends Fragment {
         PropertyValuesHolder radiusHolder = PropertyValuesHolder.ofFloat("radius", 0, radius);
         PropertyValuesHolder transparencyHolder = PropertyValuesHolder.ofFloat("transparency", 0, 1);
 
-        ValueAnimator valueAnimator = new ValueAnimator();
+        valueAnimator = new ValueAnimator();
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator.setRepeatMode(ValueAnimator.RESTART);
         valueAnimator.setValues(radiusHolder, transparencyHolder);

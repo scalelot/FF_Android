@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -52,6 +53,7 @@ import com.festum.festumfield.Fragment.MapsFragment;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -347,6 +349,15 @@ public class MainActivity extends BaseActivity {
                         if (fullName.isEmpty()) {
                             CustomDialog();
                         }
+
+                        Double log = peronalInfoModel.getData().getLocationModel().getCoordinates().get(0);
+                        Double lat = peronalInfoModel.getData().getLocationModel().getCoordinates().get(1);
+
+                        SharedPreferences sharedPreferences = getSharedPreferences("MapFragment", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("lat", String.valueOf(lat));
+                        editor.putString("log", String.valueOf(log));
+                        editor.apply();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

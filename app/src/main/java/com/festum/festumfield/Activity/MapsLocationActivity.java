@@ -155,7 +155,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         Const.mCurrLocationMarker = mMap.addMarker(markerOptions);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 8));
 
     }
 
