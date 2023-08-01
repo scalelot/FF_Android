@@ -102,7 +102,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         mSocket = MyApplication.mSocket;
 
-        mSocket.on("answerCall", new Emitter.Listener() {
+        mSocket.on("callUser", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject js = (JSONObject) args[0];
@@ -226,7 +226,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                 if (!fromIds.equals(loginUserId)) {
                                     reciveMessage = new JSONObject();
 
-                                    //Message Only
+                                    //Get Message Only
                                     if (txtJS.length() != 0 && proJS.length() == 0) {
                                         String strTxt = txtJS.getString("message");
                                         reciveMessage.put("message", strTxt);
@@ -234,21 +234,23 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                                         reciveMessage.put("message", "");
                                     }
 
-                                    //Message and Product
+                                    //Get Message Product
                                     if (txtJS.length() != 0 && proJS.length() != 0) {
                                         String strTxt = txtJS.getString("message");
                                         reciveMessage.put("pro_message", strTxt);
                                     } else {
                                         reciveMessage.put("pro_message", "");
                                     }
-                                    //Image
+
+                                    //Get Image
                                     if (medJS.length() != 0) {
                                         String psthTxt = medJS.getString("path");
                                         reciveMessage.put("image", psthTxt);
                                     } else {
                                         reciveMessage.put("image", "");
                                     }
-                                    //Product
+
+                                    //Get Product
                                     if (proJS.length() != 0) {
                                         String proIds = proJS.getString("productid");
                                         getReciveProduct(proIds);
@@ -704,7 +706,11 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             startActivity(new Intent(ChatingActivity.this, MainActivity.class));
             finish();
         } else if (id == R.id.img_video_call) {
-            startActivity(new Intent(ChatingActivity.this, VideoCallReciveActivity.class));
+            Intent intent = new Intent(ChatingActivity.this,VideoCallReciveActivity.class);
+            intent.putExtra("toUserId", toUserIds);
+            intent.putExtra("userName", userName);
+            intent.putExtra("loginUser", loginUserId);
+            startActivity(intent);
             finish();
         } else if (id == R.id.img_contact) {
             startActivity(new Intent(ChatingActivity.this, ChattingAudioCallActivity.class));

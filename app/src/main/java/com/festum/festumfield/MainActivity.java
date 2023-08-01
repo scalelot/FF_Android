@@ -346,8 +346,6 @@ public class MainActivity extends BaseActivity {
                         String fullName = peronalInfoModel.getData().getFullName();
                         if (fullName.isEmpty()) {
                             CustomDialog();
-                        } else {
-
                         }
 
                     } catch (JSONException e) {

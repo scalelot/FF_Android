@@ -96,7 +96,6 @@ public class MapsFragment extends Fragment {
     PopupWindow popview;
     private static final int DURATION = 3000;
     Double latitude, longitude;
-    String apiKeys = "AIzaSyC2Axe4uEoZW8dDrJjce7XzoM0jLyhESR8";
     List<Place.Field> fields;
     SearchView searchView;
     LatLng m3;
@@ -132,11 +131,12 @@ public class MapsFragment extends Fragment {
         iv_search = view.findViewById(R.id.iv_search);
         rl_map = view.findViewById(R.id.rl_map);
 
+        fetchgetApi();
+
         queue = Volley.newRequestQueue(getContext());
 
-
         MapsInitializer.initialize(getActivity());
-        Places.initialize(getContext(), apiKeys);
+        Places.initialize(getContext(), getContext().getResources().getString(R.string.google_maps_key));
 
         fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
 
@@ -201,7 +201,6 @@ public class MapsFragment extends Fragment {
             }
         });
 
-        fetchgetApi();
         findLocationorName(Double.valueOf("21.170240"), Double.valueOf("72.831062"));
         return view;
     }
@@ -273,7 +272,7 @@ public class MapsFragment extends Fragment {
                     }
 
                     mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(m3));
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(m3).zoom(8).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(m3).zoom(10.5F).build();
 
                     mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 

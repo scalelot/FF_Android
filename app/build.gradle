@@ -134,4 +134,7 @@ dependencies {
 
     //Firebase Notification
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
+
+    //Webrtc
+    implementation 'org.webrtc:google-webrtc:1.0.32006'
 }

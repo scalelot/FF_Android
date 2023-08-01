@@ -231,7 +231,7 @@
             android:paddingTop="@dimen/margin_4"
             android:paddingRight="@dimen/margin_8"
             android:paddingBottom="@dimen/margin_4"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/edt_search_text"
