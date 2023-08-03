@@ -79,20 +79,19 @@ public class UserSelectAdapter extends RecyclerView.Adapter<UserSelectAdapter.My
 
     }
 
-    public void selectAllItem(boolean isSelectedAll) {
-        try {
-            if (selecetdUserModelArrayList != null) {
-                for (int index = 0; index < selecetdUserModelArrayList.size(); index++) {
-                    selecetdUserModelArrayList.get(index).setSelected(isSelectedAll);
-                }
-                notifyDataSetChanged();
-            }
-            notifyDataSetChanged();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+//    public void selectAllItem(boolean isSelectedAll) {
+//        try {
+//            if (selecetdUserModelArrayList != null) {
+//                for (int index = 0; index < selecetdUserModelArrayList.size(); index++) {
+//                    selecetdUserModelArrayList.get(index).setSelected(isSelectedAll);
+//                }
+//                notifyDataSetChanged();
+//            }
+//            notifyDataSetChanged();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public int getItemCount() {

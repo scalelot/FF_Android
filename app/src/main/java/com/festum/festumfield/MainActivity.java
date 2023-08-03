@@ -499,11 +499,11 @@ public class MainActivity extends BaseActivity {
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
-                    // SYSTEM_ALERT_WINDOW permission not granted
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    finish();
                 }
             }
         }
-        mReactInstanceManager.onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override

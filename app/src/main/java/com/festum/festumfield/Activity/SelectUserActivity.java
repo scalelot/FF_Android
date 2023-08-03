@@ -75,29 +75,20 @@ public class SelectUserActivity extends BaseActivity {
         userSelectAdapter.setOnItemClickListener(new UserSelectAdapter.ClickListener() {
             @Override
             public void onItemClick(SelecetdUserModel model, boolean isAddTo, int position) {
+                SelecetdUserModel selectUserModel;
                 if (isAddTo) {
-                    selectedarraylist.add(model);
-
+                    selectUserModel = selecetdUserModelArrayList.get(position);
+                    selectUserModel.setSelected(true);
+                    selectedarraylist.add(selectUserModel);
                 } else {
-                    selectedarraylist.remove(model);
+                    selectUserModel = selecetdUserModelArrayList.get(position);
+                    selectUserModel.setSelected(false);
+                    selectedarraylist.remove(selectUserModel);
+
                 }
-
                 txt_people_count.setText(String.valueOf(selectedarraylist.size()));
+                editor.putInt("Count",selectedarraylist.size());
                 userSelectAdapter.notifyDataSetChanged();
-
-
-//                Log.e(TAG, "onItemClick: ", );
-
-//                if (isAddTo) {
-//                    selectedarraylist.add(model);
-//                } else {
-//                    selectedarraylist.remove(model);
-//                    img_select_all.setChecked(false);
-//                }
-//
-//                str_count = String.valueOf(selectedarraylist.size() + " People Selected");
-//                editor.putInt("Count", selectedarraylist.size());
-//                userSelectAdapter.notifyDataSetChanged();
             }
         });
 
@@ -105,24 +96,7 @@ public class SelectUserActivity extends BaseActivity {
         img_select_all.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    for (int i = 0; i < selecetdUserModelArrayList.size(); i++) {
-                        if (!isChecked) {
-                            txt_people_count.setText("");
-                            userSelectAdapter.selectAllItem(false);
-                            userSelectAdapter.notifyDataSetChanged();
-                        } else {
-                            selectedarraylist.clear();
-                            userSelectAdapter.selectAllItem(true);
-                            txt_people_count.setText(String.valueOf(user_name.length));
-                            str_count = String.valueOf(user_name.length + " People Selected");
-                            editor.putInt("Count", user_name.length);
-                            userSelectAdapter.notifyDataSetChanged();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                selectAll(img_select_all.isChecked());
             }
         });
 
@@ -142,6 +116,22 @@ public class SelectUserActivity extends BaseActivity {
                 showFilterDialog();
             }
         });
+    }
+
+    private void selectAll(boolean isSelected) {
+        selectedarraylist.clear();
+        for (int i = 0; i < userSelectAdapter.getItemCount(); i++) {
+            SelecetdUserModel item = selecetdUserModelArrayList.get(i);
+            item.setSelected(isSelected);
+            if (isSelected) {
+                selectedarraylist.add(item);
+            } else {
+                selectedarraylist.remove(item);
+            }
+        }
+        txt_people_count.setText(String.valueOf(selectedarraylist.size()));
+        editor.putInt("Count",selectedarraylist.size());
+        userSelectAdapter.notifyDataSetChanged();
     }
 
     public void showFilterDialog() {
