@@ -9,6 +9,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -137,9 +138,12 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                MyApplication.setuserActive(getApplicationContext(), false);
+                SharedPreferences sharedPreferences = getSharedPreferences("AuthTokens", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }

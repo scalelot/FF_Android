@@ -158,16 +158,6 @@ public class MyApplication extends Application implements LifecycleObserver {
         return cookie;
     }
 
-    public static void setuserActive(Context context, Boolean useractive) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        if (null == sharedPreferences) {
-            return;
-        }
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isUserActive", useractive);
-        editor.apply();
-    }
-
     public static String getcontactNo(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String cookie = sharedPreferences.getString("contactNo", "");
@@ -191,7 +181,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     }
 
     public static void setAuthToken(Context context, String authToken) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AuthTokens", MODE_PRIVATE);
         if (null == sharedPreferences) {
             return;
         }
@@ -201,7 +191,7 @@ public class MyApplication extends Application implements LifecycleObserver {
     }
 
     public static String getAuthToken(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AuthTokens", MODE_PRIVATE);
         String cookie = sharedPreferences.getString("AuthToken", "");
         return cookie;
     }

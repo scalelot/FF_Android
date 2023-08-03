@@ -4,7 +4,6 @@ plugins {
     id 'com.google.gms.google-services'
     id 'kotlin-android'
     id 'kotlin-parcelize'
-    id 'com.facebook.react'
 }
 
 
@@ -61,6 +60,7 @@ dependencies {
 
     //CountryCodePicker
     implementation 'com.github.inpossoft:CountryCodePickerProject:2.0.0'
+    implementation 'io.michaelrocks:libphonenumber-android:8.10.16'
 
     //Gson
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -139,11 +139,4 @@ dependencies {
 
     //Webrtc
     implementation 'org.webrtc:google-webrtc:1.0.32006'
-
-    //React-native
-    implementation 'com.facebook.react:react-android'
-    implementation 'com.facebook.react:hermes-android'
 }
-
-//React-native
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

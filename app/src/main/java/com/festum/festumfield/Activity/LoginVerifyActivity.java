@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -38,6 +40,7 @@ import in.aabhasjindal.otptextview.OtpTextView;
 
 public class LoginVerifyActivity extends BaseActivity {
     ImageView iv_back;
+    LinearLayout ll_linear;
     TextView txt_phone_number;
     TextView tv_timer;
     TextView txt_resend_code;
@@ -58,6 +61,7 @@ public class LoginVerifyActivity extends BaseActivity {
 
         iv_back = findViewById(R.id.iv_back);
         txt_phone_number = findViewById(R.id.txt_phone_number);
+        ll_linear = findViewById(R.id.ll_linear);
 
         tv_timer = findViewById(R.id.tv_timer);
         txt_resend_code = findViewById(R.id.txt_resend_code);
@@ -103,17 +107,20 @@ public class LoginVerifyActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 FileUtils.hideKeyboard(LoginVerifyActivity.this);
-
-                try {
-                    if (!OtpValue.equals("")) {
-                        FileUtils.DisplayLoading(LoginVerifyActivity.this);
-                        VerifyOtp(OtpValue);
-                    } else {
-                        Toast.makeText(LoginVerifyActivity.this, "Please Enter Otp", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (OtpValue != null && OtpValue.length() > 3){
+                    FileUtils.DisplayLoading(LoginVerifyActivity.this);
+                    VerifyOtp(OtpValue);
+                }else{
+                    Snackbar snackbar = Snackbar.make(ll_linear, "Please Enter Otp", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
+//                if (!OtpValue.equals("")) {
+//                    FileUtils.DisplayLoading(LoginVerifyActivity.this);
+//                    VerifyOtp(OtpValue);
+//                } else {
+//                    Snackbar snackbar = Snackbar.make(ll_linear, "Please Enter Otp", Snackbar.LENGTH_SHORT);
+//                    snackbar.show();
+//                }
             }
         });
 
@@ -172,7 +179,8 @@ public class LoginVerifyActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(LoginVerifyActivity.this);
-                    System.out.println("LoginVerifyOtpError=> " + error.toString());
+                    Snackbar snackbar = Snackbar.make(ll_linear, "Please Enter Valid Otp", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }) {
 

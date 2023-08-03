@@ -2,7 +2,9 @@ package com.festum.festumfield.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,6 +34,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.michaelrocks.libphonenumber.android.NumberParseException;
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+import io.michaelrocks.libphonenumber.android.Phonenumber;
 
 public class LoginActivity extends BaseActivity {
 
@@ -75,22 +81,58 @@ public class LoginActivity extends BaseActivity {
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FileUtils.hideKeyboard(LoginActivity.this);
-                String newToken = MyApplication.getNotificationToken(LoginActivity.this);
+                try {
+                    FileUtils.hideKeyboard(LoginActivity.this);
+                    String newToken = MyApplication.getNotificationToken(LoginActivity.this);
+                    String phoneNumber = edtPhone.getText().toString().trim();
 
-                if (!edtPhone.getText().toString().equals("")) {
-                    if (FileUtils.isValidPhoneNumber(edtPhone.getText().toString())) {
-                        SendOtp(countycode, edtPhone.getText().toString(), newToken);
-                        FileUtils.DisplayLoading(LoginActivity.this);
+                    if (phoneNumber.isEmpty()) {
+                        edtPhone.setError("Enter Mobile Number");
                     } else {
-                        edtPhone.setError(getResources().getString(R.string.please_enter_mno));
+                        if (isValidPhoneNumber(phoneNumber)) {
+                            boolean status = validateUsing_libphonenumber(countycode, phoneNumber);
+                            if (status) {
+                                SendOtp(countycode, edtPhone.getText().toString(), newToken);
+                                FileUtils.DisplayLoading(LoginActivity.this);
+                            } else {
+                                edtPhone.setError("Invalid Phone Number");
+                            }
+                        } else {
+                            edtPhone.setError("Invalid Phone Number");
+                        }
                     }
-                } else {
-                    edtPhone.setError(getResources().getString(R.string.please_enter_mno_error));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
 
+    }
+
+    private boolean isValidPhoneNumber(CharSequence phoneNumber) {
+        if (!TextUtils.isEmpty(phoneNumber)) {
+            return Patterns.PHONE.matcher(phoneNumber).matches();
+        }
+        return false;
+    }
+
+    private boolean validateUsing_libphonenumber(String countryCode, String phNumber) {
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.createInstance(this);
+        String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
+        Phonenumber.PhoneNumber phoneNumber = null;
+        try {
+            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
+        } catch (NumberParseException e) {
+            System.err.println(e);
+        }
+
+        boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
+        if (isValid) {
+            return true;
+        } else {
+            edtPhone.setError("Invalid Phone Number");
+            return false;
+        }
     }
 
     public void SendOtp(String countyCode, String phone_number, String newToken) {
