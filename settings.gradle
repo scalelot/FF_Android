@@ -7,15 +7,17 @@ pluginManagement {
 
     }
 }
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.google.com' }
-    }
-}
+//dependencyResolutionManagement {
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositories {
+//        google()
+//        mavenCentral()
+//        jcenter()
+//        maven { url "https://jitpack.io" }
+//        maven { url 'https://maven.google.com' }
+//    }
+//}
 rootProject.name = "FestumField"
 include ':app'
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+includeBuild '../node_modules/@react-native/gradle-plugin'

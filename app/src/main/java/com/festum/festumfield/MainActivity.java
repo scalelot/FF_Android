@@ -12,9 +12,11 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,6 +39,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.facebook.react.ReactInstanceManager;
 import com.festum.festumfield.Activity.ChatingActivity;
 import com.festum.festumfield.Activity.CreateNewGroupActivity;
 import com.festum.festumfield.Activity.DisplayAllProductActivity;
@@ -83,6 +86,8 @@ public class MainActivity extends BaseActivity {
     TextView user_name;
     CircleImageView user_img;
     Intent intent;
+    private final int OVERLAY_PERMISSION_REQ_CODE = 1;
+    ReactInstanceManager mReactInstanceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,14 @@ public class MainActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, permissions(), 1);
         } else {
             getContactList();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+            }
         }
 
         txt_chats = findViewById(R.id.txt_chats);
@@ -478,6 +491,19 @@ public class MainActivity extends BaseActivity {
             }
         });
         dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    finish();
+                }
+            }
+        }
     }
 
     @Override

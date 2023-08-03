@@ -47,6 +47,7 @@ import com.festum.festumfield.Model.BusinessInfo.BusinessInfoRegisterModel;
 import com.festum.festumfield.Model.ListChat.ListChatsModel;
 import com.festum.festumfield.Model.Product.ProductModel;
 import com.festum.festumfield.MyApplication;
+import com.festum.festumfield.MyReactActivity;
 import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
@@ -698,7 +699,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             startActivity(new Intent(ChatingActivity.this, MainActivity.class));
             finish();
         } else if (id == R.id.img_video_call) {
-            Intent intent = new Intent(ChatingActivity.this,VideoCallReciveActivity.class);
+            Intent intent = new Intent(ChatingActivity.this, MyReactActivity.class);
             intent.putExtra("toUserId", toUserIds);
             intent.putExtra("userName", userName);
             intent.putExtra("loginUser", loginUserId);
