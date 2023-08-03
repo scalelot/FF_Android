@@ -36,7 +36,6 @@ public class SelectUserActivity extends BaseActivity {
     FloatingActionButton fb_map;
     ArrayList<SelecetdUserModel> selecetdUserModelArrayList = new ArrayList<>();
     ArrayList<SelecetdUserModel> selectedarraylist = new ArrayList<>();
-    ArrayList<SelecetdUserModel> arraylist = new ArrayList<>();
     RelativeLayout iv_filter;
     String str_count;
     SharedPreferences.Editor editor;

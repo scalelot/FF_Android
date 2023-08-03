@@ -2,11 +2,11 @@ package com.festum.festumfield.Utils;
 
 public class Constans {
 
-    public static String CHAT_SERVER_URL = "https://api.festumfield.com";
+    public static String CHAT_SERVER_URL = "https://0aeb-2405-201-200d-90dc-9cd2-1307-a2e4-7278.ngrok-free.app";
 
     public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
-    public static String BASE_URL = "https://api.festumfield.com/apis/v1/";
+    public static String BASE_URL = "https://0aeb-2405-201-200d-90dc-9cd2-1307-a2e4-7278.ngrok-free.app/apis/v1/";
 
     //Login
     public static String send_otp = BASE_URL + "register/sendotp";

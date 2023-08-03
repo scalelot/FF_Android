@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.festum.festumfield.BaseActivity;
+import com.festum.festumfield.CustomSdpObserver;
+import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 
 import org.json.JSONException;
@@ -32,6 +34,7 @@ import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RtpReceiver;
+import org.webrtc.SessionDescription;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoCapturer;
@@ -41,10 +44,11 @@ import org.webrtc.VideoTrack;
 import java.util.ArrayList;
 
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class VideoCallReciveActivity extends BaseActivity {
 
-    public static final String TAG = "VideoCallReciveActivity";
+    public static final String TAG = "VideoCallReciveActivityoikjrsdogjori";
     public static final String VIDEO_TRACK_ID = "101";
     SurfaceViewRenderer surface_view, surface_view2;
     LinearLayout ll_switch_camera;
@@ -71,7 +75,7 @@ public class VideoCallReciveActivity extends BaseActivity {
         setContentView(R.layout.activity_video_call_recive);
 
         ActivityCompat.requestPermissions(this, permissions(), 1);
-
+        mSocket =  MyApplication.mSocket;
         toUserId = getIntent().getStringExtra("toUserId");
         toUserName = getIntent().getStringExtra("userName");
         loginUser = getIntent().getStringExtra("loginUser");
@@ -122,6 +126,25 @@ public class VideoCallReciveActivity extends BaseActivity {
 
         startStreamingVideo();
 
+        doCall();
+
+        mSocket.on("callAccepted", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject jsonObject = (JSONObject) args[0];
+                Log.d("callAccepted---------",jsonObject.toString());
+                try {
+                    JSONObject sdp = new JSONObject(String.valueOf(jsonObject));
+                    JSONObject signalObj = sdp.getJSONObject("signal");
+                    String sdpStr = signalObj.getString("sdp");
+                    peerConnection.setRemoteDescription(new CustomSdpObserver(), new SessionDescription(SessionDescription.Type.ANSWER, sdpStr));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
     }
 
     private void initializeSurfaceViews() {
@@ -165,7 +188,7 @@ public class VideoCallReciveActivity extends BaseActivity {
 
         //create an AudioSource instance
         audioSource = factory.createAudioSource(audioConstraints);
-        localAudioTrack = factory.createAudioTrack("101", audioSource);
+        localAudioTrack = factory.createAudioTrack("audio101", audioSource);
 
     }
 
@@ -222,7 +245,7 @@ public class VideoCallReciveActivity extends BaseActivity {
                     callData.put("name", toUserName);
                     callData.put("isVideoCall", true);
 
-                    mSocket.emit("callUser", callData);
+//                    mSocket.emit("callUser", callData);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -238,10 +261,12 @@ public class VideoCallReciveActivity extends BaseActivity {
             public void onAddStream(MediaStream mediaStream) {
                 Log.d(TAG, "onAddStream: " + mediaStream.videoTracks.size());
                 VideoTrack remoteVideoTrack = mediaStream.videoTracks.get(0);
+                Log.d("remoteVideoTrack: ",remoteVideoTrack.toString());
                 AudioTrack remoteAudioTrack = mediaStream.audioTracks.get(0);
                 remoteAudioTrack.setEnabled(true);
                 remoteVideoTrack.setEnabled(true);
                 remoteVideoTrack.addSink(surface_view2);
+
 
             }
 
@@ -258,6 +283,32 @@ public class VideoCallReciveActivity extends BaseActivity {
             @Override
             public void onRenegotiationNeeded() {
                 Log.d(TAG, "onRenegotiationNeeded: ");
+//                peerConnection.createOffer(new CustomSdpObserver() {
+//                    @Override
+//                    public void onCreateSuccess(SessionDescription sessionDescription) {
+//                        peerConnection.setLocalDescription(new CustomSdpObserver(), sessionDescription);
+//                        JSONObject callData = new JSONObject();
+//                        JSONObject signalDataJson = new JSONObject();
+//                        Log.d("oiojhasfsdiuf", String.valueOf(callData));
+//                        try {
+//                            signalDataJson.put("type",sessionDescription.type.canonicalForm());
+//                            signalDataJson.put("sdp", sessionDescription.description);
+//
+//                            callData.put("userToCall", toUserId);
+//                            callData.put("signalData", signalDataJson);
+//                            callData.put("from", loginUser);
+//                            callData.put("name", toUserName);
+//                            callData.put("isVideoCall", true);
+//
+//
+//
+//                        } catch (JSONException e) {
+//                            Log.d("oiojhasfsdiuf", String.valueOf(e));
+//                            e.printStackTrace();
+//                        }
+//                        mSocket.emit("callUser", callData);
+//                    }
+//                }, new MediaConstraints());
             }
 
             @Override
@@ -267,6 +318,45 @@ public class VideoCallReciveActivity extends BaseActivity {
         };
 
         return factory.createPeerConnection(rtcConfig, pcConstraints, pcObserver);
+    }
+
+    private void doCall() {
+        MediaConstraints sdpMediaConstraints = new MediaConstraints();
+
+        peerConnection.createOffer(new CustomSdpObserver() {
+            @Override
+            public void onCreateSuccess(SessionDescription sessionDescription) {
+                Log.d(TAG, "onCreateSuccess: ");
+                peerConnection.setLocalDescription(new CustomSdpObserver(), sessionDescription);
+                JSONObject message = new JSONObject();
+                JSONObject callData = new JSONObject();
+                JSONObject signalDataJson = new JSONObject();
+
+                try {
+                    signalDataJson.put("type",sessionDescription.type.canonicalForm());
+                    signalDataJson.put("sdp", sessionDescription.description);
+
+                    callData.put("userToCall", toUserId);
+                    callData.put("signalData", signalDataJson);
+                    callData.put("from", loginUser);
+                    callData.put("name", toUserName);
+                    callData.put("isVideoCall", true);
+
+                    Log.d("oiojhasfsdiuf", String.valueOf(callData));
+                    mSocket.emit("callUser", callData);
+                } catch (JSONException e) {
+                    Log.d("oiojhasfsdiufe", String.valueOf(e));
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCreateFailure(String s) {
+                // Called when SDP creation is failed.
+                Log.d("ppoiejhosijkfen", String.valueOf(s));
+            }
+
+        }, sdpMediaConstraints);
     }
 
     private VideoCapturer createVideoCapturer() {

@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,13 +101,6 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         mSocket = MyApplication.mSocket;
 
-        mSocket.on("callUser", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject js = (JSONObject) args[0];
-                Log.e("CallAnswer:==", js.toString());
-            }
-        });
 
         getMessageRecive();
 
