@@ -109,13 +109,15 @@ public class PersnoalInfoFragment extends Fragment {
 
                     try {
                         Log.e("FetchPersonal =>", response.toString());
-                        JSONObject jsonObject = new JSONObject(String.valueOf(response));
                         GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
-                        Double longitude = peronalInfoModel.getData().getLocationModel().getCoordinates().get(0);
-                        Double latitude = peronalInfoModel.getData().getLocationModel().getCoordinates().get(1);
+                        if (peronalInfoModel.getData().getLocationModel().getCoordinates() != null) {
+                            Double longitude = peronalInfoModel.getData().getLocationModel().getCoordinates().get(0);
+                            Double latitude = peronalInfoModel.getData().getLocationModel().getCoordinates().get(1);
 
-                        LatLng latLng = new LatLng(latitude, longitude);
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            txt_location.setText(FileUtils.getAddressFromLatLng(getContext(), latLng));
+                        }
 
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LoginUserIds", 0);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -142,9 +144,9 @@ public class PersnoalInfoFragment extends Fragment {
                         txt_range.setText(peronalInfoModel.getData().getAreaRange().toString());
                         text_interes_in.setText(peronalInfoModel.getData().getInterestedin());
                         txt_age.setText(peronalInfoModel.getData().getTargetAudienceAgeMin() + "-" + peronalInfoModel.getData().getTargetAudienceAgeMax());
-                        txt_location.setText(FileUtils.getAddressFromLatLng(getContext(), latLng));
 
-                    } catch (JSONException e) {
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

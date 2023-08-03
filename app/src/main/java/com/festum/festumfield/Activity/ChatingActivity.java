@@ -697,7 +697,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             startActivity(new Intent(ChatingActivity.this, MainActivity.class));
             finish();
         } else if (id == R.id.img_video_call) {
-            Intent intent = new Intent(ChatingActivity.this, MyReactActivity.class);
+            Intent intent = new Intent(ChatingActivity.this, VideoCallReciveActivity.class);
             intent.putExtra("toUserId", toUserIds);
             intent.putExtra("userName", userName);
             intent.putExtra("loginUser", loginUserId);

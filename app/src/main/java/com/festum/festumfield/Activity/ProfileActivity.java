@@ -74,6 +74,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -105,7 +106,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     SeekBar seekbar_range;
     CircleImageView profile_image;
     private static final int PICK_IMAGE = 100;
-    RelativeLayout edit_profile;
+    RelativeLayout edit_profile, relative;
     TextView t_km, title, txt_min_age, txt_max_age, gender;
     int p = 0, text_km = 0, txt_min = 0, txt_max = 0;
     SimpleRangeView rangeBar;
@@ -121,7 +122,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     public String bestProvider;
     String longitude = null;
     String lattitude = null;
-    RelativeLayout rl_map;
     RelativeLayout relative_map;
     EditText edt_dob;
     ImageView img_calender;
@@ -151,6 +151,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         edt_pintrest = findViewById(R.id.edt_pintrest);
         edt_youtube = findViewById(R.id.edt_youtube);
         edt_aboutUs = findViewById(R.id.edt_aboutUs);
+        relative = findViewById(R.id.relative);
         btn_save = findViewById(R.id.btn_save);
         ic_back = findViewById(R.id.ic_back);
         btn_business = findViewById(R.id.btn_business);
@@ -168,7 +169,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         gender = findViewById(R.id.gender);
         iv_location = findViewById(R.id.iv_location);
         mapview = findViewById(R.id.mapview);
-        rl_map = findViewById(R.id.rl_map);
         relative_map = findViewById(R.id.relative_map);
         gen_spinner = findViewById(R.id.gen_spinner);
         edt_dob = findViewById(R.id.edt_dob);
@@ -336,19 +336,26 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (edt_name.getText().toString().isEmpty()) {
+                if (edt_name.getText().toString().trim().isEmpty()) {
                     edt_name.setError(getResources().getString(R.string.enter_full_name));
-                } else if (edt_nickname.getText().toString().isEmpty()) {
+                } else if (edt_nickname.getText().toString().trim().isEmpty()) {
                     edt_nickname.setError(getResources().getString(R.string.enter_nickname));
-                } else if (edt_emailId.getText().toString().isEmpty()) {
+                } else if (edt_emailId.getText().toString().trim().isEmpty()) {
                     edt_emailId.setError(getResources().getString(R.string.enter_emailid));
+                } else if (edt_aboutUs.getText().toString().trim().isEmpty()) {
+                    edt_aboutUs.setError("Enter AboutUs");
+                } else if (edt_dob.getText().toString().isEmpty()) {
+                    edt_dob.setError("Enter Date Of Birth");
+                } else if (Const.longitude == null) {
+                    Snackbar.make(relative, "Select Location", Snackbar.LENGTH_SHORT).show();
+                } else if (hobbiesArrayList.isEmpty()) {
+                    Snackbar.make(relative, "Enter Your Hobbie", Snackbar.LENGTH_SHORT).show();
                 } else {
                     FileUtils.DisplayLoading(ProfileActivity.this);
                     if (profile_title != null) {
                         patchApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), hobbiesJsonArray, Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
                     } else {
                         postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
-
                     }
                 }
             }
@@ -516,7 +523,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     FileUtils.DismissLoading(ProfileActivity.this);
                     System.out.println("UpdateProfileError=>" + error.toString());
                     error.printStackTrace();
-                    Toast.makeText(ProfileActivity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(relative, "Data Not Submit", Toast.LENGTH_SHORT).show();
                 }
             }) {
                 @Override
@@ -566,6 +573,8 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else {
+            Log.e("TAG", "patchApivolley: ");
         }
 
         if (!fb_link.equals("")) {
@@ -645,7 +654,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(ProfileActivity.this);
                     System.out.println("ProfileRegisterError=>" + error.toString());
-                    Toast.makeText(ProfileActivity.this, "Data Not Submit" + error, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(relative, "Data Not Submit", Toast.LENGTH_SHORT).show();
                 }
             }) {
                 @Override
