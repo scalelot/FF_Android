@@ -66,6 +66,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -86,7 +87,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     ImageView ic_back, img_add_brochure, iv_location;
     CircleImageView business_profile_image;
     RelativeLayout edt_img, rl_map, relative_busi_map, rl_upload, rl_add_brochur;
-    LinearLayout lin_add_images;
+    LinearLayout lin_add_images, ll_business;
     EditText edt_subcategory, edt_interested_subcategory, edt_interested_category;
     EditText edt_category, edt_description, edt_bussiness_name, edt_business_address;
     AppCompatButton btn_next, btn_save, btn_change;
@@ -143,6 +144,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
         rl_add_brochur = findViewById(R.id.rl_add_brochur);
         btn_change = findViewById(R.id.btn_change);
         edt_brochure = findViewById(R.id.edt_brochure);
+        ll_business = findViewById(R.id.ll_business);
 
         getBusinessProfileInfo();
 
@@ -197,9 +199,9 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 } else if (edt_description.getText().toString().equals("")) {
                     edt_description.setError(getResources().getString(R.string.please_enter_b_des));
                 } else if (Const.b_longitude == null) {
-                    Toast.makeText(context, getResources().getString(R.string.please_enter_b_location), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(ll_business, "Select Location", Snackbar.LENGTH_SHORT).show();
                 } else if (Const.b_lattitude == null) {
-                    Toast.makeText(context, getResources().getString(R.string.please_enter_b_location), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(ll_business, "Select Location", Snackbar.LENGTH_SHORT).show();
                 } else if (edt_interested_category.getText().toString().equals("")) {
                     edt_interested_category.setError(getResources().getString(R.string.please_enter_interested_category));
                 } else if (edt_interested_subcategory.getText().toString().equals("")) {
@@ -307,8 +309,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     FileUtils.DismissLoading(getApplicationContext());
-                    System.out.println("BusinessRegisterError=>" + error.toString());
-                    error.printStackTrace();
+                    Snackbar.make(ll_business, "Business Profile Create Failed...!", Snackbar.LENGTH_SHORT).show();
                 }
             }) {
                 @Override

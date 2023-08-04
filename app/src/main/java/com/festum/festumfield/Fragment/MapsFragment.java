@@ -177,13 +177,13 @@ public class MapsFragment extends Fragment {
                         }
 
                         if (latLng != null) {
-                            showRipples(latLng);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showRipples(latLng);
-                                }
-                            }, DURATION - 500);
+//                            showRipples(latLng);
+//                            new Handler().postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    showRipples(latLng);
+//                                }
+//                            }, DURATION - 500);
 
                             fetchgetApi();
                         } else {
@@ -282,17 +282,17 @@ public class MapsFragment extends Fragment {
                     if (loc == null) {
                         Log.e("onResponse: ", "latlog null");
                     } else {
-                        showRipples(loc);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                showRipples(loc);
-                            }
-                        }, DURATION - 500);
+//                        showRipples(loc);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                showRipples(loc);
+//                            }
+//                        }, DURATION - 500);
 
 
                         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(8).build();
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(15).build();
 
                         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 

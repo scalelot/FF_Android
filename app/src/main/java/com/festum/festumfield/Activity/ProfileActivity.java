@@ -2,6 +2,7 @@ package com.festum.festumfield.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
@@ -10,12 +11,17 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,9 +30,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -86,6 +95,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -135,11 +145,21 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     JSONArray hobbiesJsonArray = new JSONArray();
     String gen_spinner_value = "";
     String selectedImage = "";
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    public static String[] storge_permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static String[] storge_permissions_33 = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    List<String> listPermissionsNeeded = new ArrayList<>();
+    String perStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        checkPermissions();
 
         edt_name = findViewById(R.id.edt_name);
         edt_nickname = findViewById(R.id.edt_nickname);
@@ -174,7 +194,8 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         edt_dob = findViewById(R.id.edt_dob);
         img_calender = findViewById(R.id.img_calender);
 
-        ActivityCompat.requestPermissions(this, permissions(), 1);
+        sharedPreferences = getSharedPreferences("isProfileCreate", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         people = Person.samplePeople();
         adapter = new PersonAdapter(this, R.layout.person_layout, people);
@@ -336,6 +357,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String emailToText = edt_emailId.getText().toString().trim();
                 if (edt_name.getText().toString().trim().isEmpty()) {
                     edt_name.setError(getResources().getString(R.string.enter_full_name));
                 } else if (edt_nickname.getText().toString().trim().isEmpty()) {
@@ -351,12 +373,18 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 } else if (hobbiesArrayList.isEmpty()) {
                     Snackbar.make(relative, "Enter Your Hobbie", Snackbar.LENGTH_SHORT).show();
                 } else {
-                    FileUtils.DisplayLoading(ProfileActivity.this);
-                    if (profile_title != null) {
-                        patchApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), hobbiesJsonArray, Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+                    if (Patterns.EMAIL_ADDRESS.matcher(emailToText).matches()) {
+                        FileUtils.DisplayLoading(ProfileActivity.this);
+//                        if (profile_title != null) {
+//                            patchApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), hobbiesJsonArray, Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+//                        } else {
+//                            postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+//                        }
                     } else {
-                        postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+                        edt_emailId.setError("Enter Invalid Email");
+                        Snackbar.make(relative, "Please Enter Valid Email", Snackbar.LENGTH_SHORT).show();
                     }
+//
                 }
             }
         });
@@ -364,21 +392,14 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         btn_business.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isSaveAndCreateBusiness = true;
-
-                if (edt_name.getText().toString().isEmpty()) {
-                    Toast.makeText(ProfileActivity.this, getResources().getString(R.string.enter_full_name), Toast.LENGTH_SHORT).show();
-                    edt_name.setError(getResources().getString(R.string.enter_full_name));
-                } else if (edt_nickname.getText().toString().isEmpty()) {
-                    edt_nickname.setError(getResources().getString(R.string.enter_nickname));
-                    Toast.makeText(ProfileActivity.this, getResources().getString(R.string.enter_nickname), Toast.LENGTH_SHORT).show();
-                } else if (edt_emailId.getText().toString().isEmpty()) {
-                    edt_emailId.setError(getResources().getString(R.string.enter_emailid));
-                    Toast.makeText(ProfileActivity.this, getResources().getString(R.string.enter_emailid), Toast.LENGTH_SHORT).show();
+                isSaveAndCreateBusiness = sharedPreferences.getBoolean("isProfile", false);
+                if (isSaveAndCreateBusiness) {
+                    startActivity(new Intent(ProfileActivity.this, BusinessProfileActivity.class));
+                    finish();
                 } else {
-                    FileUtils.DisplayLoading(ProfileActivity.this);
-                    postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+                    Snackbar.make(relative, "Create Profile", Snackbar.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -641,13 +662,8 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     ProfileRegisterModel profileRegisterModel = new Gson().fromJson(response.toString(), ProfileRegisterModel.class);
                     Toast.makeText(ProfileActivity.this, profileRegisterModel.getMessage(), Toast.LENGTH_SHORT).show();
 
-                    if (isSaveAndCreateBusiness) {
-                        startActivity(new Intent(ProfileActivity.this, BusinessProfileActivity.class));
-                        finish();
-                    } else {
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
-                    }
+                    editor.putBoolean("isProfile", true);
+                    editor.apply();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -765,6 +781,9 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
                     map.addMarker(new MarkerOptions().position(latLng1));
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1, 12));
+
+                    editor.putBoolean("isProfile", true);
+                    editor.apply();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -790,22 +809,86 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
-    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
-    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO};
-    String[] per;
+    private boolean checkPermissions() {
+        int result = 0;
 
-    public String[] permissions() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                per = storge_permissions_33;
-            } else {
-                per = storge_permissions;
+        listPermissionsNeeded.clear();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (String p : storge_permissions_33) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
             }
-        } catch (Exception e) {
-            Log.e("CameraPermission:==", e.toString());
+        } else {
+            for (String p : storge_permissions) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
         }
-        return per;
+        Log.e("checkPermissions:", String.valueOf(listPermissionsNeeded));
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 1);
+            return false;
+        }
+        return true;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    for (String per : permissions) {
+                        perStr += "\n" + per;
+                    }
+                    permissionDialog();
+                }
+            }
+        }
+    }
+
+    public void permissionDialog() {
+        Dialog dialog = new Dialog(ProfileActivity.this);
+        View view = LayoutInflater.from(ProfileActivity.this).inflate(R.layout.permission_dialog, null);
+        dialog.setContentView(view);
+
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 70);
+        dialog.getWindow().setBackgroundDrawable(insetDrawable);
+
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView dis_txt = dialog.findViewById(R.id.dis_txt);
+        AppCompatButton dialog_allow = dialog.findViewById(R.id.dialog_allow);
+
+        dis_txt.setText("To serve you best user experience we need permissions.");
+        dialog_allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent();
+                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setData(Uri.parse("package:" + getPackageName()));
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                startActivity(i);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 
     private void openGallery() {
         Intent i = new Intent();
@@ -905,18 +988,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         } catch (Exception e) {
             Log.e("FetchLocation_Error=>", e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    fetchLocation();
-                }
-                break;
         }
     }
 

@@ -41,6 +41,7 @@ import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -56,6 +57,7 @@ import java.util.Map;
 public class AddProductActivity extends BaseActivity {
     ImageView ic_back;
     LinearLayout lin_add_images;
+    RelativeLayout rl_ads,rl_addProduct;
     ImageView img_add_image, img_product1, img_product2, img_product3;
     EditText edt_pro_name, edt_pro_price, edt_pro_des, edt_offer;
     EditText edt_pro_code, edt_category, edt_subcategory;
@@ -65,14 +67,12 @@ public class AddProductActivity extends BaseActivity {
     String edit_pro;
     TextView txt_title;
     String proId;
-    RelativeLayout rl_ads;
     public static final int PICK_IMAGE = 1;
     public static final int PICK_IMAGE1 = 2;
     public static final int PICK_IMAGE2 = 3;
     public static final int PICK_IMAGE3 = 4;
     ArrayList<String> imagesArrayList = new ArrayList<>();
     JSONArray imageJsonArray = new JSONArray();
-
     File file;
 
     @Override
@@ -94,7 +94,7 @@ public class AddProductActivity extends BaseActivity {
         img_product1 = findViewById(R.id.img_product1);
         img_product2 = findViewById(R.id.img_product2);
         img_product3 = findViewById(R.id.img_product3);
-
+        rl_addProduct = findViewById(R.id.rl_addProduct);
         edt_category = findViewById(R.id.edt_category);
         edt_subcategory = findViewById(R.id.edt_subcategory);
         btn_save_product = findViewById(R.id.btn_save_product);
@@ -156,7 +156,7 @@ public class AddProductActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (file == null) {
-                    Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
+                    Snackbar.make(rl_addProduct, "Upload Images", Toast.LENGTH_LONG).show();
                 } else if (edt_pro_name.getText().toString().equals("")) {
                     edt_pro_name.setError(getResources().getString(R.string.please_enter_pro_name));
 

@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,9 +27,11 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -54,13 +57,13 @@ import com.festum.festumfield.Fragment.MapsFragment;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -92,7 +95,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         if (PackageManager.PERMISSION_GRANTED == 0) {
-            ActivityCompat.requestPermissions(this, permissions(), 1);
+//            ActivityCompat.requestPermissions(this, permissions(), 1);
         } else {
             getContactList();
         }
@@ -135,7 +138,11 @@ public class MainActivity extends BaseActivity {
         user_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                if (isProfileCrated) {
                 startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+//                } else {
+//                    CustomDialog();
+//                }
             }
         });
 
@@ -184,7 +191,6 @@ public class MainActivity extends BaseActivity {
         lin_find_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 txt_find_friend.setTextColor(getResources().getColor(R.color.app_color));
                 txt_chats.setTextColor(def);
                 txt_calls.setTextColor(def);
@@ -231,7 +237,6 @@ public class MainActivity extends BaseActivity {
                 iv_chats.setColorFilter(getResources().getColor(R.color.grey));
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ContactFragment()).commit();
-
             }
         });
 
@@ -422,24 +427,84 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+//    private boolean checkPermissions() {
+//        int result = 0;
+//
+//        listPermissionsNeeded.clear();
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            for (String p : storge_permissions_33) {
+//                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+//                if (result != PackageManager.PERMISSION_GRANTED) {
+//                    listPermissionsNeeded.add(p);
+//
+//                }
+//            }
+//        } else {
+//            for (String p : storge_permissions) {
+//                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+//                if (result != PackageManager.PERMISSION_GRANTED) {
+//                    listPermissionsNeeded.add(p);
+//
+//                }
+//            }
+//        }
+//        Log.e("checkPermissions:", String.valueOf(listPermissionsNeeded));
+//        if (!listPermissionsNeeded.isEmpty()) {
+//            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 1);
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode) {
+//            case 1: {
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                } else {
+//                    for (String per : permissions) {
+//                        perStr += "\n" + per;
+//                    }
+//                    permissionDialog();
+//                }
+//            }
+//        }
+//    }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {Manifest.permission.POST_NOTIFICATIONS, android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
-    String[] p;
+    public void permissionDialog() {
+        Dialog dialog = new Dialog(MainActivity.this);
+        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.permission_dialog, null);
+        dialog.setContentView(view);
 
-    public String[] permissions() {
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 70);
+        dialog.getWindow().setBackgroundDrawable(insetDrawable);
 
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                p = storge_permissions_33;
-            } else {
-                p = storge_permissions;
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView dis_txt = dialog.findViewById(R.id.dis_txt);
+        AppCompatButton dialog_allow = dialog.findViewById(R.id.dialog_allow);
+
+        dis_txt.setText("To serve you best user experience we need permissions.");
+        dialog_allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent();
+                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setData(Uri.parse("package:" + getPackageName()));
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                startActivity(i);
+                dialog.dismiss();
             }
-        } catch (Exception e) {
-            Log.e("Permission:==", e.toString());
-        }
-        return p;
+        });
+
+        dialog.show();
     }
 
     public void CustomDialog() {
