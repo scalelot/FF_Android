@@ -87,15 +87,25 @@ public class MainActivity extends BaseActivity {
     TextView user_name;
     CircleImageView user_img;
     Intent intent;
-//    private final int OVERLAY_PERMISSION_REQ_CODE = 1;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    boolean isProfileCrated = false;
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static String[] storge_permissions_33 = {Manifest.permission.POST_NOTIFICATIONS, android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    List<String> listPermissionsNeeded = new ArrayList<>();
+    String perStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = getSharedPreferences("isProfileCreate", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         if (PackageManager.PERMISSION_GRANTED == 0) {
-//            ActivityCompat.requestPermissions(this, permissions(), 1);
+            checkPermissions();
         } else {
             getContactList();
         }
@@ -135,14 +145,16 @@ public class MainActivity extends BaseActivity {
 
         Log.e("AuthToken==>", MyApplication.getAuthToken(getApplicationContext()));
 
+
         user_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (isProfileCrated) {
-                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-//                } else {
-//                    CustomDialog();
-//                }
+                isProfileCrated = getSharedPreferences("isProfileCreate", MODE_PRIVATE).getBoolean("isProfile", false);
+                if (isProfileCrated) {
+                    startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                } else {
+                    CustomDialog();
+                }
             }
         });
 
@@ -158,7 +170,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, LikeAndCommentActivity.class));
-
             }
         });
         iv_promotion.setOnClickListener(new View.OnClickListener() {
@@ -174,15 +185,15 @@ public class MainActivity extends BaseActivity {
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txt_chats.setTextColor(getResources().getColor(R.color.app_color));
+                txt_chats.setTextColor(getColor(R.color.app_color));
                 txt_find_friend.setTextColor(def);
                 txt_calls.setTextColor(def);
                 txt_contact_list.setTextColor(def);
 
-                iv_chats.setColorFilter(getResources().getColor(R.color.app_color));
-                iv_find_friend.setColorFilter(getResources().getColor(R.color.grey));
-                iv_calls.setColorFilter(getResources().getColor(R.color.grey));
-                iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
+                iv_chats.setColorFilter(getColor(R.color.app_color));
+                iv_find_friend.setColorFilter(getColor(R.color.grey));
+                iv_calls.setColorFilter(getColor(R.color.grey));
+                iv_contact_list.setColorFilter(getColor(R.color.grey));
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
             }
@@ -191,32 +202,38 @@ public class MainActivity extends BaseActivity {
         lin_find_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txt_find_friend.setTextColor(getResources().getColor(R.color.app_color));
-                txt_chats.setTextColor(def);
-                txt_calls.setTextColor(def);
-                txt_contact_list.setTextColor(def);
+                int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+                int permission = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
+                if (permissionCheck == 0 && permission == 0) {
+                    txt_find_friend.setTextColor(getColor(R.color.app_color));
+                    txt_chats.setTextColor(def);
+                    txt_calls.setTextColor(def);
+                    txt_contact_list.setTextColor(def);
 
-                iv_find_friend.setColorFilter(getResources().getColor(R.color.app_color));
-                iv_chats.setColorFilter(getResources().getColor(R.color.grey));
-                iv_calls.setColorFilter(getResources().getColor(R.color.grey));
-                iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
+                    iv_find_friend.setColorFilter(getColor(R.color.app_color));
+                    iv_chats.setColorFilter(getColor(R.color.grey));
+                    iv_calls.setColorFilter(getColor(R.color.grey));
+                    iv_contact_list.setColorFilter(getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new MapsFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new MapsFragment()).commit();
+                } else {
+                    permissionDialog();
+                }
             }
         });
 
         lin_calls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txt_calls.setTextColor(getResources().getColor(R.color.app_color));
+                txt_calls.setTextColor(getColor(R.color.app_color));
                 txt_chats.setTextColor(def);
                 txt_find_friend.setTextColor(def);
                 txt_contact_list.setTextColor(def);
 
-                iv_calls.setColorFilter(getResources().getColor(R.color.app_color));
-                iv_find_friend.setColorFilter(getResources().getColor(R.color.grey));
-                iv_chats.setColorFilter(getResources().getColor(R.color.grey));
-                iv_contact_list.setColorFilter(getResources().getColor(R.color.grey));
+                iv_calls.setColorFilter(getColor(R.color.app_color));
+                iv_find_friend.setColorFilter(getColor(R.color.grey));
+                iv_chats.setColorFilter(getColor(R.color.grey));
+                iv_contact_list.setColorFilter(getColor(R.color.grey));
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CallsFragment()).commit();
 
@@ -226,15 +243,15 @@ public class MainActivity extends BaseActivity {
         lin_contact_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txt_contact_list.setTextColor(getResources().getColor(R.color.app_color));
+                txt_contact_list.setTextColor(getColor(R.color.app_color));
                 txt_chats.setTextColor(def);
                 txt_find_friend.setTextColor(def);
                 txt_calls.setTextColor(def);
 
-                iv_contact_list.setColorFilter(getResources().getColor(R.color.app_color));
-                iv_find_friend.setColorFilter(getResources().getColor(R.color.grey));
-                iv_calls.setColorFilter(getResources().getColor(R.color.grey));
-                iv_chats.setColorFilter(getResources().getColor(R.color.grey));
+                iv_contact_list.setColorFilter(getColor(R.color.app_color));
+                iv_find_friend.setColorFilter(getColor(R.color.grey));
+                iv_calls.setColorFilter(getColor(R.color.grey));
+                iv_chats.setColorFilter(getColor(R.color.grey));
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ContactFragment()).commit();
             }
@@ -354,7 +371,11 @@ public class MainActivity extends BaseActivity {
 
                             String fullName = peronalInfoModel.getData().getFullName();
                             if (fullName.isEmpty()) {
-                                CustomDialog();
+                                editor.putBoolean("isProfile", false);
+                                editor.apply();
+                            } else {
+                                editor.putBoolean("isProfile", true);
+                                editor.apply();
                             }
 
                             if (peronalInfoModel.getData().getLocationModel().getCoordinates() != null) {
@@ -427,51 +448,52 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-//    private boolean checkPermissions() {
-//        int result = 0;
-//
-//        listPermissionsNeeded.clear();
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            for (String p : storge_permissions_33) {
-//                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
-//                if (result != PackageManager.PERMISSION_GRANTED) {
-//                    listPermissionsNeeded.add(p);
-//
-//                }
-//            }
-//        } else {
-//            for (String p : storge_permissions) {
-//                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
-//                if (result != PackageManager.PERMISSION_GRANTED) {
-//                    listPermissionsNeeded.add(p);
-//
-//                }
-//            }
-//        }
-//        Log.e("checkPermissions:", String.valueOf(listPermissionsNeeded));
-//        if (!listPermissionsNeeded.isEmpty()) {
-//            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 1);
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode) {
-//            case 1: {
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                } else {
-//                    for (String per : permissions) {
-//                        perStr += "\n" + per;
-//                    }
-//                    permissionDialog();
-//                }
-//            }
-//        }
-//    }
+    private boolean checkPermissions() {
+        int result = 0;
+
+        listPermissionsNeeded.clear();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (String p : storge_permissions_33) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
+        } else {
+            for (String p : storge_permissions) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
+        }
+        Log.e("checkPermissions:", String.valueOf(listPermissionsNeeded));
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 1);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    for (String per : permissions) {
+                        perStr += "\n" + per;
+                    }
+                    permissionDialog();
+                }
+            }
+        }
+    }
 
     public void permissionDialog() {
         Dialog dialog = new Dialog(MainActivity.this);
@@ -484,6 +506,7 @@ public class MainActivity extends BaseActivity {
         dialog.getWindow().setBackgroundDrawable(insetDrawable);
 
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
 
         TextView dis_txt = dialog.findViewById(R.id.dis_txt);
         AppCompatButton dialog_allow = dialog.findViewById(R.id.dialog_allow);
@@ -507,6 +530,7 @@ public class MainActivity extends BaseActivity {
         dialog.show();
     }
 
+
     public void CustomDialog() {
 
         Dialog dialog = new Dialog(MainActivity.this);
@@ -525,27 +549,30 @@ public class MainActivity extends BaseActivity {
         dialog_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dialog.isShowing()) dialog.dismiss();
+                dialog.dismiss();
             }
         });
 
         dialog_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dialog.isShowing()) dialog.dismiss();
+                dialog.dismiss();
             }
         });
 
         dialog_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (dialog.isShowing()) dialog.dismiss();
-
-                if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                    finish();
+                if (checkPermissions()) {
+                    if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
+                        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(MainActivity.this, "User profile already registered", Toast.LENGTH_SHORT).show();
+                    }
+                    dialog.dismiss();
                 } else {
-                    Toast.makeText(MainActivity.this, "User profile already registered", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 }
             }
         });

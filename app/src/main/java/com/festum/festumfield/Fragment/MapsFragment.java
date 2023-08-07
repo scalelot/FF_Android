@@ -114,6 +114,7 @@ public class MapsFragment extends Fragment {
     Address address;
     String lat, log;
     ValueAnimator valueAnimator;
+    boolean isStatus = false;
 
     @Nullable
     @Override
@@ -157,7 +158,7 @@ public class MapsFragment extends Fragment {
                 String location = searchView.getQuery().toString();
                 try {
                     List<Address> addressList = null;
-                    valueAnimator.cancel();
+//                    valueAnimator.cancel();
 
                     if (location != null || location.equals("") || !location.isEmpty()) {
 
@@ -168,27 +169,13 @@ public class MapsFragment extends Fragment {
                             address = addressList.get(0);
                             latitude = address.getLatitude();
                             longitude = address.getLongitude();
+                            isStatus = false;
 //                            FileUtils.DisplayLoading(MapsFragment.this.getContext());
                             findLocationorName(latitude, longitude);
                             latLng = new LatLng(address.getLatitude(), address.getLongitude());
                             Log.e("LatLog==>>", String.valueOf(latLng));
                         } else {
                             Toast.makeText(MapsFragment.this.getContext(), "Search Valid Place", Toast.LENGTH_SHORT).show();
-                        }
-
-                        if (latLng != null) {
-//                            showRipples(latLng);
-//                            new Handler().postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    showRipples(latLng);
-//                                }
-//                            }, DURATION - 500);
-
-                            fetchgetApi();
-                        } else {
-                            Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
-
                         }
                     } else {
                         Toast.makeText(getContext(), "Enter incorrect", Toast.LENGTH_SHORT).show();
@@ -207,8 +194,10 @@ public class MapsFragment extends Fragment {
 
         lat = getContext().getSharedPreferences("MapFragment", Context.MODE_PRIVATE).getString("lat", "");
         log = getContext().getSharedPreferences("MapFragment", Context.MODE_PRIVATE).getString("log", "");
-
-        findLocationorName(Double.valueOf(lat), Double.valueOf(log));
+        if (lat != "") {
+            isStatus = true;
+            findLocationorName(Double.valueOf(lat), Double.valueOf(log));
+        }
         return view;
     }
 
@@ -225,12 +214,12 @@ public class MapsFragment extends Fragment {
         }
     };
 
-    public void findLocationorName(Double latitude, Double longitude) {
+    public void findLocationorName(Double e_latitude, Double e_longitude) {
         JsonObjectRequest jsonObjectRequest;
         try {
             HashMap<String, String> maplatlog = new HashMap<>();
-            maplatlog.put("latitude", String.valueOf(latitude));
-            maplatlog.put("longitude", String.valueOf(longitude));
+            maplatlog.put("latitude", String.valueOf(e_latitude));
+            maplatlog.put("longitude", String.valueOf(e_longitude));
             maplatlog.put("search", "");
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.set_find_friends_location_or_name, new JSONObject(maplatlog), new Response.Listener<JSONObject>() {
                 @Override
@@ -277,25 +266,31 @@ public class MapsFragment extends Fragment {
                             }
                         });
                     }
+                    if (isStatus) {
+                        LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(log));
+                        if (loc == null) {
+                            Log.e("onResponse: ", "latlog null");
+                        } else {
+                            showRipples(loc);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showRipples(loc);
+                                }
+                            }, DURATION - 500);
 
-                    LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(log));
-                    if (loc == null) {
-                        Log.e("onResponse: ", "latlog null");
+                            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+                            CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(12).build();
+
+                            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                        }
                     } else {
-//                        showRipples(loc);
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                showRipples(loc);
-//                            }
-//                        }, DURATION - 500);
-
-
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(15).build();
+                        LatLng lat = new LatLng(e_latitude, e_longitude);
+                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(lat));
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(lat).zoom(12).build();
 
                         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
                     }
                     mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
@@ -350,9 +345,9 @@ public class MapsFragment extends Fragment {
                     Log.e("GetMapProfileInfo", response.toString());
                     GetPersonalProfileModel profileRegisterModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
-                    areakm = profileRegisterModel.getData().getAreaRange();
-                    longitude = profileRegisterModel.getData().getLocationModel().getCoordinates().get(0);
-                    latitude = profileRegisterModel.getData().getLocationModel().getCoordinates().get(1);
+                    if (profileRegisterModel.getData().getAreaRange() != null) {
+                        areakm = profileRegisterModel.getData().getAreaRange();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override

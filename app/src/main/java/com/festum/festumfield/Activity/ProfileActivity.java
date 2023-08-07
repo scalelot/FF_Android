@@ -124,7 +124,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     String hello = "";
     String profile_title = "";
     ImageView iv_location;
-    LatLng latLng;
     MapView mapview;
     Spinner gen_spinner;
     private GoogleMap map;
@@ -148,9 +147,9 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    public static String[] storge_permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] storge_permissions = {Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] storge_permissions_33 = {Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION};
     List<String> listPermissionsNeeded = new ArrayList<>();
     String perStr = "";
 
@@ -301,7 +300,9 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+                if (checkPermissions()) {
+                    openGallery();
+                }
             }
         });
 
@@ -322,8 +323,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         iv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MapsLocationActivity.class).putExtra("isProfileLocation", true));
+                if (checkPermissions()) {
+                    startActivity(new Intent(getApplicationContext(), MapsLocationActivity.class).putExtra("isProfileLocation", true));
+                } else {
 
+                }
             }
         });
 
@@ -375,11 +379,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 } else {
                     if (Patterns.EMAIL_ADDRESS.matcher(emailToText).matches()) {
                         FileUtils.DisplayLoading(ProfileActivity.this);
-//                        if (profile_title != null) {
-//                            patchApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), hobbiesJsonArray, Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
-//                        } else {
-//                            postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
-//                        }
+                        if (profile_title != null) {
+                            patchApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), hobbiesJsonArray, Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+                        } else {
+                            postApivolley(edt_name.getText().toString().trim(), edt_nickname.getText().toString().trim(), edt_emailId.getText().toString().trim(), edt_dob.getText().toString(), gen_spinner_value, edt_aboutUs.getText().toString().trim(), Const.longitude, Const.lattitude, text_km, yourRd, txt_min, txt_max, edt_fb.getText().toString().trim(), edt_insta.getText().toString().trim(), edt_twitter.getText().toString().trim(), edt_linkdin.getText().toString().trim(), edt_pintrest.getText().toString().trim(), edt_youtube.getText().toString().trim());
+                        }
                     } else {
                         edt_emailId.setError("Enter Invalid Email");
                         Snackbar.make(relative, "Please Enter Valid Email", Snackbar.LENGTH_SHORT).show();
@@ -809,8 +813,9 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
+    int result = 0;
+
     private boolean checkPermissions() {
-        int result = 0;
 
         listPermissionsNeeded.clear();
 
@@ -856,9 +861,11 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     public void permissionDialog() {
-        Dialog dialog = new Dialog(ProfileActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
         View view = LayoutInflater.from(ProfileActivity.this).inflate(R.layout.permission_dialog, null);
-        dialog.setContentView(view);
+        builder.setView(view);
+
+        AlertDialog dialog = builder.create();
 
         dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
@@ -867,8 +874,8 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
 
         dialog.setCanceledOnTouchOutside(false);
 
-        TextView dis_txt = dialog.findViewById(R.id.dis_txt);
-        AppCompatButton dialog_allow = dialog.findViewById(R.id.dialog_allow);
+        TextView dis_txt = view.findViewById(R.id.dis_txt);
+        AppCompatButton dialog_allow = view.findViewById(R.id.dialog_allow);
 
         dis_txt.setText("To serve you best user experience we need permissions.");
         dialog_allow.setOnClickListener(new View.OnClickListener() {
