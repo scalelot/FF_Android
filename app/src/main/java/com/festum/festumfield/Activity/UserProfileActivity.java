@@ -1,11 +1,20 @@
 package com.festum.festumfield.Activity;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,10 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.AuthFailureError;
@@ -49,7 +60,9 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -66,14 +79,21 @@ public class UserProfileActivity extends BaseActivity {
     LinearLayout ll_business_product;
     int pos;
     private static final int PICK_IMAGE = 1;
+    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static String[] storge_permissions_33 = {Manifest.permission.POST_NOTIFICATIONS, android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_CONTACTS, android.Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
+    List<String> listPermissionsNeeded = new ArrayList<>();
+    String perStr = "";
+    int permissionCheck,permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        ActivityCompat.requestPermissions(this, permissions(), 1);
-
+        checkPermissions();
+        permissionCheck = ContextCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+        permission = ContextCompat.checkSelfPermission(UserProfileActivity.this, ACCESS_COARSE_LOCATION);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         edit_img = findViewById(R.id.edit_img);
@@ -142,9 +162,13 @@ public class UserProfileActivity extends BaseActivity {
                     btn_edit_profile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
-                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
-                            startActivity(intent);
+                            if (permissionCheck == 0 && permission == 0) {
+                                Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
+                                intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
+                                startActivity(intent);
+                            } else {
+                                permissionDialog();
+                            }
                         }
                     });
                 } else {
@@ -153,9 +177,13 @@ public class UserProfileActivity extends BaseActivity {
                     btn_edit_profile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
-                            intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
-                            startActivity(intent);
+                            if (permissionCheck == 0&& permission == 0) {
+                                Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
+                                intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
+                                startActivity(intent);
+                            } else {
+                                permissionDialog();
+                            }
                         }
                     });
                 }
@@ -171,27 +199,6 @@ public class UserProfileActivity extends BaseActivity {
             }
         });
     }
-
-    public static String[] storge_permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {android.Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA};
-    String[] p;
-
-    public String[] permissions() {
-
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                p = storge_permissions_33;
-            } else {
-                p = storge_permissions;
-            }
-        } catch (Exception e) {
-            Log.e("CameraPermission:==", e.toString());
-        }
-        return p;
-    }
-
 
     private void getApiCalling() {
         JsonObjectRequest jsonObjectRequest = null;
@@ -408,6 +415,89 @@ public class UserProfileActivity extends BaseActivity {
         });
     }
 
+    private boolean checkPermissions() {
+        int result = 0;
+
+        listPermissionsNeeded.clear();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (String p : storge_permissions_33) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
+        } else {
+            for (String p : storge_permissions) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
+        }
+        Log.e("checkPermissions:", String.valueOf(listPermissionsNeeded));
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 1);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    for (String per : permissions) {
+                        perStr += "\n" + per;
+                    }
+                    permissionDialog();
+                }
+            }
+        }
+    }
+
+    public void permissionDialog() {
+        Dialog dialog = new Dialog(UserProfileActivity.this);
+        View view = LayoutInflater.from(UserProfileActivity.this).inflate(R.layout.permission_dialog, null);
+        dialog.setContentView(view);
+
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 70);
+        dialog.getWindow().setBackgroundDrawable(insetDrawable);
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+
+        TextView dis_txt = dialog.findViewById(R.id.dis_txt);
+        AppCompatButton dialog_allow = dialog.findViewById(R.id.dialog_allow);
+
+        dis_txt.setText("To serve you best user experience we need permissions.");
+        dialog_allow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent();
+                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setData(Uri.parse("package:" + getPackageName()));
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                startActivity(i);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -417,9 +507,13 @@ public class UserProfileActivity extends BaseActivity {
             btn_edit_profile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
-                    intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
-                    startActivity(intent);
+                    if (permissionCheck == 0&& permission == 0) {
+                        Intent intent = new Intent(UserProfileActivity.this, BusinessProfileActivity.class);
+                        intent.putExtra("EditProfile", getResources().getString(R.string.edit_business_profile));
+                        startActivity(intent);
+                    } else {
+                        permissionDialog();
+                    }
                 }
             });
         } else {
@@ -427,13 +521,18 @@ public class UserProfileActivity extends BaseActivity {
             btn_edit_profile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
-                    intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
-                    startActivity(intent);
+                    if (permissionCheck == 0&& permission == 0) {
+                        Intent intent = new Intent(UserProfileActivity.this, ProfileActivity.class);
+                        intent.putExtra("EditProfile", getResources().getString(R.string.edit_personal_profile));
+                        startActivity(intent);
+                    } else {
+                        permissionDialog();
+                    }
                 }
             });
         }
     }
+
 
     @Override
     public void onBackPressed() {

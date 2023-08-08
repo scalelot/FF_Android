@@ -52,6 +52,7 @@ import java.util.Map;
 
 public class FileUtils {
 
+
     public static LottieAnimationView animationView;
     public static Dialog mDialog;
 
