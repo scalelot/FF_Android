@@ -139,5 +139,6 @@
     <dimen name="margin_190">190sp</dimen>
     <dimen name="margin_230">230sp</dimen>
     <dimen name="margin_250">250sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

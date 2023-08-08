@@ -40,4 +40,6 @@
     <color name="call_icon">#888888</color>
     <color name="edt_dark">#ffffff</color>
 
+    <color name="gray">#4B5563</color>
+
 </resources>

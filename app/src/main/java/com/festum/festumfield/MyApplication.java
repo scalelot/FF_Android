@@ -23,10 +23,12 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import dagger.hilt.android.HiltAndroidApp;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+@HiltAndroidApp
 public class MyApplication extends Application implements LifecycleObserver {
 
     public static SimpleCache simpleCache;

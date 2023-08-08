@@ -23,6 +23,7 @@ import com.festum.festumfield.Fragment.ChatFragment;
 import com.festum.festumfield.Model.AllMyFriends.AllFriendsRegisterModel;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.verstion.firstmodule.screens.main.ChatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,8 +67,13 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
                 editor.putString("nickName", registerModels.get(position).getNickName());
                 editor.apply();
 
-                Intent intent = new Intent(fragment.getContext(), ChatingActivity.class);
+                /*Intent intent = new Intent(fragment.getContext(), ChatingActivity.class);
                 intent.putExtra("UserName", registerModels.get(position).getFullName());
+                fragment.startActivity(intent);*/
+
+                Intent intent = new Intent(fragment.getContext(), ChatActivity.class);
+                intent.putExtra("userName", registerModels.get(position).getFullName());
+                intent.putExtra("id", registerModels.get(position).getId());
                 fragment.startActivity(intent);
             }
         });

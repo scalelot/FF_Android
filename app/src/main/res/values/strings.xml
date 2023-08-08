@@ -34,6 +34,10 @@
     <string name="requests">Requests</string>
     <string name="new_brodcas">New Brodcast</string>
     <string name="new_group">New Group</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="this_month">This month</string>
+    <string name="yesterday">Yesterday</string>
 
     <!--Create your Profile-->
     <string name="create_personal_profile">Create Personal Profile</string>
@@ -401,5 +405,13 @@
     <string name="copy_link">Copy Link</string>
     <string name="share_reels">Share Reels</string>
     <string name="min">5 Min</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>

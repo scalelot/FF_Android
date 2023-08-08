@@ -324,9 +324,10 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
+        /*linearLayoutManager.setReverseLayout(true);*/
 
         messageAdapter = new MessageAdapter(ChatingActivity.this, objectList);
+        Log.e("TAG", "initView:--- " + objectList.toString() );
         chat_recycler.setAdapter(messageAdapter);
         chat_recycler.setHasFixedSize(true);
         chat_recycler.setLayoutManager(linearLayoutManager);
@@ -465,8 +466,8 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("to", toUserIds);
-            jsonObject.put("page", page);
-            jsonObject.put("limit", limit);
+            jsonObject.put("page", 1);
+            jsonObject.put("limit", Integer.MAX_VALUE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -481,8 +482,9 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                         try {
                             JSONObject dataJsonObject = response.getJSONObject("Data");
 
-                            JSONArray data_array = dataJsonObject.getJSONArray("docs");
 
+                            JSONArray data_array = dataJsonObject.getJSONArray("docs");
+                            Log.e("ListChat=>", String.valueOf(data_array.length()));
                             for (int i = 0; i < data_array.length(); i++) {
                                 JSONObject jsonObject = data_array.getJSONObject(i);
                                 listChatsModel = new Gson().fromJson(jsonObject.toString(), ListChatsModel.class);
