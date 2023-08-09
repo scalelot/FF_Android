@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context="com.festum.festumfield.Activity.ChatingActivity">
+    tools:context=".verstion.firstmodule.screens.main.ChatActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/chatCL"
         android:layout_height="@dimen/sp_56">
 
         <androidx.appcompat.widget.Toolbar
@@ -21,8 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rectangle_8">
+
                 <ImageView
-                    android:id="@+id/hp_back_arrow"
+                    android:id="@+id/back"
                     android:layout_width="@dimen/sp_30"
                     android:layout_height="match_parent"
                     android:padding="@dimen/margin_5"
@@ -35,7 +40,7 @@
                     android:layout_marginLeft="@dimen/margin_5"
                     android:layout_marginRight="@dimen/margin_5"
                     android:layout_toLeftOf="@+id/img_product"
-                    android:layout_toRightOf="@+id/hp_back_arrow">
+                    android:layout_toRightOf="@+id/back">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/img_user"
@@ -52,7 +57,7 @@
                         android:layout_toRightOf="@+id/img_user">
 
                         <TextView
-                            android:id="@+id/u_name"
+                            android:id="@+id/userName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_10"
@@ -62,10 +67,10 @@
                             android:textSize="@dimen/text_16" />
 
                         <TextView
-                            android:id="@+id/txt_online"
+                            android:id="@+id/textOnline"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/u_name"
+                            android:layout_below="@+id/userName"
                             android:layout_marginLeft="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_5"
                             android:fontFamily="@font/roboto_regular"
@@ -113,30 +118,37 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatCL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/rel_bottom"
-        android:layout_below="@id/appbar_layout"
-        android:visibility="visible">
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rel_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar_layout">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/msgRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:listitem="@layout/chat_date_item_layout" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chat_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/rel_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/chatCL"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_alignParentBottom="true">
 
         <RelativeLayout
@@ -286,9 +298,9 @@
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/img_gallery"
                     android:background="@null"
-                    android:imeActionId="@+id/send"
                     android:fontFamily="@font/roboto_regular"
                     android:hint="@string/typing_here"
+                    android:imeActionId="@+id/send"
                     android:maxHeight="@dimen/sp_400"
                     android:maxLines="1"
                     android:paddingLeft="@dimen/margin_15"
@@ -320,4 +332,4 @@
         </RelativeLayout>
     </RelativeLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

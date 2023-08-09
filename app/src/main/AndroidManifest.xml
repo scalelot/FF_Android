@@ -71,6 +71,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".verstion.firstmodule.screens.main.ChatActivity"
+            android:exported="false"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Activity.ChatProductSelectActivity"
             android:exported="false" />
         <activity

@@ -95,7 +95,8 @@ public class MapsFragment extends Fragment {
     Marker marker;
     View view_marker, transparentView, viewdialog, view;
     PopupWindow popview;
-    private static final int DURATION = 3000;
+    private static final int DURATION =
+            3000;
     Double latitude, longitude;
     List<Place.Field> fields;
     SearchView searchView;
