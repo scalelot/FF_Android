@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,14 +30,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.Adapter.TagAdapter;
 import com.festum.festumfield.MainActivity;
+import com.festum.festumfield.Model.AllMyFriends.AllFriendsRegisterModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 import com.kyleduo.switchbutton.SwitchButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,16 +53,22 @@ public class ChatPersnoalInfoFragment extends Fragment {
 
     TextView txt_about, text_birth, text_gender, txt_email, txt_number;
     RelativeLayout rl_authorized, clear_chats, block_hunter, report_hunter;
-    RecyclerView recy_tag;
+    RecyclerView recyper_tag;
+    NestedScrollView chatNested;
     String str, strIds;
+    int page = 1, limit = 10;
+    String searchData = "";
     boolean nameData, numData, emailData, dobData, genderData, mediaData, videoData, audioData;
     SwitchButton name_switch, number_switch, email_switch, birthday_switch, gender_switch, media_switch, video_switch, audio_switch;
+    public static ArrayList<String> tags = new ArrayList<>();
     public static ArrayList<String> taglist = new ArrayList<>();
+    ArrayList<AllFriendsRegisterModel> allUserDataList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_chat_persnoal_info, container, false);
 
+        chatNested = inflate.findViewById(R.id.chatNested);
         txt_about = inflate.findViewById(R.id.txt_about);
         text_birth = inflate.findViewById(R.id.text_birth);
         text_gender = inflate.findViewById(R.id.text_gender);
@@ -67,22 +78,19 @@ public class ChatPersnoalInfoFragment extends Fragment {
         clear_chats = inflate.findViewById(R.id.clear_chats);
         block_hunter = inflate.findViewById(R.id.block_hunter);
         report_hunter = inflate.findViewById(R.id.report_hunter);
-        recy_tag = inflate.findViewById(R.id.recy_tag);
+        recyper_tag = inflate.findViewById(R.id.recyper_tag);
 
         strIds = getActivity().getSharedPreferences("ToUserIds", 0).getString("ids", null);
-        recy_tag.setLayoutManager(new FlexboxLayoutManager(getContext()));
-
-        if (Const.tag_str != null && !Const.tag_str.isEmpty()) {
-            String[] items = Const.tag_str.split(",");
-
-            for (int i = 0; i < items.length; i++) {
-                Const.taglist.add(items[i]);
+        recyper_tag.setLayoutManager(new FlexboxLayoutManager(getContext()));
+        chatNested.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    page++;
+                    getUserDatas(page, limit, searchData);
+                }
             }
-
-            TagAdapter tagAdapter = new TagAdapter(getActivity(), Const.taglist);
-            recy_tag.setAdapter(tagAdapter);
-        }
-
+        });
 
         rl_authorized.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +109,76 @@ public class ChatPersnoalInfoFragment extends Fragment {
         });
 
         return inflate;
+    }
+
+    public void getUserDatas(int page, int limit, String searchData) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject();
+            jsonObject.put("page", page);
+            jsonObject.put("limit", limit);
+            jsonObject.put("search", searchData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = null;
+        try {
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_myfriend, jsonObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.e("AllUserData:-", response.toString());
+                    try {
+                        JSONObject jsonObject1 = response.getJSONObject("Data");
+                        JSONArray data_array = jsonObject1.getJSONArray("docs");
+                        for (int i = 0; i < data_array.length(); i++) {
+                            JSONObject jsonObject = data_array.getJSONObject(i);
+
+                            AllFriendsRegisterModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), AllFriendsRegisterModel.class);
+                            allUserDataList.add(productDetailsModel);
+                        }
+
+                        if (!taglist.isEmpty()) {
+                            taglist.clear();
+                        }
+
+                        for (int j = 0; j < allUserDataList.size(); j++) {
+                            if (allUserDataList.get(j).getId().equals(strIds)){
+                                txt_about.setText(allUserDataList.get(j).getAboutUs());
+                                text_birth.setText(allUserDataList.get(j).getDob());
+                                text_gender.setText(allUserDataList.get(j).getGender());
+                                txt_email.setText(allUserDataList.get(j).getEmailId());
+                                txt_number.setText(allUserDataList.get(j).getContactNo());
+                                for (int k=0;k<allUserDataList.get(j).getHobbies().size();k++){
+                                    taglist.add(allUserDataList.get(j).getHobbies().get(k));
+                                }
+                            }
+                        }
+
+                        TagAdapter tagAdapter = new TagAdapter(getActivity(), taglist);
+                        recyper_tag.setAdapter(tagAdapter);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("AllUserData:-", String.valueOf(error));
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("authorization", MyApplication.getAuthToken(getContext()));
+                    return map;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void authorizedDialog() {
@@ -212,6 +290,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 audioData = false;
                 jsonobject_one.put("audiocall", audioData);
             }
+            js.put("authorized_permissions", jsonobject_one);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -223,7 +302,6 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     Log.e("AuthorizedPermission:--", response.toString());
-                    Toast.makeText(getContext(), "Authorized Permission Done", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -231,7 +309,14 @@ public class ChatPersnoalInfoFragment extends Fragment {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     Log.e("AuthorizedPermissionError:--", error.toString());
                 }
-            });
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> map = new HashMap<>();
+                    map.put("authorization",MyApplication.getAuthToken(getContext()));
+                    return map;
+                }
+            };
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
@@ -280,5 +365,6 @@ public class ChatPersnoalInfoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getUserDatas(page, limit, searchData);
     }
 }
