@@ -4,11 +4,13 @@ import com.app.easyday.app.sources.ApiResponse
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ChatMessageResponse
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProductResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.SendMessageResponse
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.POST
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.*
 import rx.Observable
+import java.io.File
 
 interface FestumFieldApi {
 
@@ -17,9 +19,19 @@ interface FestumFieldApi {
        @Body body: ChatListBody
     ): Observable<ApiResponse<ChatMessageResponse>>
 
+
+    @Multipart
     @POST("chats/send")
     fun sendMessage(
-        @Body body: SendMessage
+        @Part filePart: MultipartBody.Part?,
+        @Part("to") to: RequestBody,
+        @Part("message") message: RequestBody?,
+        @Part("product") product: RequestBody?,
     ):Observable<ApiResponse<SendMessageResponse>>
+
+    @GET("product/single")
+    fun getProductById(
+        @Query("pid")productId : String
+    ):Observable<ApiResponse<ProductResponse>>
 
 }

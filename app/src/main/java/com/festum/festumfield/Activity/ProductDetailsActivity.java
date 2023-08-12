@@ -35,6 +35,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -189,7 +190,7 @@ public class ProductDetailsActivity extends BaseActivity {
 
                     String price = String.format("%,.0f", Float.valueOf(productModel.getProductDetailsModel().getPrice()));
 
-                    btn_inquiry_message.setOnClickListener(new View.OnClickListener() {
+                    /*btn_inquiry_message.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getApplicationContext(), ChatingActivity.class);
@@ -200,7 +201,17 @@ public class ProductDetailsActivity extends BaseActivity {
                             intent.putExtra("product_price", price);
                             startActivity(intent);
                         }
+                    });*/
+
+                    btn_inquiry_message.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), ChatingActivity.class);
+                            intent.putExtra("productId", productModel.getProductDetailsModel().getId());
+                            startActivityForResult(intent, IntentUtil.Companion.getPRODUCT_REQUEST_CODE());
+                        }
                     });
+
 
                 }
             }, new Response.ErrorListener() {

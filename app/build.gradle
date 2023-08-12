@@ -185,6 +185,16 @@ dependencies {
      * */
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
 
+    /**
+     * Permission
+     * */
+    implementation 'com.karumi:dexter:6.2.3'
+
+    /**
+     * Picasso
+     * */
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 }
 
 kapt {

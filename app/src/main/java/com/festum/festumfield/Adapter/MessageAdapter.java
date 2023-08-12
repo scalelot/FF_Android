@@ -3,6 +3,7 @@ package com.festum.festumfield.Adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -278,6 +279,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     String img = message.getString("image");
                     String pImg = message.getString("userProfileImg");
 
+                    Log.e("TAG", "onBindViewHolder:--- " + Constans.Display_Image_URL + img );
                     Glide.with(activity).load(Constans.Display_Image_URL + img).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveImg);
                     Glide.with(activity).load(Constans.Display_Image_URL + pImg).placeholder(R.drawable.ic_user_img).into(sendImageHolder.reciveUserImg);
 

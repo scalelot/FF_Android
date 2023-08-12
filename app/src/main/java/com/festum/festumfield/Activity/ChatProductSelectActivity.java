@@ -1,12 +1,14 @@
 package com.festum.festumfield.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -52,6 +55,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
     int page = 1, limit = 10;
     String searchData = "";
     String friendid;
+    String toUserIds, pro_img, p_name, p_des, p_price, p_ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,10 @@ public class ChatProductSelectActivity extends AppCompatActivity {
         nestedScrollView = findViewById(R.id.nestedScrollView);
 
         friendid = getIntent().getStringExtra("friendid");
+
+        if (getIntent() != null){
+            p_ids = getIntent().getStringExtra("productId");
+        }
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -173,8 +181,26 @@ public class ChatProductSelectActivity extends AppCompatActivity {
         getProductItem(friendid, page, limit, searchData, "price", -1);
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         startActivity(new Intent(ChatProductSelectActivity.this, ChatingActivity.class));
+    }*/
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IntentUtil.Companion.getPRODUCT_REQUEST_CODE() && resultCode == Activity.RESULT_OK) {
+            Intent intent = new Intent(getApplicationContext(), ChatingActivity.class);
+            intent.putExtra("productId", p_ids);
+            startActivityForResult(intent,IntentUtil.Companion.getPRODUCT_REQUEST_CODE());
+        }
+
     }
 }

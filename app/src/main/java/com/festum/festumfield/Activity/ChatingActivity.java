@@ -814,6 +814,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void uploadImage(File file) {
+
         try {
             AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file).addMultipartParameter("to", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override

@@ -64,9 +64,9 @@ class ApiModule {
     ) = OkHttpClient.Builder()
         .addInterceptor(headerAuthInterceptor)
         .addInterceptor(loggingInterceptor)
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(25, TimeUnit.SECONDS)
-        .readTimeout(25, TimeUnit.SECONDS)
+        .connectTimeout(2, TimeUnit.MINUTES)
+        .writeTimeout(2, TimeUnit.MINUTES)
+        .readTimeout(2, TimeUnit.MINUTES)
         .retryOnConnectionFailure(true)
         .build()
 
