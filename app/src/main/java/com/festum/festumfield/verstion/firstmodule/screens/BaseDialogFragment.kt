@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.festum.festumfield.R
 import com.festum.festumfield.verstion.firstmodule.navigation.UiEvent
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
+abstract class BaseDialogFragment<VM : BaseViewModel> : BottomSheetDialogFragment() {
     lateinit var viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +25,8 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        activity?.window?.statusBarColor = getStatusBarColor()
+        activity?.window?.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.colorAccent)
     }
 
     override fun onCreateView(
@@ -35,7 +34,6 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = getContentView()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +49,7 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     abstract fun initUi()
     abstract fun setObservers()
 
-    open fun getStatusBarColor() = ContextCompat.getColor(requireContext(), R.color.colorAccent)
+    open fun getStatusBarColor() = ContextCompat.getColor(requireContext(), R.color.green)
 
     private fun getViewModelClass(): Class<VM> {
         val type = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
@@ -59,7 +57,22 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     }
 
     protected open fun processUiEvent(uiEvent: UiEvent) {
-        (activity as? BaseActivity<*>)?.processUiEvent(uiEvent)
+
+        when (uiEvent) {
+
+            is UiEvent.ShowToast -> {
+                showToast(getString(uiEvent.messageResId))
+            }
+            is UiEvent.ShowToastMsg -> {
+                showToast(uiEvent.message)
+            }
+
+            else -> {}
+        }
     }
+
+    private fun showToast(message: String) {}
+
+
 
 }

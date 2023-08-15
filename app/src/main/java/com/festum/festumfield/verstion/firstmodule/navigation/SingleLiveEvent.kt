@@ -1,4 +1,4 @@
-package com.app.easyday.navigation
+package com.festum.festumfield.verstion.firstmodule.navigation
 
 import android.util.Log
 import androidx.annotation.MainThread

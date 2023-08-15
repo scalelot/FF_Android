@@ -73,6 +73,7 @@ public class ChatUserAdapter extends RecyclerView.Adapter<ChatUserAdapter.MyData
 
                 Intent intent = new Intent(fragment.getContext(), ChatActivity.class);
                 intent.putExtra("userName", registerModels.get(position).getFullName());
+                intent.putExtra("userImage", registerModels.get(position).getProfileimage());
                 intent.putExtra("id", registerModels.get(position).getId());
                 fragment.startActivity(intent);
             }

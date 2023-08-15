@@ -7,10 +7,11 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
-import com.app.easyday.screens.base.BaseViewModel
 import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans
+import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,7 @@ class ChatViewModel @Inject constructor(
     var chatData = MutableLiveData<ArrayList<DocsItem>?>()
     var sendData = MutableLiveData<SendMessageResponse?>()
     var productData = MutableLiveData<ProductResponse?>()
+    var friendProductData = MutableLiveData<ArrayList<FriendsProducts>?>()
 
     fun getChatMessageHistory(receiverId: String, page: Int, limit: Int) {
 
@@ -39,9 +41,7 @@ class ChatViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
                 chatData.value = resp.Data?.docs as ArrayList<DocsItem>?
-                Log.e("TAG", "getChatMessageHistory: ${resp.Data}")
             }, {
-                Log.e("TAG", "Throwable: " + it.message)
                 chatData.value = null
             })
     }
@@ -49,20 +49,6 @@ class ChatViewModel @Inject constructor(
     fun sendMessage(file: File?, receiverId: String, message: String?, product: String?) {
 
         if (file != null) {
-            /*val sendFile = File(file.toString())
-            val fileRequestBody = sendFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-            val sendImage = createFormData("file", sendFile.name, fileRequestBody)
-
-            val to = receiverId.toRequestBody("text/plain".toMediaTypeOrNull())
-            api.sendMessage(sendImage,to,null).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ resp ->
-                    sendData.value = resp.Data
-                    Log.e("TAG", "getChatImageHistory: ${resp.Data}")
-                }, {
-                    Log.e("TAG", "Throwable: " + it.message)
-                    sendData.value = null
-                })*/
 
             try {
                 AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file)
@@ -79,18 +65,18 @@ class ChatViewModel @Inject constructor(
                             val mediaList = contentList.getJSONObject("media")
                             val product = contentList.getJSONObject("product")
 
-                            val content = Content(
-                                text = Text(
+                            val content = SendMessageContent(
+                                text = SendText(
                                     messageList.optString("message")
                                 ),
-                                media = Media(
+                                media = SendMedia(
                                     path = mediaList.optString("path"),
                                     mime = mediaList.optString("mime"),
                                     name = mediaList.optString("name"),
                                     type = mediaList.optString("type")
                                 ),
-                                product = Product(
-                                    ProductItem(id = product.optString("productid"))
+                                product = SendProduct(
+                                    productid =  product.optString("productid")
                                 )
                             )
 
@@ -136,9 +122,7 @@ class ChatViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ resp ->
                     sendData.value = resp.Data
-                    Log.e("TAG", "getChatMessageHistory: ${resp.Data}")
                 }, {
-                    Log.e("TAG", "Throwable: " + it.message)
                     sendData.value = null
                 })
         }
@@ -150,9 +134,7 @@ class ChatViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
                 productData.value = resp.Data
-                Log.e("TAG", "getProductById: ${resp.Data}")
             }, {
-                Log.e("TAG", "Throwable: " + it.message)
                 productData.value = null
             })
     }

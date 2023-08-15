@@ -3,9 +3,8 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.model
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class Product(
+data class SendProduct(
 
     @field:SerializedName("productid")
-    val productid: ProductItem? = null,
-
-) : Serializable
+    val productid: String? = null
+)  : Serializable

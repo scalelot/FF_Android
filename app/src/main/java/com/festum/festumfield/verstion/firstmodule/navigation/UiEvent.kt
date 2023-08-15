@@ -1,4 +1,4 @@
-package com.app.easyday.navigation
+package com.festum.festumfield.verstion.firstmodule.navigation
 
 import androidx.annotation.StringRes
 

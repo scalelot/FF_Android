@@ -1,76 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_bg"
-    tools:context="com.festum.festumfield.Activity.ChatProductSelectActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/lin_top"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/app_bg"
+        tools:context="com.festum.festumfield.Activity.ChatProductSelectActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar_layout"
+        <LinearLayout
+            android:id="@+id/lin_top"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sp_56">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/toolbar"
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/rectangle_8">
+                android:layout_height="@dimen/sp_56">
 
-                <ImageView
-                    android:id="@+id/ic_product_back"
-                    android:layout_width="@dimen/sp_35"
+                <RelativeLayout
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_10"
-                    android:padding="@dimen/margin_6"
-                    android:src="@drawable/backarrow" />
+                    android:background="@drawable/rectangle_8">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_toRightOf="@+id/ic_product_back"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="@string/products"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_18" />
-            </RelativeLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+                    <ImageView
+                        android:id="@+id/ic_product_back"
+                        android:layout_width="@dimen/sp_35"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:padding="@dimen/margin_6"
+                        android:src="@drawable/backarrow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_toRightOf="@+id/ic_product_back"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="@string/products"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_18" />
+                </RelativeLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_chat_product"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            tools:listitem="@layout/item_all_product_display" />
+
+        <include layout="@layout/layout_empty" />
+
+        <include layout="@layout/layout_loader" />
 
     </LinearLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ProgressBar
+        android:id="@+id/idPBLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_chat_product"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/margin_5"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_all_product_display" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <include layout="@layout/layout_empty" />
-
-    <include layout="@layout/layout_loader" />
-
-</LinearLayout>
+</FrameLayout>

@@ -31,7 +31,7 @@ data class SendMessageResponse(
     val contentType: String? = null,
 
     @field:SerializedName("content")
-    val content: Content? = null,
+    val content: SendMessageContent? = null,
 
     @field:SerializedName("timestamp")
     val timestamp: Long? = null,

@@ -7,6 +7,8 @@ import java.util.*
 
 object DateTimeUtils {
 
+    const val FORMAT_API_DATETIME = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
     var newLocale = Locale("en")
 
     fun getNowSeconds() = System.currentTimeMillis() / 1000L

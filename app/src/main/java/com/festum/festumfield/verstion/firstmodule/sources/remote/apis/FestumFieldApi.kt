@@ -2,10 +2,9 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 
 import com.app.easyday.app.sources.ApiResponse
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ChatMessageResponse
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProductResponse
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.SendMessageResponse
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -18,7 +17,6 @@ interface FestumFieldApi {
     fun chatList(
        @Body body: ChatListBody
     ): Observable<ApiResponse<ChatMessageResponse>>
-
 
     @Multipart
     @POST("chats/send")
@@ -33,5 +31,10 @@ interface FestumFieldApi {
     fun getProductById(
         @Query("pid")productId : String
     ):Observable<ApiResponse<ProductResponse>>
+
+    @POST("product/friendsproducts")
+    fun getFriendProduct(
+        @Body body: GetFriendProduct
+    ): Observable<ApiResponse<FriendsProductsResponse>>
 
 }

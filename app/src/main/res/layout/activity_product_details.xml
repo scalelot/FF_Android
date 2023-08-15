@@ -71,14 +71,36 @@
                 android:layout_marginTop="@dimen/margin_15"
                 android:layout_marginRight="@dimen/margin_20" />
 
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/productPager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sp_190"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_20"
+                android:visibility="invisible"/>
+
             <LinearLayout
                 android:id="@+id/SliderDots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewPager"
                 android:layout_marginTop="@dimen/margin_10"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="horizontal" />
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pagerDotes"
+                    android:gravity="center"
+                    app:dotsColor="@color/app_color"
+                    app:selectedDotColor="@color/app_color"
+                    app:dotsSize="10dp"
+                    app:stiffness="300"
+                    android:visibility="visible"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/txt_p_name"

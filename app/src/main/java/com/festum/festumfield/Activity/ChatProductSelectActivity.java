@@ -55,7 +55,7 @@ public class ChatProductSelectActivity extends AppCompatActivity {
     int page = 1, limit = 10;
     String searchData = "";
     String friendid;
-    String toUserIds, pro_img, p_name, p_des, p_price, p_ids;
+    String  p_ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -72,9 +72,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/userName"
                             android:layout_marginLeft="@dimen/margin_10"
-                            android:layout_marginTop="@dimen/margin_5"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="@string/online"
+                            android:text="@string/offline"
                             android:textColor="@color/btn_darkturquoise"
                             android:textSize="@dimen/text_12"
                             android:visibility="visible" />

@@ -8,16 +8,23 @@ import android.net.Uri
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import com.app.easyday.screens.base.BaseActivity
-import com.festum.festumfield.Activity.ChatProductSelectActivity
+import com.bumptech.glide.Glide
 import com.festum.festumfield.MyApplication
 import com.festum.festumfield.R
+import com.festum.festumfield.Utils.Constans
+import com.festum.festumfield.databinding.ActivityChatProductSelectBinding
 import com.festum.festumfield.databinding.ChatActivityBinding
+import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ChatMessageAdapter
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailDialog
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
+import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils.FORMAT_API_DATETIME
+import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
@@ -32,16 +39,25 @@ import io.socket.client.Socket
 import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.ZoneOffset.UTC
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
+
 @SuppressLint("SimpleDateFormat")
 @AndroidEntryPoint
-class ChatActivity : BaseActivity<ChatViewModel>() {
+class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     private lateinit var binding: ChatActivityBinding
+    private lateinit var productBinding: ActivityChatProductSelectBinding
+
     private lateinit var receiverUserId: String
+    private lateinit var receiverUserName: String
+    private lateinit var receiverUserImage: String
+
     var format = SimpleDateFormat()
     var mSocket: Socket? = null
     private val listItems = ArrayList<ListItem>()
@@ -49,6 +65,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
     private var productId: String? = null
 
     private var chatMessageAdapter: ChatMessageAdapter? = null
+//    private var productListAdapter: ProductListAdapter? = null
 
 
     override fun getContentView(): View {
@@ -62,6 +79,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
 
         if (mSocket?.connected() == true) {
 
+            getUserStatus()
             getMessage()
 
         } else {
@@ -72,16 +90,31 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
 
         val intent = intent.extras
 
-        val userName = intent?.getString("userName").toString()
+        receiverUserName = intent?.getString("userName").toString()
+        receiverUserImage = intent?.getString("userImage").toString()
         receiverUserId = intent?.getString("id").toString()
         productId = intent?.getString("productId").toString()
+
+        Log.e("TAG", "setupUi: $receiverUserId")
+        Log.e("TAG", "setupUi: " + MyApplication.getOnlineId(this@ChatActivity).lowercase() )
+
+
+        if (receiverUserId == MyApplication.getOnlineId(this@ChatActivity).lowercase()){
+            binding.textOnline.text = getString(R.string.online)
+        }
 
         format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         format.timeZone = TimeZone.getTimeZone("UTC")
 
+        if (receiverUserImage.isNotEmpty()){
 
-        if (userName.isNotEmpty() && receiverUserId.isNotEmpty()) {
-            binding.userName.text = userName
+            Glide.with(this@ChatActivity).load(Constans.Display_Image_URL + receiverUserImage)
+                .placeholder(R.drawable.ic_user_img).into(binding.imgUser)
+
+        }
+
+        if (receiverUserName.isNotEmpty() && receiverUserId.isNotEmpty()) {
+            binding.userName.text = receiverUserName
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
         }
 
@@ -97,6 +130,8 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
             if (msg.isNotEmpty()) {
                 viewModel.sendMessage(null, receiverUserId, msg,"")
             }
+
+            DeviceUtils.hideKeyboard(this@ChatActivity)
 
         }
 
@@ -130,10 +165,15 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
 
         /* Product */
         binding.imgProduct.setOnClickListener {
-            val chatProductIntent = Intent(this@ChatActivity, ChatProductSelectActivity::class.java)
-            chatProductIntent.putExtra("friendid", receiverUserId)
-            startActivity(chatProductIntent)
+
+            /* ProductDialog */
+
+            val dialog = ProductItemsDialog(receiverUserId, this)
+            dialog.show(supportFragmentManager,"product")
+
         }
+
+        Log.e("TAG", "setupUi: ---" + getCurrentUTCTime())
 
     }
 
@@ -179,91 +219,106 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
                 )
             }*/
 
-
-
             binding.idPBLoading.visibility = View.GONE
 
         }
 
         viewModel.sendData.observe(this) { sendData ->
 
-            val from = From(id = sendData?.from)
-            val to = To(id = sendData?.to)
+            sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
-            val newItem = DocsItem(
-                createdAt = sendData?.createdAt,
-                v = sendData?.v,
-                context = sendData?.context,
-                from = from,
-                mainId = sendData?.id,
-                to = to,
-                id = sendData?.id,
-                contentType = sendData?.contentType,
-                content = sendData?.content,
-                timestamp = sendData?.timestamp,
-                status = sendData?.status,
-                updatedAt = sendData?.updatedAt
+            Handler().postDelayed({
 
-            )
+                val from = From(id = sendData?.from)
+                val to = To(id = sendData?.to)
 
-            val date = format.parse(newItem.createdAt)
-
-            val code = date?.time?.let { it1 ->
-
-                DateTimeUtils.getChatDate(
-                    it1,
-                    this@ChatActivity,
-                    true
+                val text = Text(sendData?.content?.text?.message)
+                val media = Media(
+                    path = sendData?.content?.media?.path,
+                    mime = sendData?.content?.media?.mime,
+                    name = sendData?.content?.media?.name,
+                    type = sendData?.content?.media?.type
                 )
 
-            }
+                val newItem = DocsItem(
+                    createdAt = sendData?.createdAt,
+                    v = sendData?.v,
+                    context = sendData?.context,
+                    from = from,
+                    mainId = sendData?.id,
+                    to = to,
+                    id = sendData?.id,
+                    contentType = sendData?.contentType,
+                    content = Content(
+                        text = text,
+                        product = Product(productItemData),
+                        media = media),
+                    timestamp = sendData?.timestamp,
+                    status = sendData?.status,
+                    updatedAt = sendData?.updatedAt
 
-            val listItem = listItems.find { it.sectionName == code }
+                )
 
-            binding.edtChating.setText("")
+                val date = format.parse(newItem.createdAt)
 
-            if (listItem == null) {
-                //chat has today section
-                val now = DateTimeUtils.getNowSeconds()
-                val today =
-                    DateTimeUtils.getChatDate(now, this@ChatActivity, true)
-                val titleItem =
+                val code = date?.time?.let { it1 ->
+
                     DateTimeUtils.getChatDate(
+                        it1,
+                        this@ChatActivity,
+                        true
+                    )
+
+                }
+
+                val listItem = listItems.find { it.sectionName == code }
+
+                binding.edtChating.setText("")
+
+                if (listItem == null) {
+                    //chat has today section
+                    val now = DateTimeUtils.getNowSeconds()
+                    val today =
+                        DateTimeUtils.getChatDate(now, this@ChatActivity, true)
+                    val titleItem =
+                        DateTimeUtils.getChatDate(
+                            date.time,
+                            this@ChatActivity,
+                            true
+                        )
+                    val day = DateTimeUtils.getChatDate(
                         date.time,
                         this@ChatActivity,
                         true
                     )
-                val day = DateTimeUtils.getChatDate(
-                    date.time,
-                    this@ChatActivity,
-                    true
-                )
-                val isToday = day == today
+                    val isToday = day == today
 
-                val listSection =
-                    code?.let { it1 ->
-                        ListSection(
-                            titleItem,
-                            it1, isToday, !isToday && date.time < now
-                        )
+                    val listSection =
+                        code?.let { it1 ->
+                            ListSection(
+                                titleItem,
+                                it1, isToday, !isToday && date.time < now
+                            )
+                        }
+                    listSection?.sectionName = code
+                    if (listSection != null) {
+                        listItems.add(listSection)
+                        chatMessageAdapter?.addItem(listSection)
                     }
-                listSection?.sectionName = code
-                if (listSection != null) {
-                    listItems.add(listSection)
-                    chatMessageAdapter?.addItem(listSection)
+                } else {
+                    newItem.sectionName = code
+                    listItems.add(newItem)
+                    //There is no today section
                 }
-            } else {
-                newItem.sectionName = code
-                listItems.add(newItem)
-                //There is no today section
-            }
 
-            chatMessageAdapter?.addItem(newItem)
-            chatMessageAdapter?.itemCount?.let { it1 ->
-                binding.msgRV.smoothScrollToPosition(
-                    it1
-                )
-            }
+                chatMessageAdapter?.addItem(newItem)
+                chatMessageAdapter?.itemCount?.let { it1 ->
+                    binding.msgRV.smoothScrollToPosition(
+                        it1
+                    )
+                }
+            }, 1000)
+
 
         }
 
@@ -281,9 +336,28 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
                 category = productData?.category
             )
 
-        }
-    }
 
+
+        }
+
+//        viewModel.friendProductData.observe(this){
+//            friendsProductList ->
+//
+//            Log.e("TAG", "setupObservers:--- " + friendsProductList.toString() )
+//            if (friendsProductList != null){
+//
+//                productListAdapter = ProductListAdapter(this@ChatActivity, friendsProductList)
+//                val linearLayoutManager = GridLayoutManager(this@ChatActivity, 2)
+//                productBinding.recycleChatProduct.layoutManager = linearLayoutManager
+//                productBinding.recycleChatProduct.adapter = productListAdapter
+//
+//                productBottomSheetDialog?.show()
+//
+//            }
+//
+//        }
+
+    }
 
     @SuppressLint("SimpleDateFormat")
     private fun sortList(logList: ArrayList<DocsItem>) {
@@ -363,7 +437,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
             )
             val productId = ProductItem(id = product.optString("productid"))
 
-            val productItem = Product(productId)
+            val productItem = Product(productid = productId)
 
             val text = Text(messageList.optString("message"))
 
@@ -372,7 +446,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
 
                 Executors.newSingleThreadScheduledExecutor().schedule({
                     if (productItemData != null) {
-                        newItemList(data, text, media, Product(productItemData))
+                        newItemList(data, text, media, Product(productid = productItemData))
                     }
                 }, 2, TimeUnit.SECONDS)
 
@@ -382,6 +456,47 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
 
 
         }
+    }
+
+    fun getUserStatus() {
+
+        mSocket?.on("userConnected")  { args ->
+
+            val data = args[0] as JSONObject
+
+            runOnUiThread {
+                if (receiverUserId == MyApplication.getOnlineId(this@ChatActivity).lowercase()){
+                    binding.textOnline.text = getString(R.string.online)
+                }
+            }
+
+            Log.e("TAG", "getUserStatus:$data")
+
+        }?.on("offline") { args ->
+
+            val data = args[0] as JSONObject
+            Log.e("TAG", "offline:$data")
+
+            runOnUiThread {
+                binding.textOnline.text = getString(R.string.offline)
+            }
+
+        }?.on("typingReceive"){ args ->
+            val data = args[0] as JSONObject
+            Log.e("TAG", "typingReceive:$data")
+
+            runOnUiThread {
+                binding.textOnline.text = getString(R.string.typing)
+
+                Handler().postDelayed(
+                    Runnable { binding.textOnline.text = getString(R.string.online) },
+                    3000
+                )
+
+            }
+
+        }
+
     }
 
     fun openIntent(actionID: Int) {
@@ -430,7 +545,6 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
             .check()
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK) {
@@ -476,7 +590,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
 
         val content = Content(text = text, media = media, product = product)
 
-        val from = From(id = data.getString("from"))
+        val from = From(id = data.getString("from"), profileimage = receiverUserImage, fullName = receiverUserName)
         val to = To(id = data.getString("to"))
         val newItem = DocsItem(
             v = data.optInt("v"),
@@ -486,7 +600,8 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
             contentType = data.getString("contentType"),
             content = content,
             timestamp = data.getLong("timestamp"),
-            status = data.getString("status")
+            status = data.getString("status"),
+            createdAt = getCurrentUTCTime()
         )
 
         val date = format.parse(newItem.timestamp?.let { convertLongToTime(it) }.toString())
@@ -557,5 +672,31 @@ class ChatActivity : BaseActivity<ChatViewModel>() {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         return format.format(date)
     }
+
+    override fun singleProduct(item: FriendsProducts, productId: String, sendProduct: Boolean) {
+
+        /* Ready to product sending */
+
+        val msg = if (binding.edtChating.text.isNotEmpty()){ binding.edtChating.text.toString() } else { "" }
+        viewModel.sendMessage(null, receiverUserId ,msg ,productId)
+
+    }
+
+    override fun chatProduct(item: FriendsProducts) {
+
+        /* ProductDetailsDialog */
+
+        val dialog = item.id?.let { ProductDetailDialog(it, this) }
+        dialog?.show(supportFragmentManager,"productDetails")
+
+    }
+
+    fun getCurrentUTCTime() : String {
+        val nowInUtc = OffsetDateTime.now(UTC)
+        nowInUtc.format(DateTimeFormatter.ofPattern(FORMAT_API_DATETIME))
+        Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")
+        return nowInUtc.toString()
+    }
+
 
 }

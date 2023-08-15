@@ -100,7 +100,19 @@ public class MyApplication extends Application implements LifecycleObserver {
                 throw new RuntimeException(e);
             }
 
-            mSocket.emit("init", jsonObject);
+            mSocket.emit("init", jsonObject).on("userConnected", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                    JSONObject jsonObject = (JSONObject) args[0];
+
+                    String onlineUser = jsonObject.optString("channelID");
+
+                    if (onlineUser != null){
+                        MyApplication.setOnlineId(getApplicationContext(), onlineUser);
+                    }
+                }
+            });
         }
     };
 
@@ -211,6 +223,22 @@ public class MyApplication extends Application implements LifecycleObserver {
     public static String getChannelId(Context context) {
         SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String str = sharedPreferences1.getString("ChannelIds", "");
+        return str;
+    }
+
+    public static void setOnlineId(Context context, String channelId) {
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        if (sharedPreferences1 == null) {
+            return;
+        }
+        SharedPreferences.Editor editor = sharedPreferences1.edit();
+        editor.putString("onlineId", channelId);
+        editor.commit();
+    }
+
+    public static String getOnlineId(Context context) {
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        String str = sharedPreferences1.getString("onlineId", "");
         return str;
     }
 

@@ -58,6 +58,7 @@ public class ImageSliderPagerAdapter extends PagerAdapter {
             }
         });
 
+
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);
         return view;

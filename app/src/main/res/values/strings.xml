@@ -234,6 +234,8 @@
     <string name="audio">Audio</string>
     <string name="video_call">Video Call</string>
     <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="typing">Typing…</string>
     <string name="audio_call">Audio Call</string>
     <string name="clear_chats">Clear Chats</string>
     <string name="block_john_hosier">Block John Hosier</string>

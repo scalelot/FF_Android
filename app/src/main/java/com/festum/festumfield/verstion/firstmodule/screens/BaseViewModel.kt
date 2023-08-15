@@ -1,8 +1,8 @@
-package com.app.easyday.screens.base
+package com.festum.festumfield.verstion.firstmodule.screens
 
 import androidx.lifecycle.ViewModel
-import com.app.easyday.navigation.SingleLiveEvent
-import com.app.easyday.navigation.UiEvent
+import com.festum.festumfield.verstion.firstmodule.navigation.SingleLiveEvent
+import com.festum.festumfield.verstion.firstmodule.navigation.UiEvent
 
 open class BaseViewModel : ViewModel() {
 

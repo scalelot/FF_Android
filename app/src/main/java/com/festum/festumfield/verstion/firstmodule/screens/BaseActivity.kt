@@ -1,6 +1,5 @@
-package com.app.easyday.screens.base
+package com.festum.festumfield.verstion.firstmodule.screens
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -15,9 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.app.easyday.navigation.UiEvent
-
-import com.festum.festumfield.verstion.firstmodule.screens.NetworkChangeReceiver
+import com.festum.festumfield.verstion.firstmodule.navigation.UiEvent
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import java.lang.reflect.ParameterizedType
 
