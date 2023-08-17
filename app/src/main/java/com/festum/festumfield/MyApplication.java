@@ -172,6 +172,16 @@ public class MyApplication extends Application implements LifecycleObserver {
         return cookie;
     }
 
+    public static void setcontactNo(Context context, String contactNo) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        if (null == sharedPreferences) {
+            return;
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("contactNo", contactNo);
+        editor.commit();
+    }
+
     public static String getcontactNo(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String cookie = sharedPreferences.getString("contactNo", "");

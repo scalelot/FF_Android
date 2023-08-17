@@ -10,6 +10,7 @@ plugins {
 
 
 android {
+
     compileSdk 33
 
     namespace 'com.festum.festumfield'

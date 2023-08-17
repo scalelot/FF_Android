@@ -9,6 +9,9 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.RequestOptions
 import com.festum.festumfield.MyApplication
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
@@ -63,6 +66,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
     private val listItems = ArrayList<ListItem>()
     private var productItemData: ProductItem? = null
     private var productId: String? = null
+    private var sendProductId: String? = null
 
     private var chatMessageAdapter: ChatMessageAdapter? = null
 //    private var productListAdapter: ProductListAdapter? = null
@@ -127,9 +131,11 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
             val msg = binding.edtChating.text.toString()
 
-            if (msg.isNotEmpty()) {
-                viewModel.sendMessage(null, receiverUserId, msg,"")
+            if (msg.isNotEmpty() || sendProductId?.isNotEmpty() == true) {
+                viewModel.sendMessage(null, receiverUserId, msg,sendProductId)
             }
+
+            binding.relReplay.visibility = View.GONE
 
             DeviceUtils.hideKeyboard(this@ChatActivity)
 
@@ -173,7 +179,13 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         }
 
-        Log.e("TAG", "setupUi: ---" + getCurrentUTCTime())
+        binding.ivClose.setOnClickListener {
+
+            binding.relReplay.visibility = View.GONE
+
+            sendProductId = ""
+
+        }
 
     }
 
@@ -438,7 +450,6 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             val productId = ProductItem(id = product.optString("productid"))
 
             val productItem = Product(productid = productId)
-
             val text = Text(messageList.optString("message"))
 
             if (productItem.productid?.id?.isNotEmpty() == true) {
@@ -677,8 +688,32 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         /* Ready to product sending */
 
-        val msg = if (binding.edtChating.text.isNotEmpty()){ binding.edtChating.text.toString() } else { "" }
-        viewModel.sendMessage(null, receiverUserId ,msg ,productId)
+
+       /* val msg = if (binding.edtChating.text.isNotEmpty()){ binding.edtChating.text.toString() } else { "" }
+
+        viewModel.sendMessage(null, receiverUserId ,msg ,productId)*/
+
+        binding.relReplay.visibility = View.VISIBLE
+
+        val options = RequestOptions()
+        binding.ivProImage.clipToOutline = true
+
+        val product = item.images?.get(0)
+        Glide.with(this@ChatActivity)
+            .load(product)
+            .apply(
+                options.centerCrop()
+                    .skipMemoryCache(true)
+                    .priority(Priority.HIGH)
+                    .format(DecodeFormat.PREFER_ARGB_8888)
+            )
+            .into(binding.ivProImage)
+
+        binding.txtProName.text = item.name
+        binding.txtProDes.text =  item.description
+        binding.txtProPrice.text = "${"$" + item.price.toString() + ".00"}"
+
+        sendProductId = item.id
 
     }
 
@@ -686,7 +721,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         /* ProductDetailsDialog */
 
-        val dialog = item.id?.let { ProductDetailDialog(it, this) }
+        val dialog = item.id?.let { ProductDetailDialog(it, this, item) }
         dialog?.show(supportFragmentManager,"productDetails")
 
     }

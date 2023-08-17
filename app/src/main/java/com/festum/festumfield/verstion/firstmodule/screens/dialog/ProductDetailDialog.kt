@@ -23,7 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProductDetailDialog(private val productId : String,
-                          private val chatProduct :ProductItemInterface)  : BaseDialogFragment<FriendProductViewModel>(), ProductItemInterface {
+                          private val chatProduct :ProductItemInterface,
+                          private val item: FriendsProducts)  : BaseDialogFragment<FriendProductViewModel>(), ProductItemInterface {
 
     private lateinit var binding: ActivityProductDetailsBinding
     private var productItemData: ProductItem? = null
@@ -48,7 +49,25 @@ class ProductDetailDialog(private val productId : String,
         }
 
         binding.btnInquiryMessage.setOnClickListener{
-            chatProduct.singleProduct(FriendsProducts(),productId,true)
+            chatProduct.singleProduct(FriendsProducts(
+                subCategory = item.subCategory,
+                images = item.images,
+                updatedBy = item.updatedBy,
+                itemCode = item.itemCode,
+                businessid = item.businessid,
+                description = item.description,
+                userid = item.userid,
+                offer = item.offer,
+                createdAt = item.createdAt,
+                createdBy = item.createdBy,
+                price = item.price,
+                v = item.v,
+                name = item.name,
+                mainId = item.mainId,
+                id = item.id,
+                category = item.category,
+                updatedAt = item.updatedAt,
+            ),productId,true)
             dismiss()
         }
 

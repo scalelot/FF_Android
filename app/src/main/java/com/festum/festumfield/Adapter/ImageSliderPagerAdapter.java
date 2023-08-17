@@ -51,7 +51,7 @@ public class ImageSliderPagerAdapter extends PagerAdapter {
         CardView card_image = view.findViewById(R.id.card_image);
         Glide.with(context).load(Constans.Display_Image_URL + imageSliderModels.get(position).getImage()).into(imageView);
 
-        card_image.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, DisplayProductImageActivity.class).putExtra("listImage", (Serializable) imageSliderModels).putExtra("pos", position));

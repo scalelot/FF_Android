@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity {
         Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));
 
         if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-            user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
+            user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
         } else {
             user_name.setText(MyApplication.getuserName(getApplicationContext()));
         }
@@ -318,6 +318,9 @@ public class MainActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             checkFCMBundle(intent);
         }
+
+        getAllPersonalData();
+
     }
 
     @SuppressLint("Range")
@@ -359,13 +362,16 @@ public class MainActivity extends BaseActivity {
                             GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
                             MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
+                            MyApplication.setcontactNo(getApplicationContext(), peronalInfoModel.getData().getContactNo());
                             MyApplication.setChannelId(getApplicationContext(), peronalInfoModel.getData().getChannelID());
 
                             if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-                                user_name.setText(MyApplication.getCountryCode(getApplicationContext()) + " " + MyApplication.getcontactNo(getApplicationContext()));
+                                user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
                             } else {
                                 user_name.setText(MyApplication.getuserName(getApplicationContext()));
                             }
+
+                            Log.e("TAG", "onResponse: " + Constans.Display_Image_URL + peronalInfoModel.getData().getProfileimage() );
 
                             Glide.with(MainActivity.this).load(Constans.Display_Image_URL + peronalInfoModel.getData().getProfileimage()).placeholder(R.drawable.ic_user).into(user_img);
 
@@ -570,10 +576,8 @@ public class MainActivity extends BaseActivity {
                     } else {
                         Toast.makeText(MainActivity.this, "User profile already registered", Toast.LENGTH_SHORT).show();
                     }
-                    dialog.dismiss();
-                } else {
-                    dialog.dismiss();
                 }
+                dialog.dismiss();
             }
         });
         dialog.show();
@@ -588,8 +592,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getAllPersonalData();
     }
+
+
 
     @Override
     public void onBackPressed() {
