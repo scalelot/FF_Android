@@ -35,17 +35,9 @@ class ProductViewPagerAdapter(val context: Context) : ListAdapter<String, Produc
 
         fun bind(item: String) {
 
-            val options = RequestOptions()
-            imageView.clipToOutline = true
-
             Glide.with(context)
                 .load(item)
-                .apply(
-                    options.centerCrop()
-                        .skipMemoryCache(true)
-                        .priority(Priority.HIGH)
-                        .format(DecodeFormat.PREFER_ARGB_8888)
-                )
+                .placeholder(R.mipmap.ic_app_logo)
                 .into(imageView)
 
         }

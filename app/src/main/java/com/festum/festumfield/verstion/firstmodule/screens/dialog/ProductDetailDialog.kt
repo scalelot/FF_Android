@@ -1,10 +1,9 @@
 package com.festum.festumfield.verstion.firstmodule.screens.dialog
 
-
-import android.R
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.core.view.doOnAttach
@@ -39,6 +38,8 @@ class ProductDetailDialog(private val productId : String,
     override fun initUi() {
 
         viewModel.getProduct(productId)
+
+        Log.e("TAG", "initUi: $productId")
 
         binding.btnInquiryMessage.visibility = View.VISIBLE
         binding.icPEdit.visibility = View.GONE

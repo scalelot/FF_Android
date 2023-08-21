@@ -124,7 +124,7 @@ class ChatMessageAdapter(
                 messageBinding.rlRight.visibility = View.GONE
                 messageBinding.rlLeft.visibility = View.VISIBLE
                 Glide.with(context).load(Constans.Display_Image_URL + item.from?.profileimage)
-                    .placeholder(R.drawable.ic_user_img).into(messageBinding.reciveImgUser)
+                    .placeholder(R.drawable.ic_user).into(messageBinding.reciveImgUser)
 
             }
 
@@ -146,10 +146,15 @@ class ChatMessageAdapter(
 
                 imageBinding.sendImgTime.text = item.createdAt?.convertToFormattedTime()
 
-                val options = RequestOptions()
-                imageBinding.reciveImg.clipToOutline = true
-
                 val image = Constans.Display_Image_URL + item.content?.media?.path
+
+                Glide.with(context)
+                    .load(image)
+                    .placeholder(R.mipmap.ic_app_logo)
+                    .into(imageBinding.sendImage)
+
+                /*val options = RequestOptions()
+                imageBinding.reciveImg.clipToOutline = true
 
                 Glide.with(context.applicationContext)
                     .load(image)
@@ -161,7 +166,9 @@ class ChatMessageAdapter(
                             .priority(Priority.HIGH)
                             .format(DecodeFormat.PREFER_ARGB_8888)
                     )
-                    .into(imageBinding.sendImage)
+                    .into(imageBinding.sendImage)*/
+
+
 
             } else {
 
@@ -171,25 +178,17 @@ class ChatMessageAdapter(
 
                 imageBinding.reciveImgTime.text = item.createdAt?.convertToFormattedTime()
 
-                val options = RequestOptions()
-                imageBinding.reciveImg.clipToOutline = true
-
                 val image = Constans.Display_Image_URL + item.content?.media?.path
 
-                Glide.with(context.applicationContext)
+                Glide.with(context)
                     .load(image)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .apply(
-                        options.centerCrop()
-                            .skipMemoryCache(true)
-                            .priority(Priority.HIGH)
-                            .format(DecodeFormat.PREFER_ARGB_8888)
-                    )
+                    .placeholder(R.mipmap.ic_app_logo)
                     .into(imageBinding.reciveImg)
 
-                Glide.with(context).load(Constans.Display_Image_URL + item.from?.profileimage)
-                    .placeholder(R.drawable.ic_user_img).into(imageBinding.reciveUserImg)
+                Glide.with(context)
+                    .load(Constans.Display_Image_URL + item.from?.profileimage)
+                    .placeholder(R.drawable.ic_user)
+                    .into(imageBinding.reciveUserImg)
 
 
             }
@@ -218,23 +217,14 @@ class ChatMessageAdapter(
 
 
                 if (item.content?.product?.productid?.images?.isNotEmpty() == true){
-//                    val image = Constans.Display_Image_URL + item.content.product.productid.images[0]
+
                     val image = item.content.product.productid.images[0]
 
-                    val options = RequestOptions()
-                    productBinding.recviceImage.clipToOutline = true
-
-                    Glide.with(context.applicationContext)
+                    Glide.with(context)
                         .load(image)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .apply(
-                            options.centerCrop()
-                                .skipMemoryCache(true)
-                                .priority(Priority.HIGH)
-                                .format(DecodeFormat.PREFER_ARGB_8888)
-                        )
+                        .placeholder(R.mipmap.ic_app_logo)
                         .into(productBinding.sendProImage)
+
                 }
 
             } else{
@@ -251,27 +241,18 @@ class ChatMessageAdapter(
                 productBinding.recviceProTime.text = item.createdAt?.convertToFormattedTime()
 
                 if (item.content?.product?.productid?.images?.isNotEmpty() == true){
-//                    val image = Constans.Display_Image_URL + item.content.product.productid.images[0]
+
                     val image = item.content.product.productid.images[0]
 
-                    val options = RequestOptions()
-                    productBinding.recviceImage.clipToOutline = true
-
-                    Glide.with(context.applicationContext)
+                    Glide.with(context)
                         .load(image)
-                        .error(R.mipmap.ic_app_logo)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .apply(
-                            options.centerCrop()
-                                .skipMemoryCache(true)
-                                .priority(Priority.HIGH)
-                                .format(DecodeFormat.PREFER_ARGB_8888)
-                        )
+                        .placeholder(R.mipmap.ic_app_logo)
                         .into(productBinding.recviceImage)
 
-                    Glide.with(context).load(Constans.Display_Image_URL + item.from?.profileimage)
-                        .placeholder(R.drawable.ic_user_img).into(productBinding.recviceProfilePic)
+                    Glide.with(context)
+                        .load(Constans.Display_Image_URL + item.from?.profileimage)
+                        .placeholder(R.drawable.ic_user)
+                        .into(productBinding.recviceProfilePic)
                 }
 
             }

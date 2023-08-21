@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:visibility="gone"
+    android:visibility="visible"
     android:paddingVertical="@dimen/_10sdp">
 
     <TextView
@@ -22,7 +22,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
         android:background="@color/gray"
         app:layout_constraintBottom_toBottomOf="@id/dateTV"
         app:layout_constraintEnd_toStartOf="@id/dateTV"
@@ -32,7 +32,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
         android:background="@color/gray"
         app:layout_constraintBottom_toBottomOf="@id/dateTV"
         app:layout_constraintEnd_toEndOf="parent"

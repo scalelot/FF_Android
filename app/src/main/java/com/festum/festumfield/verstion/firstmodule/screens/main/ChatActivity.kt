@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit
 class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     private lateinit var binding: ChatActivityBinding
-    private lateinit var productBinding: ActivityChatProductSelectBinding
+
 
     private lateinit var receiverUserId: String
     private lateinit var receiverUserName: String
@@ -101,6 +101,10 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         Log.e("TAG", "setupUi: $receiverUserId")
         Log.e("TAG", "setupUi: " + MyApplication.getOnlineId(this@ChatActivity).lowercase() )
+        Log.e("TAG", "setupUi: " + receiverUserName)
+        Log.e("TAG", "setupUi: " + receiverUserImage)
+        Log.e("TAG", "setupUi: " + receiverUserId)
+        Log.e("TAG", "setupUi: " + productId)
 
 
         if (receiverUserId == MyApplication.getOnlineId(this@ChatActivity).lowercase()){
@@ -187,6 +191,13 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         }
 
+        /* Product View */
+        if (!MyApplication.isBusinessProfileRegistered(this@ChatActivity)) {
+            binding.imgProduct.visibility = View.VISIBLE
+        } else {
+            binding.imgProduct.visibility = View.GONE
+        }
+
     }
 
     override fun setupObservers() {
@@ -197,39 +208,39 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
             chatMessageAdapter = ChatMessageAdapter(
                 this@ChatActivity,
-                chatList as ArrayList<ListItem> /* = java.util.ArrayList<com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem> */,
+                chatList as ArrayList<ListItem>,
                 receiverUserId
             )
             binding.msgRV.adapter = chatMessageAdapter
-            binding.msgRV.scrollToPosition(chatList.size - 1)
 
-            /*sortList(chatList?.docs as ArrayList<DocsItem>)*/
+            var prevCode = ""
+            val now = DateTimeUtils.getNowSeconds()
+            val today = DateTimeUtils.getChatDate(now, this@ChatActivity, true)
+            chatList.forEach {
+                if (it.createdAt != null) {
+                    val date =
+                        format.parse(
+                            it.createdAt
+                        )
+                    val code = DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
 
-            /*val from = From(id = sendData?.from)
-            val to = To(id = sendData?.to)
-
-            val newItem = DocsItem(
-                createdAt = sendData?.createdAt,
-                v = sendData?.v,
-                context = sendData?.context,
-                from = from,
-                mainId = sendData?.id,
-                to = to,
-                id = sendData?.id,
-                contentType = sendData?.contentType,
-                content = sendData?.content,
-                timestamp = sendData?.timestamp,
-                status = sendData?.status,
-                updatedAt = sendData?.updatedAt
-
-            )
-
-            chatMessageAdapter?.addItem(newItem)
-            chatMessageAdapter?.itemCount?.let { it1 ->
-                binding.msgRV.smoothScrollToPosition(
-                    it1
-                )
-            }*/
+                    if (code != prevCode) {
+                        val titleItem =
+                            DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
+                        val day = DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
+                        val isToday = day == today
+                        val listSection =
+                            ListSection(titleItem, code, isToday, !isToday && date.time < now)
+                        listSection.sectionName = code
+                        listItems.add(listSection)
+                        prevCode = code
+                    }
+                    it.sectionName = prevCode
+                    listItems.add(it)
+                }
+            }
+            chatMessageAdapter?.setItems(listItems)
+            binding.msgRV.scrollToPosition(listItems.size - 1)
 
             binding.idPBLoading.visibility = View.GONE
 
@@ -329,7 +340,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                         it1
                     )
                 }
-            }, 1000)
+            }, 500)
 
 
         }
@@ -352,80 +363,6 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         }
 
-//        viewModel.friendProductData.observe(this){
-//            friendsProductList ->
-//
-//            Log.e("TAG", "setupObservers:--- " + friendsProductList.toString() )
-//            if (friendsProductList != null){
-//
-//                productListAdapter = ProductListAdapter(this@ChatActivity, friendsProductList)
-//                val linearLayoutManager = GridLayoutManager(this@ChatActivity, 2)
-//                productBinding.recycleChatProduct.layoutManager = linearLayoutManager
-//                productBinding.recycleChatProduct.adapter = productListAdapter
-//
-//                productBottomSheetDialog?.show()
-//
-//            }
-//
-//        }
-
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun sortList(logList: ArrayList<DocsItem>) {
-
-        logList.sortWith { o1, o2 ->
-
-            val date1 = format.parse(o1.createdAt)
-            val date2 = format.parse(o2.createdAt)
-            if (o1.createdAt != null && o2.createdAt != null) {
-                val dateStr1 = DateTimeUtils.addStringTimeToDate(date1)
-                val dateStr2 = DateTimeUtils.addStringTimeToDate(date2)
-                dateStr2.compareTo(dateStr1)
-            } else {
-                date2.compareTo(date1)
-            }
-        }
-
-        logList.reverse()
-
-        if (chatMessageAdapter != null) {
-            chatMessageAdapter?.clearAll()
-            listItems.clear()
-            var prevCode = ""
-            val now = DateTimeUtils.getNowSeconds()
-            val today = DateTimeUtils.getChatDate(now, this@ChatActivity, true)
-            logList.forEach {
-                if (it.createdAt != null) {
-                    val date =
-                        format.parse(
-                            it.createdAt
-                        )
-                    val code = DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
-
-                    if (code != prevCode) {
-                        val titleItem =
-                            DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
-                        val day = DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
-                        val isToday = day == today
-
-                        val listSection =
-                            ListSection(titleItem, code, isToday, !isToday && date.time < now)
-                        listSection.sectionName = code
-                        listItems.add(listSection)
-                        prevCode = code
-                    }
-                    it.sectionName = prevCode
-                    listItems.add(it)
-                }
-            }
-            chatMessageAdapter?.setItems(listItems)
-            Handler().postDelayed(
-                Runnable { binding.msgRV.scrollToPosition(listItems.size - 1) },
-                50
-            )
-
-        }
     }
 
     fun getMessage() {
@@ -469,7 +406,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         }
     }
 
-    fun getUserStatus() {
+    private fun getUserStatus() {
 
         mSocket?.on("userConnected")  { args ->
 
@@ -688,11 +625,6 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         /* Ready to product sending */
 
-
-       /* val msg = if (binding.edtChating.text.isNotEmpty()){ binding.edtChating.text.toString() } else { "" }
-
-        viewModel.sendMessage(null, receiverUserId ,msg ,productId)*/
-
         binding.relReplay.visibility = View.VISIBLE
 
         val options = RequestOptions()
@@ -720,13 +652,14 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
     override fun chatProduct(item: FriendsProducts) {
 
         /* ProductDetailsDialog */
+        Log.e("TAG", "chatProduct: $item")
 
-        val dialog = item.id?.let { ProductDetailDialog(it, this, item) }
+        val dialog = item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
         dialog?.show(supportFragmentManager,"productDetails")
 
     }
 
-    fun getCurrentUTCTime() : String {
+    private fun getCurrentUTCTime() : String {
         val nowInUtc = OffsetDateTime.now(UTC)
         nowInUtc.format(DateTimeFormatter.ofPattern(FORMAT_API_DATETIME))
         Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")

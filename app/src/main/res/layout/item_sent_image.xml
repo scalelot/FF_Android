@@ -64,7 +64,7 @@
                 android:layout_height="@dimen/sp_16"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_toRightOf="@id/sendImgTime"
-                android:src="@drawable/ic_seen" />
+                android:src="@drawable/ic_unseen" />
         </RelativeLayout>
     </RelativeLayout>
 

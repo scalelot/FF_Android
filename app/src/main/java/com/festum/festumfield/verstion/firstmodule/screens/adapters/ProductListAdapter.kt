@@ -11,6 +11,7 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.festum.festumfield.R
+import com.festum.festumfield.Utils.Constans.Display_Image_URL
 import com.festum.festumfield.databinding.ItemAllProductDisplayBinding
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsProducts
@@ -44,27 +45,17 @@ class ProductListAdapter(
             displayBinding.txtDes.text = item.description
             displayBinding.txtPrice.text = "${"$" + item.price.toString() + ".00"}"
 
+            val image = Display_Image_URL + item.images?.get(0)
 
-            val options = RequestOptions()
-            displayBinding.ivImage.clipToOutline = true
-
-            val image = item.images?.get(0)
-
-            Glide.with(context.applicationContext)
+            Glide.with(context)
                 .load(image)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .error(R.drawable.headpone)
-                .apply(
-                    options.centerCrop()
-                        .skipMemoryCache(true)
-                        .priority(Priority.HIGH)
-                        .format(DecodeFormat.PREFER_ARGB_8888)
-                )
+                .placeholder(R.mipmap.ic_app_logo)
                 .into(displayBinding.ivImage)
 
+
             displayBinding.container.setOnClickListener {
-                item.id?.let { it1 -> productInterface.singleProduct(productList[position], it1, false) }
+                item.id?.let { it1 -> productInterface.singleProduct(item = productList[position],
+                    productId = it1, sendProduct = false) }
             }
 
         }

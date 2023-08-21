@@ -49,14 +49,14 @@ import com.festum.festumfield.Activity.PromotionActivity;
 import com.festum.festumfield.Activity.RequestActivity;
 import com.festum.festumfield.Activity.ProfileActivity;
 import com.festum.festumfield.Activity.SettingActivity;
-import com.festum.festumfield.Activity.UserProfileActivity;
 import com.festum.festumfield.Fragment.CallsFragment;
-import com.festum.festumfield.Fragment.ChatFragment;
 import com.festum.festumfield.Fragment.ContactFragment;
 import com.festum.festumfield.Fragment.MapsFragment;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment;
+import com.festum.festumfield.verstion.firstmodule.screens.main.ProfilePreviewActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -66,8 +66,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+@AndroidEntryPoint
 public class MainActivity extends BaseActivity {
 
     TextView txt_chats, txt_find_friend, txt_calls, txt_contact_list, select;
@@ -146,12 +148,24 @@ public class MainActivity extends BaseActivity {
         Log.e("AuthToken==>", MyApplication.getAuthToken(getApplicationContext()));
 
 
-        user_img.setOnClickListener(new View.OnClickListener() {
+        /*user_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isProfileCrated = getSharedPreferences("isProfileCreate", MODE_PRIVATE).getBoolean("isProfile", false);
                 if (isProfileCrated) {
                     startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                } else {
+                    CustomDialog();
+                }
+            }
+        });*/
+
+        user_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isProfileCrated = getSharedPreferences("isProfileCreate", MODE_PRIVATE).getBoolean("isProfile", false);
+                if (isProfileCrated) {
+                    startActivity(new Intent(MainActivity.this, ProfilePreviewActivity.class));
                 } else {
                     CustomDialog();
                 }
@@ -180,7 +194,8 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new ChatFragment()).commit();
+       /* getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new ChatFragment()).commit();*/
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new FriendsListFragment()).commit();
 
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +210,8 @@ public class MainActivity extends BaseActivity {
                 iv_calls.setColorFilter(getColor(R.color.grey));
                 iv_contact_list.setColorFilter(getColor(R.color.grey));
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new FriendsListFragment()).commit();
             }
         });
 

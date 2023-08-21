@@ -1,7 +1,6 @@
 package com.festum.festumfield.verstion.firstmodule.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.festum.festumfield.verstion.firstmodule.sources.local.model.ProductUrl
 
 class ProductImageMediaDiffCallback : DiffUtil.ItemCallback<String>() {
 

@@ -3,6 +3,7 @@ package com.festum.festumfield.verstion.firstmodule.screens.dialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -51,6 +52,8 @@ class ProductItemsDialog(private val receiverUserId : String,
 
         viewModel.friendProductData.observe(this){
                 friendsProductList ->
+
+            Log.e("TAG", "setObservers" + friendsProductList.toString() )
 
             if (friendsProductList != null){
 

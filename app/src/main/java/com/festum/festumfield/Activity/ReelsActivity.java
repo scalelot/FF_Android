@@ -62,7 +62,7 @@ public class ReelsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ReelsActivity.this, MainActivity.class));
+        /*startActivity(new Intent(ReelsActivity.this, MainActivity.class));*/
         finish();
     }
 }

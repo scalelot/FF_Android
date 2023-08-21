@@ -736,7 +736,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(BusinessProfileActivity.this, UserProfileActivity.class));
+       /* startActivity(new Intent(BusinessProfileActivity.this, UserProfileActivity.class));*/
         finish();
     }
 
