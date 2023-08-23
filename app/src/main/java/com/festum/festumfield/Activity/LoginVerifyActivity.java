@@ -27,6 +27,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -171,7 +172,8 @@ public class LoginVerifyActivity extends BaseActivity {
 
                     MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
 
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();
 
                 }

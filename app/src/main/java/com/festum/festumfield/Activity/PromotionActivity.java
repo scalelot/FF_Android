@@ -68,7 +68,7 @@ public class PromotionActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(PromotionActivity.this, MainActivity.class));
+        /*startActivity(new Intent(PromotionActivity.this, MainActivity.class));*/
         finish();
     }
 }

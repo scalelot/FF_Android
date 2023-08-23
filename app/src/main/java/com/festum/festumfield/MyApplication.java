@@ -119,13 +119,13 @@ public class MyApplication extends Application implements LifecycleObserver {
     private final Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.e(TAG, "onConnectError");
+            Log.e("TAG", "onConnectError");
         }
     };
     private final Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.e(TAG, "onDisconnect");
+            Log.e("TAG", "onDisconnect");
             if (!mSocket.connected()) {
                 mSocket.connect();
             }

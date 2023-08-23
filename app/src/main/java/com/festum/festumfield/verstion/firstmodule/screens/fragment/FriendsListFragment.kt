@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.festum.festumfield.Activity.ReelsActivity
@@ -79,7 +80,7 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
             binding.edtSearchText.setText("")
             binding.ivClearText.visibility = View.GONE
             binding.ivSearch.visibility = View.VISIBLE
-            DeviceUtils.hideKeyboard(requireContext())
+            DeviceUtils.hideKeyboard(requireActivity())
         })
 
         binding.fbReels.setOnClickListener {
@@ -130,7 +131,8 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
             }
 
             if (filteredList.isEmpty()) {
-                Toast.makeText(context, "No Data Found..", Toast.LENGTH_SHORT).show()
+                friendsListAdapter?.filterList(filteredList)
+                Toast.makeText(context, "No User Found..", Toast.LENGTH_SHORT).show()
             } else {
                 friendsListAdapter?.filterList(filteredList)
             }
@@ -147,8 +149,6 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
             val data = args[0] as JSONObject
 
             activity?.runOnUiThread {
-
-                Toast.makeText(activity, data.toString(), Toast.LENGTH_SHORT).show()
 
                 friendsListAdapter?.updateItem(data)
                 binding.chatRecyclerview.scrollToPosition(0)

@@ -383,7 +383,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(SettingActivity.this, MainActivity.class));
+        /*startActivity(new Intent(SettingActivity.this, MainActivity.class));*/
         finish();
     }
 }

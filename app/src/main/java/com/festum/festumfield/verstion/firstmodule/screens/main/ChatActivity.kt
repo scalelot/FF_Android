@@ -19,6 +19,7 @@ import com.festum.festumfield.databinding.ActivityChatProductSelectBinding
 import com.festum.festumfield.databinding.ChatActivityBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ChatMessageAdapter
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
@@ -101,10 +102,10 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         Log.e("TAG", "setupUi: $receiverUserId")
         Log.e("TAG", "setupUi: " + MyApplication.getOnlineId(this@ChatActivity).lowercase() )
-        Log.e("TAG", "setupUi: " + receiverUserName)
-        Log.e("TAG", "setupUi: " + receiverUserImage)
-        Log.e("TAG", "setupUi: " + receiverUserId)
-        Log.e("TAG", "setupUi: " + productId)
+        Log.e("TAG", "receiverUserName: " + receiverUserName)
+        Log.e("TAG", "receiverUserImage: " + receiverUserImage)
+        Log.e("TAG", "receiverUserId: " + receiverUserId)
+        Log.e("TAG", "productId: " + productId)
 
 
         if (receiverUserId == MyApplication.getOnlineId(this@ChatActivity).lowercase()){
@@ -147,7 +148,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         /* Photos */
         binding.imgGallery.setOnClickListener {
-            if (IntentUtil.cameraPermission(this@ChatActivity) && IntentUtil.readPermission(
+            if (IntentUtil.readPermission(
                     this@ChatActivity
                 ) && IntentUtil.writePermission(
                     this@ChatActivity
@@ -155,21 +156,17 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             ) {
                 openIntent(binding.imgGallery.id)
             } else
-                onPermission(binding.imgGallery.id)
+                onMediaPermission(binding.imgGallery.id)
 
         }
 
         /* Camera */
         binding.imgCamera.setOnClickListener {
-            if (IntentUtil.cameraPermission(this@ChatActivity) && IntentUtil.readPermission(
-                    this@ChatActivity
-                ) && IntentUtil.writePermission(
-                    this@ChatActivity
-                )
+            if (IntentUtil.cameraPermission(this@ChatActivity)
             ) {
                 openIntent(binding.imgCamera.id)
             } else
-                onPermission(binding.imgCamera.id)
+                onCameraPermission(binding.imgCamera.id)
 
         }
 
@@ -192,7 +189,8 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         }
 
         /* Product View */
-        if (!MyApplication.isBusinessProfileRegistered(this@ChatActivity)) {
+
+        if (MyApplication.isBusinessProfileRegistered(this@ChatActivity)) {
             binding.imgProduct.visibility = View.VISIBLE
         } else {
             binding.imgProduct.visibility = View.GONE
@@ -248,6 +246,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         viewModel.sendData.observe(this) { sendData ->
 
+            Log.e("TAG", "setupObservers:-- " + sendData?.content?.product?.productid )
             sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
             Handler().postDelayed({
@@ -342,7 +341,6 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                 }
             }, 500)
 
-
         }
 
         viewModel.productData.observe(this) { productData ->
@@ -359,7 +357,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                 category = productData?.category
             )
 
-
+            Log.e("TAG", "setupObservers:$productItemData")
 
         }
 
@@ -468,24 +466,56 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         }
     }
 
-    private fun onPermission(actionID: Int) {
+    private fun onCameraPermission(actionID: Int) {
 
         Dexter.withContext(this@ChatActivity)
             .withPermissions(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.CAMERA
             )
             .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {
-                    if (p0?.areAllPermissionsGranted() == true)
+                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                    if (permission?.areAllPermissionsGranted() == true){
                         openIntent(actionID)
+                    } else {
+                        AppPermissionDialog.showPermission(this@ChatActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                    }
+
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
                     p0: MutableList<PermissionRequest>?,
-                    p1: PermissionToken?
+                    token: PermissionToken?
                 ) {
+                    token?.continuePermissionRequest()
+                }
+
+            }).withErrorListener {}
+
+            .check()
+    }
+
+    private fun onMediaPermission(actionID: Int) {
+
+        Dexter.withContext(this@ChatActivity)
+            .withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                    if (permission?.areAllPermissionsGranted() == true){
+                        openIntent(actionID)
+                    } else {
+                        AppPermissionDialog.showPermission(this@ChatActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                    }
+
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    token?.continuePermissionRequest()
                 }
 
             }).withErrorListener {}
@@ -552,7 +582,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             createdAt = getCurrentUTCTime()
         )
 
-        val date = format.parse(newItem.timestamp?.let { convertLongToTime(it) }.toString())
+        val date = format.parse(newItem.createdAt)
 
         val code = date?.time?.let { it1 ->
 
@@ -665,6 +695,5 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")
         return nowInUtc.toString()
     }
-
 
 }

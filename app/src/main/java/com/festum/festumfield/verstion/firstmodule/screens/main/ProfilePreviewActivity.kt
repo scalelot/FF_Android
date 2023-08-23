@@ -16,6 +16,7 @@ import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ProfileActivityBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ProfileViewPagerAdapter
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
@@ -116,7 +117,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         /* Profile Picture Set */
         binding.editImg.setOnClickListener {
-            if (IntentUtil.cameraPermission(this@ProfilePreviewActivity) && IntentUtil.readPermission(
+            if (IntentUtil.readPermission(
                     this@ProfilePreviewActivity
                 ) && IntentUtil.writePermission(
                     this@ProfilePreviewActivity
@@ -124,7 +125,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             ) {
                 openIntent()
             } else
-                onPermission()
+                onMediaPermission()
         }
 
 
@@ -200,27 +201,28 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
     }
 
-    private fun onPermission() {
+    private fun onMediaPermission() {
 
         Dexter.withContext(this@ProfilePreviewActivity)
             .withPermissions(
-                Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
+                    if (permission?.areAllPermissionsGranted() == true){
                         openIntent()
                     } else {
-
+                        AppPermissionDialog.showPermission(this@ProfilePreviewActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
                     }
+
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
                     p0: MutableList<PermissionRequest>?,
-                    p1: PermissionToken?
+                    token: PermissionToken?
                 ) {
+                    token?.continuePermissionRequest()
                 }
 
             }).withErrorListener {}

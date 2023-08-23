@@ -43,7 +43,7 @@
         android:layout_marginTop="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_20"
         android:fontFamily="@font/roboto_regular"
-        android:text="@string/dis_txt"
+        android:text="@string/crate_profile"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="@dimen/text_14" />
@@ -63,7 +63,7 @@
             android:id="@+id/dialog_skip"
             android:layout_width="@dimen/margin_130"
             android:layout_height="@dimen/sp_40"
-            android:layout_margin="@dimen/margin_10"
+            android:layout_margin="@dimen/_12sdp"
             android:layout_weight="1"
             android:background="@drawable/button_boder"
             android:fontFamily="@font/roboto_medium"
@@ -71,13 +71,13 @@
             android:paddingRight="@dimen/margin_30"
             android:text="@string/skip_now"
             android:textColor="@color/app_color"
-            android:textSize="@dimen/text_14" />
+            android:textSize="@dimen/_10sdp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/dialog_continue"
             android:layout_width="@dimen/margin_130"
             android:layout_height="@dimen/sp_40"
-            android:layout_margin="@dimen/margin_10"
+            android:layout_margin="@dimen/_12sdp"
             android:layout_weight="1"
             android:background="@drawable/rectangle_150"
             android:backgroundTint="@color/app_color"
@@ -86,7 +86,7 @@
             android:paddingRight="@dimen/margin_30"
             android:text="@string/continue_btn"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_14" />
+            android:textSize="@dimen/_10sdp" />
     </LinearLayout>
 
 

@@ -30,6 +30,7 @@
     <string name="tab_contact_list">Contact List</string>
     <string name="create_your_profile">Create Your Profile</string>
     <string name="dis_txt">Lorern Ipsum is simply dummy text of the printing and typesetting industy</string>
+    <string name="crate_profile">For best user experience you need to create your profile, And access to application fetchers.</string>
     <string name="call_time">Today, 09:30</string>
     <string name="requests">Requests</string>
     <string name="new_brodcas">New Brodcast</string>
@@ -420,5 +421,9 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location_permission_title">Location Permission</string>
+    <string name="media_permission_title">Media Permission</string>
+    <string name="location_permission">To serve you best user experience we need permissions from location services</string>
+    <string name="media_permission">To serve you best user experience we need permissions from media services</string>
 
 </resources>

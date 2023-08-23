@@ -19,11 +19,14 @@ import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Product
 import com.festum.festumfield.verstion.firstmodule.utils.ProductImageMediaDiffCallback
 
-class ProductViewPagerAdapter(val context: Context) : ListAdapter<String, ProductViewPagerAdapter.ProductViewHolder>(ProductImageMediaDiffCallback()) {
+class ProductViewPagerAdapter(val context: Context) :
+    ListAdapter<String, ProductViewPagerAdapter.ProductViewHolder>(ProductImageMediaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
 
-        ProductViewHolder(LayoutInflater.from(context).inflate(R.layout.custom_layout_viewslider, parent, false))
+        ProductViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.custom_layout_viewslider, parent, false)
+        )
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         holder.bind(getItem(position))
@@ -35,10 +38,24 @@ class ProductViewPagerAdapter(val context: Context) : ListAdapter<String, Produc
 
         fun bind(item: String) {
 
+            val image: String = if (item.startsWith("https")) {
+                item
+            } else {
+                Constans.Display_Image_URL + item
+            }
+
+            Log.e("TAG", "bind: $image")
+
             Glide.with(context)
-                .load(item)
+                .load(image)
                 .placeholder(R.mipmap.ic_app_logo)
                 .into(imageView)
+
+
+            /* Glide.with(context)
+                 .load(item)
+                 .placeholder(R.mipmap.ic_app_logo)
+                 .into(imageView)*/
 
         }
     }

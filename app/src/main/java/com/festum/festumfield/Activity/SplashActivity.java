@@ -9,6 +9,10 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 
 public class SplashActivity extends BaseActivity {
 
@@ -22,12 +26,12 @@ public class SplashActivity extends BaseActivity {
             public void run() {
                 if (MyApplication.getAuthToken(getApplicationContext()).isEmpty()) {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                    finish();
                 } else {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    finish();
+//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
                 }
+                finish();
             }
-        }, 4000);
+        }, 1000);
     }
 }

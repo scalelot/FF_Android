@@ -257,7 +257,7 @@ public class DisplayAllProductActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(DisplayAllProductActivity.this, MainActivity.class));
+       /* startActivity(new Intent(DisplayAllProductActivity.this, MainActivity.class));*/
         finish();
     }
 }

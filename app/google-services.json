@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "115520106171",
-    "project_id": "festumfield-16980",
-    "storage_bucket": "festumfield-16980.appspot.com"
+    "project_number": "1000627930202",
+    "project_id": "festum-field",
+    "storage_bucket": "festum-field.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:115520106171:android:f47070e3b37102b284839e",
+        "mobilesdk_app_id": "1:1000627930202:android:dad890f3ff702638460463",
         "android_client_info": {
           "package_name": "com.festum.festumfield"
         }
       },
       "oauth_client": [
         {
-          "client_id": "115520106171-pi9t7lsi22abntl002so8a2mes91qq4d.apps.googleusercontent.com",
+          "client_id": "1000627930202-sm9aa46aguopfckfhdmp1g7rc26nka90.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.festum.festumfield",
-            "certificate_hash": "9dc811a7f38fcc3900d85ef478d72d283e861e1e"
+            "certificate_hash": "3b720ff3e6f4958064ab30b8f21bddad412809d8"
           }
         },
         {
-          "client_id": "115520106171-p0gi7478bg93fjb1a65oosc6im49tmqo.apps.googleusercontent.com",
+          "client_id": "1000627930202-g4nkcmmdpkg0hehl1gfqkeq2i04bdbsh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2Axe4uEoZW8dDrJjce7XzoM0jLyhESR8"
+          "current_key": "AIzaSyC6ME8EI1JLjyAPSEtMm4y7XeTO4ViKqeg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "115520106171-p0gi7478bg93fjb1a65oosc6im49tmqo.apps.googleusercontent.com",
+              "client_id": "1000627930202-g4nkcmmdpkg0hehl1gfqkeq2i04bdbsh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

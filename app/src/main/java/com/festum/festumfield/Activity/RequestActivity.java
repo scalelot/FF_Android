@@ -64,7 +64,7 @@ public class RequestActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(RequestActivity.this, MainActivity.class));
+        /*startActivity(new Intent(RequestActivity.this, MainActivity.class));*/
         finish();
     }
 }

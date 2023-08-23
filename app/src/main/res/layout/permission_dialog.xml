@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_bg"
-    android:padding="@dimen/margin_20">
+    android:padding="@dimen/margin_15">
 
     <TextView
         android:id="@+id/cerate_txt"
@@ -22,7 +22,7 @@
         android:layout_below="@+id/cerate_txt"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/margin_20"
-        android:layout_marginTop="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_15"
         android:layout_marginRight="@dimen/margin_20"
         android:fontFamily="@font/roboto_regular"
         android:text="To serve you best user experience we need permissions from location services"
@@ -30,21 +30,49 @@
         android:textColor="@color/grey"
         android:textSize="@dimen/text_14" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/dialog_allow"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/sp_40"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/dis_txt"
-        android:layout_marginLeft="@dimen/margin_30"
-        android:layout_marginTop="@dimen/margin_30"
-        android:layout_marginRight="@dimen/margin_30"
-        android:background="@drawable/edt_bg"
-        android:backgroundTint="@color/app_color"
-        android:fontFamily="@font/roboto_medium"
-        android:paddingLeft="@dimen/margin_30"
-        android:paddingRight="@dimen/margin_30"
-        android:text="Allow"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_14" />
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_allow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_40"
+            android:layout_below="@+id/dis_txt"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginTop="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_weight="1"
+            android:background="@drawable/edt_bg"
+            android:backgroundTint="@color/app_color"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingLeft="@dimen/margin_30"
+            android:paddingRight="@dimen/margin_30"
+            android:text="Allow"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialogCancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_40"
+            android:layout_below="@+id/dis_txt"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginTop="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_weight="1"
+            android:background="@drawable/button_boder"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingLeft="@dimen/margin_30"
+            android:paddingRight="@dimen/margin_30"
+            android:text="Cancel"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/text_14" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

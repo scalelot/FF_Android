@@ -2,6 +2,7 @@ package com.festum.festumfield.verstion.firstmodule.screens.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.festum.festumfield.R
+import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.Utils.Constans.Display_Image_URL
 import com.festum.festumfield.databinding.ItemAllProductDisplayBinding
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
@@ -45,12 +47,23 @@ class ProductListAdapter(
             displayBinding.txtDes.text = item.description
             displayBinding.txtPrice.text = "${"$" + item.price.toString() + ".00"}"
 
-            val image = Display_Image_URL + item.images?.get(0)
 
-            Glide.with(context)
-                .load(image)
-                .placeholder(R.mipmap.ic_app_logo)
-                .into(displayBinding.ivImage)
+            item.images?.forEach {
+
+                val image : String = if (it?.startsWith("https") == true){
+                    it
+                }else{
+                    Display_Image_URL + it
+                }
+
+                Log.e("TAG", "bind: $image")
+
+                Glide.with(context)
+                    .load(image)
+                    .placeholder(R.mipmap.ic_app_logo)
+                    .into(displayBinding.ivImage)
+
+            }
 
 
             displayBinding.container.setOnClickListener {

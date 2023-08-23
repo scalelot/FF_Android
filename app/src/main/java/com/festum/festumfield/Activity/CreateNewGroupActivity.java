@@ -222,7 +222,7 @@ public class CreateNewGroupActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(CreateNewGroupActivity.this, MainActivity.class));
+       /* startActivity(new Intent(CreateNewGroupActivity.this, MainActivity.class));*/
         finish();
     }
 }
