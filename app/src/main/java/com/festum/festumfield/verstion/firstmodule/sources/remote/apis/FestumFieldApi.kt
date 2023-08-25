@@ -2,6 +2,8 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 
 import com.app.easyday.app.sources.ApiResponse
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
@@ -48,5 +50,15 @@ interface FestumFieldApi {
 
     @GET("business/getbusiness")
     fun getBusinessProfile(): Observable<ApiResponse<BusinessProfile>>
+
+    @POST("profile/setprofile")
+    fun createPersonProfile(
+        @Body body: CreateProfileModel
+    ) : Observable<ApiResponse<Nothing>>
+
+    @POST("business/setbusiness")
+    fun createBusinessProfile(
+        @Body body: CreateBusinessProfileModel
+    ) : Observable<ApiResponse<Nothing>>
 
 }

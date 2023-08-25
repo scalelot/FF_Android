@@ -428,15 +428,15 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
             title.setText(getResources().getString(R.string.create_personal_profile));
         }
 
-        if (Const.longitude != null) {
+        if (Const.longitude != null && Const.lattitude != null) {
             if (map != null) {
                 map.clear();
                 if (Const.mCurrLocationMarker != null) {
                     Const.mCurrLocationMarker.remove();
                 }
-                LatLng userLocation = new LatLng(Double.valueOf(Const.lattitude), Double.valueOf(Const.longitude));
-                map.addMarker(new MarkerOptions().position(userLocation));
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12));
+                LatLng location = new LatLng(Double.valueOf(Const.lattitude), Double.valueOf(Const.longitude));
+                map.addMarker(new MarkerOptions().position(location));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
             }
         } else {
             fetchLocation();

@@ -9,6 +9,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyled</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyled</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/DialogButtonStyled</item>
+    </style>
+
+    <style name="DialogButtonStyled" parent="Theme.MaterialComponents.Light">
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="Category_chk" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">

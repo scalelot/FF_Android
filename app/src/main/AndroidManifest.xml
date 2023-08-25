@@ -70,6 +70,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".verstion.firstmodule.screens.main.CreateBusinessProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".verstion.firstmodule.screens.main.CreatePersonProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".verstion.firstmodule.screens.main.HomeActivity"
             android:exported="false"

@@ -65,7 +65,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         if (item == 0){
             binding.btnEditProfile.setOnClickListener {
-                val intent = Intent(this@ProfilePreviewActivity, ProfileActivity::class.java)
+                val intent = Intent(this@ProfilePreviewActivity, CreatePersonProfileActivity::class.java)
                 intent.putExtra("EditProfile", resources.getString(R.string.edit_personal_profile))
                 startActivity(intent)
             }
@@ -80,7 +80,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                         binding.btnEditProfile.text = resources.getString(R.string.edit_personal_profile)
                         binding.llBusinessProduct.visibility = View.GONE
                         binding.btnEditProfile.setOnClickListener {
-                            val intent = Intent(this@ProfilePreviewActivity, ProfileActivity::class.java)
+                            val intent = Intent(this@ProfilePreviewActivity, CreatePersonProfileActivity::class.java)
                             intent.putExtra("EditProfile", resources.getString(R.string.edit_personal_profile))
                             startActivity(intent)
                         }
@@ -94,7 +94,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                             binding.llBusinessProduct.visibility = View.GONE
                         }
                         binding.btnEditProfile.setOnClickListener {
-                            val intent = Intent(this@ProfilePreviewActivity, BusinessProfileActivity::class.java)
+                            val intent = Intent(this@ProfilePreviewActivity, CreateBusinessProfileActivity::class.java)
                             intent.putExtra("EditProfile", resources.getString(R.string.edit_business_profile))
                             startActivity(intent)
                         }

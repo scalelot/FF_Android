@@ -10,8 +10,12 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Base64
 import com.festum.festumfield.BuildConfig.DEBUG
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 
 class FileUtil {
     companion object {
@@ -200,6 +204,41 @@ class FileUtil {
                 cursor?.close()
             }
             return null
+        }
+
+        fun getDocumentFilePath(context: Context, uri: Uri): String {
+            var absolutePath = ""
+            try {
+                val inputStream: InputStream = context.contentResolver.openInputStream(uri)!!
+                val pdfInBytes = ByteArray(inputStream.available())
+                inputStream.read(pdfInBytes)
+                val encodePdf: String = Base64.encodeToString(pdfInBytes, Base64.DEFAULT)
+                var offset = 0
+                var numRead = 0
+                while (offset < pdfInBytes.size && inputStream.read(
+                        pdfInBytes,
+                        offset,
+                        pdfInBytes.size - offset
+                    ).also {
+                        numRead = it
+                    } >= 0
+                ) {
+                    offset += numRead
+                }
+                var mPath = ""
+                mPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                    (context.getExternalFilesDir(Environment.DIRECTORY_DCIM).toString()  + ".pdf")
+                } else {
+                    Environment.getExternalStorageDirectory().toString() + ".pdf"
+                }
+                val pdfFile = File(mPath)
+                val op: OutputStream = FileOutputStream(pdfFile)
+                op.write(pdfInBytes)
+                absolutePath = pdfFile.path
+            } catch (ae: Exception) {
+                ae.printStackTrace()
+            }
+            return absolutePath
         }
     }
 }

@@ -29,6 +29,7 @@ class ProfileViewModel @Inject constructor(
     var profileData = MutableLiveData<ProfileResponse?>()
     var profileBusinessData = MutableLiveData<BusinessProfile?>()
     var profilePictureData = MutableLiveData<ProfilePictureResponse?>()
+    var documentData = MutableLiveData<ProfilePictureResponse?>()
 
     fun getProfile(){
         api.getProfile().subscribeOn(Schedulers.io())
@@ -80,6 +81,72 @@ class ProfileViewModel @Inject constructor(
             }, {
                 profileBusinessData.value = null
             })
+    }
+
+    fun setBusinessProfilePicture(file: File?){
+
+        Log.e("TAG", "onResponse:$file")
+
+        if (file != null) {
+
+            AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file)
+                .addHeaders("Authorization", MyApplication.getAuthToken(MyApplication.context))
+                .setPriority(Priority.HIGH).build()
+                .getAsJSONObject(object : JSONObjectRequestListener {
+                    override fun onResponse(response: JSONObject) {
+
+                        val profileImageData = response.getJSONObject("Data")
+                        val profilePictureResponse = ProfilePictureResponse(
+                            s3Url = profileImageData.optString("s3_url"),
+                            key = profileImageData.optString("Key")
+                        )
+
+                        profilePictureData.value = profilePictureResponse
+
+                    }
+
+                    override fun onError(anError: ANError) {
+
+
+                        profilePictureData.value = null
+
+                    }
+
+                })
+
+        }
+
+    }
+
+    fun setBusinessBrochure(file: File?){
+
+        if (file != null) {
+
+            AndroidNetworking.upload(Constans.set_Setbrochure_pdf).addMultipartFile("file", file)
+                .addHeaders("Authorization", MyApplication.getAuthToken(MyApplication.context))
+                .setPriority(Priority.HIGH).build()
+                .getAsJSONObject(object : JSONObjectRequestListener {
+                    override fun onResponse(response: JSONObject) {
+
+                        val profileImageData = response.getJSONObject("Data")
+                        val profilePictureResponse = ProfilePictureResponse(
+                            s3Url = profileImageData.optString("s3_url"),
+                            key = profileImageData.optString("Key")
+                        )
+                        documentData.value = profilePictureResponse
+
+                    }
+
+                    override fun onError(anError: ANError) {
+
+                        documentData.value = null
+
+                    }
+
+                })
+
+        }
+
     }
 
 }
