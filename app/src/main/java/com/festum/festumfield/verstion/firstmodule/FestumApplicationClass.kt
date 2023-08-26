@@ -6,16 +6,17 @@ import android.content.ContextWrapper
 import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans.SOCKET_SERVER_URL
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.pixplicity.easyprefs.library.Prefs
+import dagger.hilt.android.HiltAndroidApp
 import io.socket.client.IO
-import io.socket.client.Manager
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import io.socket.engineio.client.Transport
 import org.json.JSONObject
 
+@HiltAndroidApp
 class FestumApplicationClass : MultiDexApplication() {
 
     companion object {
@@ -74,7 +75,13 @@ class FestumApplicationClass : MultiDexApplication() {
 
             val jsonObj = JSONObject()
             jsonObj.put("channelID", AppPreferencesDelegates.get().channelId)
-            mSocket?.emit("init",jsonObj)
+            mSocket?.emit("init", jsonObj)?.on(
+                "userConnected"
+            ) { args ->
+                val jsonObject = args[0] as JSONObject
+                val onlineUser = jsonObject.optString("channelID")
+                AppPreferencesDelegates.get().onLineUser = onlineUser
+            }
 
         }catch (e: Exception) {
             Log.e("Error", "error send channalId " + e.message)
@@ -90,6 +97,8 @@ class FestumApplicationClass : MultiDexApplication() {
     fun getMSocket(): Socket? {
         return mSocket
     }
+
+
 
 
 }

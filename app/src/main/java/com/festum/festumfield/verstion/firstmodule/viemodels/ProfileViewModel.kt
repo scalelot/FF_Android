@@ -6,12 +6,12 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
-import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.BusinessProfile
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfilePictureResponse
@@ -55,7 +55,7 @@ class ProfileViewModel @Inject constructor(
         if (file != null) {
 
             AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file)
-                .addHeaders("Authorization", MyApplication.getAuthToken(MyApplication.context))
+                .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                 .setPriority(Priority.HIGH).build()
                 .getAsJSONObject(object : JSONObjectRequestListener {
                     override fun onResponse(response: JSONObject) {
@@ -99,7 +99,7 @@ class ProfileViewModel @Inject constructor(
         if (file != null) {
 
             AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file)
-                .addHeaders("Authorization", MyApplication.getAuthToken(MyApplication.context))
+                .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                 .setPriority(Priority.HIGH).build()
                 .getAsJSONObject(object : JSONObjectRequestListener {
                     override fun onResponse(response: JSONObject) {
@@ -132,7 +132,7 @@ class ProfileViewModel @Inject constructor(
         if (file != null) {
 
             AndroidNetworking.upload(Constans.set_Setbrochure_pdf).addMultipartFile("file", file)
-                .addHeaders("Authorization", MyApplication.getAuthToken(MyApplication.context))
+                .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                 .setPriority(Priority.HIGH).build()
                 .getAsJSONObject(object : JSONObjectRequestListener {
                     override fun onResponse(response: JSONObject) {
@@ -158,22 +158,38 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    fun createProfile(profileData: CreateProfileModel) {
+    fun createProfile(profileData: CreateProfileModel, isBusinessClick : Boolean) {
         api.createPersonProfile(profileData).enqueue(object : Callback<ApiBody> {
             override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
 
-                if (response.isSuccessful){
-                    createProfileData.value = response.body()
+                if (isBusinessClick){
+                    if (response.isSuccessful){
+                        createBusinessProfileData.value = response.body()
+                    }else{
+                        val gson = Gson()
+                        val type = object : TypeToken<ApiBody>() {}.type
+                        val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                        createBusinessProfileData.value = errorResponse
+                    }
                 }else{
-                    val gson = Gson()
-                    val type = object : TypeToken<ApiBody>() {}.type
-                    val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
-                    createProfileData.value = errorResponse
+                    if (response.isSuccessful){
+                        createProfileData.value = response.body()
+                    }else{
+                        val gson = Gson()
+                        val type = object : TypeToken<ApiBody>() {}.type
+                        val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                        createProfileData.value = errorResponse
+                    }
                 }
             }
 
             override fun onFailure(call: Call<ApiBody>, t: Throwable) {
-                createProfileData.value = null
+
+                if (isBusinessClick){
+                    createBusinessProfileData.value = null
+                }else{
+                    createProfileData.value = null
+                }
             }
         })
     }

@@ -26,6 +26,9 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
+import static com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.*;
+
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -51,16 +54,12 @@ public class LoginVerifyActivity extends BaseActivity {
     RequestQueue queue;
     OtpTextView otpTextView;
 
-    MyApplication myApplication;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_verify);
-
-
-        myApplication = new MyApplication(this);
 
         queue = Volley.newRequestQueue(LoginVerifyActivity.this);
 
@@ -175,6 +174,9 @@ public class LoginVerifyActivity extends BaseActivity {
                     Toast.makeText(LoginVerifyActivity.this, verifyOtpModel.getMessage(), Toast.LENGTH_LONG).show();
 
 //                    MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
+
+                    AppPreferencesDelegates.Companion.get().setToken("bearer " + verifyOtpModel.getData().getToken());
+
 
 //                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));

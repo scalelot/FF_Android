@@ -50,6 +50,7 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.gson.Gson;
 
@@ -98,7 +99,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
 
-        mSocket = MyApplication.mSocket;
+//        mSocket = MyApplication.mSocket;
 
 
         getMessageRecive();
@@ -134,11 +135,11 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
         Glide.with(this).load(Constans.Display_Image_URL + p_img).placeholder(R.drawable.ic_user_img).into(img_user);
 
-        if (!MyApplication.isBusinessProfileRegistered(ChatingActivity.this)) {
+        /*if (!MyApplication.isBusinessProfileRegistered(ChatingActivity.this)) {
             img_product.setVisibility(View.VISIBLE);
         } else {
             img_product.setVisibility(View.GONE);
-        }
+        }*/
 
         txt_name = getIntent().getStringExtra("UserName");
         pro_img = getIntent().getStringExtra("product_img");
@@ -311,7 +312,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };
@@ -415,7 +416,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     private void sendMessage(String toUserIds, String toString) {
         try {
-            AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", toUserIds).addBodyParameter("message", toString).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
+            AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", toUserIds).addBodyParameter("message", toString).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
                 }
@@ -437,7 +438,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
 
     private void sendProduct(String userIds, String toUserIds, String txt) {
         try {
-            AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", userIds).addBodyParameter("message", txt).addBodyParameter("product", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
+            AndroidNetworking.post(Constans.set_chat_message).addBodyParameter("to", userIds).addBodyParameter("message", txt).addBodyParameter("product", toUserIds).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setPriority(Priority.HIGH).setTag("UploadTest").build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
                 }
@@ -578,7 +579,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> map = new HashMap<>();
-                        map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                        map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                         return map;
                     }
                 };
@@ -816,7 +817,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
     public void uploadImage(File file) {
 
         try {
-            AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file).addMultipartParameter("to", toUserIds).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+            AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file).addMultipartParameter("to", toUserIds).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
                 }
@@ -857,7 +858,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

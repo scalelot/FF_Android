@@ -26,6 +26,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.exoplayer2.util.Log;
 import com.google.gson.Gson;
 
@@ -105,7 +106,7 @@ public class BlockedContactAdapter extends RecyclerView.Adapter<BlockedContactAd
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("authorization", MyApplication.getAuthToken(activity));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

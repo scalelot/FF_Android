@@ -40,6 +40,7 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -267,7 +268,7 @@ public class AddProductActivity extends BaseActivity {
     public void uploadImage(int pos, File file) {
         try {
             FileUtils.DisplayLoading(AddProductActivity.this);
-            AndroidNetworking.upload(Constans.set_product_image).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+            AndroidNetworking.upload(Constans.set_product_image).addMultipartFile("file", file).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
                 }
@@ -357,7 +358,7 @@ public class AddProductActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
 
@@ -422,7 +423,7 @@ public class AddProductActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
 
@@ -496,7 +497,7 @@ public class AddProductActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

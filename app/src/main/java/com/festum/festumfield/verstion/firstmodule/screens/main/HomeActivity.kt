@@ -28,6 +28,7 @@ import com.festum.festumfield.MyApplication
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityHomeBinding
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
@@ -55,15 +56,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
 
     override fun setupUi() {
 
-        /* Get Profile */
-        viewModel.getProfile()
-
         val menu: Menu = binding.bottomNavigationView.menu
         selectFragment(menu.getItem(0))
 
         binding.userImg.setOnClickListener {
 
-            if (MyApplication.getuserName(this@HomeActivity).isNullOrBlank()){
+            if (AppPreferencesDelegates.get().userName.isBlank()){
                 /* For create profile */
                 createProfileDialog()
             }else{
@@ -123,13 +121,16 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
 
         viewModel.profileData.observe(this) { profileData ->
 
+            val app: FestumApplicationClass = application as FestumApplicationClass
+            app.initializeSocket()
+
             if (profileData != null){
 
                 AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
-                MyApplication.setChannelId(this@HomeActivity, profileData.channelID)
-                MyApplication.setBusinessProfileRegistered(this@HomeActivity,
-                    profileData.isBusinessProfileCreated)
-                MyApplication.setuserName(this@HomeActivity, profileData.fullName)
+                AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
+                AppPreferencesDelegates.get().userName = profileData.fullName.toString()
+
+
 
                 if (profileData.fullName.isNullOrEmpty()){
                     binding.userName.text = "+" + profileData.contactNo
@@ -147,6 +148,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        /* Get Profile */
+        viewModel.getProfile()
+    }
+
     private fun selectFragment(item: MenuItem) {
         item.isChecked = true
         when (item.itemId) {
@@ -158,7 +165,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
                 /* For Set Permission */
                 onPermission()
             }else{
-                if (MyApplication.getuserName(this@HomeActivity).isNullOrBlank()){
+                if (AppPreferencesDelegates.get().userName.isBlank()){
                     /* For create profile */
                     createProfileDialog()
                 } else{
@@ -194,8 +201,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true){
-                        Log.e("TAG", "onPermissionsChecked:---  "  + MyApplication.getuserName(this@HomeActivity).isNullOrBlank() )
-                        if (MyApplication.getuserName(this@HomeActivity).isNullOrBlank()){
+                        if (AppPreferencesDelegates.get().userName.isBlank()){
                             createProfileDialog()
                         } else{
                             pushFragment(MapsFragment())
@@ -235,6 +241,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             allowed.setOnClickListener {
                 startActivity(Intent(this@HomeActivity, ProfilePreviewActivity::class.java))
+                dialog.dismiss()
             }
             cancel.setOnClickListener {
                 dialog.dismiss()

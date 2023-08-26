@@ -67,11 +67,11 @@ public class ChatUserProfileActivity extends BaseActivity {
         chat_name.setText(chatFname);
         u_nickname.setText(chatNick);
 
-        if (!MyApplication.isBusinessProfileRegistered(ChatUserProfileActivity.this)) {
+        /*if (!MyApplication.isBusinessProfileRegistered(ChatUserProfileActivity.this)) {
             l_product.setVisibility(View.GONE);
         } else {
             l_product.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         ic_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +92,7 @@ public class ChatUserProfileActivity extends BaseActivity {
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.tab_business_info)));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.tab_reels)));
 
-        if (!MyApplication.isBusinessProfileRegistered(ChatUserProfileActivity.this)) {
+       /* if (!MyApplication.isBusinessProfileRegistered(ChatUserProfileActivity.this)) {
 
             ChatViewPagerAdapter viewPagerAdapter = new ChatViewPagerAdapter(ChatUserProfileActivity.this, getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(viewPagerAdapter);
@@ -103,7 +103,7 @@ public class ChatUserProfileActivity extends BaseActivity {
             tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.app_color));
             ChatViewPagerAdapter viewPagerAdapter = new ChatViewPagerAdapter(ChatUserProfileActivity.this, getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(viewPagerAdapter);
-        }
+        }*/
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

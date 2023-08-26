@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -59,8 +61,7 @@ public class LoginActivity extends BaseActivity {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
             public void onSuccess(String s) {
-                Log.e("TAG", s);
-                MyApplication.setNotificationToken(LoginActivity.this, s);
+               AppPreferencesDelegates.Companion.get().setNotificationToken(s);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -83,7 +84,7 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
                 try {
                     FileUtils.hideKeyboard(LoginActivity.this);
-                    String newToken = MyApplication.getNotificationToken(LoginActivity.this);
+                    String newToken = AppPreferencesDelegates.Companion.get().getNotificationToken();
                     String phoneNumber = edtPhone.getText().toString().trim();
 
                     if (phoneNumber.isEmpty()) {
@@ -94,6 +95,8 @@ public class LoginActivity extends BaseActivity {
                             if (status) {
                                 SendOtp(countycode, edtPhone.getText().toString(), newToken);
                                 FileUtils.DisplayLoading(LoginActivity.this);
+                                Button b = (Button) view;
+                                b.setEnabled(false);
                             } else {
                                 edtPhone.setError("Invalid Phone Number");
                             }
@@ -180,6 +183,8 @@ public class LoginActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         edtPhone.setText("");
+        AppCompatButton button1 = (AppCompatButton) findViewById(R.id.btn_continue);
+        button1.setEnabled(true);
     }
 
     @Override

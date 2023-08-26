@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -29,7 +30,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
         try {
-            channelId = MyApplication.getChannelId(this);
+            channelId = AppPreferencesDelegates.Companion.get().getChannelId();
             Log.e("onMessageReceived:=", message.getData().toString());
             if (message.getNotification().getTitle() != null) {
                 String title = message.getNotification().getTitle();

@@ -74,6 +74,7 @@ import com.festum.festumfield.TagView.TokenCompleteTextView;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -555,7 +556,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
 
@@ -681,7 +682,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
 
@@ -760,7 +761,6 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                     rangeBar.setStart(profileRegisterModel.getData().getTargetAudienceAgeMin());
                     rangeBar.setEnd(profileRegisterModel.getData().getTargetAudienceAgeMax());
 
-                    MyApplication.setBusinessProfileRegistered(ProfileActivity.this, profileRegisterModel.getData().getIsBusinessProfileCreated());
 
 
                     if (profileRegisterModel.getData().getProfileimage().equals("")) {
@@ -800,7 +800,7 @@ public class ProfileActivity extends BaseActivity implements OnMapReadyCallback,
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

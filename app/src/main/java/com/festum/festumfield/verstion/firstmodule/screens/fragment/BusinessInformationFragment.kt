@@ -5,12 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import com.bumptech.glide.Glide
-import com.festum.festumfield.Activity.BusinessProfileActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.Utils.FileUtils
 import com.festum.festumfield.databinding.FragmentBusinessInfromationBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
+import com.festum.festumfield.verstion.firstmodule.screens.main.CreateBusinessProfileActivity
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -46,7 +46,7 @@ class BusinessInformationFragment(var profileData: ProfileResponse) : BaseFragme
         }
 
         binding.btnCreateProfile.setOnClickListener {
-            startActivity(Intent(requireContext(), BusinessProfileActivity::class.java))
+            startActivity(Intent(requireContext(), CreateBusinessProfileActivity::class.java))
         }
 
     }

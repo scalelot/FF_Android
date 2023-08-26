@@ -17,6 +17,7 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityChatProductSelectBinding
 import com.festum.festumfield.databinding.ChatActivityBinding
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ChatMessageAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
@@ -24,6 +25,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
@@ -80,18 +82,27 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     override fun setupUi() {
 
-        mSocket = MyApplication.mSocket
+        try {
 
-        if (mSocket?.connected() == true) {
+            val app: FestumApplicationClass = application as FestumApplicationClass
+            mSocket = app.getMSocket()
 
-            getUserStatus()
-            getMessage()
+            if (mSocket?.connected() == true) {
 
-        } else {
+                getUserStatus()
+                getMessage()
 
-            mSocket?.connected()
+            } else {
 
+                mSocket?.connected()
+
+            }
+
+        }catch (e: Exception) {
+            Log.e("Error: ", e.message.toString())
         }
+
+
 
         val intent = intent.extras
 
@@ -101,14 +112,14 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         productId = intent?.getString("productId").toString()
 
         Log.e("TAG", "setupUi: $receiverUserId")
-        Log.e("TAG", "setupUi: " + MyApplication.getOnlineId(this@ChatActivity).lowercase() )
+        Log.e("TAG", "setupUi: " + AppPreferencesDelegates.get().onLineUser.lowercase() )
         Log.e("TAG", "receiverUserName: " + receiverUserName)
         Log.e("TAG", "receiverUserImage: " + receiverUserImage)
         Log.e("TAG", "receiverUserId: " + receiverUserId)
         Log.e("TAG", "productId: " + productId)
 
 
-        if (receiverUserId == MyApplication.getOnlineId(this@ChatActivity).lowercase()){
+        if (receiverUserId == AppPreferencesDelegates.get().onLineUser.lowercase()){
             binding.textOnline.text = getString(R.string.online)
         }
 
@@ -190,7 +201,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         /* Product View */
 
-        if (MyApplication.isBusinessProfileRegistered(this@ChatActivity)) {
+        if (AppPreferencesDelegates.get().businessProfile) {
             binding.imgProduct.visibility = View.VISIBLE
         } else {
             binding.imgProduct.visibility = View.GONE
@@ -411,7 +422,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             val data = args[0] as JSONObject
 
             runOnUiThread {
-                if (receiverUserId == MyApplication.getOnlineId(this@ChatActivity).lowercase()){
+                if (receiverUserId == AppPreferencesDelegates.get().onLineUser.lowercase()){
                     binding.textOnline.text = getString(R.string.online)
                 }
             }

@@ -54,6 +54,7 @@ import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
@@ -366,7 +367,7 @@ public class UserProfileActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(UserProfileActivity.this));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };
@@ -396,7 +397,7 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     public void personalProfileImageUpload(File file) {
-        AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+        AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
             @Override
             public void onProgress(long bytesUploaded, long totalBytes) {
                 // do anything with progress

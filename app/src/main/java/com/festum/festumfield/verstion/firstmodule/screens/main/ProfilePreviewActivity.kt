@@ -4,22 +4,25 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.festum.festumfield.Activity.BusinessProfileActivity
+
 import com.festum.festumfield.Activity.ProductActivity
-import com.festum.festumfield.Activity.ProfileActivity
 import com.festum.festumfield.R
+
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ProfileActivityBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ProfileViewPagerAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.karumi.dexter.Dexter
@@ -117,15 +120,23 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         /* Profile Picture Set */
         binding.editImg.setOnClickListener {
-            if (IntentUtil.readPermission(
-                    this@ProfilePreviewActivity
-                ) && IntentUtil.writePermission(
-                    this@ProfilePreviewActivity
-                )
-            ) {
-                openIntent()
-            } else
-                onMediaPermission()
+
+            if (AppPreferencesDelegates.get().userName.isBlank()){
+
+                createProfile()
+
+            }else{
+                if (IntentUtil.readPermission(
+                        this@ProfilePreviewActivity
+                    ) && IntentUtil.writePermission(
+                        this@ProfilePreviewActivity
+                    )
+                ) {
+                    openIntent()
+                } else
+                    onMediaPermission()
+            }
+
         }
 
 
@@ -142,8 +153,8 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                     .placeholder(R.drawable.ic_user)
                     .into(binding.userProfileImage)
 
-                binding.uName.text = profileData.fullName ?: "Festum Field"
-                binding.uNickname.text = profileData.nickName ?: "Festum"
+                binding.uName.text = profileData.fullName ?: ""
+                binding.uNickname.text = profileData.nickName ?: ""
 
                 businessProfile = profileData.isBusinessProfileCreated
 
@@ -256,6 +267,19 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             }
 
         }
+    }
+
+    fun createProfile(){
+
+        MaterialAlertDialogBuilder(this, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+            .setTitle(getString(R.string.create_profile))
+            .setMessage(getString(R.string.crate_profile))
+            .setPositiveButton("OK") {
+                    dialogInterface, i ->
+                dialogInterface.dismiss()
+
+            }
+            .show()
     }
 
 }

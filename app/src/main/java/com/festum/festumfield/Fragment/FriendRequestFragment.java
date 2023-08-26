@@ -28,6 +28,7 @@ import com.festum.festumfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterMod
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -151,7 +152,7 @@ public class FriendRequestFragment extends Fragment {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

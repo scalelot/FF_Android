@@ -68,7 +68,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_15"
             android:fontFamily="@font/roboto_bold"
-            android:text="@string/caroline_case"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/text_18" />
 
@@ -80,7 +80,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_5"
             android:fontFamily="@font/roboto_regular"
-            android:text="@string/caroline"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/text_16" />
 

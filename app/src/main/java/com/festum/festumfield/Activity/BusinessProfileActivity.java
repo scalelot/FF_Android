@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -51,6 +52,7 @@ import com.bumptech.glide.Glide;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Model.Business.Register.BusinessRegisterModel;
 import com.festum.festumfield.Model.BusinessInfo.BusinessInfoRegisterModel;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
@@ -316,7 +318,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };
@@ -392,7 +394,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };
@@ -539,7 +541,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> headers = new HashMap<String, String>();
-                    headers.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    headers.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return headers;
                 }
             };
@@ -579,7 +581,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     public void uploadImage(File file) {
         try {
             FileUtils.DisplayLoading(BusinessProfileActivity.this);
-            AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(getApplicationContext())).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+            AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
                 }
@@ -743,7 +745,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
     @Override
     protected void onResume() {
         super.onResume();
-        if (!MyApplication.isBusinessProfileRegistered(BusinessProfileActivity.this)) {
+        /*if (!MyApplication.isBusinessProfileRegistered(BusinessProfileActivity.this)) {
             tv_title.setText(getResources().getString(R.string.edit_business_profile));
             if (Const.bitmap_business_profile_image != null) {
                 business_profile_image.setImageBitmap(Const.bitmap_business_profile_image);
@@ -755,7 +757,7 @@ public class BusinessProfileActivity extends BaseActivity implements OnMapReadyC
             tv_title.setText(getResources().getString(R.string.create_business_profile));
             btn_save.setVisibility(View.GONE);
             btn_next.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         if (Const.b_longitude != null) {
             if (map != null) {

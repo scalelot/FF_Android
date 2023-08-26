@@ -11,6 +11,7 @@ import android.provider.OpenableColumns
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.festum.festumfield.Activity.MapsLocationActivity
 import com.festum.festumfield.Activity.ProductActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Const
@@ -25,6 +26,7 @@ import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
@@ -54,6 +56,12 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
     override fun setupUi() {
 
         val editProfile = intent.getStringExtra("EditProfile")
+
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+
+        mapFragment?.getMapAsync(this)
+        binding.mapview.getMapAsync(this)
+
         if (editProfile?.isNotEmpty() == true) {
             binding.tvTitle.text = editProfile
             binding.rlUpload.visibility = View.GONE
@@ -81,7 +89,13 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             openImageOrDocument(R.id.btn_change)
         }
 
-        binding.btnSave.setOnClickListener {
+        binding.relativeBusiMap.setOnClickListener {
+            startActivity(
+                Intent(this@CreateBusinessProfileActivity, MapsLocationActivity::class.java).putExtra("isBusinessLocation", true)
+            )
+        }
+
+        binding.btnNext.setOnClickListener {
 
             val businessProfile = CreateBusinessProfileModel(
                 name = binding.edtBussinessName.text.toString(),
@@ -146,8 +160,8 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
                         if (lat != null && long != null){
                             val latLng = LatLng(lat,long)
-                            Const.longitude = long
-                            Const.lattitude = lat
+                            Const.b_lattitude = lat
+                            Const.b_longitude = long
                             map?.addMarker(MarkerOptions().position(latLng))
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                         }
@@ -321,13 +335,13 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
     override fun onResume() {
         super.onResume()
-        if (Const.longitude != null && Const.lattitude != null) {
+        if (Const.b_longitude != null && Const.b_lattitude != null) {
             if (map != null) {
                 map?.clear()
                 if (Const.mCurrLocationMarker != null) {
                     Const.mCurrLocationMarker.remove()
                 }
-                val userLocation = LatLng(Const.lattitude, Const.longitude)
+                val userLocation = LatLng(Const.b_lattitude, Const.b_longitude)
                 map?.addMarker(MarkerOptions().position(userLocation))
                 map?.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12f))
             }

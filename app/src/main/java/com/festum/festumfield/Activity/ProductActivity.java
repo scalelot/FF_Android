@@ -35,6 +35,8 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.screens.main.CreateBusinessProfileActivity;
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -118,7 +120,7 @@ public class ProductActivity extends BaseActivity {
         txt_skip_for_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 finish();
             }
         });
@@ -126,7 +128,7 @@ public class ProductActivity extends BaseActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 finish();
             }
         });
@@ -134,7 +136,7 @@ public class ProductActivity extends BaseActivity {
         edt_business_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), BusinessProfileActivity.class).putExtra("edit_profile", getResources().getString(R.string.edit_business_profile)));
+                startActivity(new Intent(getApplicationContext(), CreateBusinessProfileActivity.class).putExtra("EditProfile", getResources().getString(R.string.edit_business_profile)));
             }
         });
 
@@ -179,7 +181,7 @@ public class ProductActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };
@@ -263,7 +265,7 @@ public class ProductActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

@@ -209,7 +209,25 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
         binding.btnBusiness.setOnClickListener {
 
-            startActivity(Intent(this@CreatePersonProfileActivity, CreateBusinessProfileActivity::class.java))
+            val profileData = CreateProfileModel(
+                fullName = binding.edtName.text.toString(),
+                userName = binding.edtNickname.text.toString(),
+                nickName = binding.edtNickname.text.toString(),
+                emailId = binding.edtEmailId.text.toString(),
+                areaRange = binding.tKm.text.toString().toInt(),
+                aboutUs = binding.edtAboutUs.text.toString(),
+                targetAudienceAgeMin = binding.txtMinAge.text.toString().toInt(),
+                targetAudienceAgeMax = binding.txtMaxAge.text.toString().toInt(),
+                hobbies = hobbiesArrayList,
+                socialMediaLinks = socialMediaLinkArrayList,
+                dob = binding.edtDob.text.toString(),
+                gender = genSpinnerValue,
+                latitude = Const.lattitude,
+                longitude = Const.longitude,
+                interestedin = radioGenderValue.uppercase()
+            )
+
+            viewModel.createProfile(profileData,true)
 
         }
 
@@ -263,7 +281,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 interestedin = radioGenderValue.uppercase()
             )
 
-            viewModel.createProfile(profileData)
+            viewModel.createProfile(profileData,false)
 
         }
 
@@ -404,6 +422,18 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             if (it?.status == 200){
                 finish()
+            }
+
+        }
+
+        viewModel.createBusinessProfileData.observe(this) {
+
+            if (it != null) {
+                Snackbar.make(binding.relative, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+            }
+
+            if (it?.status == 200){
+                startActivity(Intent(this@CreatePersonProfileActivity, CreateBusinessProfileActivity::class.java))
             }
 
         }

@@ -10,6 +10,7 @@ import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -24,7 +25,7 @@ public class SplashActivity extends BaseActivity {
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (MyApplication.getAuthToken(getApplicationContext()).isEmpty()) {
+                if (AppPreferencesDelegates.Companion.get().getToken().isEmpty()) {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 } else {
 //                    startActivity(new Intent(getApplicationContext(), MainActivity.class));

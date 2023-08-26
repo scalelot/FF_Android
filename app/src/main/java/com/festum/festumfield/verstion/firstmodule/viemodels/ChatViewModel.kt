@@ -9,9 +9,11 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,7 +55,7 @@ class ChatViewModel @Inject constructor(
             try {
                 AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file)
                     .addMultipartParameter("to", receiverId)
-                    .addHeaders("Authorization", MyApplication.getAuthToken(MyApplication.context))
+                    .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                     .setPriority(Priority.HIGH).build()
                     .getAsJSONObject(object : JSONObjectRequestListener {
                         override fun onResponse(response: JSONObject) {
@@ -101,7 +103,7 @@ class ChatViewModel @Inject constructor(
 
                         override fun onError(error: ANError) {
                             Toast.makeText(
-                                MyApplication.context,
+                                FestumApplicationClass.appInstance,
                                 "Not Upload Image",
                                 Toast.LENGTH_SHORT
                             ).show()

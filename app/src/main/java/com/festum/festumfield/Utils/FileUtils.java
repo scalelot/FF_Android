@@ -37,6 +37,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -114,7 +115,7 @@ public class FileUtils {
     }
 
     public static void personalProfileImageUpload(Context context, File file) {
-        AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file).addHeaders("authorization", MyApplication.getAuthToken(context)).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
+        AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
             @Override
             public void onProgress(long bytesUploaded, long totalBytes) {
                 // do anything with progress
@@ -279,7 +280,7 @@ public class FileUtils {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
 //                    map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(context));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

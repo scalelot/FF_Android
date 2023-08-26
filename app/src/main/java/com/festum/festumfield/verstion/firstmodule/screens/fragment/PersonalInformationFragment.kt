@@ -3,12 +3,11 @@ package com.festum.festumfield.verstion.firstmodule.screens.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
-import com.festum.festumfield.Activity.BusinessProfileActivity
-import com.festum.festumfield.Activity.ProfileActivity
 import com.festum.festumfield.Adapter.TagAdapter
 import com.festum.festumfield.Utils.FileUtils
 import com.festum.festumfield.databinding.FragmentPersonalInformationBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
+import com.festum.festumfield.verstion.firstmodule.screens.main.CreatePersonProfileActivity
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -63,7 +62,7 @@ class PersonalInformationFragment(var profileData: ProfileResponse) : BaseFragme
         }
 
         binding.btnCreateProfile.setOnClickListener {
-            startActivity(Intent(requireContext(), ProfileActivity::class.java))
+            startActivity(Intent(requireContext(), CreatePersonProfileActivity::class.java))
         }
 
     }

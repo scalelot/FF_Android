@@ -23,6 +23,7 @@ import com.festum.festumfield.databinding.ItemSentImageBinding
 import com.festum.festumfield.databinding.ItemSentMessageBinding
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.DocsItem
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import com.squareup.picasso.Picasso
@@ -109,7 +110,7 @@ class ChatMessageAdapter(
             val item = listItems[position] as DocsItem
 
 
-            if (item.from?.id.toString().uppercase() == MyApplication.getChannelId(MyApplication.context)){
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
 
                 messageBinding.sendTxt.text = item.content?.text?.message
                 messageBinding.sendTxtTime.text = item.createdAt?.convertToFormattedTime()
@@ -139,7 +140,7 @@ class ChatMessageAdapter(
             val item = listItems[position] as DocsItem
 
 
-            if (item.from?.id.toString().uppercase() == MyApplication.getChannelId(MyApplication.context)){
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
 
                 imageBinding.relativeLeft.visibility = View.GONE
                 imageBinding.relativeRight.visibility = View.VISIBLE
@@ -203,7 +204,7 @@ class ChatMessageAdapter(
 
             val item = listItems[position] as DocsItem
 
-            if (item.from?.id.toString().uppercase() == MyApplication.getChannelId(MyApplication.context)){
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
 
                 productBinding.sendRelative.visibility = View.VISIBLE
                 productBinding.reciveRelative.visibility = View.GONE

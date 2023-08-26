@@ -34,6 +34,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.material.snackbar.Snackbar;
 import com.hbb20.CountryCodePicker;
 
@@ -196,7 +197,7 @@ public class ChangeNumberActivity extends BaseActivity {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    hashMap.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return hashMap;
                 }
             };
@@ -332,7 +333,7 @@ public class ChangeNumberActivity extends BaseActivity {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
 

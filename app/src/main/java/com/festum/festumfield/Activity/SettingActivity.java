@@ -32,6 +32,7 @@ import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -46,6 +47,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import io.socket.client.Socket;
+
 public class SettingActivity extends BaseActivity {
 
     ImageView ic_back_arrow, img_close, ic_close;
@@ -57,10 +60,27 @@ public class SettingActivity extends BaseActivity {
     TextView txt_ph_no, txt_file_name, txt_email_id;
     LinearLayout ll_txt, ll_phone_email, ll_sample_txt;
 
+    Socket socket;
+    FestumApplicationClass festumApplicationClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        festumApplicationClass = new FestumApplicationClass();
+
+        try {
+
+            socket = festumApplicationClass.getMSocket();
+            if (socket.connected() == true){
+                Log.e("TAG", "onConnect");
+            }else {
+                socket.connect();
+            }
+        }catch (Exception e){
+
+        }
 
         ic_back_arrow = findViewById(R.id.ic_back_arrow);
         btn_clear_data = findViewById(R.id.btn_clear_data);
@@ -143,9 +163,25 @@ public class SettingActivity extends BaseActivity {
                 editor.clear();
                 editor.apply();
 
+                try {
+                    socket.disconnect();
+                }catch (Exception e){
+                    /*Toast.makeText(SettingActivity.this, e.toString(), Toast.LENGTH_SHORT).show();*/
+                }
+
+                /*runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        socket.disconnect();
+                    }
+                });*/
+
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+
+
+
             }
         });
     }

@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.festum.festumfield.Activity.ReelsActivity
 import com.festum.festumfield.MyApplication
 import com.festum.festumfield.databinding.FragmentFriendsListBinding
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
@@ -40,16 +42,23 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
 
     override fun initUi() {
 
-        mSocket = MyApplication.mSocket
+        try {
 
-        if (mSocket?.connected() == true) {
+            val app: FestumApplicationClass = requireActivity().application as FestumApplicationClass
+            mSocket = app.getMSocket()
 
-            getMessage()
+            if (mSocket?.connected() == true) {
 
-        } else {
+                getMessage()
 
-            mSocket?.connected()
+            } else {
 
+                mSocket?.connected()
+
+            }
+
+        }catch (e: Exception) {
+            Log.e("Error: ", e.message.toString())
         }
 
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)

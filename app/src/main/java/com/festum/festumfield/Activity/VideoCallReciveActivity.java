@@ -75,7 +75,7 @@ public class VideoCallReciveActivity extends BaseActivity {
         setContentView(R.layout.activity_video_call_recive);
 
         ActivityCompat.requestPermissions(this, permissions(), 1);
-        mSocket =  MyApplication.mSocket;
+//        mSocket =  MyApplication.mSocket;
         toUserId = getIntent().getStringExtra("toUserId");
         toUserName = getIntent().getStringExtra("userName");
         loginUser = getIntent().getStringExtra("loginUser");

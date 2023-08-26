@@ -32,6 +32,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.gson.Gson;
 
@@ -150,7 +151,7 @@ public class Contact_Us_Activity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };

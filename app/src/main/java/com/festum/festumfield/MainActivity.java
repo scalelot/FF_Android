@@ -57,6 +57,7 @@ import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment;
 import com.festum.festumfield.verstion.firstmodule.screens.main.ProfilePreviewActivity;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -139,13 +140,13 @@ public class MainActivity extends BaseActivity {
         def = txt_find_friend.getTextColors();
         /*Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));*/
 
-        if (MyApplication.getuserName(getApplicationContext()).equals("")) {
+        /*if (MyApplication.getuserName(getApplicationContext()).equals("")) {
 //            user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
         } else {
             user_name.setText(MyApplication.getuserName(getApplicationContext()));
-        }
+        }*/
 
-        Log.e("AuthToken==>", MyApplication.getAuthToken(getApplicationContext()));
+        Log.e("AuthToken==>", AppPreferencesDelegates.Companion.get().getToken());
 
 
         /*user_img.setOnClickListener(new View.OnClickListener() {
@@ -379,13 +380,13 @@ public class MainActivity extends BaseActivity {
 
                            /* MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());*/
 //                            MyApplication.setcontactNo(getApplicationContext(), peronalInfoModel.getData().getContactNo());
-                            MyApplication.setChannelId(getApplicationContext(), peronalInfoModel.getData().getChannelID());
+//                            MyApplication.setChannelId(getApplicationContext(), peronalInfoModel.getData().getChannelID());
 
-                            if (MyApplication.getuserName(getApplicationContext()).equals("")) {
+                            /*if (MyApplication.getuserName(getApplicationContext()).equals("")) {
 //                                user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
                             } else {
                                 user_name.setText(MyApplication.getuserName(getApplicationContext()));
-                            }
+                            }*/
 
                             Log.e("TAG", "onResponse: " + Constans.Display_Image_URL + peronalInfoModel.getData().getProfileimage() );
 
@@ -430,7 +431,7 @@ public class MainActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", MyApplication.getAuthToken(getApplicationContext()));
+                    map.put("authorization", AppPreferencesDelegates.Companion.get().getToken());
                     return map;
                 }
             };
@@ -586,12 +587,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (checkPermissions()) {
-                    if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
+                   /* if (!MyApplication.isPersonalProfileRegistered(getApplicationContext())) {
                         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                         finish();
                     } else {
                         Toast.makeText(MainActivity.this, "User profile already registered", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 }
                 dialog.dismiss();
             }
