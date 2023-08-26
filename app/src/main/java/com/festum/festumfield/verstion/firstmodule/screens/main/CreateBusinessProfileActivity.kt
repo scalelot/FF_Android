@@ -11,12 +11,14 @@ import android.provider.OpenableColumns
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.festum.festumfield.Activity.ProductActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Const
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityCreateBusinessBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -78,6 +81,23 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             openImageOrDocument(R.id.btn_change)
         }
 
+        binding.btnSave.setOnClickListener {
+
+            val businessProfile = CreateBusinessProfileModel(
+                name = binding.edtBussinessName.text.toString(),
+                category = binding.edtCategory.text.toString(),
+                subCategory = binding.edtSubcategory.text.toString(),
+                description =  binding.edtDescription.text.toString(),
+                interestedCategory = binding.edtBussinessName.text.toString(),
+                interestedSubCategory = binding.edtBussinessName.text.toString(),
+                latitude = Const.lattitude,
+                longitude = Const.longitude
+            )
+
+            viewModel.createBusinessProfile(businessProfile)
+
+        }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -126,6 +146,8 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
                         if (lat != null && long != null){
                             val latLng = LatLng(lat,long)
+                            Const.longitude = long
+                            Const.lattitude = lat
                             map?.addMarker(MarkerOptions().position(latLng))
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                         }
@@ -160,11 +182,23 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
                     val document = profilePictureData.s3Url + profilePictureData.key
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(document)))
-                    
+
                 }
 
             } else {
                 Toast.makeText(this, "Something went wrong ", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        viewModel.createBusinessProfileData.observe(this) {
+
+            if (it != null) {
+                Snackbar.make(binding.linear, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+            }
+
+            if (it?.status == 200){
+                startActivity(Intent(this@CreateBusinessProfileActivity, ProductActivity::class.java))
             }
 
         }
@@ -246,7 +280,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                         ?.let { File(it) }
                 }
                 val file = File(mImageFile.toString())
-                 viewModel.setBusinessProfilePicture(file)
+                viewModel.setBusinessProfilePicture(file)
             }
 
         }

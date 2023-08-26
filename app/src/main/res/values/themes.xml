@@ -12,10 +12,15 @@
         <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyled</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyled</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/DialogButtonStyled</item>
+        <item name="snackbarStyle">@style/MySnackBarStyle</item>
     </style>
 
     <style name="DialogButtonStyled" parent="Theme.MaterialComponents.Light">
         <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="MySnackBarStyle" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:background">@color/colorAccent</item>
     </style>
 
     <style name="Category_chk" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">

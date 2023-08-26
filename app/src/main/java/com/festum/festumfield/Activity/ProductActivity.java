@@ -34,6 +34,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.screens.main.CreateBusinessProfileActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -283,7 +284,7 @@ public class ProductActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ProductActivity.this, BusinessProfileActivity.class));
+        startActivity(new Intent(ProductActivity.this, CreateBusinessProfileActivity.class));
         finish();
     }
 }

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.festum.festumfield.Activity.ReelsActivity

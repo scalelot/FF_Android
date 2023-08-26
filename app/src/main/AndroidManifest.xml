@@ -59,7 +59,7 @@
     </queries>
 
     <application
-        android:name=".MyApplication"
+        android:name=".verstion.firstmodule.FestumApplicationClass"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_app_logo"

@@ -5,16 +5,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Criteria
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -23,11 +17,9 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.festum.festumfield.Activity.BusinessProfileActivity
 import com.festum.festumfield.Activity.MapsLocationActivity
+import com.festum.festumfield.Activity.ProductActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.TagView.Person
 import com.festum.festumfield.TagView.PersonAdapter
@@ -38,6 +30,8 @@ import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityCreateProfileBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.SocialMediaLinksItem
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
@@ -45,7 +39,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
@@ -71,6 +64,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
     private var radioGenderValue = ""
     private var businessProfileValue = false
     private var hobbiesArrayList = ArrayList<String>()
+    private var socialMediaLinkArrayList = ArrayList<SocialMediaLinksItem>()
     private var map: GoogleMap? = null
 
     override fun getContentView(): View {
@@ -215,31 +209,62 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
         binding.btnBusiness.setOnClickListener {
 
-//            startActivity(Intent(this@CreatePersonProfileActivity, BusinessProfileActivity::class.java))
             startActivity(Intent(this@CreatePersonProfileActivity, CreateBusinessProfileActivity::class.java))
 
+        }
 
+        if (!binding.edtFb.equals("")){
+            val faceBook = SocialMediaLinksItem(platform = "Facebook", link = binding.edtFb.text.toString())
+            socialMediaLinkArrayList.add(faceBook)
+        }
+
+        if (!binding.edtInsta.equals("")){
+            val instagram = SocialMediaLinksItem(platform = "Instagram", link = binding.edtInsta.text.toString())
+            socialMediaLinkArrayList.add(instagram)
+        }
+
+        if (!binding.edtTwitter.equals("")){
+            val twitter = SocialMediaLinksItem(platform = "Twitter", link = binding.edtTwitter.text.toString())
+            socialMediaLinkArrayList.add(twitter)
+        }
+
+        if (!binding.edtLinkdin.equals("")){
+            val linkedin = SocialMediaLinksItem(platform = "Linkedin", link = binding.edtLinkdin.text.toString())
+            socialMediaLinkArrayList.add(linkedin)
+        }
+
+        if (!binding.edtPintrest.equals("")){
+            val pinterest = SocialMediaLinksItem(platform = "Pinterest", link = binding.edtPintrest.text.toString())
+            socialMediaLinkArrayList.add(pinterest)
+        }
+
+        if (!binding.edtYoutube.equals("")){
+            val youtube = SocialMediaLinksItem(platform = "Youtube", link = binding.edtYoutube.text.toString())
+            socialMediaLinkArrayList.add(youtube)
         }
 
         binding.btnSave.setOnClickListener {
 
-            /*val profileData = CreateProfileModel(
-                fullName = ,
-                userName = ,
-                nickName = ,
-                emailId = ,
-                areaRange = ,
-                aboutUs =,
-                targetAudienceAgeMin = ,
-                targetAudienceAgeMax = ,
-                hobbies = ,
-                socialMediaLinks = ,
-                dob = ,
-                gender = ,
-                latitude = ,
-                longitude = ,
-                interestedin =
-            )*/
+            val profileData = CreateProfileModel(
+                fullName = binding.edtName.text.toString(),
+                userName = binding.edtNickname.text.toString(),
+                nickName = binding.edtNickname.text.toString(),
+                emailId = binding.edtEmailId.text.toString(),
+                areaRange = binding.tKm.text.toString().toInt(),
+                aboutUs = binding.edtAboutUs.text.toString(),
+                targetAudienceAgeMin = binding.txtMinAge.text.toString().toInt(),
+                targetAudienceAgeMax = binding.txtMaxAge.text.toString().toInt(),
+                hobbies = hobbiesArrayList,
+                socialMediaLinks = socialMediaLinkArrayList,
+                dob = binding.edtDob.text.toString(),
+                gender = genSpinnerValue,
+                latitude = Const.lattitude,
+                longitude = Const.longitude,
+                interestedin = radioGenderValue.uppercase()
+            )
+
+            viewModel.createProfile(profileData)
+
         }
 
     }
@@ -271,7 +296,12 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                     binding.tagView.addObjectAsync(Person(it))
                 }
 
-                binding.tKm.text = profileData.areaRange.toString()
+                if (profileData.areaRange == null){
+                    binding.tKm.text = "0"
+                }else{
+                    binding.tKm.text = profileData.areaRange.toString()
+                }
+
                 binding.seekbarRange.progress = profileData.areaRange ?: 0
 
                 if (profileData.gender.equals("Male")){
@@ -281,9 +311,16 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 }else if (profileData.gender.equals("OTHER")){
                     (binding.radioGender.getChildAt(2) as RadioButton).isChecked = true
                 }
+                radioGenderValue = profileData.gender.toString()
 
-                binding.txtMinAge.text = profileData.targetAudienceAgeMin.toString()
-                binding.txtMaxAge.text = profileData.targetAudienceAgeMax.toString()
+                if (profileData.targetAudienceAgeMin == null && profileData.targetAudienceAgeMax == null ){
+                    binding.txtMinAge.text =  "0"
+                    binding.txtMaxAge.text = "0"
+                }else{
+                    binding.txtMinAge.text =  profileData.targetAudienceAgeMin.toString()
+                    binding.txtMaxAge.text = profileData.targetAudienceAgeMax.toString()
+                }
+
                 binding.rangeSeekbar.start = profileData.targetAudienceAgeMin ?: 0
                 binding.rangeSeekbar.end = profileData.targetAudienceAgeMax ?: 0
 
@@ -329,6 +366,8 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
                         if (lat != null && long != null){
                             val latLng = LatLng(lat,long)
+                            Const.lattitude = lat
+                            Const.longitude = long
                             map?.addMarker(MarkerOptions().position(latLng))
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                         }
@@ -353,6 +392,18 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             } else {
                 Toast.makeText(this, "Something went wrong ", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        viewModel.createProfileData.observe(this){
+
+            if (it != null) {
+                Snackbar.make(binding.relative, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+            }
+
+            if (it?.status == 200){
+                finish()
             }
 
         }
@@ -448,7 +499,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-            map = googleMap
+        map = googleMap
     }
     override fun onResume() {
         super.onResume()

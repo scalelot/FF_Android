@@ -1,6 +1,7 @@
 package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 
 import com.app.easyday.app.sources.ApiResponse
+import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
@@ -10,6 +11,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessa
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.*
 import rx.Observable
 import java.io.File
@@ -54,11 +56,11 @@ interface FestumFieldApi {
     @POST("profile/setprofile")
     fun createPersonProfile(
         @Body body: CreateProfileModel
-    ) : Observable<ApiResponse<Nothing>>
+    ) : Call<ApiBody>
 
     @POST("business/setbusiness")
     fun createBusinessProfile(
         @Body body: CreateBusinessProfileModel
-    ) : Observable<ApiResponse<Nothing>>
+    ) : Call<ApiBody>
 
 }

@@ -4,6 +4,8 @@ public class Constans {
 
     public static String CHAT_SERVER_URL = "https://api.festumfield.com";
 
+    public static String SOCKET_SERVER_URL = "https://api.festumfield.com";
+
     public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
     public static String BASE_URL = "https://api.festumfield.com/apis/v1/";

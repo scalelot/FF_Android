@@ -199,6 +199,15 @@ dependencies {
      * Pager Dots Indicator
      * */
     implementation 'com.tbuonomo:dotsindicator:4.3'
+
+    /**
+     * Android Support
+     * */
+    implementation 'androidx.multidex:multidex:2.0.1'
+    /**
+     shared preferences helper
+     * */
+    implementation "com.pixplicity.easyprefs:library:1.9.0"
 }
 
 kapt {

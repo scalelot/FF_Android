@@ -51,10 +51,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onStop() {
-        MyApplication.activityStopped();
-        if (MyApplication.isApplicationOnBackground()) {
-            System.out.println("App is Background");
-        }
         super.onStop();
     }
 }

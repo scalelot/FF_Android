@@ -9,13 +9,20 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
+import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.BusinessProfile
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfilePictureResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.io.File
@@ -30,6 +37,8 @@ class ProfileViewModel @Inject constructor(
     var profileBusinessData = MutableLiveData<BusinessProfile?>()
     var profilePictureData = MutableLiveData<ProfilePictureResponse?>()
     var documentData = MutableLiveData<ProfilePictureResponse?>()
+    var createProfileData = MutableLiveData<ApiBody?>()
+    var createBusinessProfileData = MutableLiveData<ApiBody?>()
 
     fun getProfile(){
         api.getProfile().subscribeOn(Schedulers.io())
@@ -146,6 +155,49 @@ class ProfileViewModel @Inject constructor(
                 })
 
         }
+
+    }
+
+    fun createProfile(profileData: CreateProfileModel) {
+        api.createPersonProfile(profileData).enqueue(object : Callback<ApiBody> {
+            override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
+
+                if (response.isSuccessful){
+                    createProfileData.value = response.body()
+                }else{
+                    val gson = Gson()
+                    val type = object : TypeToken<ApiBody>() {}.type
+                    val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                    createProfileData.value = errorResponse
+                }
+            }
+
+            override fun onFailure(call: Call<ApiBody>, t: Throwable) {
+                createProfileData.value = null
+            }
+        })
+    }
+
+    fun createBusinessProfile(businessProfile: CreateBusinessProfileModel) {
+
+        api.createBusinessProfile(businessProfile).enqueue(object : Callback<ApiBody>{
+            override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
+
+                if (response.isSuccessful){
+                    createBusinessProfileData.value = response.body()
+                }else{
+                    val gson = Gson()
+                    val type = object : TypeToken<ApiBody>() {}.type
+                    val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                    createBusinessProfileData.value = errorResponse
+                }
+            }
+
+            override fun onFailure(call: Call<ApiBody>, t: Throwable) {
+                createBusinessProfileData.value = null
+            }
+
+        })
 
     }
 

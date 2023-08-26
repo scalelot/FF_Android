@@ -31,6 +31,7 @@ import com.festum.festumfield.databinding.ActivityHomeBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.karumi.dexter.Dexter
@@ -39,6 +40,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import io.socket.client.Socket
 
 
 @AndroidEntryPoint
@@ -123,6 +125,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
 
             if (profileData != null){
 
+                AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
                 MyApplication.setChannelId(this@HomeActivity, profileData.channelID)
                 MyApplication.setBusinessProfileRegistered(this@HomeActivity,
                     profileData.isBusinessProfileCreated)

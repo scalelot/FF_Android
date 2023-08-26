@@ -137,10 +137,10 @@ public class MainActivity extends BaseActivity {
         noti_message = findViewById(R.id.noti_message);
 
         def = txt_find_friend.getTextColors();
-        Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));
+        /*Log.e("CountryCode==>", MyApplication.getCountryCode(getApplicationContext()));*/
 
         if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-            user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
+//            user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
         } else {
             user_name.setText(MyApplication.getuserName(getApplicationContext()));
         }
@@ -377,12 +377,12 @@ public class MainActivity extends BaseActivity {
                             Log.e("GetProfileData=>", response.toString());
                             GetPersonalProfileModel peronalInfoModel = new Gson().fromJson(response.toString(), GetPersonalProfileModel.class);
 
-                            MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());
-                            MyApplication.setcontactNo(getApplicationContext(), peronalInfoModel.getData().getContactNo());
+                           /* MyApplication.setuserName(getApplicationContext(), peronalInfoModel.getData().getFullName());*/
+//                            MyApplication.setcontactNo(getApplicationContext(), peronalInfoModel.getData().getContactNo());
                             MyApplication.setChannelId(getApplicationContext(), peronalInfoModel.getData().getChannelID());
 
                             if (MyApplication.getuserName(getApplicationContext()).equals("")) {
-                                user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
+//                                user_name.setText("+" + MyApplication.getcontactNo(getApplicationContext()));
                             } else {
                                 user_name.setText(MyApplication.getuserName(getApplicationContext()));
                             }

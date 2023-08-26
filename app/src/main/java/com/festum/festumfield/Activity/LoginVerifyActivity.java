@@ -3,7 +3,6 @@ package com.festum.festumfield.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.BaseActivity;
-import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.SendOtpModel;
 import com.festum.festumfield.Model.Verifyotp.VerifyOtpModel;
 import com.festum.festumfield.MyApplication;
@@ -53,10 +51,16 @@ public class LoginVerifyActivity extends BaseActivity {
     RequestQueue queue;
     OtpTextView otpTextView;
 
+    MyApplication myApplication;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_verify);
+
+
+        myApplication = new MyApplication(this);
 
         queue = Volley.newRequestQueue(LoginVerifyActivity.this);
 
@@ -76,7 +80,7 @@ public class LoginVerifyActivity extends BaseActivity {
 
         txt_phone_number.setText(" +" + c_code + " " + MobileNo);
 
-        MyApplication.setCountryCode(getApplicationContext(), " +" + c_code);
+        /*MyApplication.setCountryCode(getApplicationContext(), "+" + c_code);*/
 
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,10 +174,11 @@ public class LoginVerifyActivity extends BaseActivity {
 
                     Toast.makeText(LoginVerifyActivity.this, verifyOtpModel.getMessage(), Toast.LENGTH_LONG).show();
 
-                    MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
+//                    MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
 
 //                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
                     finish();
 
                 }
