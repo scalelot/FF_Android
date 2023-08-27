@@ -19,10 +19,4 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MyApplication {
-
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    Context context;
-
-}
+public class MyApplication {}

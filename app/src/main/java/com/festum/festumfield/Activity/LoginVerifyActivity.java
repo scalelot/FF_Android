@@ -25,6 +25,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass;
 import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
 import static com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.*;
 
@@ -178,8 +179,12 @@ public class LoginVerifyActivity extends BaseActivity {
                     AppPreferencesDelegates.Companion.get().setToken("bearer " + verifyOtpModel.getData().getToken());
 
 
+
 //                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+                    /*FestumApplicationClass festumApplicationClass = new FestumApplicationClass();
+                    festumApplicationClass.initializeSocket();*/
 
                     finish();
 

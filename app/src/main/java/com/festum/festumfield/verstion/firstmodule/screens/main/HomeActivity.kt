@@ -56,9 +56,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
 
     override fun setupUi() {
 
-        val menu: Menu = binding.bottomNavigationView.menu
-        selectFragment(menu.getItem(0))
-
         binding.userImg.setOnClickListener {
 
             if (AppPreferencesDelegates.get().userName.isBlank()){
@@ -121,14 +118,18 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
 
         viewModel.profileData.observe(this) { profileData ->
 
-            val app: FestumApplicationClass = application as FestumApplicationClass
-            app.initializeSocket()
 
             if (profileData != null){
 
                 AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
                 AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
                 AppPreferencesDelegates.get().userName = profileData.fullName.toString()
+
+                val app: FestumApplicationClass = application as FestumApplicationClass
+                app.initializeSocket()
+
+                val menu: Menu = binding.bottomNavigationView.menu
+                selectFragment(menu.getItem(0))
 
 
 
