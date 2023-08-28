@@ -164,7 +164,7 @@ public class SettingActivity extends BaseActivity {
                 editor.apply();
 
                 try {
-                    socket.disconnect();
+//                    socket.disconnect();
                 }catch (Exception e){
                     /*Toast.makeText(SettingActivity.this, e.toString(), Toast.LENGTH_SHORT).show();*/
                 }

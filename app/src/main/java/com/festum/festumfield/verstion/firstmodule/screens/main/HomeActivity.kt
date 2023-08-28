@@ -32,6 +32,7 @@ import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -170,7 +171,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
                     /* For create profile */
                     createProfileDialog()
                 } else{
-                    pushFragment(MapsFragment())
+                    pushFragment(MapFragment())
                 }
             }
             R.id.call ->
@@ -205,7 +206,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
                         if (AppPreferencesDelegates.get().userName.isBlank()){
                             createProfileDialog()
                         } else{
-                            pushFragment(MapsFragment())
+                            pushFragment(MapFragment())
                         }
                     } else {
                         AppPermissionDialog.showPermission(this@HomeActivity, title = getString(R.string.location_permission_title), message = getString(R.string.location_permission))

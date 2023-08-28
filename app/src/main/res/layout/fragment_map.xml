@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rl_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"
-    android:orientation="vertical">
+    tools:context=".verstion.firstmodule.screens.fragment.MapFragment">
 
     <RelativeLayout
         android:id="@+id/mapview_root"
@@ -38,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/rl_bottom"
-            tools:context="com.festum.festumfield.Fragment.MapsFragment" />
+            tools:context="com.festum.festumfield.Fragment.MapFragment" />
 
         <RelativeLayout
             android:id="@+id/rl_bottom"
@@ -72,4 +70,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</FrameLayout>

@@ -5,6 +5,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
@@ -63,4 +64,8 @@ interface FestumFieldApi {
         @Body body: CreateBusinessProfileModel
     ) : Call<ApiBody>
 
+    @POST("friends/findfriends")
+    fun findFriendByLocation(
+        @Body body: FindFriendsBody
+    ) : Observable<ApiResponse<ArrayList<ProfileResponse>>>
 }

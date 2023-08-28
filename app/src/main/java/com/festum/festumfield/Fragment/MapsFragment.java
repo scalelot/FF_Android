@@ -53,10 +53,8 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.festum.festumfield.Model.FindFriends.FindFriendsModel;
 import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
-import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
-import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -96,8 +94,7 @@ public class MapsFragment extends Fragment {
     Marker marker;
     View view_marker, transparentView, viewdialog, view;
     PopupWindow popview;
-    private static final int DURATION =
-            3000;
+    private static final int DURATION = 3000;
     Double latitude, longitude;
     List<Place.Field> fields;
     SearchView searchView;
@@ -196,6 +193,8 @@ public class MapsFragment extends Fragment {
 
         lat = getContext().getSharedPreferences("MapFragment", Context.MODE_PRIVATE).getString("lat", "");
         log = getContext().getSharedPreferences("MapFragment", Context.MODE_PRIVATE).getString("log", "");
+        Log.e("TAG", "onCreateView:- " + lat );
+        Log.e("TAG", "onCreateView:--- " + log );
         if (lat != "") {
             isStatus = true;
             findLocationorName(Double.valueOf(lat), Double.valueOf(log));
