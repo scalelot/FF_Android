@@ -6,7 +6,6 @@ import android.content.ContextWrapper
 import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans.SOCKET_SERVER_URL
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.pixplicity.easyprefs.library.Prefs
@@ -14,7 +13,9 @@ import dagger.hilt.android.HiltAndroidApp
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import org.json.JSONException
 import org.json.JSONObject
+
 
 @HiltAndroidApp
 class FestumApplicationClass : MultiDexApplication() {
@@ -24,6 +25,7 @@ class FestumApplicationClass : MultiDexApplication() {
     }
 
     private var mSocket: Socket? = null
+    private var mOnlineUsers: ArrayList<String>? = null
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -79,8 +81,17 @@ class FestumApplicationClass : MultiDexApplication() {
                 "userConnected"
             ) { args ->
                 val jsonObject = args[0] as JSONObject
-                val onlineUser = jsonObject.optString("channelID")
-                AppPreferencesDelegates.get().onLineUser = onlineUser
+                val onlineUser = jsonObject.optJSONObject("onlineUsers")
+
+
+                val onlineUserChannelId = onlineUser?.keys()
+
+                while (onlineUserChannelId?.hasNext() == true) {
+                    val key = onlineUserChannelId.next()
+                    mOnlineUsers?.addAll(listOf(key))
+                }
+
+                /*AppPreferencesDelegates.get().onLineUser = totalList*/
             }
 
         }catch (e: Exception) {
@@ -97,8 +108,10 @@ class FestumApplicationClass : MultiDexApplication() {
     fun getMSocket(): Socket? {
         return mSocket
     }
+    data class MyDataClass(val dataMap: Map<String, String>)
 
-
-
+    fun getOnlineUser() : ArrayList<String>? {
+        return mOnlineUsers
+    }
 
 }

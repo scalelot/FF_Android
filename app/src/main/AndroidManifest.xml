@@ -70,22 +70,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".verstion.firstmodule.screens.main.VideoCallingActivity"
+            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.CreateBusinessProfileActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.CreatePersonProfileActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.HomeActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.ProfilePreviewActivity"
             android:exported="false"
@@ -301,12 +300,12 @@
         <activity
             android:name=".Activity.LoginVerifyActivity"
             android:exported="false"
-            android:launchMode = "singleTop"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.LoginActivity"
             android:exported="false"
-            android:launchMode = "singleTop"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.SplashActivity"

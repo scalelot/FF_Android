@@ -4,12 +4,19 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
+import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
@@ -22,6 +29,7 @@ class FriendsListViewModel @Inject constructor(
     var friendsListData = MutableLiveData<ArrayList<FriendsListItems>?>()
     var profileData = MutableLiveData<ProfileResponse?>()
     var findFriendsData = MutableLiveData<ArrayList<ProfileResponse?>?>()
+    var sendRequestData = MutableLiveData<ApiBody?>()
 
     fun friendsList(friendListBody: FriendListBody){
         api.getFriendsListProduct(friendListBody).subscribeOn(Schedulers.io())
@@ -54,6 +62,32 @@ class FriendsListViewModel @Inject constructor(
                 }, {
                     findFriendsData.value = null
                 })
+
+        }
+
+    }
+
+    fun sendFriendRequest(sendFriendRequestBody : SendRequestBody?) {
+
+        if (sendFriendRequestBody != null) {
+            api.sendFriendRequest(sendFriendRequestBody).enqueue(object : Callback<ApiBody> {
+                override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
+
+                    if (response.isSuccessful){
+                        sendRequestData.value = response.body()
+                    }else{
+                        val gson = Gson()
+                        val type = object : TypeToken<ApiBody>() {}.type
+                        val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                        sendRequestData.value = errorResponse
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiBody>, t: Throwable) {
+                    sendRequestData.value = null
+                }
+
+            })
 
         }
 

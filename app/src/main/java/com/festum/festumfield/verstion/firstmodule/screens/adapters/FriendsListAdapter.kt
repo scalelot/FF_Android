@@ -66,11 +66,11 @@ class FriendsListAdapter(
                 binding.txtChatCount.visibility = View.GONE
             }
 
-            if (item.lastMessage?.size != null) {
+            if (item.lastMessage != null) {
 
-                when (item.lastMessage[0]?.contentType) {
+                when (item.lastMessage.contentType) {
                     "text" -> {
-                        binding.txtMessage.text = item.lastMessage[0]?.content?.text?.message
+                        binding.txtMessage.text = item.lastMessage.content?.text?.message
                         binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
                             null,
                             null,
@@ -103,7 +103,7 @@ class FriendsListAdapter(
 
             }
 
-            binding.chatUserTime.text = item.lastMessage?.get(0)?.timestamp?.let { getTimeInMillis(it) }
+            binding.chatUserTime.text = item.lastMessage?.timestamp?.let { getTimeInMillis(it) }
 
             binding.txtChatCount.text = item.messageSize
 
@@ -192,11 +192,10 @@ class FriendsListAdapter(
 
         val productItem = SendProduct(productid = product.optString("productid"))
 
-        val lastMessageItemList = listOf(LastMessageItem(
+        val lastMessageItemList = LastMessageItem(
             timestamp = data.optLong("timestamp"),
             content = SendMessageContent(text = text, media = media, product = productItem),
             contentType = data.optString("contentType"))
-        )
 
         val friendsListItem = FriendsListItems(
             fullName = friendsListItems?.fullName,

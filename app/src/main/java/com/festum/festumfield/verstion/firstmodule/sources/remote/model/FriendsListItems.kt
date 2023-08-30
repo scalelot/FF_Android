@@ -24,7 +24,7 @@ data class FriendsListItems(
     val emailId: String? = null,
 
     @field:SerializedName("last_message")
-    val lastMessage: List<LastMessageItem?>? = null,
+    val lastMessage: LastMessageItem? = null,
 
     @field:SerializedName("userName")
     val userName: String? = null,

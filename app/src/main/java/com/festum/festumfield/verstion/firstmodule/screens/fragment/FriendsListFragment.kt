@@ -105,7 +105,7 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
 
                 friendsListItems = friendsListData
 
-                friendsListData.sortByDescending { it.lastMessage?.get(0)?.updatedAt }
+                friendsListData.sortByDescending { it.lastMessage?.updatedAt }
 
                 friendsListAdapter = FriendsListAdapter(requireActivity(), friendsListData)
                 binding.chatRecyclerview.adapter = friendsListAdapter
@@ -162,6 +162,29 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
                 binding.chatRecyclerview.scrollToPosition(0)
 
             }
+
+        }?.on("callUser"){ args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "getMessage: $data")
+
+        }?.on("updateMyMedia"){ args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "updateMyMedia: $data")
+
+        }?.on("answerCall"){ args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "answerCall: $data")
+
+        }?.on("endCall"){ args ->
+
+
+            Log.e("TAG", "endCall: ${args.asList()}")
 
         }
 

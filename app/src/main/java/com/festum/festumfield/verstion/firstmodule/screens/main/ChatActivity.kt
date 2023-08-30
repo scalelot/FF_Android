@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
@@ -82,10 +83,11 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     override fun setupUi() {
 
+        val applicationClass : FestumApplicationClass = application as FestumApplicationClass
+
         try {
 
-            val app: FestumApplicationClass = application as FestumApplicationClass
-            mSocket = app.getMSocket()
+            mSocket = applicationClass.getMSocket()
 
             if (mSocket?.connected() == true) {
 
@@ -112,16 +114,22 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         productId = intent?.getString("productId").toString()
 
         Log.e("TAG", "setupUi: $receiverUserId")
-        Log.e("TAG", "setupUi: " + AppPreferencesDelegates.get().onLineUser.lowercase() )
+//        Log.e("TAG", "setupUi: " + AppPreferencesDelegates.get().onLineUser.lowercase() )
         Log.e("TAG", "receiverUserName: " + receiverUserName)
         Log.e("TAG", "receiverUserImage: " + receiverUserImage)
         Log.e("TAG", "receiverUserId: " + receiverUserId)
-        Log.e("TAG", "productId: " + productId)
+        Log.e("TAG", "productId: " + applicationClass.getOnlineUser().toString())
 
-
-        if (receiverUserId == AppPreferencesDelegates.get().onLineUser.lowercase()){
+        if (applicationClass.getOnlineUser()?.equals(receiverUserId.uppercase()) == true ||
+            applicationClass.getOnlineUser()?.equals(receiverUserId.lowercase()) == true){
             binding.textOnline.text = getString(R.string.online)
         }
+
+       /* AppPreferencesDelegates.get().onLineUser.forEach {
+            if (receiverUserId == it.lowercase()){
+
+            }
+        }*/
 
         format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         format.timeZone = TimeZone.getTimeZone("UTC")
@@ -260,7 +268,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             Log.e("TAG", "setupObservers:-- " + sendData?.content?.product?.productid )
             sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
 
                 val from = From(id = sendData?.from)
                 val to = To(id = sendData?.to)
@@ -421,10 +429,22 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
             val data = args[0] as JSONObject
 
+
             runOnUiThread {
-                if (receiverUserId == AppPreferencesDelegates.get().onLineUser.lowercase()){
+
+                /*AppPreferencesDelegates.get().onLineUser.forEach {
+                    if (receiverUserId == it.lowercase()){
+                        binding.textOnline.text = getString(R.string.online)
+                    }
+                }*/
+
+                val applicationClass : FestumApplicationClass = application as FestumApplicationClass
+
+                if (applicationClass.getOnlineUser()?.equals(receiverUserId.uppercase()) == true ||
+                    applicationClass.getOnlineUser()?.equals(receiverUserId.lowercase()) == true){
                     binding.textOnline.text = getString(R.string.online)
                 }
+
             }
 
             Log.e("TAG", "getUserStatus:$data")
@@ -445,7 +465,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             runOnUiThread {
                 binding.textOnline.text = getString(R.string.typing)
 
-                Handler().postDelayed(
+                Handler(Looper.getMainLooper()).postDelayed(
                     Runnable { binding.textOnline.text = getString(R.string.online) },
                     3000
                 )

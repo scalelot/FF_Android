@@ -9,6 +9,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFrien
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -68,4 +69,10 @@ interface FestumFieldApi {
     fun findFriendByLocation(
         @Body body: FindFriendsBody
     ) : Observable<ApiResponse<ArrayList<ProfileResponse>>>
+
+    @POST("friends/sendfriendrequest")
+    fun sendFriendRequest(
+        @Body body: SendRequestBody
+    ) : Call<ApiBody>
+
 }
