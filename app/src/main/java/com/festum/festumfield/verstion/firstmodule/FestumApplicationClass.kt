@@ -25,7 +25,6 @@ class FestumApplicationClass : MultiDexApplication() {
     }
 
     private var mSocket: Socket? = null
-    private var mOnlineUsers: ArrayList<String>? = null
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -81,17 +80,7 @@ class FestumApplicationClass : MultiDexApplication() {
                 "userConnected"
             ) { args ->
                 val jsonObject = args[0] as JSONObject
-                val onlineUser = jsonObject.optJSONObject("onlineUsers")
-
-
-                val onlineUserChannelId = onlineUser?.keys()
-
-                while (onlineUserChannelId?.hasNext() == true) {
-                    val key = onlineUserChannelId.next()
-                    mOnlineUsers?.addAll(listOf(key))
-                }
-
-                /*AppPreferencesDelegates.get().onLineUser = totalList*/
+                AppPreferencesDelegates.get().onLineUser = jsonObject.optJSONObject("onlineUsers")?.toString() ?: ""
             }
 
         }catch (e: Exception) {
@@ -108,10 +97,6 @@ class FestumApplicationClass : MultiDexApplication() {
     fun getMSocket(): Socket? {
         return mSocket
     }
-    data class MyDataClass(val dataMap: Map<String, String>)
 
-    fun getOnlineUser() : ArrayList<String>? {
-        return mOnlineUsers
-    }
 
 }

@@ -78,4 +78,7 @@ data class FriendsListItems(
     @field:SerializedName("messageSize")
     val messageSize: String? = null,
 
+    @field:SerializedName("isOnline")
+    var online: Boolean? = null
+
 ) : Serializable

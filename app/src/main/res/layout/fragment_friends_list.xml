@@ -189,7 +189,7 @@
                     android:clipToPadding="false"
                     android:paddingBottom="@dimen/sp_60"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/user_chat_list" />
+                    tools:listitem="@layout/user_chat_list"/>
 
                 <ProgressBar
                     android:id="@+id/idPBLoading"

@@ -162,18 +162,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
             R.id.chat ->
                 pushFragment(FriendsListFragment())
             R.id.location ->
-            if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                /* For Set Permission */
-                onPermission()
-            }else{
                 if (AppPreferencesDelegates.get().userName.isBlank()){
                     /* For create profile */
                     createProfileDialog()
                 } else{
-                    pushFragment(MapFragment())
+                    onPermission()
                 }
-            }
             R.id.call ->
                 pushFragment(CallsFragment())
             R.id.contact ->
@@ -203,11 +197,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>()  {
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true){
-                        if (AppPreferencesDelegates.get().userName.isBlank()){
-                            createProfileDialog()
-                        } else{
-                            pushFragment(MapFragment())
-                        }
+                        pushFragment(MapFragment())
                     } else {
                         AppPermissionDialog.showPermission(this@HomeActivity, title = getString(R.string.location_permission_title), message = getString(R.string.location_permission))
                     }

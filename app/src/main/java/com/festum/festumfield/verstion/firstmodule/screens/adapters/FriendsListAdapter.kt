@@ -18,11 +18,11 @@ import com.festum.festumfield.verstion.firstmodule.screens.main.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class FriendsListAdapter(
     private val context: Context,
@@ -48,6 +48,7 @@ class FriendsListAdapter(
 
             val item = friendsList[position]
 
+
             val image = Constans.Display_Image_URL + item.profileimage
 
 
@@ -58,12 +59,24 @@ class FriendsListAdapter(
 
             binding.txtUserName.text = item.fullName
 
-            if (item.isNewMessage == true){
-                binding.txtMessage.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+            if (item.isNewMessage == true) {
+                binding.txtMessage.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.colorAccent
+                    )
+                );
                 binding.txtChatCount.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.txtMessage.setTextColor(ContextCompat.getColor(context, R.color.grey));
                 binding.txtChatCount.visibility = View.GONE
+            }
+
+
+            if (item.online == true){
+                binding.ivTypeImg.visibility = View.VISIBLE
+            }else{
+                binding.ivTypeImg.visibility = View.INVISIBLE
             }
 
             if (item.lastMessage != null) {
@@ -78,6 +91,7 @@ class FriendsListAdapter(
                             null
                         )
                     }
+
                     "media" -> {
                         binding.txtMessage.text = context.getString(R.string.image)
                         binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
@@ -87,6 +101,7 @@ class FriendsListAdapter(
                             null
                         )
                     }
+
                     "product" -> {
                         binding.txtMessage.text = context.getString(R.string.product)
                         binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
@@ -96,6 +111,7 @@ class FriendsListAdapter(
                             null
                         )
                     }
+
                     "" -> {
                         binding.txtMessage.text = ""
                     }
@@ -150,32 +166,18 @@ class FriendsListAdapter(
         }
     }
 
-    /*fun updateItem(optString: String) {
-
-
-
-        friendsList.forEach {
-            if (optString == it.id){
-                Log.e("TAG", "updateItem: $optString")
-                notifyItemRangeChanged(0, friendsList.size)
-            }
-        }
-
-    }*/
-
     @SuppressLint("NotifyDataSetChanged")
     fun updateItem(data: JSONObject) {
 
         /* Check user */
         val userId = data.optString("from").lowercase()
 
-        var friendsListItems : FriendsListItems ?= null
+        var friendsListItems: FriendsListItems? = null
         friendsList.forEach {
             if (userId == it.id) {
                 friendsListItems = it
             }
         }
-
 
         val contentList = data.getJSONObject("content")
         val messageList = contentList.getJSONObject("text")
@@ -195,7 +197,8 @@ class FriendsListAdapter(
         val lastMessageItemList = LastMessageItem(
             timestamp = data.optLong("timestamp"),
             content = SendMessageContent(text = text, media = media, product = productItem),
-            contentType = data.optString("contentType"))
+            contentType = data.optString("contentType")
+        )
 
         val friendsListItem = FriendsListItems(
             fullName = friendsListItems?.fullName,
@@ -215,7 +218,101 @@ class FriendsListAdapter(
 
     }
 
-    private fun getCurrentUTCTime() : String {
+    fun onlineUserList(data: JSONObject?) {
+
+        val onlineUserChannelId = data?.keys()
+        var friendsListItems: FriendsListItems? = null
+
+        while (onlineUserChannelId?.hasNext() == true) {
+            val key = onlineUserChannelId.next()
+
+            Log.e("TAG", "updateOnline:-- $key")
+
+            friendsList.forEach {
+                if (key.toString().lowercase() == it.id) {
+                    friendsListItems = it
+                }
+            }
+
+        }
+
+        /*val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = friendsListItems?.lastMessage,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            online = true
+        )
+
+        val currentItemIndex = friendsList.indexOf(friendsListItems)
+        friendsList.removeAt(currentItemIndex)
+        friendsListItem.let { friendsList.add(0, it) }
+        notifyItemMoved(currentItemIndex, 0)
+        notifyItemChanged(0)*/
+
+    }
+
+    fun updateOnline(data: JSONObject?) {
+
+        val onlineUserChannelId = data?.keys()
+        var friendsListItems: FriendsListItems? = null
+
+        while (onlineUserChannelId?.hasNext() == true) {
+            val key = onlineUserChannelId.next()
+
+            Log.e("TAG", "updateOnline:-- $key")
+
+            friendsList.forEach {
+                if (key.toString().lowercase() == it.id) {
+                    friendsListItems = it
+                }
+            }
+
+        }
+
+        val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = friendsListItems?.lastMessage,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            online = true
+        )
+
+        val currentItemIndex = friendsList.indexOf(friendsListItems)
+        friendsList.removeAt(currentItemIndex)
+        friendsListItem.let { friendsList.add(0, it) }
+        notifyItemMoved(currentItemIndex, 0)
+        notifyItemChanged(0)
+
+    }
+
+    fun updateOffline(receiverChannelId: String?) {
+
+        var friendsListItems: FriendsListItems? = null
+
+        friendsList.forEach {
+            if (receiverChannelId.toString().lowercase() == it.id) {
+                friendsListItems = it
+            }
+        }
+
+        val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = friendsListItems?.lastMessage,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            online = false
+        )
+
+        val currentItemIndex = friendsList.indexOf(friendsListItems)
+        friendsList.removeAt(currentItemIndex)
+        friendsListItem.let { friendsList.add(currentItemIndex, it) }
+        notifyItemChanged(currentItemIndex)
+
+
+    }
+
+    private fun getCurrentUTCTime(): String {
         val nowInUtc = OffsetDateTime.now(ZoneOffset.UTC)
         nowInUtc.format(DateTimeFormatter.ofPattern(DateTimeUtils.FORMAT_API_DATETIME))
         Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")

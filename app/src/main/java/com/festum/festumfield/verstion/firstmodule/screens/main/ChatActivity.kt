@@ -114,22 +114,15 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         productId = intent?.getString("productId").toString()
 
         Log.e("TAG", "setupUi: $receiverUserId")
-//        Log.e("TAG", "setupUi: " + AppPreferencesDelegates.get().onLineUser.lowercase() )
-        Log.e("TAG", "receiverUserName: " + receiverUserName)
-        Log.e("TAG", "receiverUserImage: " + receiverUserImage)
-        Log.e("TAG", "receiverUserId: " + receiverUserId)
-        Log.e("TAG", "productId: " + applicationClass.getOnlineUser().toString())
 
-        if (applicationClass.getOnlineUser()?.equals(receiverUserId.uppercase()) == true ||
-            applicationClass.getOnlineUser()?.equals(receiverUserId.lowercase()) == true){
-            binding.textOnline.text = getString(R.string.online)
-        }
-
-       /* AppPreferencesDelegates.get().onLineUser.forEach {
-            if (receiverUserId == it.lowercase()){
-
+        val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
+        val onlineUserChannelId = jsonObject.keys()
+        while (onlineUserChannelId.hasNext()) {
+            val key = onlineUserChannelId.next()
+            if (receiverUserId == key.toString().lowercase()){
+                binding.textOnline.text = getString(R.string.online)
             }
-        }*/
+        }
 
         format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         format.timeZone = TimeZone.getTimeZone("UTC")
@@ -429,20 +422,17 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
             val data = args[0] as JSONObject
 
+            AppPreferencesDelegates.get().onLineUser = data.optJSONObject("onlineUsers")?.toString() ?: ""
 
             runOnUiThread {
 
-                /*AppPreferencesDelegates.get().onLineUser.forEach {
-                    if (receiverUserId == it.lowercase()){
+                val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
+                val onlineUserChannelId = jsonObject.keys()
+                while (onlineUserChannelId.hasNext()) {
+                    val key = onlineUserChannelId.next()
+                    if (receiverUserId == key.toString().lowercase()){
                         binding.textOnline.text = getString(R.string.online)
                     }
-                }*/
-
-                val applicationClass : FestumApplicationClass = application as FestumApplicationClass
-
-                if (applicationClass.getOnlineUser()?.equals(receiverUserId.uppercase()) == true ||
-                    applicationClass.getOnlineUser()?.equals(receiverUserId.lowercase()) == true){
-                    binding.textOnline.text = getString(R.string.online)
                 }
 
             }
@@ -453,6 +443,8 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
             val data = args[0] as JSONObject
             Log.e("TAG", "offline:$data")
+
+            AppPreferencesDelegates.get().onLineUser = data.optJSONObject("onlineUsers")?.toString() ?: ""
 
             runOnUiThread {
                 binding.textOnline.text = getString(R.string.offline)

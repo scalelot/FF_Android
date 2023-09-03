@@ -62,4 +62,5 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
         (activity as? BaseActivity<*>)?.processUiEvent(uiEvent)
     }
 
+
 }

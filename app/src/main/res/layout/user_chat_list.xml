@@ -34,14 +34,14 @@
 
             <ImageView
                 android:id="@+id/iv_type_img"
-                android:layout_width="@dimen/sp_25"
-                android:layout_height="@dimen/sp_25"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="-3dp"
                 android:layout_marginBottom="-3dp"
                 android:padding="@dimen/margin_3"
-                android:src="@drawable/contact_icon" />
+                android:src="@drawable/online_icon" />
         </RelativeLayout>
 
         <LinearLayout

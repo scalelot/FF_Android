@@ -2,19 +2,18 @@ package com.festum.festumfield.verstion.firstmodule.screens.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.festum.festumfield.Activity.ReelsActivity
-import com.festum.festumfield.MyApplication
 import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
@@ -22,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -32,8 +32,8 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
     private var friendsListAdapter: FriendsListAdapter? = null
     private var friendsListItems: ArrayList<FriendsListItems>? = null
 
-    var mSocket: Socket? = null
-    private var recyclerViewState: Parcelable? = null
+    private var mSocket: Socket? = null
+    lateinit var applicationClass: FestumApplicationClass
 
     override fun getContentView(): View {
         binding = FragmentFriendsListBinding.inflate(layoutInflater)
@@ -44,8 +44,8 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
 
         try {
 
-            val app: FestumApplicationClass = requireActivity().application as FestumApplicationClass
-            mSocket = app.getMSocket()
+            applicationClass = requireActivity().application as FestumApplicationClass
+            mSocket = applicationClass.getMSocket()
 
             if (mSocket?.connected() == true) {
 
@@ -57,7 +57,7 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
 
             }
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("Error: ", e.message.toString())
         }
 
@@ -104,6 +104,25 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
             if (friendsListData != null) {
 
                 friendsListItems = friendsListData
+
+                val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
+
+                val onlineUserChannelId = jsonObject.keys()
+
+                val onLineUserList = ArrayList<String>()
+
+                friendsListData.forEach {
+
+                    while (onlineUserChannelId.hasNext()) {
+                        val key = onlineUserChannelId.next()
+                        onLineUserList.add(key)
+                    }
+
+                    if (onLineUserList.contains(it.id?.uppercase())){
+                        it.online = true
+                    }
+
+                }
 
                 friendsListData.sortByDescending { it.lastMessage?.updatedAt }
 
@@ -163,26 +182,56 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
 
             }
 
-        }?.on("callUser"){ args ->
+        }?.on("userConnected") { args ->
+
+            val data = args[0] as JSONObject
+
+            AppPreferencesDelegates.get().onLineUser =
+                data.optJSONObject("onlineUsers")?.toString() ?: ""
+
+            activity?.runOnUiThread {
+
+                val jsonObject = args[0] as JSONObject
+                val mOnlineUsers = jsonObject.optJSONObject("onlineUsers")
+                friendsListAdapter?.updateOnline(mOnlineUsers)
+
+            }
+
+            Log.e("TAG", "getUserStatus:$data")
+
+        }?.on("offline") { args ->
+
+            val data = args[0] as JSONObject
+            Log.e("TAG", "offline:$data")
+
+            AppPreferencesDelegates.get().onLineUser =
+                data.optJSONObject("onlineUsers")?.toString() ?: ""
+
+            activity?.runOnUiThread {
+                val jsonObject = args[0] as JSONObject
+                val mOnlineUsers = jsonObject.optString("userId")
+                friendsListAdapter?.updateOffline(mOnlineUsers)
+            }
+
+        }?.on("callUser") { args ->
 
             val data = args[0] as JSONObject
 
             Log.e("TAG", "getMessage: $data")
 
-        }?.on("updateMyMedia"){ args ->
+        }?.on("updateMyMedia") { args ->
 
             val data = args[0] as JSONObject
 
             Log.e("TAG", "updateMyMedia: $data")
 
-        }?.on("answerCall"){ args ->
+        }?.on("answerCall") { args ->
 
             val data = args[0] as JSONObject
 
             Log.e("TAG", "answerCall: $data")
 
-        }?.on("endCall"){ args ->
-
+        }?.on("endCall") { args ->
 
             Log.e("TAG", "endCall: ${args.asList()}")
 
