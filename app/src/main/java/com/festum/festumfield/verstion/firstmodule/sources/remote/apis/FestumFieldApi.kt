@@ -3,6 +3,7 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 import com.app.easyday.app.sources.ApiResponse
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatPinBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
@@ -73,6 +74,11 @@ interface FestumFieldApi {
     @POST("friends/sendfriendrequest")
     fun sendFriendRequest(
         @Body body: SendRequestBody
+    ) : Call<ApiBody>
+
+    @POST("pinned")
+    fun sendPin(
+        @Body body: ChatPinBody
     ) : Call<ApiBody>
 
 }

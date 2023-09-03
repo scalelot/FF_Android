@@ -11,6 +11,9 @@ data class FriendsListItems(
     @field:SerializedName("is_sender")
     val isSender: Boolean? = null,
 
+    @field:SerializedName("is_pinned")
+    val isPinned: Boolean? = null,
+
     @field:SerializedName("gender")
     val gender: String? = null,
 

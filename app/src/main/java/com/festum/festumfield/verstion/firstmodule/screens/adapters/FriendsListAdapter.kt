@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,6 +15,7 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.UserChatListBinding
 import com.festum.festumfield.verstion.firstmodule.screens.main.ChatActivity
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import org.json.JSONObject
@@ -22,12 +23,15 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class FriendsListAdapter(
     private val context: Context,
-    private var friendsList: ArrayList<FriendsListItems>
+    private var friendsList: ArrayList<FriendsListItems>,
+    private val pinInterface: ChatPinInterface,
+    private var isLongClick : Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var checkedPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(UserChatListBinding.inflate(LayoutInflater.from(parent.context)))
@@ -48,9 +52,7 @@ class FriendsListAdapter(
 
             val item = friendsList[position]
 
-
             val image = Constans.Display_Image_URL + item.profileimage
-
 
             Glide.with(context)
                 .load(image)
@@ -77,6 +79,12 @@ class FriendsListAdapter(
                 binding.ivTypeImg.visibility = View.VISIBLE
             }else{
                 binding.ivTypeImg.visibility = View.INVISIBLE
+            }
+
+            if (item.isPinned == true){
+                binding.chatPin.visibility = View.VISIBLE
+            }else{
+                binding.chatPin.visibility = View.INVISIBLE
             }
 
             if (item.lastMessage != null) {
@@ -123,14 +131,47 @@ class FriendsListAdapter(
 
             binding.txtChatCount.text = item.messageSize
 
+            when (checkedPosition) {
+                -1 -> {
+                    binding.ivSelect.visibility = View.GONE
+                }
+                else -> when (checkedPosition) {
+                    absoluteAdapterPosition -> {
+                        binding.ivSelect.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        binding.ivSelect.visibility = View.GONE
+                    }
+                }
+            }
+
             binding.rlChatLayout.setOnClickListener {
 
-                val intent = Intent(context, ChatActivity::class.java)
-                intent.putExtra("userName", item.fullName)
-                intent.putExtra("userImage", item.profileimage)
-                intent.putExtra("id", item.id)
-                context.startActivity(intent)
+                if (isLongClick) {
 
+                    binding.ivSelect.visibility = View.VISIBLE
+                    if (checkedPosition != absoluteAdapterPosition) {
+
+                        notifyItemChanged(checkedPosition)
+                        checkedPosition = absoluteAdapterPosition
+                    }
+
+                    pinInterface.checkItemPin(friendsList[absoluteAdapterPosition])
+
+                } else  {
+                    val intent = Intent(context, ChatActivity::class.java)
+                    intent.putExtra("userName", item.fullName)
+                    intent.putExtra("userImage", item.profileimage)
+                    intent.putExtra("id", item.id)
+                    context.startActivity(intent)
+                }
+
+            }
+
+            binding.rlChatLayout.setOnLongClickListener {
+                isLongClick = true
+                pinInterface.checkItemPin(item)
+                false
             }
 
         }
@@ -206,6 +247,7 @@ class FriendsListAdapter(
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
             createdAt = getCurrentUTCTime(),
+            isPinned = friendsListItems?.isPinned,
             isNewMessage = true,
             messageSize = "1",
         )
@@ -217,41 +259,6 @@ class FriendsListAdapter(
         notifyItemChanged(0)
 
     }
-
-    fun onlineUserList(data: JSONObject?) {
-
-        val onlineUserChannelId = data?.keys()
-        var friendsListItems: FriendsListItems? = null
-
-        while (onlineUserChannelId?.hasNext() == true) {
-            val key = onlineUserChannelId.next()
-
-            Log.e("TAG", "updateOnline:-- $key")
-
-            friendsList.forEach {
-                if (key.toString().lowercase() == it.id) {
-                    friendsListItems = it
-                }
-            }
-
-        }
-
-        /*val friendsListItem = FriendsListItems(
-            fullName = friendsListItems?.fullName,
-            lastMessage = friendsListItems?.lastMessage,
-            profileimage = friendsListItems?.profileimage,
-            id = friendsListItems?.id,
-            online = true
-        )
-
-        val currentItemIndex = friendsList.indexOf(friendsListItems)
-        friendsList.removeAt(currentItemIndex)
-        friendsListItem.let { friendsList.add(0, it) }
-        notifyItemMoved(currentItemIndex, 0)
-        notifyItemChanged(0)*/
-
-    }
-
     fun updateOnline(data: JSONObject?) {
 
         val onlineUserChannelId = data?.keys()
@@ -259,8 +266,6 @@ class FriendsListAdapter(
 
         while (onlineUserChannelId?.hasNext() == true) {
             val key = onlineUserChannelId.next()
-
-            Log.e("TAG", "updateOnline:-- $key")
 
             friendsList.forEach {
                 if (key.toString().lowercase() == it.id) {
@@ -275,14 +280,20 @@ class FriendsListAdapter(
             lastMessage = friendsListItems?.lastMessage,
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
+            isPinned = friendsListItems?.isPinned,
             online = true
         )
 
-        val currentItemIndex = friendsList.indexOf(friendsListItems)
-        friendsList.removeAt(currentItemIndex)
-        friendsListItem.let { friendsList.add(0, it) }
-        notifyItemMoved(currentItemIndex, 0)
-        notifyItemChanged(0)
+        if (friendsListItems != null){
+
+            val currentItemIndex = friendsList.indexOf(friendsListItems)
+
+            friendsList.removeAt(currentItemIndex)
+            friendsListItem.let { friendsList.add(0, it) }
+            notifyItemMoved(currentItemIndex, 0)
+            notifyItemChanged(0)
+
+        }
 
     }
 
@@ -301,13 +312,91 @@ class FriendsListAdapter(
             lastMessage = friendsListItems?.lastMessage,
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
+            isPinned = friendsListItems?.isPinned,
             online = false
         )
 
-        val currentItemIndex = friendsList.indexOf(friendsListItems)
-        friendsList.removeAt(currentItemIndex)
-        friendsListItem.let { friendsList.add(currentItemIndex, it) }
-        notifyItemChanged(currentItemIndex)
+        if (friendsListItems != null){
+
+            val currentItemIndex = friendsList.indexOf(friendsListItems)
+            friendsList.removeAt(currentItemIndex)
+            friendsListItem.let { friendsList.add(currentItemIndex, it) }
+            notifyItemChanged(currentItemIndex)
+
+        }
+
+    }
+
+    fun updatePin(friendData: FriendsListItems?, pinSet: Boolean){
+
+        val userId = friendData?.id
+
+        var friendsListItems: FriendsListItems? = null
+        friendsList.forEach {
+            if (userId == it.id) {
+                friendsListItems = it
+            }
+        }
+
+        val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = friendsListItems?.lastMessage,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            isPinned = pinSet,
+        )
+
+        if (friendsListItems != null){
+
+            if (pinSet){
+                val currentItemIndex = friendsList.indexOf(friendsListItems)
+                friendsList.removeAt(currentItemIndex)
+                friendsList.add(0, friendsListItem)
+                notifyItemMoved(currentItemIndex, 0)
+                notifyItemChanged(0)
+            } else {
+                val currentItemIndex = friendsList.indexOf(friendsListItems)
+                friendsList.removeAt(currentItemIndex)
+                friendsList.add(friendsList.size, friendsListItem)
+                notifyItemMoved(currentItemIndex, friendsList.size)
+                notifyItemChanged(friendsList.size)
+            }
+
+            isLongClick = false
+
+        }
+
+    }
+
+    fun pinNotSelected(itemData: FriendsListItems?) {
+
+        isLongClick = false
+
+        val userId = itemData?.id
+
+        var friendsListItems: FriendsListItems? = null
+        friendsList.forEach {
+            if (userId == it.id) {
+                friendsListItems = it
+            }
+        }
+        val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = friendsListItems?.lastMessage,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            isPinned = friendsListItems?.isPinned
+        )
+
+        if (friendsListItems != null){
+
+            checkedPosition = -1
+            val currentItemIndex = friendsList.indexOf(friendsListItems)
+            friendsList.removeAt(currentItemIndex)
+            friendsListItem.let { friendsList.add(currentItemIndex, it) }
+            notifyItemChanged(currentItemIndex)
+
+        }
 
 
     }
@@ -315,7 +404,6 @@ class FriendsListAdapter(
     private fun getCurrentUTCTime(): String {
         val nowInUtc = OffsetDateTime.now(ZoneOffset.UTC)
         nowInUtc.format(DateTimeFormatter.ofPattern(DateTimeUtils.FORMAT_API_DATETIME))
-        Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")
         return nowInUtc.toString()
     }
 

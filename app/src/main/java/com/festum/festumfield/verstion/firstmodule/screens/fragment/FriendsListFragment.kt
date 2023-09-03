@@ -2,6 +2,7 @@ package com.festum.festumfield.verstion.firstmodule.screens.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,6 +15,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
@@ -21,11 +23,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
-class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
+class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
+    BaseFragment<FriendsListViewModel>(), ChatPinInterface {
 
     private lateinit var binding: FragmentFriendsListBinding
 
@@ -40,7 +42,19 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
         return binding.root
     }
 
+
+    override fun setArguments(args: Bundle?) {
+        super.setArguments(args)
+        Toast.makeText(activity, args?.getString("text"), Toast.LENGTH_SHORT).show()
+    }
+
     override fun initUi() {
+
+        val bundle = this.arguments
+        if (bundle != null) {
+            val myInt = bundle.getString("text")
+            Toast.makeText(requireActivity(), myInt, Toast.LENGTH_SHORT).show()
+        }
 
         try {
 
@@ -105,11 +119,13 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
 
                 friendsListItems = friendsListData
 
+                /* Online - Offline*/
                 val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
-
                 val onlineUserChannelId = jsonObject.keys()
-
                 val onLineUserList = ArrayList<String>()
+
+                /* Pin - Unpin */
+                var setPin = false
 
                 friendsListData.forEach {
 
@@ -118,15 +134,24 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
                         onLineUserList.add(key)
                     }
 
-                    if (onLineUserList.contains(it.id?.uppercase())){
+                    if (onLineUserList.contains(it.id?.uppercase())) {
                         it.online = true
+                    }
+
+                    if (it.isPinned == true){
+                        setPin = true
                     }
 
                 }
 
-                friendsListData.sortByDescending { it.lastMessage?.updatedAt }
+                if (setPin) {
+                    friendsListData.sortByDescending { item -> item.isPinned }
+                } else {
+                    friendsListData.sortByDescending { item -> item.lastMessage?.updatedAt }
+                }
 
-                friendsListAdapter = FriendsListAdapter(requireActivity(), friendsListData)
+
+                friendsListAdapter = FriendsListAdapter(requireActivity(), friendsListData, this, false)
                 binding.chatRecyclerview.adapter = friendsListAdapter
 
                 if (friendsListData.isEmpty()) {
@@ -238,5 +263,25 @@ class FriendsListFragment : BaseFragment<FriendsListViewModel>() {
         }
 
     }
+
+    override fun checkItemPin(friendItem: FriendsListItems) {
+        chatPinInterface?.setPin(friendItem)
+    }
+
+    override fun setPin(friendItem: FriendsListItems) {}
+
+
+    fun setOnPin(itemData: FriendsListItems?, pinSet: Boolean) {
+
+        friendsListAdapter?.updatePin(itemData, pinSet)
+
+    }
+
+    fun pinNotSelected(itemData: FriendsListItems?){
+
+        friendsListAdapter?.pinNotSelected(itemData)
+
+    }
+
 
 }

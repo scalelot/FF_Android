@@ -9,11 +9,13 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatPinBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.BusinessProfile
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfilePictureResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.google.gson.Gson
@@ -39,8 +41,9 @@ class ProfileViewModel @Inject constructor(
     var documentData = MutableLiveData<ProfilePictureResponse?>()
     var createProfileData = MutableLiveData<ApiBody?>()
     var createBusinessProfileData = MutableLiveData<ApiBody?>()
+    var setPinData = MutableLiveData<ApiBody?>()
 
-    fun getProfile(){
+    fun getProfile() {
         api.getProfile().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
@@ -50,7 +53,7 @@ class ProfileViewModel @Inject constructor(
             })
     }
 
-    fun setProfilePicture(file: File?){
+    fun setProfilePicture(file: File?) {
 
         if (file != null) {
 
@@ -82,7 +85,7 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    fun getBusinessProfile(){
+    fun getBusinessProfile() {
         api.getBusinessProfile().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
@@ -92,13 +95,14 @@ class ProfileViewModel @Inject constructor(
             })
     }
 
-    fun setBusinessProfilePicture(file: File?){
+    fun setBusinessProfilePicture(file: File?) {
 
         Log.e("TAG", "onResponse:$file")
 
         if (file != null) {
 
-            AndroidNetworking.upload(Constans.set_business_profile_pic).addMultipartFile("file", file)
+            AndroidNetworking.upload(Constans.set_business_profile_pic)
+                .addMultipartFile("file", file)
                 .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                 .setPriority(Priority.HIGH).build()
                 .getAsJSONObject(object : JSONObjectRequestListener {
@@ -127,7 +131,7 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    fun setBusinessBrochure(file: File?){
+    fun setBusinessBrochure(file: File?) {
 
         if (file != null) {
 
@@ -158,26 +162,28 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    fun createProfile(profileData: CreateProfileModel, isBusinessClick : Boolean) {
+    fun createProfile(profileData: CreateProfileModel, isBusinessClick: Boolean) {
         api.createPersonProfile(profileData).enqueue(object : Callback<ApiBody> {
             override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
 
-                if (isBusinessClick){
-                    if (response.isSuccessful){
+                if (isBusinessClick) {
+                    if (response.isSuccessful) {
                         createBusinessProfileData.value = response.body()
-                    }else{
+                    } else {
                         val gson = Gson()
                         val type = object : TypeToken<ApiBody>() {}.type
-                        val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                        val errorResponse: ApiBody? =
+                            gson.fromJson(response.errorBody()?.charStream(), type)
                         createBusinessProfileData.value = errorResponse
                     }
-                }else{
-                    if (response.isSuccessful){
+                } else {
+                    if (response.isSuccessful) {
                         createProfileData.value = response.body()
-                    }else{
+                    } else {
                         val gson = Gson()
                         val type = object : TypeToken<ApiBody>() {}.type
-                        val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                        val errorResponse: ApiBody? =
+                            gson.fromJson(response.errorBody()?.charStream(), type)
                         createProfileData.value = errorResponse
                     }
                 }
@@ -185,9 +191,9 @@ class ProfileViewModel @Inject constructor(
 
             override fun onFailure(call: Call<ApiBody>, t: Throwable) {
 
-                if (isBusinessClick){
+                if (isBusinessClick) {
                     createBusinessProfileData.value = null
-                }else{
+                } else {
                     createProfileData.value = null
                 }
             }
@@ -196,21 +202,47 @@ class ProfileViewModel @Inject constructor(
 
     fun createBusinessProfile(businessProfile: CreateBusinessProfileModel) {
 
-        api.createBusinessProfile(businessProfile).enqueue(object : Callback<ApiBody>{
+        api.createBusinessProfile(businessProfile).enqueue(object : Callback<ApiBody> {
             override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
 
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     createBusinessProfileData.value = response.body()
-                }else{
+                } else {
                     val gson = Gson()
                     val type = object : TypeToken<ApiBody>() {}.type
-                    val errorResponse: ApiBody? = gson.fromJson(response.errorBody()?.charStream(), type)
+                    val errorResponse: ApiBody? =
+                        gson.fromJson(response.errorBody()?.charStream(), type)
                     createBusinessProfileData.value = errorResponse
                 }
             }
 
             override fun onFailure(call: Call<ApiBody>, t: Throwable) {
                 createBusinessProfileData.value = null
+            }
+
+        })
+
+    }
+
+    fun setPin(itemData: FriendsListItems?, chatPin: Boolean) {
+
+        val chatPinBody = ChatPinBody(userid = itemData?.id, isPinned = chatPin)
+        api.sendPin(chatPinBody).enqueue(object : Callback<ApiBody> {
+            override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
+
+                if (response.isSuccessful) {
+                    setPinData.value = response.body()
+                } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<ApiBody>() {}.type
+                    val errorResponse: ApiBody? =
+                        gson.fromJson(response.errorBody()?.charStream(), type)
+                    setPinData.value = errorResponse
+                }
+            }
+
+            override fun onFailure(call: Call<ApiBody>, t: Throwable) {
+                setPinData.value = null
             }
 
         })

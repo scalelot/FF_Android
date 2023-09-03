@@ -20,9 +20,9 @@ import java.io.OutputStream
 class FileUtil {
     companion object {
         @SuppressLint("NewApi")
-        fun getPath(uri: Uri, context: Context): String? {
-            var uri: Uri = uri
-            val needToCheckUri = Build.VERSION.SDK_INT >= 19
+        fun getPath(itemUrl: Uri, context: Context): String? {
+            var uri : Uri = itemUrl
+            val needToCheckUri = true
             var selection: String? = null
             var selectionArgs: Array<String>? = null
             var type: String? = null
