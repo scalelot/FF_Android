@@ -8,6 +8,7 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.festum.festumfield.Utils.Constans.SOCKET_SERVER_URL
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.pixplicity.easyprefs.library.Prefs
 import dagger.hilt.android.HiltAndroidApp
 import io.socket.client.IO
@@ -42,61 +43,15 @@ class FestumApplicationClass : MultiDexApplication() {
 
         appInstance = this
 
-        initializeSocket()
+        SocketManager.initializeSocket()
+
+        /*initializeSocket()*/
 
     }
 
-    fun initializeSocket() {
-
-        val options = IO.Options()
-        options.forceNew = true
-        options.reconnection = true
-        options.reconnectionDelay = 2000
-        options.reconnectionDelayMax = 5000
-        options.reconnectionAttempts = Int.MAX_VALUE
-
-        try {
-            mSocket = IO.socket(SOCKET_SERVER_URL, options)
-            mSocket?.on(Socket.EVENT_CONNECT, onConnect)
-            mSocket?.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-            mSocket?.on(Socket.EVENT_DISCONNECT, onDisconnect)
-
-            if (mSocket?.connected() == false) {
-                mSocket?.connect()
-            }
-        } catch (e: Exception) {
-
-            throw java.lang.RuntimeException(e)
-        }
-    }
-
-    var onConnect: Emitter.Listener = Emitter.Listener {
-        Log.e("mSocket", "Socket Connected!")
-        try {
-
-            val jsonObj = JSONObject()
-            jsonObj.put("channelID", AppPreferencesDelegates.get().channelId)
-            mSocket?.emit("init", jsonObj)?.on(
-                "userConnected"
-            ) { args ->
-                val jsonObject = args[0] as JSONObject
-                AppPreferencesDelegates.get().onLineUser = jsonObject.optJSONObject("onlineUsers")?.toString() ?: ""
-            }
-
-        }catch (e: Exception) {
-            Log.e("Error", "error send channalId " + e.message)
-        }
-    }
-
-    private val onConnectError: Emitter.Listener =
-        Emitter.Listener { args -> Log.e("mSocket", args.contentToString()) }
-
-    private val onDisconnect: Emitter.Listener =
-        Emitter.Listener { Log.e("mSocket", "onDisconnect") }
-
-    fun getMSocket(): Socket? {
+    /*fun getMSocket(): Socket? {
         return mSocket
-    }
+    }*/
 
 
 }

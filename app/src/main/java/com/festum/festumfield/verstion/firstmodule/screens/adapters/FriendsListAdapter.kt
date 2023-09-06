@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,12 @@ class FriendsListAdapter(
 
             binding.txtUserName.text = item.fullName
 
+            if (item.isPinned == true){
+                binding.chatPin.visibility = View.VISIBLE
+            }else{
+                binding.chatPin.visibility = View.INVISIBLE
+            }
+
             if (item.isNewMessage == true) {
                 binding.txtMessage.setTextColor(
                     ContextCompat.getColor(
@@ -69,22 +76,20 @@ class FriendsListAdapter(
                     )
                 );
                 binding.txtChatCount.visibility = View.VISIBLE
+
+                if (item.isPinned == true){
+                    binding.chatPin.visibility = View.INVISIBLE
+                }
+
             } else {
                 binding.txtMessage.setTextColor(ContextCompat.getColor(context, R.color.grey));
                 binding.txtChatCount.visibility = View.GONE
             }
 
-
             if (item.online == true){
                 binding.ivTypeImg.visibility = View.VISIBLE
             }else{
                 binding.ivTypeImg.visibility = View.INVISIBLE
-            }
-
-            if (item.isPinned == true){
-                binding.chatPin.visibility = View.VISIBLE
-            }else{
-                binding.chatPin.visibility = View.INVISIBLE
             }
 
             if (item.lastMessage != null) {
@@ -250,6 +255,7 @@ class FriendsListAdapter(
             isPinned = friendsListItems?.isPinned,
             isNewMessage = true,
             messageSize = "1",
+            online = friendsListItems?.online
         )
 
         val currentItemIndex = friendsList.indexOf(friendsListItems)

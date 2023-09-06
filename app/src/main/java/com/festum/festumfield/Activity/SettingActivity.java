@@ -70,7 +70,7 @@ public class SettingActivity extends BaseActivity {
 
         festumApplicationClass = new FestumApplicationClass();
 
-        try {
+        /*try {
 
             socket = festumApplicationClass.getMSocket();
             if (socket.connected() == true){
@@ -80,7 +80,7 @@ public class SettingActivity extends BaseActivity {
             }
         }catch (Exception e){
 
-        }
+        }*/
 
         ic_back_arrow = findViewById(R.id.ic_back_arrow);
         btn_clear_data = findViewById(R.id.btn_clear_data);

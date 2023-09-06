@@ -146,17 +146,14 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             if (profileData != null) {
 
                 AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
-                AppPreferencesDelegates.get().businessProfile =
-                    profileData.isBusinessProfileCreated == true
+                AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
                 AppPreferencesDelegates.get().userName = profileData.fullName.toString()
 
-                val app: FestumApplicationClass = application as FestumApplicationClass
-                app.initializeSocket()
+                val applicationClass : FestumApplicationClass = application as FestumApplicationClass
+                applicationClass.onCreate()
 
                 val menu: Menu = binding.bottomNavigationView.menu
                 selectFragment(menu.getItem(0))
-
-
 
                 if (profileData.fullName.isNullOrEmpty()) {
                     binding.userName.text = "+" + profileData.contactNo

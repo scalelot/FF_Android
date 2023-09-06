@@ -27,6 +27,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDi
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
@@ -56,7 +57,7 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("SimpleDateFormat")
 @AndroidEntryPoint
-class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
+class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
 
     private lateinit var binding: ChatActivityBinding
 
@@ -83,27 +84,10 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     override fun setupUi() {
 
-        val applicationClass : FestumApplicationClass = application as FestumApplicationClass
 
-        try {
+        getMessage()
 
-            mSocket = applicationClass.getMSocket()
-
-            if (mSocket?.connected() == true) {
-
-                getUserStatus()
-                getMessage()
-
-            } else {
-
-                mSocket?.connected()
-
-            }
-
-        }catch (e: Exception) {
-            Log.e("Error: ", e.message.toString())
-        }
-
+        getUserStatus()
 
 
         val intent = intent.extras
@@ -119,7 +103,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         val onlineUserChannelId = jsonObject.keys()
         while (onlineUserChannelId.hasNext()) {
             val key = onlineUserChannelId.next()
-            if (receiverUserId == key.toString().lowercase()){
+            if (receiverUserId == key.toString().lowercase()) {
                 binding.textOnline.text = getString(R.string.online)
             }
         }
@@ -127,7 +111,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         format.timeZone = TimeZone.getTimeZone("UTC")
 
-        if (receiverUserImage.isNotEmpty()){
+        if (receiverUserImage.isNotEmpty()) {
 
             Glide.with(this@ChatActivity).load(Constans.Display_Image_URL + receiverUserImage)
                 .placeholder(R.drawable.ic_user_img).into(binding.imgUser)
@@ -149,7 +133,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             val msg = binding.edtChating.text.toString()
 
             if (msg.isNotEmpty() || sendProductId?.isNotEmpty() == true) {
-                viewModel.sendMessage(null, receiverUserId, msg,sendProductId)
+                viewModel.sendMessage(null, receiverUserId, msg, sendProductId)
             }
 
             binding.relReplay.visibility = View.GONE
@@ -188,7 +172,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             /* ProductDialog */
 
             val dialog = ProductItemsDialog(receiverUserId, this)
-            dialog.show(supportFragmentManager,"product")
+            dialog.show(supportFragmentManager, "product")
 
         }
 
@@ -258,7 +242,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         viewModel.sendData.observe(this) { sendData ->
 
-            Log.e("TAG", "setupObservers:-- " + sendData?.content?.product?.productid )
+            Log.e("TAG", "setupObservers:-- " + sendData?.content?.product?.productid)
             sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
             Handler(Looper.getMainLooper()).postDelayed({
@@ -286,7 +270,8 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                     content = Content(
                         text = text,
                         product = Product(productItemData),
-                        media = media),
+                        media = media
+                    ),
                     timestamp = sendData?.timestamp,
                     status = sendData?.status,
                     updatedAt = sendData?.updatedAt
@@ -377,7 +362,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     fun getMessage() {
 
-        mSocket?.on("newMessage") { args ->
+        SocketManager.mSocket?.on("newMessage") { args ->
 
             val data = args[0] as JSONObject
 
@@ -418,11 +403,12 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
     private fun getUserStatus() {
 
-        mSocket?.on("userConnected")  { args ->
+        SocketManager.mSocket?.on("userConnected") { args ->
 
             val data = args[0] as JSONObject
 
-            AppPreferencesDelegates.get().onLineUser = data.optJSONObject("onlineUsers")?.toString() ?: ""
+            AppPreferencesDelegates.get().onLineUser =
+                data.optJSONObject("onlineUsers")?.toString() ?: ""
 
             runOnUiThread {
 
@@ -430,7 +416,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                 val onlineUserChannelId = jsonObject.keys()
                 while (onlineUserChannelId.hasNext()) {
                     val key = onlineUserChannelId.next()
-                    if (receiverUserId == key.toString().lowercase()){
+                    if (receiverUserId == key.toString().lowercase()) {
                         binding.textOnline.text = getString(R.string.online)
                     }
                 }
@@ -444,13 +430,14 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             val data = args[0] as JSONObject
             Log.e("TAG", "offline:$data")
 
-            AppPreferencesDelegates.get().onLineUser = data.optJSONObject("onlineUsers")?.toString() ?: ""
+            AppPreferencesDelegates.get().onLineUser =
+                data.optJSONObject("onlineUsers")?.toString() ?: ""
 
             runOnUiThread {
                 binding.textOnline.text = getString(R.string.offline)
             }
 
-        }?.on("typingReceive"){ args ->
+        }?.on("typingReceive") { args ->
             val data = args[0] as JSONObject
             Log.e("TAG", "typingReceive:$data")
 
@@ -478,6 +465,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
                 startActivityForResult(intent, IMAGE_PICKER_SELECT)
             }
+
             R.id.img_camera -> {
                 IntentUtil.getCaptureImageVideoIntent(this@ChatActivity).let {
                     startActivityForResult(
@@ -497,10 +485,14 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true){
+                    if (permission?.areAllPermissionsGranted() == true) {
                         openIntent(actionID)
                     } else {
-                        AppPermissionDialog.showPermission(this@ChatActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                        AppPermissionDialog.showPermission(
+                            this@ChatActivity,
+                            getString(R.string.media_permission),
+                            getString(R.string.media_permission_title)
+                        )
                     }
 
                 }
@@ -526,10 +518,14 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true){
+                    if (permission?.areAllPermissionsGranted() == true) {
                         openIntent(actionID)
                     } else {
-                        AppPermissionDialog.showPermission(this@ChatActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                        AppPermissionDialog.showPermission(
+                            this@ChatActivity,
+                            getString(R.string.media_permission),
+                            getString(R.string.media_permission_title)
+                        )
                     }
 
                 }
@@ -558,7 +554,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                         ?.let { File(it) }
                 }
                 val file = File(mImageFile.toString())
-                viewModel.sendMessage(file = file, receiverId = receiverUserId,"","")
+                viewModel.sendMessage(file = file, receiverId = receiverUserId, "", "")
             }
 
         }
@@ -576,13 +572,13 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
                         ?.let { File(it) }
                 }
                 val file = File(mImageFile.toString())
-                viewModel.sendMessage(file = file, receiverId = receiverUserId,"","")
+                viewModel.sendMessage(file = file, receiverId = receiverUserId, "", "")
             }
         }
 
         if (requestCode == IntentUtil.PRODUCT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val productId = productId
-            viewModel.sendMessage(null, receiverUserId, "",productId)
+            viewModel.sendMessage(null, receiverUserId, "", productId)
         }
 
     }
@@ -591,7 +587,11 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
 
         val content = Content(text = text, media = media, product = product)
 
-        val from = From(id = data.getString("from"), profileimage = receiverUserImage, fullName = receiverUserName)
+        val from = From(
+            id = data.getString("from"),
+            profileimage = receiverUserImage,
+            fullName = receiverUserName
+        )
         val to = To(id = data.getString("to"))
         val newItem = DocsItem(
             v = data.optInt("v"),
@@ -695,7 +695,7 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
             .into(binding.ivProImage)
 
         binding.txtProName.text = item.name
-        binding.txtProDes.text =  item.description
+        binding.txtProDes.text = item.description
         binding.txtProPrice.text = "${"$" + item.price.toString() + ".00"}"
 
         sendProductId = item.id
@@ -707,16 +707,18 @@ class ChatActivity : BaseActivity<ChatViewModel>() , ProductItemInterface{
         /* ProductDetailsDialog */
         Log.e("TAG", "chatProduct: $item")
 
-        val dialog = item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
-        dialog?.show(supportFragmentManager,"productDetails")
+        val dialog =
+            item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
+        dialog?.show(supportFragmentManager, "productDetails")
 
     }
 
-    private fun getCurrentUTCTime() : String {
+    private fun getCurrentUTCTime(): String {
         val nowInUtc = OffsetDateTime.now(UTC)
         nowInUtc.format(DateTimeFormatter.ofPattern(FORMAT_API_DATETIME))
         Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")
         return nowInUtc.toString()
     }
+
 
 }

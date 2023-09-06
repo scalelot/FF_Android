@@ -15,6 +15,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
@@ -33,9 +34,6 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
     private var friendsListAdapter: FriendsListAdapter? = null
     private var friendsListItems: ArrayList<FriendsListItems>? = null
-
-    private var mSocket: Socket? = null
-    lateinit var applicationClass: FestumApplicationClass
 
     override fun getContentView(): View {
         binding = FragmentFriendsListBinding.inflate(layoutInflater)
@@ -56,24 +54,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
             Toast.makeText(requireActivity(), myInt, Toast.LENGTH_SHORT).show()
         }
 
-        try {
-
-            applicationClass = requireActivity().application as FestumApplicationClass
-            mSocket = applicationClass.getMSocket()
-
-            if (mSocket?.connected() == true) {
-
-                getMessage()
-
-            } else {
-
-                mSocket?.connected()
-
-            }
-
-        } catch (e: Exception) {
-            Log.e("Error: ", e.message.toString())
-        }
+        getMessage()
 
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
@@ -120,6 +101,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
                 friendsListItems = friendsListData
 
                 /* Online - Offline*/
+                var onLine = false
                 val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
                 val onlineUserChannelId = jsonObject.keys()
                 val onLineUserList = ArrayList<String>()
@@ -136,9 +118,10 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
                     if (onLineUserList.contains(it.id?.uppercase())) {
                         it.online = true
+                        onLine = true
                     }
 
-                    if (it.isPinned == true){
+                    if (it.isPinned == true) {
                         setPin = true
                     }
 
@@ -147,11 +130,15 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
                 if (setPin) {
                     friendsListData.sortByDescending { item -> item.isPinned }
                 } else {
-                    friendsListData.sortByDescending { item -> item.lastMessage?.updatedAt }
+                    if (onLine){
+                        friendsListData.sortByDescending { item -> item.online }
+                    }else{
+                        friendsListData.sortByDescending { item -> item.lastMessage?.updatedAt }
+                    }
                 }
 
-
-                friendsListAdapter = FriendsListAdapter(requireActivity(), friendsListData, this, false)
+                friendsListAdapter =
+                    FriendsListAdapter(requireActivity(), friendsListData, this, false)
                 binding.chatRecyclerview.adapter = friendsListAdapter
 
                 if (friendsListData.isEmpty()) {
@@ -196,7 +183,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
     @SuppressLint("NotifyDataSetChanged")
     fun getMessage() {
 
-        mSocket?.on("newMessage") { args ->
+        SocketManager.mSocket?.on("newMessage") { args ->
 
             val data = args[0] as JSONObject
 
@@ -277,7 +264,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
     }
 
-    fun pinNotSelected(itemData: FriendsListItems?){
+    fun pinNotSelected(itemData: FriendsListItems?) {
 
         friendsListAdapter?.pinNotSelected(itemData)
 
