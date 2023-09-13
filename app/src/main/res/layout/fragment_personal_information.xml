@@ -83,6 +83,7 @@
                     android:layout_marginTop="@dimen/margin_15">
 
                     <RelativeLayout
+                        android:id="@+id/relativeAbove"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true">
@@ -213,6 +214,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/relativeHobbies"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -424,6 +426,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/relativeLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_20">
@@ -572,6 +575,7 @@
                     android:layout_marginTop="@dimen/margin_20">
 
                     <RelativeLayout
+                        android:id="@+id/relativeIntersted"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true">

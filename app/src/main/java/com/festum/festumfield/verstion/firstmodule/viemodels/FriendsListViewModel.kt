@@ -38,6 +38,7 @@ class FriendsListViewModel @Inject constructor(
                 friendsListData.value = resp.Data?.docs as ArrayList<FriendsListItems>?
             }, {
                 friendsListData.value = null
+                Log.e("TAG", "friendsList:--- " + it.message )
             })
     }
 

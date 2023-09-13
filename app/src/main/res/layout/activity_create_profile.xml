@@ -100,6 +100,7 @@
                 android:imeOptions="actionNext"
                 android:paddingLeft="@dimen/margin_15"
                 android:paddingRight="@dimen/margin_15"
+                android:inputType="textCapSentences"
                 android:singleLine="true"
                 android:textColor="@color/edt_dark"
                 android:textColorHint="@color/edt_hint"
@@ -117,6 +118,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/nick_name"
                 android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
                 android:paddingLeft="@dimen/margin_15"
                 android:paddingRight="@dimen/margin_15"
                 android:singleLine="true"
@@ -155,6 +157,7 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
+                    android:id="@+id/relativeDOB"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/sp_45"
                     android:layout_marginRight="@dimen/margin_20"
@@ -192,6 +195,11 @@
                         android:padding="@dimen/sp_3"
                         android:src="@drawable/ic_date_picker_icon"
                         app:tint="@color/black" />
+
+                    <View
+                        android:id="@+id/clickView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
                 </RelativeLayout>
 
                 <LinearLayout
@@ -210,6 +218,7 @@
                         android:gravity="center"
                         android:prompt="@string/gender" />
                 </LinearLayout>
+
             </LinearLayout>
 
             <EditText
@@ -223,6 +232,7 @@
                 android:background="@drawable/notification_bg"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="top"
+                android:inputType="textCapSentences"
                 android:hint="@string/aboutUs"
                 android:imeOptions="actionNext"
                 android:minHeight="@dimen/sp_100"
@@ -244,7 +254,7 @@
                 android:gravity="start"
                 android:hint="@string/enter_hobbies"
                 android:imeOptions="actionDone"
-                android:inputType="text|textNoSuggestions|textMultiLine"
+                android:inputType="text|textNoSuggestions|textMultiLine|textCapSentences"
                 android:lineSpacingExtra="@dimen/text_5"
                 android:minHeight="@dimen/sp_100"
                 android:nextFocusDown="@+id/editText"

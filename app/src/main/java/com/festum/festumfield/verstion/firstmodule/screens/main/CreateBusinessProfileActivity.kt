@@ -66,7 +66,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             binding.tvTitle.text = editProfile
             binding.rlUpload.visibility = View.GONE
             binding.rlAddBrochur.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.rlUpload.visibility = View.VISIBLE
             binding.rlAddBrochur.visibility = View.GONE
         }
@@ -90,9 +90,26 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
         }
 
         binding.relativeBusiMap.setOnClickListener {
-            startActivity(
-                Intent(this@CreateBusinessProfileActivity, MapsLocationActivity::class.java).putExtra("isBusinessLocation", true)
-            )
+
+            if (IntentUtil.readMapPermission(
+                    this@CreateBusinessProfileActivity
+                ) && IntentUtil.readMapFinePermission(
+                    this@CreateBusinessProfileActivity
+                )
+            ) {
+                startActivity(
+                    Intent(
+                        this@CreateBusinessProfileActivity,
+                        MapsLocationActivity::class.java
+                    ).putExtra("isBusinessLocation", true)
+                )
+            } else
+                AppPermissionDialog.showPermission(
+                    this@CreateBusinessProfileActivity,
+                    title = getString(R.string.location_permission_title),
+                    message = getString(R.string.location_permission)
+                )
+
         }
 
         binding.btnNext.setOnClickListener {
@@ -101,7 +118,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 name = binding.edtBussinessName.text.toString(),
                 category = binding.edtCategory.text.toString(),
                 subCategory = binding.edtSubcategory.text.toString(),
-                description =  binding.edtDescription.text.toString(),
+                description = binding.edtDescription.text.toString(),
                 interestedCategory = binding.edtBussinessName.text.toString(),
                 interestedSubCategory = binding.edtBussinessName.text.toString(),
                 latitude = Const.lattitude,
@@ -112,6 +129,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
         }
 
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -119,7 +137,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
         viewModel.profileBusinessData.observe(this) { profileBusinessData ->
 
-            if (profileBusinessData != null){
+            if (profileBusinessData != null) {
 
                 Glide.with(this@CreateBusinessProfileActivity)
                     .load(Constans.Display_Image_URL + profileBusinessData.businessimage)
@@ -131,13 +149,14 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 binding.edtSubcategory.setText(profileBusinessData.subCategory)
                 binding.edtDescription.setText(profileBusinessData.description)
 
-                if (profileBusinessData.brochure != null){
+                if (profileBusinessData.brochure != null) {
 
                     val brochure: String = profileBusinessData.brochure
                     val pdfName = brochure.substring(brochure.lastIndexOf('/') + 1)
                     binding.edtBrochure.text = pdfName
                     binding.edtBrochure.setOnClickListener {
-                        val uri = Uri.parse(Constans.Display_Image_URL + profileBusinessData.brochure)
+                        val uri =
+                            Uri.parse(Constans.Display_Image_URL + profileBusinessData.brochure)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
@@ -158,15 +177,15 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                         val long = profileBusinessData.location.coordinates[0]
                         val lat = profileBusinessData.location.coordinates[1]
 
-                        if (lat != null && long != null){
-                            val latLng = LatLng(lat,long)
+                        if (lat != null && long != null) {
+                            val latLng = LatLng(lat, long)
                             Const.b_lattitude = lat
                             Const.b_longitude = long
                             map?.addMarker(MarkerOptions().position(latLng))
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                         }
                     }
-                },500)
+                }, 500)
 
             }
         }
@@ -211,15 +230,20 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 Snackbar.make(binding.linear, it.message.toString(), Snackbar.LENGTH_SHORT).show()
             }
 
-            if (it?.status == 200){
-                startActivity(Intent(this@CreateBusinessProfileActivity, ProductActivity::class.java))
+            if (it?.status == 200) {
+                startActivity(
+                    Intent(
+                        this@CreateBusinessProfileActivity,
+                        ProductActivity::class.java
+                    )
+                )
             }
 
         }
 
     }
 
-    private fun openImageOrDocument(id : Int){
+    private fun openImageOrDocument(id: Int) {
         if (IntentUtil.readPermission(
                 this@CreateBusinessProfileActivity
             ) && IntentUtil.writePermission(
@@ -230,9 +254,10 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
         } else
             onMediaPermission(id)
     }
+
     private fun openIntent(id: Int) {
 
-        when(id){
+        when (id) {
             R.id.edt_img -> {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.type = "image/*"
@@ -241,6 +266,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
                 startActivityForResult(intent, IntentUtil.IMAGE_PICKER_SELECT)
             }
+
             R.id.rl_upload, R.id.btn_change -> {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.type = "application/pdf"
@@ -260,10 +286,14 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true){
+                    if (permission?.areAllPermissionsGranted() == true) {
                         openIntent(id)
                     } else {
-                        AppPermissionDialog.showPermission(this@CreateBusinessProfileActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                        AppPermissionDialog.showPermission(
+                            this@CreateBusinessProfileActivity,
+                            getString(R.string.media_permission),
+                            getString(R.string.media_permission_title)
+                        )
                     }
 
                 }

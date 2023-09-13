@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
 
 import com.festum.festumfield.Activity.ProductActivity
@@ -19,6 +20,8 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ProfileViewPagerAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.CreateProfileInterface
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
@@ -39,6 +42,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
     private lateinit var binding: ProfileActivityBinding
     private var businessProfile: Boolean? = null
+    private var profileResponse: ProfileResponse? = null
 
     override fun getContentView(): View {
         binding = ProfileActivityBinding.inflate(layoutInflater)
@@ -118,12 +122,18 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             finish()
         }
 
+        if (AppPreferencesDelegates.get().userName.isBlank()){
+            binding.editImg.visibility = View.GONE
+        }else{
+            binding.editImg.visibility = View.VISIBLE
+        }
+
         /* Profile Picture Set */
         binding.editImg.setOnClickListener {
 
             if (AppPreferencesDelegates.get().userName.isBlank()){
 
-                createProfile()
+                createProfileDialog()
 
             }else{
                 if (IntentUtil.readPermission(
@@ -146,48 +156,54 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         viewModel.profileData.observe(this) { profileData ->
 
-            if (profileData != null) {
+            if (lifecycle.currentState == Lifecycle.State.RESUMED) {
 
-                Glide.with(this@ProfilePreviewActivity)
-                    .load(Constans.Display_Image_URL + profileData.profileimage)
-                    .placeholder(R.drawable.ic_user)
-                    .into(binding.userProfileImage)
+                profileResponse = profileData
 
-                binding.uName.text = profileData.fullName ?: ""
-                binding.uNickname.text = profileData.nickName ?: ""
+                if (profileData != null) {
 
-                businessProfile = profileData.isBusinessProfileCreated
+                    Glide.with(this@ProfilePreviewActivity)
+                        .load(Constans.Display_Image_URL + profileData.profileimage)
+                        .placeholder(R.drawable.ic_user)
+                        .into(binding.userProfileImage)
 
-                if (profileData.socialMediaLinks != null) {
+                    binding.uName.text = profileData.fullName ?: ""
+                    binding.uNickname.text = profileData.nickName ?: ""
 
-                    profileData.socialMediaLinks.forEach {
+                    businessProfile = profileData.isBusinessProfileCreated
 
-                        when (it?.platform) {
-                            "Facebook" -> {
-                                binding.icFb.visibility = View.VISIBLE
-                            }
-                            "Instagram" -> {
-                                binding.icInsta.visibility = View.VISIBLE
-                            }
-                            "Twitter" -> {
-                                binding.icTwitter.visibility = View.VISIBLE
-                            }
-                            "Linkedin" -> {
-                                binding.icLinkdin.visibility = View.VISIBLE
-                            }
-                            "Pinterest" -> {
-                                binding.icPinterest.visibility = View.VISIBLE
-                            }
-                            "Youtube" -> {
-                                binding.icYoutube.visibility = View.VISIBLE
+                    if (profileData.socialMediaLinks != null) {
+
+                        profileData.socialMediaLinks.forEach {
+
+                            when (it?.platform) {
+                                "Facebook" -> {
+                                    binding.icFb.visibility = View.VISIBLE
+                                }
+                                "Instagram" -> {
+                                    binding.icInsta.visibility = View.VISIBLE
+                                }
+                                "Twitter" -> {
+                                    binding.icTwitter.visibility = View.VISIBLE
+                                }
+                                "Linkedin" -> {
+                                    binding.icLinkdin.visibility = View.VISIBLE
+                                }
+                                "Pinterest" -> {
+                                    binding.icPinterest.visibility = View.VISIBLE
+                                }
+                                "Youtube" -> {
+                                    binding.icYoutube.visibility = View.VISIBLE
+                                }
                             }
                         }
+
                     }
 
-                }
+                    /* Set View Pager */
+                    binding.viewPager.adapter = ProfileViewPagerAdapter(profileData,supportFragmentManager)
 
-                /* Set View Pager */
-                binding.viewPager.adapter = ProfileViewPagerAdapter(profileData,supportFragmentManager)
+                }
 
             }
 
@@ -267,9 +283,10 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             }
 
         }
+
     }
 
-    fun createProfile(){
+    private fun createProfileDialog(){
 
         MaterialAlertDialogBuilder(this, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog)
             .setTitle(getString(R.string.create_profile))
@@ -280,6 +297,14 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
             }
             .show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (AppPreferencesDelegates.get().personalProfile){
+            viewModel.getProfile()
+
+        }
     }
 
 }

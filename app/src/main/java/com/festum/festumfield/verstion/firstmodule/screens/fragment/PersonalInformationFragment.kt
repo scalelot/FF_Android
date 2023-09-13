@@ -35,6 +35,11 @@ class PersonalInformationFragment(var profileData: ProfileResponse) : BaseFragme
 
         } else {
 
+            if (profileData.aboutUs.isNullOrEmpty()){ binding.relativeAbove.visibility = View.GONE}
+            if (profileData.hobbies.isNullOrEmpty()){ binding.relativeHobbies.visibility = View.GONE}
+            if (profileData.location?.coordinates.isNullOrEmpty()){ binding.relativeLocation.visibility = View.GONE}
+            if (profileData.interestedin.isNullOrEmpty()){ binding.relativeIntersted.visibility = View.GONE}
+
             binding.txtAbout.text = profileData.aboutUs
             binding.txtBirth.text = profileData.dob
             binding.txtGender.text = profileData.gender

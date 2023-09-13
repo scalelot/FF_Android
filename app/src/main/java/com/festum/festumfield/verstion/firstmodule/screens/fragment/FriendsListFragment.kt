@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import com.festum.festumfield.Activity.ReelsActivity
 import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
@@ -96,60 +97,68 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
         viewModel.friendsListData.observe(this) { friendsListData ->
 
-            if (friendsListData != null) {
+            Log.e("TAG", "setObservers:--- $friendsListData")
 
-                friendsListItems = friendsListData
+            if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
 
-                /* Online - Offline*/
-                var onLine = false
-                val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
-                val onlineUserChannelId = jsonObject.keys()
-                val onLineUserList = ArrayList<String>()
+                if (friendsListData != null) {
 
-                /* Pin - Unpin */
-                var setPin = false
 
-                friendsListData.forEach {
 
-                    while (onlineUserChannelId.hasNext()) {
-                        val key = onlineUserChannelId.next()
-                        onLineUserList.add(key)
+                    friendsListItems = friendsListData
+
+                    /* Online - Offline*/
+                    var onLine = false
+                    val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
+                    val onlineUserChannelId = jsonObject.keys()
+                    val onLineUserList = ArrayList<String>()
+
+                    /* Pin - Unpin */
+                    var setPin = false
+
+                    friendsListData.forEach {
+
+                        while (onlineUserChannelId.hasNext()) {
+                            val key = onlineUserChannelId.next()
+                            onLineUserList.add(key)
+                        }
+
+                        if (onLineUserList.contains(it.id?.uppercase())) {
+                            it.online = true
+                            onLine = true
+                        }
+
+                        if (it.isPinned == true) {
+                            setPin = true
+                        }
+
                     }
 
-                    if (onLineUserList.contains(it.id?.uppercase())) {
-                        it.online = true
-                        onLine = true
+                    if (setPin) {
+                        friendsListData.sortByDescending { item -> item.isPinned }
+                    } else {
+                        if (onLine){
+                            friendsListData.sortByDescending { item -> item.online }
+                        }else{
+                            friendsListData.sortByDescending { item -> item.lastMessage?.updatedAt }
+                        }
                     }
 
-                    if (it.isPinned == true) {
-                        setPin = true
+                    friendsListAdapter =
+                        FriendsListAdapter(requireActivity(), friendsListData, this, false)
+                    binding.chatRecyclerview.adapter = friendsListAdapter
+
+                    if (friendsListData.isEmpty()) {
+                        binding.layoutEmpty.emptyLay.visibility = View.VISIBLE
+                    } else {
+                        binding.layoutEmpty.emptyLay.visibility = View.GONE
                     }
 
                 }
 
-                if (setPin) {
-                    friendsListData.sortByDescending { item -> item.isPinned }
-                } else {
-                    if (onLine){
-                        friendsListData.sortByDescending { item -> item.online }
-                    }else{
-                        friendsListData.sortByDescending { item -> item.lastMessage?.updatedAt }
-                    }
-                }
-
-                friendsListAdapter =
-                    FriendsListAdapter(requireActivity(), friendsListData, this, false)
-                binding.chatRecyclerview.adapter = friendsListAdapter
-
-                if (friendsListData.isEmpty()) {
-                    binding.layoutEmpty.emptyLay.visibility = View.VISIBLE
-                } else {
-                    binding.layoutEmpty.emptyLay.visibility = View.GONE
-                }
+                binding.idPBLoading.visibility = View.GONE
 
             }
-
-            binding.idPBLoading.visibility = View.GONE
 
         }
 
