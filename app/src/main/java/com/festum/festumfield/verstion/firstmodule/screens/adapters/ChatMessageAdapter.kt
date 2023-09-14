@@ -149,6 +149,8 @@ class ChatMessageAdapter(
 
                 val image = Constans.Display_Image_URL + item.content?.media?.path
 
+                imageBinding.sendImage.setLargeImagePath(image)
+
                 Glide.with(context)
                     .load(image)
                     .placeholder(R.mipmap.ic_app_logo)
@@ -181,9 +183,11 @@ class ChatMessageAdapter(
 
                 val image = Constans.Display_Image_URL + item.content?.media?.path
 
+                imageBinding.reciveImg.setLargeImagePath(image)
+
                 Glide.with(context)
                     .load(image)
-                    .placeholder(R.mipmap.ic_app_logo)
+                    .error(R.mipmap.ic_app_logo)
                     .into(imageBinding.reciveImg)
 
                 Glide.with(context)

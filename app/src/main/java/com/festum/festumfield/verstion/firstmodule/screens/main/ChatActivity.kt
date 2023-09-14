@@ -451,6 +451,17 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
 
             }
 
+//            val i = Intent()
+//            i.type = "image/*"
+//            i.action = Intent.ACTION_GET_CONTENT
+//
+//            // pass the constant to compare it
+//            // with the returned requestCode
+//
+//            // pass the constant to compare it
+//            // with the returned requestCode
+//            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
+
         }
 
     }

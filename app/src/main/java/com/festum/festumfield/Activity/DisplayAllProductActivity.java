@@ -217,6 +217,7 @@ public class DisplayAllProductActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("GetAllProductItemError=>", error.toString());
+                    idPBLoading.setVisibility(View.GONE);
                 }
             }) {
                 @Override

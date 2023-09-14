@@ -208,6 +208,10 @@ dependencies {
      shared preferences helper
      * */
     implementation "com.pixplicity.easyprefs:library:1.9.0"
+    /**
+     zoomIn-zoomOut
+     * */
+    implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
 
 }
 

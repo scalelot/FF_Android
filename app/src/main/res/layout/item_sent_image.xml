@@ -32,7 +32,7 @@
                 android:padding="@dimen/margin_10"
                 app:cardCornerRadius="@dimen/margin_5">
 
-                <ImageView
+                <com.festum.festumfield.verstion.firstmodule.utils.ZoomImageView
                     android:id="@+id/sendImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -121,7 +121,7 @@
                 android:padding="@dimen/margin_10"
                 app:cardCornerRadius="@dimen/margin_5">
 
-                <ImageView
+                <com.festum.festumfield.verstion.firstmodule.utils.ZoomImageView
                     android:id="@+id/reciveImg"
                     android:layout_width="@dimen/margin_230"
                     android:layout_height="@dimen/margin_230"

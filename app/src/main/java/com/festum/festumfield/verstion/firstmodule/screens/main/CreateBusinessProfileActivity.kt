@@ -211,6 +211,9 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
             if (profilePictureData != null) {
 
+                binding.rlUpload.visibility = View.GONE
+                binding.rlAddBrochur.visibility = View.VISIBLE
+
                 binding.edtBrochure.setOnClickListener {
 
                     val document = profilePictureData.s3Url + profilePictureData.key
@@ -352,6 +355,8 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                     val file = File(document)
 
                     viewModel.setBusinessBrochure(file)
+
+
 
                 }
 
