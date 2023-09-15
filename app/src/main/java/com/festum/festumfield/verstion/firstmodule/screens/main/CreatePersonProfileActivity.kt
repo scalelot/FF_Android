@@ -57,7 +57,7 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListener<Person>,
-    OnMapReadyCallback{
+    OnMapReadyCallback {
 
     private lateinit var binding: ActivityCreateProfileBinding
 
@@ -79,10 +79,9 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
         viewModel.getProfile()
 
         val editProfile = intent.getStringExtra("EditProfile")
-        if (editProfile?.isNotEmpty() == true){
+        if (editProfile?.isNotEmpty() == true) {
             binding.title.text = editProfile
         }
-
 
 
         /* Map View */
@@ -95,19 +94,27 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             finish()
         }
 
-        val adapter = ArrayAdapter.createFromResource(this, R.array.gender, R.layout.simple_spinner_item)
+        val adapter =
+            ArrayAdapter.createFromResource(this, R.array.gender, R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.genSpinner.adapter = adapter
 
         binding.genSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 genSpinnerValue = parent.getItemAtPosition(position).toString()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         val people = Person.samplePeople()
-        val personAdapter = PersonAdapter(this@CreatePersonProfileActivity, R.layout.person_layout, people)
+        val personAdapter =
+            PersonAdapter(this@CreatePersonProfileActivity, R.layout.person_layout, people)
 
         binding.tagView.setAdapter(personAdapter)
         binding.tagView.threshold = 1
@@ -162,6 +169,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             ) {
                 genSpinnerValue = parent.getItemAtPosition(position).toString()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -174,7 +182,10 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 )
             ) {
                 startActivity(
-                    Intent(this@CreatePersonProfileActivity, MapsLocationActivity::class.java).putExtra("isProfileLocation", true)
+                    Intent(
+                        this@CreatePersonProfileActivity,
+                        MapsLocationActivity::class.java
+                    ).putExtra("isProfileLocation", true)
                 )
             } else
                 AppPermissionDialog.showPermission(
@@ -215,46 +226,87 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             }
         }
 
-        binding.rangeSeekbar.onRangeLabelsListener = object : SimpleRangeView.OnRangeLabelsListener {
-            override fun getLabelTextForPosition(
-                rangeView: SimpleRangeView,
-                pos: Int,
-                state: SimpleRangeView.State
-            ): String {
-                return pos.toString()
+        binding.rangeSeekbar.onRangeLabelsListener =
+            object : SimpleRangeView.OnRangeLabelsListener {
+                override fun getLabelTextForPosition(
+                    rangeView: SimpleRangeView,
+                    pos: Int,
+                    state: SimpleRangeView.State
+                ): String {
+                    return pos.toString()
+                }
             }
-        }
 
         binding.btnBusiness.setOnClickListener {
 
             socialMediaLink()
 
-            if (Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString()).matches()) {
 
-                val profileData = CreateProfileModel(
-                    fullName = binding.edtName.text.toString(),
-                    userName = binding.edtNickname.text.toString(),
-                    nickName = binding.edtNickname.text.toString(),
-                    emailId = binding.edtEmailId.text.toString(),
-                    areaRange = binding.tKm.text.toString().toInt(),
-                    aboutUs = binding.edtAboutUs.text.toString(),
-                    targetAudienceAgeMin = binding.txtMinAge.text.toString().toInt(),
-                    targetAudienceAgeMax = binding.txtMaxAge.text.toString().toInt(),
-                    hobbies = hobbiesArrayList,
-                    socialMediaLinks = socialMediaLinkArrayList,
-                    dob = binding.edtDob.text.toString(),
-                    gender = genSpinnerValue,
-                    latitude = Const.lattitude,
-                    longitude = Const.longitude,
-                    interestedin = radioGenderValue.uppercase()
-                )
+            val profileData = CreateProfileModel(
+                fullName = binding.edtName.text.toString(),
+                userName = binding.edtNickname.text.toString(),
+                nickName = binding.edtNickname.text.toString(),
+                emailId = binding.edtEmailId.text.toString(),
+                areaRange = binding.tKm.text.toString().toInt(),
+                aboutUs = binding.edtAboutUs.text.toString(),
+                targetAudienceAgeMin = binding.txtMinAge.text.toString().toInt(),
+                targetAudienceAgeMax = binding.txtMaxAge.text.toString().toInt(),
+                hobbies = hobbiesArrayList,
+                socialMediaLinks = socialMediaLinkArrayList,
+                dob = binding.edtDob.text.toString(),
+                gender = genSpinnerValue,
+                latitude = Const.lattitude,
+                longitude = Const.longitude,
+                interestedin = radioGenderValue.uppercase()
+            )
 
-                viewModel.createProfile(profileData,true)
-
-            } else {
-                Snackbar.make(binding.relative, "Please Enter Valid Email", Snackbar.LENGTH_SHORT).show()
+            if (profileData.fullName.isNullOrEmpty()) {
+                binding.edtName.error = "Enter Full Name"
+                Snackbar.make(binding.relative, "Enter Full Name", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
+            if (profileData.userName.isNullOrEmpty()) {
+                binding.edtNickname.error = "Enter Nick Name"
+                Snackbar.make(binding.relative, "Enter Nick Name", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.emailId.isNullOrEmpty()) {
+                binding.edtEmailId.error = "Enter Email Id"
+                Snackbar.make(binding.relative, "Enter Email Id", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.dob.isNullOrEmpty()) {
+                Snackbar.make(binding.relative, "Enter Date of birth", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.aboutUs.isNullOrEmpty()) {
+                binding.edtAboutUs.error = "Enter About Us"
+                Snackbar.make(binding.relative, "Enter About Us", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (Const.lattitude == null) {
+                Snackbar.make(binding.relative, "Select Location", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.interestedin.isNullOrEmpty()) {
+                Snackbar.make(binding.relative, "Select Interested In", Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+            if (Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString()).matches()) {
+
+                viewModel.createProfile(profileData, true)
+
+            } else {
+                Snackbar.make(binding.relative, "Please Enter Valid Email", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
 
 
         }
@@ -263,31 +315,74 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             socialMediaLink()
 
+
+            val profileData = CreateProfileModel(
+                fullName = binding.edtName.text.toString(),
+                userName = binding.edtNickname.text.toString(),
+                nickName = binding.edtNickname.text.toString(),
+                emailId = binding.edtEmailId.text.toString(),
+                areaRange = binding.tKm.text.toString().toInt(),
+                aboutUs = binding.edtAboutUs.text.toString(),
+                targetAudienceAgeMin = binding.txtMinAge.text.toString().toInt(),
+                targetAudienceAgeMax = binding.txtMaxAge.text.toString().toInt(),
+                hobbies = hobbiesArrayList,
+                socialMediaLinks = socialMediaLinkArrayList,
+                dob = binding.edtDob.text.toString(),
+                gender = genSpinnerValue,
+                latitude = Const.lattitude,
+                longitude = Const.longitude,
+                interestedin = radioGenderValue.uppercase()
+            )
+
+            if (profileData.fullName.isNullOrEmpty()) {
+                binding.edtName.error = "Enter Full Name"
+                Snackbar.make(binding.relative, "Enter Full Name", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.userName.isNullOrEmpty()) {
+                binding.edtNickname.error = "Enter Nick Name"
+                Snackbar.make(binding.relative, "Enter Nick Name", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.emailId.isNullOrEmpty()) {
+                binding.edtEmailId.error = "Enter Email Id"
+                Snackbar.make(binding.relative, "Enter Email Id", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.dob.isNullOrEmpty()) {
+                Snackbar.make(binding.relative, "Enter Date of birth", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.aboutUs.isNullOrEmpty()) {
+                binding.edtAboutUs.error = "Enter About Us"
+                Snackbar.make(binding.relative, "Enter About Us", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            if (Const.lattitude == null) {
+                Snackbar.make(binding.relative, "Select Location", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (profileData.interestedin.isNullOrEmpty()) {
+                Snackbar.make(binding.relative, "Select Interested In", Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+
             if (Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString()).matches()) {
 
-                val profileData = CreateProfileModel(
-                    fullName = binding.edtName.text.toString(),
-                    userName = binding.edtNickname.text.toString(),
-                    nickName = binding.edtNickname.text.toString(),
-                    emailId = binding.edtEmailId.text.toString(),
-                    areaRange = binding.tKm.text.toString().toInt(),
-                    aboutUs = binding.edtAboutUs.text.toString(),
-                    targetAudienceAgeMin = binding.txtMinAge.text.toString().toInt(),
-                    targetAudienceAgeMax = binding.txtMaxAge.text.toString().toInt(),
-                    hobbies = hobbiesArrayList,
-                    socialMediaLinks = socialMediaLinkArrayList,
-                    dob = binding.edtDob.text.toString(),
-                    gender = genSpinnerValue,
-                    latitude = Const.lattitude,
-                    longitude = Const.longitude,
-                    interestedin = radioGenderValue.uppercase()
-                )
-
-                viewModel.createProfile(profileData,false)
+                viewModel.createProfile(profileData, false)
 
             } else {
 
-                Snackbar.make(binding.relative, "Please Enter Valid Email", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.relative, "Please Enter Valid Email", Snackbar.LENGTH_SHORT)
+                    .show()
 
             }
 
@@ -322,28 +417,28 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                     binding.tagView.addObjectAsync(Person(it))
                 }
 
-                if (profileData.areaRange == null){
+                if (profileData.areaRange == null) {
                     binding.tKm.text = "0"
-                }else{
+                } else {
                     binding.tKm.text = profileData.areaRange.toString()
                 }
 
                 binding.seekbarRange.progress = profileData.areaRange ?: 0
 
-                if (profileData.gender.equals("Male")){
+                if (profileData.gender.equals("Male")) {
                     (binding.radioGender.getChildAt(0) as RadioButton).isChecked = true
-                }else if (profileData.gender.equals("FEMALE")){
+                } else if (profileData.gender.equals("FEMALE")) {
                     (binding.radioGender.getChildAt(1) as RadioButton).isChecked = true
-                }else if (profileData.gender.equals("OTHER")){
+                } else if (profileData.gender.equals("OTHER")) {
                     (binding.radioGender.getChildAt(2) as RadioButton).isChecked = true
                 }
                 radioGenderValue = profileData.gender.toString()
 
-                if (profileData.targetAudienceAgeMin == null && profileData.targetAudienceAgeMax == null ){
-                    binding.txtMinAge.text =  "0"
+                if (profileData.targetAudienceAgeMin == null && profileData.targetAudienceAgeMax == null) {
+                    binding.txtMinAge.text = "0"
                     binding.txtMaxAge.text = "0"
-                }else{
-                    binding.txtMinAge.text =  profileData.targetAudienceAgeMin.toString()
+                } else {
+                    binding.txtMinAge.text = profileData.targetAudienceAgeMin.toString()
                     binding.txtMaxAge.text = profileData.targetAudienceAgeMax.toString()
                 }
 
@@ -358,18 +453,23 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                             "Facebook" -> {
                                 binding.edtFb.setText(it.link)
                             }
+
                             "Instagram" -> {
                                 binding.edtInsta.setText(it.link)
                             }
+
                             "Twitter" -> {
                                 binding.edtTwitter.setText(it.link)
                             }
+
                             "Linkedin" -> {
                                 binding.edtLinkdin.setText(it.link)
                             }
+
                             "Pinterest" -> {
                                 binding.edtPintrest.setText(it.link)
                             }
+
                             "Youtube" -> {
                                 binding.edtYoutube.setText(it.link)
                             }
@@ -378,7 +478,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
                 }
 
-                if (profileData.isBusinessProfileCreated == true){
+                if (profileData.isBusinessProfileCreated == true) {
                     businessProfileValue = true
                     binding.btnBusiness.visibility = View.GONE
                 }
@@ -390,15 +490,15 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                         val long = profileData.location.coordinates[0]
                         val lat = profileData.location.coordinates[1]
 
-                        if (lat != null && long != null){
-                            val latLng = LatLng(lat,long)
+                        if (lat != null && long != null) {
+                            val latLng = LatLng(lat, long)
                             Const.lattitude = lat
                             Const.longitude = long
                             map?.addMarker(MarkerOptions().position(latLng))
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                         }
                     }
-                },500)
+                }, 500)
 
 
             }
@@ -422,13 +522,13 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
         }
 
-        viewModel.createProfileData.observe(this){
+        viewModel.createProfileData.observe(this) {
 
             if (it != null) {
                 Snackbar.make(binding.relative, it.message.toString(), Snackbar.LENGTH_SHORT).show()
             }
 
-            if (it?.status == 200){
+            if (it?.status == 200) {
 
                 AppPreferencesDelegates.get().personalProfile = true
 
@@ -444,11 +544,16 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 Snackbar.make(binding.relative, it.message.toString(), Snackbar.LENGTH_SHORT).show()
             }
 
-            if (it?.status == 200){
+            if (it?.status == 200) {
 
                 AppPreferencesDelegates.get().personalProfile = true
 
-                startActivity(Intent(this@CreatePersonProfileActivity, CreateBusinessProfileActivity::class.java))
+                startActivity(
+                    Intent(
+                        this@CreatePersonProfileActivity,
+                        CreateBusinessProfileActivity::class.java
+                    )
+                )
             }
 
         }
@@ -504,10 +609,14 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true){
+                    if (permission?.areAllPermissionsGranted() == true) {
                         openIntent()
                     } else {
-                        AppPermissionDialog.showPermission(this@CreatePersonProfileActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                        AppPermissionDialog.showPermission(
+                            this@CreatePersonProfileActivity,
+                            getString(R.string.media_permission),
+                            getString(R.string.media_permission_title)
+                        )
                     }
 
                 }
@@ -546,6 +655,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
     }
+
     override fun onResume() {
         super.onResume()
         if (Const.longitude != null && Const.lattitude != null) {
@@ -554,7 +664,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 if (Const.mCurrLocationMarker != null) {
                     Const.mCurrLocationMarker.remove()
                 }
-                val userLocation = LatLng(Const.lattitude,Const.longitude)
+                val userLocation = LatLng(Const.lattitude, Const.longitude)
                 map?.addMarker(MarkerOptions().position(userLocation))
                 map?.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12f))
             }
@@ -562,35 +672,51 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
     }
 
-    fun socialMediaLink(){
+    fun socialMediaLink() {
 
-        if (binding.edtFb.text.toString() != ""){
-            val faceBook = SocialMediaLinksItem(platform = "Facebook", link = binding.edtFb.text.toString())
+        if (binding.edtFb.text.toString() != "") {
+            val faceBook =
+                SocialMediaLinksItem(platform = "Facebook", link = binding.edtFb.text.toString())
             socialMediaLinkArrayList.add(faceBook)
         }
 
-        if (binding.edtInsta.text.toString() != ""){
-            val instagram = SocialMediaLinksItem(platform = "Instagram", link = binding.edtInsta.text.toString())
+        if (binding.edtInsta.text.toString() != "") {
+            val instagram = SocialMediaLinksItem(
+                platform = "Instagram",
+                link = binding.edtInsta.text.toString()
+            )
             socialMediaLinkArrayList.add(instagram)
         }
 
-        if (binding.edtTwitter.text.toString() != ""){
-            val twitter = SocialMediaLinksItem(platform = "Twitter", link = binding.edtTwitter.text.toString())
+        if (binding.edtTwitter.text.toString() != "") {
+            val twitter = SocialMediaLinksItem(
+                platform = "Twitter",
+                link = binding.edtTwitter.text.toString()
+            )
             socialMediaLinkArrayList.add(twitter)
         }
 
-        if (binding.edtLinkdin.text.toString() != ""){
-            val linkedin = SocialMediaLinksItem(platform = "Linkedin", link = binding.edtLinkdin.text.toString())
+        if (binding.edtLinkdin.text.toString() != "") {
+            val linkedin = SocialMediaLinksItem(
+                platform = "Linkedin",
+                link = binding.edtLinkdin.text.toString()
+            )
             socialMediaLinkArrayList.add(linkedin)
         }
 
-        if (binding.edtPintrest.text.toString() != ""){
-            val pinterest = SocialMediaLinksItem(platform = "Pinterest", link = binding.edtPintrest.text.toString())
+        if (binding.edtPintrest.text.toString() != "") {
+            val pinterest = SocialMediaLinksItem(
+                platform = "Pinterest",
+                link = binding.edtPintrest.text.toString()
+            )
             socialMediaLinkArrayList.add(pinterest)
         }
 
-        if (binding.edtYoutube.text.toString() != ""){
-            val youtube = SocialMediaLinksItem(platform = "Youtube", link = binding.edtYoutube.text.toString())
+        if (binding.edtYoutube.text.toString() != "") {
+            val youtube = SocialMediaLinksItem(
+                platform = "Youtube",
+                link = binding.edtYoutube.text.toString()
+            )
             socialMediaLinkArrayList.add(youtube)
         }
 

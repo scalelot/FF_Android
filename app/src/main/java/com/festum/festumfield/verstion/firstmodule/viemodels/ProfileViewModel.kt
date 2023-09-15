@@ -163,6 +163,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun createProfile(profileData: CreateProfileModel, isBusinessClick: Boolean) {
+
         api.createPersonProfile(profileData).enqueue(object : Callback<ApiBody> {
             override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
 

@@ -475,6 +475,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
                 startActivityForResult(intent, IMAGE_PICKER_SELECT)
+
             }
 
             R.id.img_camera -> {

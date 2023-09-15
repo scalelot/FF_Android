@@ -230,19 +230,19 @@ class FriendsListAdapter(
         val mediaList = contentList.getJSONObject("media")
         val product = contentList.getJSONObject("product")
 
-        val text = SendText(messageList.optString("message"))
-        val media = SendMedia(
+        val text = Text(messageList.optString("message"))
+        val media = Media(
             path = mediaList.optString("path"),
             mime = mediaList.optString("mime"),
             name = mediaList.optString("name"),
             type = mediaList.optString("type")
         )
 
-        val productItem = SendProduct(productid = product.optString("productid"))
+        val productItem = Product(ProductItem(id = product.optString("productid")))
 
         val lastMessageItemList = LastMessageItem(
             timestamp = data.optLong("timestamp"),
-            content = SendMessageContent(text = text, media = media, product = productItem),
+            content = Content(text = text, media = media, product = productItem),
             contentType = data.optString("contentType")
         )
 

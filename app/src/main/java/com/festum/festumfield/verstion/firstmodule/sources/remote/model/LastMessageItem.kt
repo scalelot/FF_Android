@@ -27,7 +27,7 @@ data class LastMessageItem(
     val contentType: String? = null,
 
     @field:SerializedName("content")
-    val content: SendMessageContent? = null,
+    val content: Content? = null,
 
     @field:SerializedName("timestamp")
     val timestamp: Long? = null,

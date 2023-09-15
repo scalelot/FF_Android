@@ -119,11 +119,52 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 category = binding.edtCategory.text.toString(),
                 subCategory = binding.edtSubcategory.text.toString(),
                 description = binding.edtDescription.text.toString(),
-                interestedCategory = binding.edtBussinessName.text.toString(),
-                interestedSubCategory = binding.edtBussinessName.text.toString(),
+                interestedCategory = binding.edtInterestedCategory.text.toString(),
+                interestedSubCategory = binding.edtInterestedSubcategory.text.toString(),
                 latitude = Const.lattitude,
                 longitude = Const.longitude
             )
+
+            if (businessProfile.name.isNullOrEmpty()){
+                binding.edtBussinessName.error = resources.getString(R.string.please_enter_bname)
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_bname), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (businessProfile.category.isNullOrEmpty()){
+                binding.edtCategory.error = resources.getString(R.string.please_enter_b_cat)
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_cat), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (businessProfile.subCategory.isNullOrEmpty()){
+                binding.edtSubcategory.error = resources.getString(R.string.please_enter_b_subcat)
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_subcat), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (businessProfile.description.isNullOrEmpty()){
+                binding.edtDescription.error = resources.getString(R.string.please_enter_b_des)
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_des), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (Const.b_lattitude == null){
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_location), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (businessProfile.interestedCategory.isNullOrEmpty()){
+                binding.edtInterestedCategory.error = resources.getString(R.string.please_enter_interested_category)
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_interested_category), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (businessProfile.interestedSubCategory.isNullOrEmpty()){
+                binding.edtInterestedSubcategory.error = resources.getString(R.string.please_enter_interested_subcategory)
+                Snackbar.make(binding.linear, resources.getString(R.string.please_enter_interested_subcategory), Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             viewModel.createBusinessProfile(businessProfile)
 
