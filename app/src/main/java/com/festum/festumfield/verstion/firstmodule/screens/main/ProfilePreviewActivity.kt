@@ -4,8 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
-import android.util.Log
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -20,7 +19,6 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ProfileViewPagerAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
-import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.CreateProfileInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
@@ -33,6 +31,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageActivity
+import com.theartofdev.edmodo.cropper.CropImageOptions
+import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -274,14 +276,33 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             val uri = IntentUtil.getPickImageResultUri(baseContext, data)
 
             if (uri != null) {
-                val mImageFile = uri.let { it ->
-                    FileUtil.getPath(Uri.parse(it.toString()), this@ProfilePreviewActivity)
-                        ?.let { File(it) }
-                }
-                val file = File(mImageFile.toString())
-                viewModel.setProfilePicture(file)
+
+                cropImage(uri)
+
             }
 
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+
+                if (result != null) {
+                    val mImageFile = result.uri.let { it ->
+                        FileUtil.getPath(Uri.parse(it.toString()), this@ProfilePreviewActivity)
+                            ?.let { File(it) }
+                    }
+                    val file = File(mImageFile.toString())
+                    viewModel.setProfilePicture(file)
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(
+                    this,
+                    "Cropping failed" + result.error,
+                    Toast.LENGTH_LONG
+                ).show()
+
+            }
         }
 
     }
@@ -305,6 +326,25 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             viewModel.getProfile()
 
         }
+    }
+
+    private fun cropImage(uri: Uri) {
+        val mOptions = CropImageOptions()
+        mOptions.allowFlipping = false
+        mOptions.allowRotation = false
+        mOptions.aspectRatioX = 1
+        mOptions.aspectRatioY = 1
+        mOptions.cropShape = CropImageView.CropShape.OVAL
+        val intent = Intent()
+        intent.setClass(this@ProfilePreviewActivity, CropImageActivity::class.java)
+        val bundle = Bundle()
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, uri)
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, mOptions)
+        intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
+        startActivityForResult(
+            intent,
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+        )
     }
 
 }

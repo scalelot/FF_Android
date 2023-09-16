@@ -279,10 +279,10 @@ public class ProductDetailsActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (isFromUser.equals("Product")) {
-            startActivity(new Intent(getApplicationContext(), ProductActivity.class));
+            /*startActivity(new Intent(getApplicationContext(), ProductActivity.class));*/
             finish();
         } else {
-            startActivity(new Intent(getApplicationContext(), ChatingActivity.class));
+            /*startActivity(new Intent(getApplicationContext(), ChatingActivity.class));*/
             finish();
         }
     }

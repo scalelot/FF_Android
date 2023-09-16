@@ -71,6 +71,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
             android:name=".verstion.firstmodule.screens.main.VideoCallingActivity"
             android:exported="false" />
         <activity

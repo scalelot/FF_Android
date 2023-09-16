@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
@@ -48,6 +49,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageActivity
+import com.theartofdev.edmodo.cropper.CropImageOptions
+import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import me.bendik.simplerangeview.SimpleRangeView
 import java.io.File
@@ -641,15 +646,34 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             val uri = IntentUtil.getPickImageResultUri(baseContext, data)
 
             if (uri != null) {
-                val mImageFile = uri.let { it ->
-                    FileUtil.getPath(Uri.parse(it.toString()), this@CreatePersonProfileActivity)
-                        ?.let { File(it) }
-                }
-                val file = File(mImageFile.toString())
-                viewModel.setProfilePicture(file)
-            }
 
+                cropImage(uri)
+
+            }
         }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+
+                if (result != null) {
+                    val mImageFile = result.uri.let { it ->
+                        FileUtil.getPath(Uri.parse(it.toString()), this@CreatePersonProfileActivity)
+                            ?.let { File(it) }
+                    }
+                    val file = File(mImageFile.toString())
+                    viewModel.setProfilePicture(file)
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(
+                    this,
+                    "Cropping failed" + result.error,
+                    Toast.LENGTH_LONG
+                ).show()
+
+            }
+        }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -720,6 +744,25 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             socialMediaLinkArrayList.add(youtube)
         }
 
+    }
+
+    private fun cropImage(uri: Uri) {
+        val mOptions = CropImageOptions()
+        mOptions.allowFlipping = false
+        mOptions.allowRotation = false
+        mOptions.aspectRatioX = 1
+        mOptions.aspectRatioY = 1
+        mOptions.cropShape = CropImageView.CropShape.OVAL
+        val intent = Intent()
+        intent.setClass(this@CreatePersonProfileActivity, CropImageActivity::class.java)
+        val bundle = Bundle()
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, uri)
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, mOptions)
+        intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
+        startActivityForResult(
+            intent,
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+        )
     }
 
 }

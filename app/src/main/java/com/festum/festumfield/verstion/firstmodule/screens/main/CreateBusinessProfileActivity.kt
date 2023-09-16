@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.provider.OpenableColumns
 import android.view.View
@@ -35,6 +36,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageActivity
+import com.theartofdev.edmodo.cropper.CropImageOptions
+import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -363,14 +368,33 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             val uri = IntentUtil.getPickImageResultUri(baseContext, data)
 
             if (uri != null) {
-                val mImageFile = uri.let { it ->
-                    FileUtil.getPath(Uri.parse(it.toString()), this@CreateBusinessProfileActivity)
-                        ?.let { File(it) }
-                }
-                val file = File(mImageFile.toString())
-                viewModel.setBusinessProfilePicture(file)
+
+                cropImage(uri)
+
             }
 
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+
+                if (result != null) {
+                    val mImageFile = result.uri.let { it ->
+                        FileUtil.getPath(Uri.parse(it.toString()), this@CreateBusinessProfileActivity)
+                            ?.let { File(it) }
+                    }
+                    val file = File(mImageFile.toString())
+                    viewModel.setBusinessProfilePicture(file)
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(
+                    this,
+                    "Cropping failed" + result.error,
+                    Toast.LENGTH_LONG
+                ).show()
+
+            }
         }
 
         if (requestCode == IntentUtil.DOCUMENT_PICKER_SELECT && resultCode == Activity.RESULT_OK) {
@@ -403,6 +427,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
             }
         }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -422,6 +447,25 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 map?.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12f))
             }
         }
+    }
+
+    private fun cropImage(uri: Uri) {
+        val mOptions = CropImageOptions()
+        mOptions.allowFlipping = false
+        mOptions.allowRotation = false
+        mOptions.aspectRatioX = 1
+        mOptions.aspectRatioY = 1
+        mOptions.cropShape = CropImageView.CropShape.OVAL
+        val intent = Intent()
+        intent.setClass(this@CreateBusinessProfileActivity, CropImageActivity::class.java)
+        val bundle = Bundle()
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, uri)
+        bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, mOptions)
+        intent.putExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE, bundle)
+        startActivityForResult(
+            intent,
+            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+        )
     }
 
 }
