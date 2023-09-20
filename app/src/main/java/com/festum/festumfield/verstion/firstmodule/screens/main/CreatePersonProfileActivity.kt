@@ -67,7 +67,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
     private lateinit var binding: ActivityCreateProfileBinding
 
     private var genSpinnerValue = ""
-    private var radioGenderValue = ""
+    private var radioGenderValue = "MALE"
     private var businessProfileValue = false
     private var hobbiesArrayList = ArrayList<String>()
     private var socialMediaLinkArrayList = ArrayList<SocialMediaLinksItem>()
@@ -266,18 +266,21 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             )
 
             if (profileData.fullName.isNullOrEmpty()) {
+                binding.edtName.requestFocus()
                 binding.edtName.error = "Enter Full Name"
                 Snackbar.make(binding.relative, "Enter Full Name", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (profileData.userName.isNullOrEmpty()) {
+                binding.edtNickname.requestFocus()
                 binding.edtNickname.error = "Enter Nick Name"
                 Snackbar.make(binding.relative, "Enter Nick Name", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (profileData.emailId.isNullOrEmpty()) {
+                binding.edtEmailId.requestFocus()
                 binding.edtEmailId.error = "Enter Email Id"
                 Snackbar.make(binding.relative, "Enter Email Id", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -289,6 +292,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             }
 
             if (profileData.aboutUs.isNullOrEmpty()) {
+                binding.edtAboutUs.requestFocus()
                 binding.edtAboutUs.error = "Enter About Us"
                 Snackbar.make(binding.relative, "Enter About Us", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -340,18 +344,21 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             )
 
             if (profileData.fullName.isNullOrEmpty()) {
+                binding.edtName.requestFocus()
                 binding.edtName.error = "Enter Full Name"
                 Snackbar.make(binding.relative, "Enter Full Name", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (profileData.userName.isNullOrEmpty()) {
+                binding.edtNickname.requestFocus()
                 binding.edtNickname.error = "Enter Nick Name"
                 Snackbar.make(binding.relative, "Enter Nick Name", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (profileData.emailId.isNullOrEmpty()) {
+                binding.edtEmailId.requestFocus()
                 binding.edtEmailId.error = "Enter Email Id"
                 Snackbar.make(binding.relative, "Enter Email Id", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -363,6 +370,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             }
 
             if (profileData.aboutUs.isNullOrEmpty()) {
+                binding.edtAboutUs.requestFocus()
                 binding.edtAboutUs.error = "Enter About Us"
                 Snackbar.make(binding.relative, "Enter About Us", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener

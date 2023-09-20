@@ -131,24 +131,28 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             )
 
             if (businessProfile.name.isNullOrEmpty()){
+                binding.edtBussinessName.requestFocus()
                 binding.edtBussinessName.error = resources.getString(R.string.please_enter_bname)
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_bname), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (businessProfile.category.isNullOrEmpty()){
+                binding.edtCategory.requestFocus()
                 binding.edtCategory.error = resources.getString(R.string.please_enter_b_cat)
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_cat), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (businessProfile.subCategory.isNullOrEmpty()){
+                binding.edtSubcategory.requestFocus()
                 binding.edtSubcategory.error = resources.getString(R.string.please_enter_b_subcat)
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_subcat), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (businessProfile.description.isNullOrEmpty()){
+                binding.edtDescription.requestFocus()
                 binding.edtDescription.error = resources.getString(R.string.please_enter_b_des)
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_des), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -160,12 +164,14 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
             }
 
             if (businessProfile.interestedCategory.isNullOrEmpty()){
+                binding.edtInterestedCategory.requestFocus()
                 binding.edtInterestedCategory.error = resources.getString(R.string.please_enter_interested_category)
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_interested_category), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (businessProfile.interestedSubCategory.isNullOrEmpty()){
+                binding.edtInterestedSubcategory.requestFocus()
                 binding.edtInterestedSubcategory.error = resources.getString(R.string.please_enter_interested_subcategory)
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_interested_subcategory), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener

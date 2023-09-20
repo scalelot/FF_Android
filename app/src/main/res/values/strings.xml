@@ -425,5 +425,6 @@
     <string name="media_permission_title">Media Permission</string>
     <string name="location_permission">To serve you best user experience we need permissions from location services</string>
     <string name="media_permission">To serve you best user experience we need permissions from media services</string>
+    <string name="gujarat">gujarat</string>
 
 </resources>

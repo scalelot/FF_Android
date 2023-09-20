@@ -75,6 +75,30 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             }
         }
 
+        binding.userName.setOnClickListener {
+
+            if (AppPreferencesDelegates.get().userName.isBlank()) {
+                /* For create profile */
+                createProfileDialog()
+            } else {
+                /* For Start Profile */
+                startActivity(Intent(this@HomeActivity, ProfilePreviewActivity::class.java))
+            }
+
+        }
+
+        binding.hi.setOnClickListener {
+
+            if (AppPreferencesDelegates.get().userName.isBlank()) {
+                /* For create profile */
+                createProfileDialog()
+            } else {
+                /* For Start Profile */
+                startActivity(Intent(this@HomeActivity, ProfilePreviewActivity::class.java))
+            }
+
+        }
+
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             selectFragment(item)
             true

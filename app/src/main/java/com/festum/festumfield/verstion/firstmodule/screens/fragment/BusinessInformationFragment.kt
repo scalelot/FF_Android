@@ -30,27 +30,16 @@ class BusinessInformationFragment(var profileData: ProfileResponse) : BaseFragme
 
     override fun initUi() {
 
-        if (profileData.isBusinessProfileCreated == false){
-
-            binding.dialog.visibility = View.VISIBLE
-            binding.createProfile.visibility = View.GONE
-            binding.idPBLoading.visibility = View.GONE
-
-        } else {
-
-            viewModel.getBusinessProfile()
-
-            binding.dialog.visibility = View.GONE
-            binding.createProfile.visibility = View.VISIBLE
-
-        }
-
-        binding.btnCreateProfile.setOnClickListener {
-            startActivity(Intent(requireContext(), CreateBusinessProfileActivity::class.java))
-        }
+        getInformation()
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        getInformation()
+
+    }
     @SuppressLint("SetTextI18n")
     override fun setObservers() {
 
@@ -99,6 +88,28 @@ class BusinessInformationFragment(var profileData: ProfileResponse) : BaseFragme
             }
             binding.idPBLoading.visibility = View.GONE
 
+        }
+
+    }
+
+    private fun getInformation(){
+        if (profileData.isBusinessProfileCreated == false){
+
+            binding.dialog.visibility = View.VISIBLE
+            binding.createProfile.visibility = View.GONE
+            binding.idPBLoading.visibility = View.GONE
+
+        } else {
+
+            viewModel.getBusinessProfile()
+
+            binding.dialog.visibility = View.GONE
+            binding.createProfile.visibility = View.VISIBLE
+
+        }
+
+        binding.btnCreateProfile.setOnClickListener {
+            startActivity(Intent(requireContext(), CreateBusinessProfileActivity::class.java))
         }
 
     }

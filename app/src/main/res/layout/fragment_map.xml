@@ -15,7 +15,9 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/sp_50"
-            android:layout_margin="@dimen/margin_20"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/edt_bg"
             android:elevation="5dp"
             android:layoutDirection="rtl"
@@ -23,6 +25,16 @@
             app:iconifiedByDefault="false"
             app:queryBackground="@android:color/transparent"
             app:queryHint="@string/search_user_area" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_below="@id/searchView">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/latlng"

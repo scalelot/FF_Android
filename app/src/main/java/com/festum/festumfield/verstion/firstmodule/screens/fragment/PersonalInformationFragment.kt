@@ -27,6 +27,23 @@ class PersonalInformationFragment(var profileData: ProfileResponse) : BaseFragme
     @SuppressLint("SetTextI18n")
     override fun initUi() {
 
+        getInformation()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        getInformation()
+
+    }
+
+    override fun setObservers() {
+
+    }
+
+    private fun getInformation(){
+
         if (profileData.fullName.isNullOrEmpty()){
 
             binding.dialog.visibility = View.VISIBLE
@@ -69,11 +86,6 @@ class PersonalInformationFragment(var profileData: ProfileResponse) : BaseFragme
         binding.btnCreateProfile.setOnClickListener {
             startActivity(Intent(requireContext(), CreatePersonProfileActivity::class.java))
         }
-
-    }
-
-    override fun setObservers() {
-
     }
 
 }

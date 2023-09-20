@@ -41,12 +41,13 @@
             <TextView
                 android:id="@+id/hi"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_toRightOf="@+id/user_img"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/hiiiii"
+                android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_14" />
 
@@ -60,6 +61,7 @@
                 android:layout_toLeftOf="@+id/iv_likes"
                 android:layout_toRightOf="@+id/hi"
                 android:ellipsize="end"
+                android:gravity="center_vertical"
                 android:fontFamily="@font/roboto_medium"
                 android:paddingRight="@dimen/margin_10"
                 android:singleLine="true"
