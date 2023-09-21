@@ -18,8 +18,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.AdapterView
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SearchView
 import com.bumptech.glide.Glide
@@ -31,6 +33,11 @@ import com.festum.festumfield.databinding.FragmentMapBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
+import com.festum.festumfield.verstion.firstmodule.utils.place.OnPlacesDetailsListener
+import com.festum.festumfield.verstion.firstmodule.utils.place.Place
+import com.festum.festumfield.verstion.firstmodule.utils.place.PlaceAPI
+import com.festum.festumfield.verstion.firstmodule.utils.place.PlaceDetails
+import com.festum.festumfield.verstion.firstmodule.utils.place.PlacesAutoCompleteAdapter
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -43,6 +50,9 @@ import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +68,14 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
     private var areaRange : Int? = null
     private val DURATION = 3000
 
+
+
+    var street = ""
+    var city = ""
+    var state = ""
+    var country = ""
+    var zipCode = ""
+
     override fun getContentView(): View {
         binding = FragmentMapBinding.inflate(layoutInflater)
         return binding.root
@@ -68,8 +86,17 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        val placesApi = PlaceAPI.Builder()
+            .apiKey(requireActivity().resources.getString(R.string.google_maps_key))
+            .build(requireActivity())
+
+
+        val autocompleteSessionToken = AutocompleteSessionToken.newInstance()
+
         /* Get Profile */
         viewModel.getProfile()
+
+        Places.initialize(requireActivity(), requireActivity().resources.getString(R.string.google_maps_key))
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -104,11 +131,72 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+
+                if (!newText.isNullOrEmpty()) {
+                    // Perform autocomplete search
+                    val request = FindAutocompletePredictionsRequest.builder()
+                        .setSessionToken(autocompleteSessionToken)
+                        .setQuery(newText)
+                        .build()
+
+                    Places.createClient(requireActivity()).findAutocompletePredictions(request)
+                        .addOnSuccessListener { response ->
+                            val predictions = response.autocompletePredictions
+                            Toast.makeText(requireActivity(), predictions.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(requireActivity(), exception.message, Toast.LENGTH_SHORT).show()
+                        }
+                }
                 return false
             }
         })
 
+
+
+        /*binding.autoCompleteEditText.setAdapter(PlacesAutoCompleteAdapter(requireActivity(), placesApi))
+        binding.autoCompleteEditText.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val place = parent.getItemAtPosition(position) as Place
+                binding.autoCompleteEditText.setText(place.description)
+                Toast.makeText(requireActivity(), place.description, Toast.LENGTH_SHORT).show()
+                getPlaceDetails(placesApi,place.id)
+            }*/
+
+
     }
+
+    /*private fun getPlaceDetails(placesApi: PlaceAPI, placeId: String) {
+        placesApi.fetchPlaceDetails(placeId, object :
+            OnPlacesDetailsListener {
+            override fun onError(errorMessage: String) {
+                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPlaceDetailsFetched(placeDetails: PlaceDetails) {
+                Toast.makeText(requireActivity(), placeDetails.placeId, Toast.LENGTH_SHORT).show()
+                setupUI(placeDetails)
+            }
+        })
+    }*/
+
+    /*private fun setupUI(placeDetails: PlaceDetails) {
+        val address = placeDetails.address
+        parseAddress(address)
+    }
+
+    private fun parseAddress(address: ArrayList<Address>) {
+        (0 until address.size).forEach { i ->
+            when {
+                address[i].type.contains("street_number") -> street += address[i].shortName + " "
+                address[i].type.contains("route") -> street += address[i].shortName
+                address[i].type.contains("locality") -> city += address[i].shortName
+                address[i].type.contains("administrative_area_level_1") -> state += address[i].shortName
+                address[i].type.contains("country") -> country += address[i].shortName
+                address[i].type.contains("postal_code") -> zipCode += address[i].shortName
+            }
+        }
+    }*/
 
     override fun setObservers() {
 

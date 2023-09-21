@@ -121,7 +121,12 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
         })
 
         binding.icBack.setOnClickListener {
-            finish()
+            startActivity(
+                Intent(
+                    this@ProfilePreviewActivity,
+                    HomeActivity::class.java
+                )
+            )
         }
 
         if (AppPreferencesDelegates.get().userName.isBlank()){
@@ -344,6 +349,15 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
         startActivityForResult(
             intent,
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+        )
+    }
+
+    override fun onBackPressed() {
+        startActivity(
+            Intent(
+                this@ProfilePreviewActivity,
+                HomeActivity::class.java
+            )
         )
     }
 

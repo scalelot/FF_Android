@@ -545,7 +545,12 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
                 AppPreferencesDelegates.get().personalProfile = true
 
-                finish()
+                startActivity(
+                    Intent(
+                        this@CreatePersonProfileActivity,
+                        ProfilePreviewActivity::class.java
+                    )
+                )
 
             }
 

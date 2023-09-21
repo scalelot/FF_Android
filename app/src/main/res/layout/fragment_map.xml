@@ -26,15 +26,8 @@
             app:queryBackground="@android:color/transparent"
             app:queryHint="@string/search_user_area" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:layout_below="@id/searchView">
 
-        </androidx.recyclerview.widget.RecyclerView>
+
 
         <TextView
             android:id="@+id/latlng"
@@ -79,6 +72,14 @@
                 android:textSize="@dimen/sp_16" />
 
         </RelativeLayout>
+
+        <!--<AutoCompleteTextView
+            android:id="@+id/autoCompleteEditText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:background="@android:color/white"
+            android:hint="Tap your location"
+            android:padding="8dp" />-->
 
     </RelativeLayout>
 
