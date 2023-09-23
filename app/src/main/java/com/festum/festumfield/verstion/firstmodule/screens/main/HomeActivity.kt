@@ -29,6 +29,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
+import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems

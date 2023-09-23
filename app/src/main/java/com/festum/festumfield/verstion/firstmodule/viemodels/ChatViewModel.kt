@@ -54,6 +54,7 @@ class ChatViewModel @Inject constructor(
 
             try {
                 AndroidNetworking.upload(Constans.set_chat_message).addMultipartFile("file", file)
+                    .addMultipartParameter("message",message)
                     .addMultipartParameter("to", receiverId)
                     .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                     .setPriority(Priority.HIGH).build()
@@ -97,6 +98,8 @@ class ChatViewModel @Inject constructor(
                                 updatedAt = messageData.getString("updatedAt")
 
                             )
+
+                            Log.e("TAG", "onResponse:-- " + newItem )
 
                             sendData.value = newItem
                         }

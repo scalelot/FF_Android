@@ -151,6 +151,14 @@ class ChatMessageAdapter(
 
                 imageBinding.sendImage.setLargeImagePath(image)
 
+
+
+                if (item.content?.text?.message.isNullOrEmpty()){
+                    imageBinding.sendMessageText.visibility = View.GONE
+                }
+
+                imageBinding.sendMessageText.text = item.content?.text?.message
+
                 Glide.with(context)
                     .load(image)
                     .placeholder(R.mipmap.ic_app_logo)
@@ -184,6 +192,12 @@ class ChatMessageAdapter(
                 val image = Constans.Display_Image_URL + item.content?.media?.path
 
                 imageBinding.reciveImg.setLargeImagePath(image)
+
+                if (item.content?.text?.message.isNullOrEmpty()){
+                    imageBinding.reciveMessageText.visibility = View.GONE
+                }
+
+                imageBinding.reciveMessageText.text = item.content?.text?.message
 
                 Glide.with(context)
                     .load(image)

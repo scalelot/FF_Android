@@ -15,30 +15,50 @@
         android:layout_marginBottom="@dimen/margin_10"
         android:paddingTop="@dimen/sp_6"
         android:paddingBottom="@dimen/sp_6"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/rel_top"
             android:layout_width="@dimen/margin_250"
-            android:layout_height="@dimen/margin_250"
-            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:background="@drawable/chat_txt_right_bg">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardSendImage"
-                android:layout_width="@dimen/margin_230"
-                android:layout_height="@dimen/margin_230"
-                android:layout_centerInParent="true"
-                android:padding="@dimen/margin_10"
-                app:cardCornerRadius="@dimen/margin_5">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
 
-                <com.festum.festumfield.verstion.firstmodule.utils.ZoomImageView
-                    android:id="@+id/sendImage"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardSendImage"
+                    android:layout_width="@dimen/margin_230"
+                    android:layout_height="@dimen/margin_230"
+                    android:layout_margin="@dimen/_10sdp"
+                    app:cardCornerRadius="@dimen/margin_5">
+
+                    <com.festum.festumfield.verstion.firstmodule.utils.ZoomImageView
+                        android:id="@+id/sendImage"
+                        android:layout_width="@dimen/margin_230"
+                        android:layout_height="@dimen/margin_230"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_user_img" />
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/sendMessageText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_user_img" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/txt_pro"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
 
 
         </RelativeLayout>
@@ -77,7 +97,7 @@
         android:layout_marginBottom="@dimen/margin_10"
         android:paddingTop="@dimen/sp_6"
         android:paddingBottom="@dimen/sp_6"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/rel_name"
@@ -110,24 +130,44 @@
         <RelativeLayout
             android:id="@+id/recive_top"
             android:layout_width="@dimen/margin_250"
-            android:layout_height="@dimen/margin_250"
+            android:layout_height="wrap_content"
             android:layout_below="@id/rel_name"
             android:background="@drawable/chat_txt_left_bg">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="@dimen/margin_230"
-                android:layout_height="@dimen/margin_230"
-                android:layout_centerInParent="true"
-                android:padding="@dimen/margin_10"
-                app:cardCornerRadius="@dimen/margin_5">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
 
-                <com.festum.festumfield.verstion.firstmodule.utils.ZoomImageView
-                    android:id="@+id/reciveImg"
+                <androidx.cardview.widget.CardView
                     android:layout_width="@dimen/margin_230"
                     android:layout_height="@dimen/margin_230"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_user_img" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_margin="@dimen/_10sdp"
+                    app:cardCornerRadius="@dimen/margin_5">
+
+                    <com.festum.festumfield.verstion.firstmodule.utils.ZoomImageView
+                        android:id="@+id/reciveImg"
+                        android:layout_width="@dimen/margin_230"
+                        android:layout_height="@dimen/margin_230"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_user_img" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/reciveMessageText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/txt_pro"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+
         </RelativeLayout>
 
         <RelativeLayout

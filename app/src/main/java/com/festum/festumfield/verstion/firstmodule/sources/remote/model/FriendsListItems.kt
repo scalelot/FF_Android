@@ -23,6 +23,9 @@ data class FriendsListItems(
     @field:SerializedName("fullName")
     val fullName: String? = null,
 
+    @field:SerializedName("name")
+    val name: String? = null,
+
     @field:SerializedName("emailId")
     val emailId: String? = null,
 

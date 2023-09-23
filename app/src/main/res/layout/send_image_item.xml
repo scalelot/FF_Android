@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/txt_black"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginStart="@dimen/sp_20"
+            android:layout_marginTop="@dimen/sp_20"
+            android:layout_marginEnd="@dimen/sp_20"
+            android:layout_marginBottom="@dimen/sp_20"
+            android:src="@drawable/ic_close1"
+            android:background="@drawable/cricle_send_btn"
+            android:padding="@dimen/_10sdp"
+            app:backgroundTint="@color/stickerBacColor"
+            app:maxImageSize="@dimen/text_24"
+            app:tint="@android:color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/sendText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:hint="@string/add_a_caption"
+                android:textColorHint="@color/white"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@color/tab_select"
+                android:background="@drawable/image_caption_bg"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/receiverUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginHorizontal="@dimen/_15sdp"
+                    android:text="Vivek kuvadiya"
+                    android:gravity="center"
+                    android:background="@drawable/rectangle_bg"
+                    android:padding="@dimen/_7sdp"
+                    android:backgroundTint="@color/app_color"
+                    android:textColor="@color/white">
+
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/sendButton"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_gravity="bottom|end"
+                    android:src="@drawable/ic_send_vector"
+                    app:backgroundTint="@color/app_color"
+                    android:layout_alignParentEnd="true"
+                    android:padding="@dimen/_10sdp"
+                    android:background="@drawable/cricle_send_btn"
+                    android:layout_margin="@dimen/sp_20"
+                    app:tint="@android:color/white"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

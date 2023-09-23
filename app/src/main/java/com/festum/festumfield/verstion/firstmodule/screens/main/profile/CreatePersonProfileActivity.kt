@@ -1,4 +1,4 @@
-package com.festum.festumfield.verstion.firstmodule.screens.main
+package com.festum.festumfield.verstion.firstmodule.screens.main.profile
 
 import android.Manifest
 import android.annotation.SuppressLint

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context=".verstion.firstmodule.screens.main.ProfilePreviewActivity">
+    tools:context=".verstion.firstmodule.screens.main.profile.ProfilePreviewActivity">
 
     <RelativeLayout
         android:id="@+id/header"

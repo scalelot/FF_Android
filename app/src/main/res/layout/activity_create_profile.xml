@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".verstion.firstmodule.screens.main.CreatePersonProfileActivity">
+    tools:context=".verstion.firstmodule.screens.main.profile.CreatePersonProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"

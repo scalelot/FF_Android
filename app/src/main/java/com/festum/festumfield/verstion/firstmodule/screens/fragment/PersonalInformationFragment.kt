@@ -7,7 +7,7 @@ import com.festum.festumfield.Adapter.TagAdapter
 import com.festum.festumfield.Utils.FileUtils
 import com.festum.festumfield.databinding.FragmentPersonalInformationBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
-import com.festum.festumfield.verstion.firstmodule.screens.main.CreatePersonProfileActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.profile.CreatePersonProfileActivity
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.gms.maps.model.LatLng

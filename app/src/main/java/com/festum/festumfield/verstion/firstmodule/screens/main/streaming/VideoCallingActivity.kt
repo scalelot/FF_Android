@@ -1,4 +1,4 @@
-package com.festum.festumfield.verstion.firstmodule.screens.main
+package com.festum.festumfield.verstion.firstmodule.screens.main.streaming
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

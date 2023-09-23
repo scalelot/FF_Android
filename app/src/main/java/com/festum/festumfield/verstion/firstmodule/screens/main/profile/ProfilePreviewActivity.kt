@@ -1,4 +1,4 @@
-package com.festum.festumfield.verstion.firstmodule.screens.main
+package com.festum.festumfield.verstion.firstmodule.screens.main.profile
 
 import android.Manifest
 import android.app.Activity
@@ -18,6 +18,7 @@ import com.festum.festumfield.databinding.ProfileActivityBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ProfileViewPagerAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil

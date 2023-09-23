@@ -47,7 +47,6 @@ import com.festum.festumfield.Activity.DisplayAllProductActivity;
 import com.festum.festumfield.Activity.LikeAndCommentActivity;
 import com.festum.festumfield.Activity.PromotionActivity;
 import com.festum.festumfield.Activity.RequestActivity;
-import com.festum.festumfield.Activity.ProfileActivity;
 import com.festum.festumfield.Activity.SettingActivity;
 import com.festum.festumfield.Fragment.CallsFragment;
 import com.festum.festumfield.Fragment.ContactFragment;
@@ -56,7 +55,7 @@ import com.festum.festumfield.Model.Profile.Register.GetPersonalProfileModel;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment;
-import com.festum.festumfield.verstion.firstmodule.screens.main.ProfilePreviewActivity;
+import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.gson.Gson;
 

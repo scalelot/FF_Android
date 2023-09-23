@@ -1,4 +1,4 @@
-package com.festum.festumfield.verstion.firstmodule.screens.main
+package com.festum.festumfield.verstion.firstmodule.screens.main.chat
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,22 +13,21 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
-import com.festum.festumfield.MyApplication
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
-import com.festum.festumfield.databinding.ActivityChatProductSelectBinding
 import com.festum.festumfield.databinding.ChatActivityBinding
-import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ChatMessageAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.SendImageInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils.FORMAT_API_DATETIME
@@ -37,6 +36,7 @@ import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -46,6 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.io.File
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.time.ZoneOffset.UTC
@@ -57,7 +58,7 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("SimpleDateFormat")
 @AndroidEntryPoint
-class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
+class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendImageInterface {
 
     private lateinit var binding: ChatActivityBinding
 
@@ -65,6 +66,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
     private lateinit var receiverUserId: String
     private lateinit var receiverUserName: String
     private lateinit var receiverUserImage: String
+    private lateinit var friendsItem: FriendsListItems
 
     var format = SimpleDateFormat()
     var mSocket: Socket? = null
@@ -92,9 +94,12 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
 
         val intent = intent.extras
 
-        receiverUserName = intent?.getString("userName").toString()
-        receiverUserImage = intent?.getString("userImage").toString()
-        receiverUserId = intent?.getString("id").toString()
+        val jsonList = intent?.getString("friendsList")
+
+        friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
+        receiverUserName = friendsItem.fullName.toString()
+        receiverUserImage = friendsItem.profileimage.toString()
+        receiverUserId = friendsItem.id.toString()
         productId = intent?.getString("productId").toString()
 
         Log.e("TAG", "setupUi: $receiverUserId")
@@ -121,6 +126,21 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
         if (receiverUserName.isNotEmpty() && receiverUserId.isNotEmpty()) {
             binding.userName.text = receiverUserName
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
+        }else{
+
+            /*if (friendsItem.members != null){
+
+                val groupMembers = friendsItem.members as? List<String>
+
+                if (groupMembers != null){
+
+                    for (i in groupMembers.indices){
+                        binding.userName.text = i.toString()
+                    }
+                }
+
+            }*/
+
         }
 
         binding.back.setOnClickListener {
@@ -242,7 +262,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
 
         viewModel.sendData.observe(this) { sendData ->
 
-            Log.e("TAG", "setupObservers:-- " + sendData?.content?.product?.productid)
             sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
             Handler(Looper.getMainLooper()).postDelayed({
@@ -566,7 +585,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
                         ?.let { File(it) }
                 }
                 val file = File(mImageFile.toString())
-                viewModel.sendMessage(file = file, receiverId = receiverUserId, "", "")
+
+                val dialog = SendImageDialog(file, receiverUserName, this)
+                dialog.show(supportFragmentManager, "productDetails")
+
             }
 
         }
@@ -719,8 +741,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
         /* ProductDetailsDialog */
         Log.e("TAG", "chatProduct: $item")
 
-        val dialog =
-            item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
+        val dialog = item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
         dialog?.show(supportFragmentManager, "productDetails")
 
     }
@@ -730,6 +751,11 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface {
         nowInUtc.format(DateTimeFormatter.ofPattern(FORMAT_API_DATETIME))
         Log.e("TAG", "getCurrentUTCTime:--- $nowInUtc")
         return nowInUtc.toString()
+    }
+
+    override fun onSendImage(file: File, message: String) {
+        /*  Send Image */
+        viewModel.sendMessage(file = file, receiverId = receiverUserId, message = message, "")
     }
 
 

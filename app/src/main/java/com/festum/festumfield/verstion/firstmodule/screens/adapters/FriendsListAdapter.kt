@@ -4,22 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.UserChatListBinding
-import com.festum.festumfield.verstion.firstmodule.screens.main.ChatActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
+import com.google.gson.Gson
 import org.json.JSONObject
+import java.io.Serializable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -61,6 +61,10 @@ class FriendsListAdapter(
                 .into(binding.imgUser)
 
             binding.txtUserName.text = item.fullName
+
+            if (item.fullName == null){
+                binding.txtUserName.text = item.name
+            }
 
             if (item.isPinned == true){
                 binding.chatPin.visibility = View.VISIBLE
@@ -165,9 +169,8 @@ class FriendsListAdapter(
 
                 } else  {
                     val intent = Intent(context, ChatActivity::class.java)
-                    intent.putExtra("userName", item.fullName)
-                    intent.putExtra("userImage", item.profileimage)
-                    intent.putExtra("id", item.id)
+                    val jsonItem = Gson().toJson(item)
+                    intent.putExtra("friendsList", jsonItem)
                     context.startActivity(intent)
                 }
 
