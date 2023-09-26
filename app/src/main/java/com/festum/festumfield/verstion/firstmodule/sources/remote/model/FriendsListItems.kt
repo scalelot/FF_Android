@@ -2,6 +2,7 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.model
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.lang.reflect.Member
 
 data class FriendsListItems(
 
@@ -79,12 +80,15 @@ data class FriendsListItems(
 
     /* Custom Parameters*/
     @field:SerializedName("isNewMessage")
-    val isNewMessage: Boolean? = null,
+    var isNewMessage: Boolean? = null,
 
     @field:SerializedName("messageSize")
     val messageSize: String? = null,
 
     @field:SerializedName("isOnline")
-    var online: Boolean? = null
+    var online: Boolean? = null,
+
+    @field:SerializedName("members")
+    var members : ArrayList<MembersList>? = null,
 
 ) : Serializable

@@ -29,6 +29,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
+import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
@@ -139,6 +140,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                     R.id.new_group -> {
                         startActivity(Intent(this@HomeActivity, CreateNewGroupActivity::class.java))
+                        return@OnMenuItemClickListener true
+                    }
+
+                    R.id.group -> {
+                        startActivity(Intent(this@HomeActivity, NewGroupActivity::class.java))
                         return@OnMenuItemClickListener true
                     }
 

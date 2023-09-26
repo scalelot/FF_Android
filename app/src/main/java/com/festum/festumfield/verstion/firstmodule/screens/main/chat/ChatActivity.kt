@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
@@ -123,23 +124,27 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }
 
+
+
         if (receiverUserName.isNotEmpty() && receiverUserId.isNotEmpty()) {
             binding.userName.text = receiverUserName
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
-        }else{
+        }
 
-            /*if (friendsItem.members != null){
+        if (friendsItem.members != null){
 
-                val groupMembers = friendsItem.members as? List<String>
+            val groupMembers = friendsItem.members as? List<MembersList>
 
-                if (groupMembers != null){
+            if (groupMembers != null){
 
-                    for (i in groupMembers.indices){
-                        binding.userName.text = i.toString()
-                    }
+                binding.userName.text = friendsItem.name
+
+                for (i in groupMembers.indices){
+                    val userNamesList = groupMembers.mapNotNull { it.membersList?.fullName }
+                    val commaSeparatedUserNames = userNamesList.joinToString(", ")
+                    binding.textOnline.text = commaSeparatedUserNames
                 }
-
-            }*/
+            }
 
         }
 

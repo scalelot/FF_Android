@@ -290,7 +290,8 @@ class FriendsListAdapter(
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
             isPinned = friendsListItems?.isPinned,
-            online = true
+            online = true,
+            members = friendsListItems?.members
         )
 
         if (friendsListItems != null){
@@ -322,7 +323,8 @@ class FriendsListAdapter(
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
             isPinned = friendsListItems?.isPinned,
-            online = false
+            online = false,
+            members = friendsListItems?.members
         )
 
         if (friendsListItems != null){
@@ -353,6 +355,7 @@ class FriendsListAdapter(
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
             isPinned = pinSet,
+            members = friendsListItems?.members
         )
 
         if (friendsListItems != null){
@@ -394,7 +397,8 @@ class FriendsListAdapter(
             lastMessage = friendsListItems?.lastMessage,
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
-            isPinned = friendsListItems?.isPinned
+            isPinned = friendsListItems?.isPinned,
+            members = friendsListItems?.members
         )
 
         if (friendsListItems != null){
