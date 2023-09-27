@@ -32,7 +32,7 @@ class CreateGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterfac
     }
 
     override fun setupObservers() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
