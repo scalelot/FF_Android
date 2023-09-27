@@ -6,7 +6,6 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.festum.festumfield.R
@@ -27,6 +26,9 @@ class GroupMembersListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var checkedPosition = -1
+    val memberList = arrayListOf<FriendsListItems>()
+    private var isEnable = false
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -75,19 +77,21 @@ class GroupMembersListAdapter(
 
             if (item.isNewMessage == true){
                 binding.ivSelect.visibility = View.VISIBLE
-
-                onAddMemberClick.onAddMemberClick(item)
             }else{
                 binding.ivSelect.visibility = View.GONE
             }
 
-            val memberList = arrayListOf<FriendsListItems>()
-
             binding.rlChatLayout.setOnClickListener {
 
-                memberList.add(item)
-                updateOffline(item.id)
-
+                if (item.isNewMessage == true){
+                    item.isNewMessage = false
+                    binding.ivSelect.visibility = View.GONE
+                    onAddMemberClick.onAddMemberClick(item, false)
+                }else{
+                    item.isNewMessage = true
+                    binding.ivSelect.visibility = View.VISIBLE
+                    onAddMemberClick.onAddMemberClick(item,true)
+                }
             }
 
         }
@@ -109,10 +113,11 @@ class GroupMembersListAdapter(
             lastMessage = friendsListItems?.lastMessage,
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
+            aboutUs = friendsListItems?.aboutUs,
             isPinned = friendsListItems?.isPinned,
             online = false,
             members = friendsListItems?.members,
-            isNewMessage = true
+            isNewMessage = false
         )
 
         if (friendsListItems != null){

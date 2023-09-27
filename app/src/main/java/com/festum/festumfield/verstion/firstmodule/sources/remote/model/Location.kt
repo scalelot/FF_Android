@@ -1,5 +1,7 @@
 package com.festum.festumfield.verstion.firstmodule.sources.remote.model
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

@@ -1,6 +1,7 @@
 package com.festum.festumfield.verstion.firstmodule.sources.remote.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class ProfileResponse(
 
@@ -78,5 +79,5 @@ data class ProfileResponse(
 
 	@field:SerializedName("channelID")
 	val channelID: String? = null
-)
+) : Serializable
 

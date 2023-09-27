@@ -73,7 +73,7 @@ class AddGroupMembersAdapter(
 
                 membersList.add(item)
 
-                onAddMemberClick.onRemoveMemberClick(item, membersList)
+                onAddMemberClick.onRemoveMemberClick(item, position)
 
             }
 

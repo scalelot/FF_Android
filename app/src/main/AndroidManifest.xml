@@ -71,6 +71,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".verstion.firstmodule.screens.main.group.CreateGroupActivity"
+            android:exported="false" />
+        <activity
             android:name=".verstion.firstmodule.screens.main.group.NewGroupActivity"
             android:exported="false" />
         <activity

@@ -1,35 +1,27 @@
 package com.festum.festumfield.verstion.firstmodule.screens.main.group
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
-import com.festum.festumfield.R
-import com.festum.festumfield.databinding.ActivityHomeBinding
 import com.festum.festumfield.databinding.ActivityNewGroupBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.AddGroupMembersAdapter
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
-import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
-import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
-import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
-import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
-import java.util.ArrayList
+import java.io.Serializable
 import java.util.Locale
+
 
 @AndroidEntryPoint
 class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
@@ -37,7 +29,7 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
     private lateinit var binding: ActivityNewGroupBinding
     private var friendsListAdapter: GroupMembersListAdapter? = null
     private var addMemberAdapter: AddGroupMembersAdapter? = null
-    private var friendsListItems: ArrayList<FriendsListItems>? = null
+    private var membersListItems = arrayListOf<FriendsListItems>()
     private val addMemberList = arrayListOf<FriendsListItems>()
 
     override fun getContentView(): View {
@@ -49,24 +41,27 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
 
         binding.icBack.setOnClickListener {
             finish()
+
         }
 
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
 
+        binding.recyclerviewSelectedList.visibility = View.GONE
+        DeviceUtils.hideKeyboard(this@NewGroupActivity)
+
     }
 
+    @SuppressLint("SetTextI18n")
     override fun setupObservers() {
 
         viewModel.friendsListData.observe(this) { friendsListData ->
 
-            val membersListItems = arrayListOf<FriendsListItems>()
+
 
             if (lifecycle.currentState == Lifecycle.State.RESUMED) {
 
                 if (friendsListData != null) {
-
-                    friendsListItems = friendsListData
 
                     friendsListData.forEach {
                         if (it.members.isNullOrEmpty()){
@@ -82,6 +77,9 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
                         binding.recyclerviewContactList.adapter = friendsListAdapter
 
                     },100)
+
+                    binding.txtSelectedCount.text = addMemberList.size.toString() + " of "
+                    binding.txtTotalCount.text = membersListItems.size.toString() + " selected "
 
                 }
 
@@ -121,15 +119,23 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
             DeviceUtils.hideKeyboard(this@NewGroupActivity)
         })
 
+        binding.ivNext.setOnClickListener {
+
+            val intent = Intent(this@NewGroupActivity, CreateGroupActivity::class.java)
+            intent.putExtra("memberList", membersListItems as Serializable)
+            startActivity(intent)
+
+        }
+
     }
 
     private fun filter(text: String) {
 
         val filteredList = ArrayList<FriendsListItems>()
 
-        if (friendsListItems?.isNotEmpty() == true) {
+        if (membersListItems.isNotEmpty()) {
 
-            friendsListItems?.forEach { item ->
+            membersListItems.forEach { item ->
                 if (item.fullName?.lowercase(Locale.getDefault())
                         ?.contains(text.lowercase(Locale.getDefault())) == true
                 ) {
@@ -148,18 +154,49 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
 
     }
 
-    override fun onAddMemberClick(items: FriendsListItems) {
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
 
-        addMemberList.add(items)
+        if (b){
+            addMemberList.add(items)
+        }else{
+            addMemberList.remove(items)
+        }
 
         addMemberAdapter = AddGroupMembersAdapter(this@NewGroupActivity, addMemberList, this)
         binding.recyclerviewSelectedList.adapter = addMemberAdapter
 
+        friendsListAdapter?.notifyDataSetChanged()
+        binding.txtSelectedCount.text = addMemberList.size.toString() + " of "
+        binding.txtTotalCount.text = membersListItems.size.toString() + " selected "
+        if (addMemberList.isNullOrEmpty()){
+            binding.recyclerviewSelectedList.visibility = View.GONE
+        }else{
+            binding.recyclerviewSelectedList.visibility = View.VISIBLE
+        }
+
     }
 
-    override fun onRemoveMemberClick(items: FriendsListItems, memberList : ArrayList<FriendsListItems>) {
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+    override fun onRemoveMemberClick(items: FriendsListItems, position : Int) {
+//        membersListItems[membersListItems.indexOf(items)].isNewMessage = false
 
-        friendsListAdapter
+        addMemberList.remove(items)
+
+        addMemberAdapter = AddGroupMembersAdapter(this@NewGroupActivity, addMemberList, this)
+        binding.recyclerviewSelectedList.adapter = addMemberAdapter
+
+        friendsListAdapter?.updateOffline(items.id)
+
+        binding.txtSelectedCount.text = addMemberList.size.toString() + " of "
+        binding.txtTotalCount.text = membersListItems.size.toString() + " selected "
+
+        if (addMemberList.isNullOrEmpty()){
+            binding.recyclerviewSelectedList.visibility = View.GONE
+        }else{
+            binding.recyclerviewSelectedList.visibility = View.VISIBLE
+        }
+
     }
 
 }
