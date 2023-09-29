@@ -84,7 +84,6 @@
                     android:background="@drawable/ellipse_4">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/cir_group_image"
                         android:layout_width="@dimen/sp_110"
                         android:layout_height="@dimen/sp_110"

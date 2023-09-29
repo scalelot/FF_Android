@@ -9,11 +9,11 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
+import com.festum.festumfield.Activity.ReelsActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ChatActivityBinding
@@ -23,6 +23,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
+import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -47,7 +48,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.io.File
-import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.time.ZoneOffset.UTC
@@ -144,6 +144,21 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     val commaSeparatedUserNames = userNamesList.joinToString(", ")
                     binding.textOnline.text = commaSeparatedUserNames
                 }
+            }
+
+        }
+
+        binding.rlUser.setOnClickListener {
+
+            if (friendsItem.members?.isNotEmpty() == true){
+
+                val intent = Intent(this@ChatActivity, GroupDetailsActivity::class.java)
+                val jsonItem = Gson().toJson(friendsItem)
+                intent.putExtra("groupMembersList", jsonItem)
+                startActivity(intent)
+
+            }else{
+                return@setOnClickListener
             }
 
         }

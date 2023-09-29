@@ -18,6 +18,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.Gro
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 import java.util.Locale
@@ -121,8 +122,12 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
 
         binding.ivNext.setOnClickListener {
 
+            val gson = Gson()
+
+            val membersItems = gson.toJson(addMemberList)
+
             val intent = Intent(this@NewGroupActivity, CreateGroupActivity::class.java)
-            intent.putExtra("memberList", membersListItems as Serializable)
+            intent.putExtra("memberList", membersItems)
             startActivity(intent)
 
         }

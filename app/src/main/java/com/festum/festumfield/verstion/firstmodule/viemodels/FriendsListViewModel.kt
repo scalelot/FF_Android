@@ -3,22 +3,32 @@ package com.festum.festumfield.verstion.firstmodule.viemodels
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfilePictureResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +40,8 @@ class FriendsListViewModel @Inject constructor(
     var profileData = MutableLiveData<ProfileResponse?>()
     var findFriendsData = MutableLiveData<ArrayList<ProfileResponse?>?>()
     var sendRequestData = MutableLiveData<ApiBody?>()
+    var groupProfilePictureData = MutableLiveData<ProfilePictureResponse?>()
+    var createGroupData = MutableLiveData<FriendsListItems?>()
 
     fun friendsList(friendListBody: FriendListBody){
         api.getFriendsListProduct(friendListBody).subscribeOn(Schedulers.io())
@@ -92,6 +104,48 @@ class FriendsListViewModel @Inject constructor(
 
         }
 
+    }
+
+    fun setGroupProfilePicture(file: File?) {
+
+        if (file != null) {
+
+            AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file)
+                .addHeaders("Authorization", AppPreferencesDelegates.get().token)
+                .setPriority(Priority.HIGH).build()
+                .getAsJSONObject(object : JSONObjectRequestListener {
+                    override fun onResponse(response: JSONObject) {
+
+                        val profileImageData = response.getJSONObject("Data")
+                        val profilePictureResponse = ProfilePictureResponse(
+                            s3Url = profileImageData.optString("s3_url"),
+                            key = profileImageData.optString("Key")
+                        )
+
+                        groupProfilePictureData.value = profilePictureResponse
+
+                    }
+
+                    override fun onError(anError: ANError) {
+
+                        groupProfilePictureData.value = null
+
+                    }
+
+                })
+
+        }
+
+    }
+
+    fun createGroup(groupBody: CreateGroupBody){
+        api.createGroup(groupBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                createGroupData.value = resp.Data
+            }, {
+                createGroupData.value = null
+            })
     }
 
 }
