@@ -180,6 +180,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
                 AppPreferencesDelegates.get().userName = profileData.fullName.toString()
 
+                AppPreferencesDelegates.get().personalProfile = true
+
                 val applicationClass : FestumApplicationClass = application as FestumApplicationClass
                 applicationClass.onCreate()
 

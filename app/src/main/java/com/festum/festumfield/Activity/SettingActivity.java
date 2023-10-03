@@ -33,6 +33,7 @@ import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -162,6 +163,13 @@ public class SettingActivity extends BaseActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.apply();
+
+                AppPreferencesDelegates.Companion.get().setChannelId("");
+                AppPreferencesDelegates.Companion.get().setToken("");
+                AppPreferencesDelegates.Companion.get().setUserName("");
+                AppPreferencesDelegates.Companion.get().setBusinessProfile(false);
+                AppPreferencesDelegates.Companion.get().setPersonalProfile(false);
+                AppPreferencesDelegates.Companion.get().setOnLineUser("");
 
                 try {
 //                    socket.disconnect();

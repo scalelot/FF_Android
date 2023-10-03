@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 
 import com.festum.festumfield.Activity.ProductActivity
@@ -63,9 +64,10 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
         binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(resources.getText(R.string.tab_business_info))
         )
-        binding.tabLayout.addTab(
+
+        /*binding.tabLayout.addTab(
             binding.tabLayout.newTab().setText(resources.getText(R.string.tab_reels))
-        )
+        )*/
 
         binding.llBusinessProduct.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this@ProfilePreviewActivity, ProductActivity::class.java))
@@ -86,9 +88,14 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                 binding.viewPager.currentItem = tab.position
 
                 when (tab.position) {
-                    0 , 2 -> {
+                    0 -> {
                         binding.btnEditProfile.text = resources.getString(R.string.edit_personal_profile)
                         binding.llBusinessProduct.visibility = View.GONE
+                        if (AppPreferencesDelegates.get().personalProfile) {
+                            binding.btnEditProfile.visibility = View.VISIBLE
+                        } else {
+                            binding.btnEditProfile.visibility = View.INVISIBLE
+                        }
                         binding.btnEditProfile.setOnClickListener {
                             val intent = Intent(this@ProfilePreviewActivity, CreatePersonProfileActivity::class.java)
                             intent.putExtra("EditProfile", resources.getString(R.string.edit_personal_profile))
@@ -96,12 +103,13 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                         }
                     }
                     1 -> {
-                        binding.btnEditProfile.text =
-                            resources.getString(R.string.edit_business_profile)
+                        binding.btnEditProfile.text = resources.getString(R.string.edit_business_profile)
                         if (businessProfile == true) {
                             binding.llBusinessProduct.visibility = View.VISIBLE
+                            binding.btnEditProfile.visibility = View.VISIBLE
                         } else {
                             binding.llBusinessProduct.visibility = View.GONE
+                            binding.btnEditProfile.visibility = View.INVISIBLE
                         }
                         binding.btnEditProfile.setOnClickListener {
                             val intent = Intent(this@ProfilePreviewActivity, CreateBusinessProfileActivity::class.java)
@@ -121,6 +129,22 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         })
 
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {}
+
+            override fun onPageSelected(position: Int) {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+        })
+
         binding.icBack.setOnClickListener {
             startActivity(
                 Intent(
@@ -130,10 +154,12 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             )
         }
 
-        if (AppPreferencesDelegates.get().userName.isBlank()){
-            binding.editImg.visibility = View.GONE
-        }else{
+        if (AppPreferencesDelegates.get().userName.isNotEmpty()){
             binding.editImg.visibility = View.VISIBLE
+            binding.btnEditProfile.visibility = View.VISIBLE
+        }else{
+            binding.editImg.visibility = View.GONE
+            binding.btnEditProfile.visibility = View.INVISIBLE
         }
 
         /* Profile Picture Set */
@@ -330,7 +356,11 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
         super.onResume()
         if (AppPreferencesDelegates.get().personalProfile){
             viewModel.getProfile()
-
+            binding.editImg.visibility = View.VISIBLE
+            binding.btnEditProfile.visibility = View.VISIBLE
+        }else{
+            binding.editImg.visibility = View.GONE
+            binding.btnEditProfile.visibility = View.INVISIBLE
         }
     }
 

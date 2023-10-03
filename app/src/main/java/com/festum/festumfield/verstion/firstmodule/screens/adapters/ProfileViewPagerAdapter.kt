@@ -14,13 +14,13 @@ class ProfileViewPagerAdapter(var profileData: ProfileResponse, fm: FragmentMana
         return when (position) {
             0 -> PersonalInformationFragment(profileData)
             1 -> BusinessInformationFragment(profileData)
-            2 -> ReelsFragment(profileData)
+//            2 -> ReelsFragment(profileData)
             else -> PersonalInformationFragment(profileData)
         }
     }
 
     override fun getCount(): Int {
-        return 3
+        return 2
     }
 
     override fun getPageTitle(position: Int): CharSequence {

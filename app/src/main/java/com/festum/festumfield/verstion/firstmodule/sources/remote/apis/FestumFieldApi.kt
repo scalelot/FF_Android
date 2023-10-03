@@ -85,6 +85,6 @@ interface FestumFieldApi {
     @POST("group")
     fun createGroup(
         @Body createGroupBody : CreateGroupBody
-    ) : Observable<ApiResponse<FriendsListItems>>
+    ) : Observable<ApiResponse<GroupListItems>>
 
 }

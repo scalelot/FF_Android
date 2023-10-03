@@ -265,6 +265,8 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 interestedin = radioGenderValue.uppercase()
             )
 
+            Toast.makeText(this@CreatePersonProfileActivity, "" + radioGenderValue.uppercase(), Toast.LENGTH_SHORT).show()
+
             if (profileData.fullName.isNullOrEmpty()) {
                 binding.edtName.requestFocus()
                 binding.edtName.error = "Enter Full Name"
@@ -324,6 +326,11 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             socialMediaLink()
 
+            val interestedIn = if (radioGenderValue.isNullOrEmpty()){
+                "MALE"
+            }else{
+                radioGenderValue.uppercase()
+            }
 
             val profileData = CreateProfileModel(
                 fullName = binding.edtName.text.toString(),
@@ -340,8 +347,10 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 gender = genSpinnerValue,
                 latitude = Const.lattitude,
                 longitude = Const.longitude,
-                interestedin = radioGenderValue.uppercase()
+                interestedin = interestedIn
             )
+
+            Toast.makeText(this@CreatePersonProfileActivity, "" + radioGenderValue.uppercase(), Toast.LENGTH_SHORT).show()
 
             if (profileData.fullName.isNullOrEmpty()) {
                 binding.edtName.requestFocus()
@@ -350,12 +359,12 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 return@setOnClickListener
             }
 
-            if (profileData.userName.isNullOrEmpty()) {
+            /*if (profileData.userName.isNullOrEmpty()) {
                 binding.edtNickname.requestFocus()
                 binding.edtNickname.error = "Enter Nick Name"
                 Snackbar.make(binding.relative, "Enter Nick Name", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
-            }
+            }*/
 
             if (profileData.emailId.isNullOrEmpty()) {
                 binding.edtEmailId.requestFocus()
@@ -413,6 +422,8 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                     .load(Constans.Display_Image_URL + profileData.profileimage)
                     .placeholder(R.drawable.ic_user)
                     .into(binding.profileImage)
+
+                AppPreferencesDelegates.get().personalProfile = true
 
                 binding.edtName.setText(profileData.fullName)
                 binding.edtNickname.setText(profileData.nickName)

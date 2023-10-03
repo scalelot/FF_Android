@@ -18,6 +18,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.Gro
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
@@ -121,6 +122,12 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
         })
 
         binding.ivNext.setOnClickListener {
+
+            if (addMemberList.isEmpty()) {
+                Snackbar.make(binding.linear, "Group Members not found", Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
             val gson = Gson()
 
