@@ -111,7 +111,7 @@ class FriendsListViewModel @Inject constructor(
 
         if (file != null) {
 
-            AndroidNetworking.upload(Constans.set_profile_pic).addMultipartFile("file", file)
+            AndroidNetworking.upload(Constans.set_group_pic).addMultipartFile("file", file)
                 .addHeaders("Authorization", AppPreferencesDelegates.get().token)
                 .setPriority(Priority.HIGH).build()
                 .getAsJSONObject(object : JSONObjectRequestListener {

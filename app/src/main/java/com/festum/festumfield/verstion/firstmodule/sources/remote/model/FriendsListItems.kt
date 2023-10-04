@@ -91,4 +91,7 @@ data class FriendsListItems(
     @field:SerializedName("members")
     var members : ArrayList<MembersList>? = null,
 
+    @field:SerializedName("description")
+    var description : String? = null,
+
 ) : Serializable

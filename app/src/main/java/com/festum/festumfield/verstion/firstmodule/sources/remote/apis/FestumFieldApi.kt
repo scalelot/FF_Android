@@ -87,4 +87,14 @@ interface FestumFieldApi {
         @Body createGroupBody : CreateGroupBody
     ) : Observable<ApiResponse<GroupListItems>>
 
+    @POST("group/addmembers")
+    fun addMembersInGroup(
+        @Body createGroupBody : CreateGroupBody
+    ) : Observable<ApiResponse<GroupListItems>>
+
+    @POST("group/removemembers")
+    fun removeMembersInGroup(
+        @Body createGroupBody : CreateGroupBody
+    ) : Observable<ApiResponse<GroupListItems>>
+
 }

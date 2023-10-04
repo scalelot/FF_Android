@@ -38,7 +38,9 @@
                 android:text="@string/edit_friends"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_18" />
+
         </RelativeLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
@@ -56,7 +58,7 @@
             android:layout_width="@dimen/sp_100"
             android:layout_height="@dimen/sp_100"
             android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_group_profile"
             app:civ_border_color="@color/white"
             app:civ_circle_background_color="@color/bg_grey" />
 
@@ -75,6 +77,7 @@
                 android:src="@drawable/ic_edit"
                 app:tint="@color/white" />
         </RelativeLayout>
+
     </RelativeLayout>
 
     <EditText

@@ -21,6 +21,8 @@ public class Constans {
     public static String fetch_personal_info = BASE_URL + "profile/getprofile";
     public static String set_profile_pic = BASE_URL + "profile/setprofilepic";
 
+    public static String set_group_pic = BASE_URL + "group/uploadgroupprofileimage";
+
     //Business Profile
     public static String business_register = BASE_URL + "business/setbusiness";
     public static String fetch_business_info = BASE_URL + "business/getbusiness";

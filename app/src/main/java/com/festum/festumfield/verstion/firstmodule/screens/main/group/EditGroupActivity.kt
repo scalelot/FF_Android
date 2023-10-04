@@ -1,30 +1,30 @@
 package com.festum.festumfield.verstion.firstmodule.screens.main.group
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
-import com.festum.festumfield.databinding.ActivityGroupDetailsBinding
+import com.festum.festumfield.databinding.ActivityEditGroupBinding
+import com.festum.festumfield.databinding.ActivityNewGroupBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.EditGroupMembersListAdapter
-import com.festum.festumfield.verstion.firstmodule.screens.dialog.AddMembersDialog
+import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
-import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -39,63 +39,40 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 @AndroidEntryPoint
-class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterface {
+class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
 
-    private lateinit var binding: ActivityGroupDetailsBinding
+    private lateinit var binding: ActivityEditGroupBinding
     private lateinit var membersList: FriendsListItems
-    private var friendsListAdapter: EditGroupMembersListAdapter? = null
+    private var friendsListAdapter: GroupMembersListAdapter? = null
     private val groupMembers = arrayListOf<FriendsListItems>()
     private var profileKey: String = ""
 
     override fun getContentView(): View {
-        binding = ActivityGroupDetailsBinding.inflate(layoutInflater)
+        binding = ActivityEditGroupBinding.inflate(layoutInflater)
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
     override fun setupUi() {
 
         val intent = intent.extras
 
-        val jsonList = intent?.getString("groupMembersList")
+        val jsonList = intent?.getString("MembersList")
 
         membersList = Gson().fromJson(jsonList, FriendsListItems::class.java)
 
         val profileImage = Constans.Display_Image_URL + membersList.profileimage
 
-        binding.description.text = membersList.description
+        binding.txtTitle.text = membersList.name
+        binding.edtName.setText(membersList.name)
+        binding.edtDescription.setText(membersList.description)
 
-        Glide.with(this@GroupDetailsActivity)
+        Glide.with(this@EditGroupActivity)
             .load(profileImage)
             .placeholder(R.drawable.ic_user)
             .into(binding.groupProfileImage)
 
-
-        if (membersList.members?.isNotEmpty() == true) {
-
-            membersList.members?.forEach {
-
-                val members = FriendsListItems(
-                    profileimage = it.membersList?.profileimage,
-                    fullName = it.membersList?.fullName,
-                    aboutUs = it.membersList?.aboutUs
-                )
-                groupMembers.add(members)
-            }
-
-            binding.groupName.text = membersList.name
-
-
-            binding.txtPeople.text = membersList.members?.size.toString() + " peoples"
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                friendsListAdapter = EditGroupMembersListAdapter(this@GroupDetailsActivity, groupMembers, this)
-                binding.recyclerGroup.adapter = friendsListAdapter
-            },100)
-
-            binding.backArrow.setOnClickListener {
-                finish()
-            }
+        binding.icBack.setOnClickListener {
+            finish()
         }
 
         binding.editImg.setOnClickListener {
@@ -105,9 +82,9 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
             } else {
                 if (IntentUtil.readPermission(
-                        this@GroupDetailsActivity
+                        this@EditGroupActivity
                     ) && IntentUtil.writePermission(
-                        this@GroupDetailsActivity
+                        this@EditGroupActivity
                     )
                 ) {
                     openIntent()
@@ -116,19 +93,43 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
             }
         }
 
-        binding.btnGroupInfo.setOnClickListener {
+        binding.btnSave.setOnClickListener {
 
-            val intent = Intent(this@GroupDetailsActivity, EditGroupActivity::class.java)
-            val jsonItem = Gson().toJson(membersList)
-            intent.putExtra("MembersList", jsonItem)
-            startActivity(intent)
+            val membersIds = arrayListOf<String>()
+            membersList.members?.forEach {
+                it.membersList?.id?.let { it1 -> membersIds.add(it1) }
+            }
+            val createGroupBody = CreateGroupBody(
+                groupid = membersList.id,
+                members = membersIds,
+                name = binding.edtName.text.toString(),
+                description = binding.edtDescription.text.toString(),
+                profileimage = profileKey,
+            )
 
-        }
+            if (createGroupBody.name.isNullOrEmpty()) {
+                binding.edtName.requestFocus()
+                binding.edtName.error = "Enter Group Name"
+                Snackbar.make(binding.relative, "Enter Group Name", Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
-        binding.llAddUser.setOnClickListener {
+            if (createGroupBody.description.isNullOrEmpty()) {
+                binding.edtDescription.requestFocus()
+                binding.edtDescription.error = "Enter Description"
+                Snackbar.make(binding.relative, "Enter Description", Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
-            val dialog = AddMembersDialog(membersList)
-            dialog.show(supportFragmentManager, "AddMembersDialog")
+            if (membersIds.isEmpty()) {
+                Snackbar.make(binding.relative, "Members not found", Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+
+            viewModel.createGroup(createGroupBody)
 
         }
 
@@ -144,7 +145,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
                 profileKey = groupProfilePictureData.key.toString()
 
-                Glide.with(this@GroupDetailsActivity)
+                Glide.with(this@EditGroupActivity)
                     .load(profileImage)
                     .placeholder(R.drawable.ic_user)
                     .into(binding.groupProfileImage)
@@ -157,11 +158,23 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
         }
 
+        viewModel.createGroupData.observe(this) { createGroupData ->
+
+            if (createGroupData != null) {
+
+                startActivity(
+                    Intent(this@EditGroupActivity, HomeActivity::class.java)
+                )
+
+            }
+
+        }
+
     }
 
     private fun onMediaPermission() {
 
-        Dexter.withContext(this@GroupDetailsActivity)
+        Dexter.withContext(this@EditGroupActivity)
             .withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -172,7 +185,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                         openIntent()
                     } else {
                         AppPermissionDialog.showPermission(
-                            this@GroupDetailsActivity,
+                            this@EditGroupActivity,
                             getString(R.string.media_permission),
                             getString(R.string.media_permission_title)
                         )
@@ -225,7 +238,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
         mOptions.aspectRatioY = 1
         mOptions.cropShape = CropImageView.CropShape.OVAL
         val intent = Intent()
-        intent.setClass(this@GroupDetailsActivity, CropImageActivity::class.java)
+        intent.setClass(this@EditGroupActivity, CropImageActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_SOURCE, uri)
         bundle.putParcelable(CropImage.CROP_IMAGE_EXTRA_OPTIONS, mOptions)
@@ -257,7 +270,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
                 if (result != null) {
                     val mImageFile = result.uri.let { it ->
-                        FileUtil.getPath(Uri.parse(it.toString()), this@GroupDetailsActivity)
+                        FileUtil.getPath(Uri.parse(it.toString()), this@EditGroupActivity)
                             ?.let { File(it) }
                     }
                     val file = File(mImageFile.toString())
@@ -272,14 +285,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
             }
         }
-
-    }
-
-    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
-
-    }
-
-    override fun onRemoveMemberClick(items: FriendsListItems, position: Int) {
 
     }
 }

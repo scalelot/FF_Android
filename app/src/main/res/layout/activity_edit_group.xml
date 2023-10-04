@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".verstion.firstmodule.screens.main.group.EditGroupActivity">
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_bg">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_56">
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rectangle_8">
+
+                <ImageView
+                    android:id="@+id/ic_back"
+                    android:layout_width="@dimen/sp_35"
+                    android:layout_height="@dimen/sp_35"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:padding="@dimen/margin_6"
+                    android:src="@drawable/backarrow" />
+
+                <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_toRightOf="@+id/ic_back"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/edit_friends"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_18" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_image"
+            android:layout_width="@dimen/sp_110"
+            android:layout_height="@dimen/sp_110"
+            android:layout_below="@+id/appbar_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/ellipse_bodar">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/group_profile_image"
+                android:layout_width="@dimen/sp_100"
+                android:layout_height="@dimen/sp_100"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_group_profile"
+                app:civ_border_color="@color/white"
+                app:civ_circle_background_color="@color/bg_grey" />
+
+            <RelativeLayout
+                android:id="@+id/edit_img"
+                android:layout_width="@dimen/sp_30"
+                android:layout_height="@dimen/sp_30"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/circle">
+
+                <ImageView
+                    android:layout_width="@dimen/sp_16"
+                    android:layout_height="@dimen/sp_16"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_edit"
+                    app:tint="@color/white" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/edt_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_45"
+            android:layout_below="@+id/rl_image"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:background="@drawable/edt_bg"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/group_title"
+            android:imeOptions="actionNext"
+            android:paddingLeft="@dimen/margin_15"
+            android:paddingRight="@dimen/margin_15"
+            android:singleLine="true"
+            android:textColor="@color/edt_dark"
+            android:textColorHint="@color/edt_hint"
+            android:textSize="@dimen/sp_14" />
+
+
+        <EditText
+            android:id="@+id/edt_description"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_100"
+            android:layout_below="@+id/edt_name"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:background="@drawable/notification_bg"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="top"
+            android:hint="@string/descirition"
+            android:imeOptions="actionNext"
+            android:padding="@dimen/sp_15"
+            android:textColor="@color/edt_dark"
+            android:textColorHint="@color/edt_hint"
+            android:textSize="@dimen/sp_14" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:background="@drawable/login_btn_bg"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16" />
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
