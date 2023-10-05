@@ -10,14 +10,19 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityGroupDetailsBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
+import com.festum.festumfield.verstion.firstmodule.screens.adapters.AddMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.EditGroupMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AddMembersDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.RemoveMembersDialog
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
@@ -43,9 +48,12 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
     private lateinit var binding: ActivityGroupDetailsBinding
     private lateinit var membersList: FriendsListItems
+    private lateinit var addMemberList: FriendsListItems
     private var friendsListAdapter: EditGroupMembersListAdapter? = null
     private val groupMembers = arrayListOf<FriendsListItems>()
+    private val addGroupMembers = arrayListOf<FriendsListItems>()
     private var profileKey: String = ""
+    private var removeUserID: String = ""
 
     override fun getContentView(): View {
         binding = ActivityGroupDetailsBinding.inflate(layoutInflater)
@@ -78,7 +86,8 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                 val members = FriendsListItems(
                     profileimage = it.membersList?.profileimage,
                     fullName = it.membersList?.fullName,
-                    aboutUs = it.membersList?.aboutUs
+                    aboutUs = it.membersList?.aboutUs,
+                    id = it.membersList?.id
                 )
                 groupMembers.add(members)
             }
@@ -127,7 +136,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
         binding.llAddUser.setOnClickListener {
 
-            val dialog = AddMembersDialog(membersList)
+            val dialog = AddMembersDialog(membersList, this)
             dialog.show(supportFragmentManager, "AddMembersDialog")
 
         }
@@ -135,6 +144,8 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
     }
 
     override fun setupObservers() {
+
+
 
         viewModel.groupProfilePictureData.observe(this) { groupProfilePictureData ->
 
@@ -149,9 +160,71 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                     .placeholder(R.drawable.ic_user)
                     .into(binding.groupProfileImage)
 
+                val createGroupBody = CreateGroupBody(
+                    groupid = membersList.id,
+                    profileimage = profileKey
+                )
+
+                viewModel.createGroup(createGroupBody)
+
             } else {
 
                 Toast.makeText(this, "Something went wrong ", Toast.LENGTH_SHORT).show()
+
+            }
+
+        }
+
+        viewModel.removeMembersData.observe(this){
+
+            if (it != null){
+
+                friendsListAdapter?.updateOffline(removeUserID)
+
+            }else{
+
+                Toast.makeText(this@GroupDetailsActivity, "Something get wrong", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        viewModel.friendsListData.observe(this) { friendsListData ->
+
+
+            if (lifecycle.currentState == Lifecycle.State.RESUMED) {
+
+                if (friendsListData != null) {
+
+                    friendsListData.forEach {friends ->
+
+                        if (membersList.id.equals(friends.id)){
+                            addMemberList = friends
+                        }
+
+                    }
+
+                    addMemberList.members?.forEach {
+
+                        val members = FriendsListItems(
+                            profileimage = it.membersList?.profileimage,
+                            fullName = it.membersList?.fullName,
+                            aboutUs = it.membersList?.aboutUs,
+                            id = it.membersList?.id
+                        )
+                        addGroupMembers.add(members)
+                    }
+
+                    binding.groupName.text = addMemberList.name
+
+
+                    binding.txtPeople.text = addMemberList.members?.size.toString() + " peoples"
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        friendsListAdapter = EditGroupMembersListAdapter(this@GroupDetailsActivity, addGroupMembers, this)
+                        binding.recyclerGroup.adapter = friendsListAdapter
+                    },100)
+
+                }
 
             }
 
@@ -277,9 +350,40 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
     override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
 
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        viewModel.friendsList(friendListBody)
+
     }
 
     override fun onRemoveMemberClick(items: FriendsListItems, position: Int) {
+
+        val dialog = RemoveMembersDialog(items, this)
+        dialog.show(supportFragmentManager, "RemoveMembersDialog")
+        /*friendsListAdapter?.updateOffline(items.id)*/
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onMembersList(position: Int) {
+
+        binding.txtPeople.text = "$position peoples"
+
+    }
+
+    override fun onRemoveMember(items: FriendsListItems) {
+
+        val membersIds = arrayListOf<String>()
+
+        items.id?.let { membersIds.add(it) }
+
+        val removeMembers = CreateGroupBody(
+            groupid = membersList.id,
+            members = membersIds
+        )
+
+        removeUserID = items.id.toString()
+
+        viewModel.removeMembers(removeMembers)
 
     }
 }

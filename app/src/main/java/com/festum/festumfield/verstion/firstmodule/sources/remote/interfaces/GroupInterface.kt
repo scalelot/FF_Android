@@ -9,4 +9,8 @@ interface GroupInterface {
 
     fun onRemoveMemberClick(items: FriendsListItems, position : Int)
 
+    fun onMembersList(position : Int)
+
+    fun onRemoveMember(items: FriendsListItems)
+
 }

@@ -211,4 +211,12 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
 
     }
 
+    override fun onMembersList(position: Int) {
+
+    }
+
+    override fun onRemoveMember(items: FriendsListItems) {
+
+    }
+
 }

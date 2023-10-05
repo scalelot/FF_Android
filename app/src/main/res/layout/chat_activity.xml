@@ -47,7 +47,7 @@
                         android:layout_width="@dimen/sp_40"
                         android:layout_height="@dimen/sp_40"
                         android:layout_centerVertical="true"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/ic_user" />
 
                     <RelativeLayout
                         android:id="@+id/rel_name"

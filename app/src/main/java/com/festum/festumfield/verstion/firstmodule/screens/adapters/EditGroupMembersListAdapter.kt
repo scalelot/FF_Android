@@ -83,8 +83,7 @@ class EditGroupMembersListAdapter(
 
             binding.rlChatLayout.setOnClickListener {
 
-                onAddMemberClick.onAddMemberClick(item,true)
-
+                onAddMemberClick.onRemoveMemberClick(item,position)
             }
 
         }
@@ -101,24 +100,13 @@ class EditGroupMembersListAdapter(
             }
         }
 
-        val friendsListItem = FriendsListItems(
-            fullName = friendsListItems?.fullName,
-            lastMessage = friendsListItems?.lastMessage,
-            profileimage = friendsListItems?.profileimage,
-            id = friendsListItems?.id,
-            aboutUs = friendsListItems?.aboutUs,
-            isPinned = friendsListItems?.isPinned,
-            online = false,
-            members = friendsListItems?.members,
-            isNewMessage = false
-        )
-
         if (friendsListItems != null){
 
             val currentItemIndex = friendsList.indexOf(friendsListItems)
-            friendsList.removeAt(currentItemIndex)
-            friendsListItem.let { friendsList.add(currentItemIndex, it) }
-            notifyItemChanged(currentItemIndex)
+            notifyItemRemoved(currentItemIndex)
+            friendsList.remove(friendsListItems)
+
+            onAddMemberClick.onMembersList(friendsList.size)
 
         }
 

@@ -43,6 +43,8 @@ class FriendsListViewModel @Inject constructor(
     var sendRequestData = MutableLiveData<ApiBody?>()
     var groupProfilePictureData = MutableLiveData<ProfilePictureResponse?>()
     var createGroupData = MutableLiveData<GroupListItems?>()
+    var addMembersData = MutableLiveData<GroupListItems?>()
+    var removeMembersData = MutableLiveData<GroupListItems?>()
 
     fun friendsList(friendListBody: FriendListBody){
         api.getFriendsListProduct(friendListBody).subscribeOn(Schedulers.io())
@@ -148,6 +150,30 @@ class FriendsListViewModel @Inject constructor(
             }, {
                 Log.e("TAG", "createGroup: " + it.localizedMessage )
                 createGroupData.value = null
+            })
+    }
+
+    fun addMembers(groupBody: CreateGroupBody){
+        api.addMembersInGroup(groupBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                Log.e("TAG", "addMembersData: " + resp.Data )
+                addMembersData.value = resp.Data
+            }, {
+                Log.e("TAG", "addMembersData: " + it.localizedMessage )
+                addMembersData.value = null
+            })
+    }
+
+    fun removeMembers(groupBody: CreateGroupBody){
+        api.removeMembersInGroup(groupBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                Log.e("TAG", "addMembersData: " + resp.Data )
+                removeMembersData.value = resp.Data
+            }, {
+                Log.e("TAG", "addMembersData: " + it.localizedMessage )
+                removeMembersData.value = null
             })
     }
 

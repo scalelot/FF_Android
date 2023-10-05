@@ -28,7 +28,7 @@
     <color name="stickerBacColor">#CC212121</color>
     <color name="editBubbleTextBac">#F8F8F8</color>
     <color name="musicBacColor">#0F0F1B</color>
-
+    <color name="remove_member_bg">#f5f5f5</color>
     <color name="selected_item">#EFFAFB</color>
 
     <color name="icon_color">#242427</color>

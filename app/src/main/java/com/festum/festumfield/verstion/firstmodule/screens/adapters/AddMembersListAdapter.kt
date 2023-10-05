@@ -30,7 +30,6 @@ class AddMembersListAdapter(
     private var isEnable = false
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(UserChatListBinding.inflate(LayoutInflater.from(parent.context)))
     }
@@ -75,22 +74,22 @@ class AddMembersListAdapter(
 
             binding.txtChatCount.text = item.messageSize
 
-            if (item.isNewMessage == true){
+            if (item.isNewMessage == true) {
                 binding.ivSelect.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.ivSelect.visibility = View.GONE
             }
 
             binding.rlChatLayout.setOnClickListener {
 
-                if (item.isNewMessage == true){
+                if (item.isNewMessage == true) {
                     item.isNewMessage = false
                     binding.ivSelect.visibility = View.GONE
                     onAddMemberClick.onAddMemberClick(item, false)
-                }else{
+                } else {
                     item.isNewMessage = true
                     binding.ivSelect.visibility = View.VISIBLE
-                    onAddMemberClick.onAddMemberClick(item,true)
+                    onAddMemberClick.onAddMemberClick(item, true)
                 }
             }
 
@@ -120,11 +119,11 @@ class AddMembersListAdapter(
             isNewMessage = false
         )
 
-        if (friendsListItems != null){
+        if (friendsListItems != null) {
 
             val currentItemIndex = friendsList.indexOf(friendsListItems)
             friendsList.removeAt(currentItemIndex)
-            friendsListItem.let { friendsList.add(currentItemIndex, it) }
+            friendsList.remove(friendsListItem)
             notifyItemChanged(currentItemIndex)
 
         }

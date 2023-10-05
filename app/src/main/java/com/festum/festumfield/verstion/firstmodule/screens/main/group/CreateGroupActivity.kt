@@ -182,6 +182,14 @@ class CreateGroupActivity : BaseActivity<FriendsListViewModel>(), GroupInterface
 
     }
 
+    override fun onMembersList(position: Int) {
+
+    }
+
+    override fun onRemoveMember(items: FriendsListItems) {
+
+    }
+
     private fun onMediaPermission() {
 
         Dexter.withContext(this@CreateGroupActivity)
