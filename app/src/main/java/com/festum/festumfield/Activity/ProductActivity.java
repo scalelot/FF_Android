@@ -61,7 +61,7 @@ public class ProductActivity extends BaseActivity {
     LinearLayout lin_add_product;
     Context context;
     ArrayList<ProductDetailsModel> productDetailsModelArrayList = new ArrayList<>();
-    int page = 1, limit = 10;
+    int page = 1, limit = Integer.MAX_VALUE;
     String searchData = "";
     NestedScrollView nestedScrollView;
     ProgressBar idPBLoading;
@@ -216,7 +216,6 @@ public class ProductActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
-                    productDetailsModelArrayList.clear();
                     Log.e("GetProductLists=>", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
@@ -229,7 +228,7 @@ public class ProductActivity extends BaseActivity {
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
                         }
-                        if (!productDetailsModelArrayList.isEmpty()) {
+                        if (productDetailsModelArrayList != null ) {
                             lin_not_empty.setVisibility(View.VISIBLE);
                             lin_empty_view.setVisibility(View.GONE);
 

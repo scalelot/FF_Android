@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FestumField</string>
     <string name="google_maps_key">AIzaSyDnyBX5ozUcrXEQcrFo6HRb0wEUnTAa0EI</string>
+    <string name="google_maps_key_new_one">AIzaSyAy1EmmZYXtEjbDPvV7gIW0Qs2oD6WKi2o</string>
 
     <!--Login Screen-->
     <string name="welcome_txt">Welcome!</string>
@@ -433,5 +434,7 @@
     <string name="error_lib_not_initialized">Please initialize the api before using it</string>
     <string name="add_a_caption">Add a caption...</string>
     <string name="add_members">Add Members</string>
+    <string name="search_city">Search city</string>
+    <string name="enter_a_location">Enter a location</string>
 
 </resources>

@@ -15,13 +15,15 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.AdapterView
+import android.widget.AutoCompleteTextView
 import android.widget.PopupWindow
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SearchView
 import com.bumptech.glide.Glide
@@ -31,13 +33,14 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.FragmentMapBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
+import com.festum.festumfield.verstion.firstmodule.screens.adapters.PlaceAutocompleteAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
-import com.festum.festumfield.verstion.firstmodule.utils.place.OnPlacesDetailsListener
-import com.festum.festumfield.verstion.firstmodule.utils.place.Place
-import com.festum.festumfield.verstion.firstmodule.utils.place.PlaceAPI
-import com.festum.festumfield.verstion.firstmodule.utils.place.PlaceDetails
-import com.festum.festumfield.verstion.firstmodule.utils.place.PlacesAutoCompleteAdapter
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.AutoSuggestAdapter
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.OnSearchCity
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.ResponseSearch
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.RetrofitClient
+import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -52,15 +55,19 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 @AndroidEntryPoint
-class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
+class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback, OnSearchCity {
 
     private lateinit var binding: FragmentMapBinding
     private var googleMap : GoogleMap? = null
@@ -68,13 +75,8 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
     private var areaRange : Int? = null
     private val DURATION = 3000
 
-
-
-    var street = ""
-    var city = ""
-    var state = ""
-    var country = ""
-    var zipCode = ""
+    private var autoSuggestAdapter: AutoSuggestAdapter? = null
+    private var responseSearch =  arrayListOf<ResponseSearch>()
 
     override fun getContentView(): View {
         binding = FragmentMapBinding.inflate(layoutInflater)
@@ -83,43 +85,61 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
 
     override fun initUi() {
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        val placesApi = PlaceAPI.Builder()
-            .apiKey(requireActivity().resources.getString(R.string.google_maps_key))
-            .build(requireActivity())
-
-
-        val autocompleteSessionToken = AutocompleteSessionToken.newInstance()
 
         /* Get Profile */
         viewModel.getProfile()
 
-        Places.initialize(requireActivity(), requireActivity().resources.getString(R.string.google_maps_key))
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+
+        /*autoSuggestAdapter = AutoSuggestAdapter(requireActivity(), R.layout.list_item_search_auto, R.id.text1, responseSearch, this)
+        val input = AutoCompleteTextView(requireActivity())
+        input.setTextColor(resources.getColor(R.color.white))
+        binding.searchTextView.threshold = 1
+        binding.searchTextView.setAdapter(autoSuggestAdapter)
+
+        binding.searchTextView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                searchLocation(s.toString())
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 var addressList: List<Address?>? = null
 
-                if (query?.isNotEmpty() == true){
+                if (query?.isNotEmpty() == true) {
 
                     val geocoder = Geocoder(requireActivity())
 
                     addressList = geocoder.getFromLocationName(query, 1)
 
-                    if (addressList?.size != 0){
+                    if (addressList?.size != 0) {
                         val address = addressList?.get(0)
                         val latitude = address?.latitude
                         val longitude = address?.longitude
 
-                        if (latitude != null && longitude != null){
+                        if (latitude != null && longitude != null) {
 
                             val latLng = LatLng(latitude, longitude)
                             googleMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-                            val cameraPosition = CameraPosition.Builder().target(latLng).zoom(12f).build()
-                            googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                            val cameraPosition =
+                                CameraPosition.Builder().target(latLng).zoom(12f).build()
+                            googleMap?.animateCamera(
+                                CameraUpdateFactory.newCameraPosition(
+                                    cameraPosition
+                                )
+                            )
 
                         }
 
@@ -132,71 +152,50 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
 
             override fun onQueryTextChange(newText: String?): Boolean {
 
-                if (!newText.isNullOrEmpty()) {
-                    // Perform autocomplete search
-                    val request = FindAutocompletePredictionsRequest.builder()
-                        .setSessionToken(autocompleteSessionToken)
-                        .setQuery(newText)
-                        .build()
-
-                    Places.createClient(requireActivity()).findAutocompletePredictions(request)
-                        .addOnSuccessListener { response ->
-                            val predictions = response.autocompletePredictions
-                            Toast.makeText(requireActivity(), predictions.toString(), Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener { exception ->
-                            Toast.makeText(requireActivity(), exception.message, Toast.LENGTH_SHORT).show()
-                        }
-                }
                 return false
             }
+        })*/
+
+        val apiKey = resources.getString(R.string.google_maps_key_new_one)
+        Places.initialize(requireActivity(), apiKey)
+
+        val placesClient = Places.createClient(requireActivity())
+
+        val adapter = PlaceAutocompleteAdapter(requireActivity(),this)
+
+        binding.autoCompleteTextView.setAdapter(adapter)
+
+        binding.autoCompleteTextView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                val query = s.toString()
+                if (query.length >= 2) {
+
+                    val token = AutocompleteSessionToken.newInstance()
+                    val predictionsRequest = FindAutocompletePredictionsRequest.builder().setTypeFilter(TypeFilter.CITIES)
+                            .setSessionToken(token).setQuery(query).build()
+                    placesClient.findAutocompletePredictions(predictionsRequest).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val predictionsResponse = task.result
+                            adapter.setPredictions(predictionsResponse)
+                        } else {
+                            Log.e("TAG", "prediction fetching task unsuccessful")
+                        }
+                    }
+                } else {
+                    adapter.clearPredictions()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
         })
 
 
 
-        /*binding.autoCompleteEditText.setAdapter(PlacesAutoCompleteAdapter(requireActivity(), placesApi))
-        binding.autoCompleteEditText.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val place = parent.getItemAtPosition(position) as Place
-                binding.autoCompleteEditText.setText(place.description)
-                Toast.makeText(requireActivity(), place.description, Toast.LENGTH_SHORT).show()
-                getPlaceDetails(placesApi,place.id)
-            }*/
-
 
     }
-
-    /*private fun getPlaceDetails(placesApi: PlaceAPI, placeId: String) {
-        placesApi.fetchPlaceDetails(placeId, object :
-            OnPlacesDetailsListener {
-            override fun onError(errorMessage: String) {
-                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onPlaceDetailsFetched(placeDetails: PlaceDetails) {
-                Toast.makeText(requireActivity(), placeDetails.placeId, Toast.LENGTH_SHORT).show()
-                setupUI(placeDetails)
-            }
-        })
-    }*/
-
-    /*private fun setupUI(placeDetails: PlaceDetails) {
-        val address = placeDetails.address
-        parseAddress(address)
-    }
-
-    private fun parseAddress(address: ArrayList<Address>) {
-        (0 until address.size).forEach { i ->
-            when {
-                address[i].type.contains("street_number") -> street += address[i].shortName + " "
-                address[i].type.contains("route") -> street += address[i].shortName
-                address[i].type.contains("locality") -> city += address[i].shortName
-                address[i].type.contains("administrative_area_level_1") -> state += address[i].shortName
-                address[i].type.contains("country") -> country += address[i].shortName
-                address[i].type.contains("postal_code") -> zipCode += address[i].shortName
-            }
-        }
-    }*/
 
     override fun setObservers() {
 
@@ -367,6 +366,72 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback {
 
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12f))
 
+    }
+
+    private fun searchLocation(text: CharSequence) {
+        val call: Call<List<ResponseSearch?>?>? = RetrofitClient.getInstance().getModel().getSearch(
+            "application/x-www-form-urlencoded", text,
+            "srRLeAmTroxPinDG8Aus3Ikl6tLGJd94", "en-us", "value"
+        )
+        call?.enqueue(object : Callback<List<ResponseSearch?>?> {
+            override fun onResponse(
+                call: Call<List<ResponseSearch?>?>,
+                response: Response<List<ResponseSearch?>?>
+            ) {
+                val responseSearch = arrayListOf<ResponseSearch>()
+                val search: List<ResponseSearch?>? = response.body()
+
+                if (search != null){
+                    responseSearch.addAll(search as ArrayList<ResponseSearch>)
+                    autoSuggestAdapter?.setData(responseSearch)
+                    autoSuggestAdapter?.notifyDataSetChanged()
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<List<ResponseSearch?>?>, t: Throwable) {}
+
+        })
+
+    }
+
+    override fun onSearchCity(city: String) {
+        var addressList: List<Address?>? = null
+
+        if (city.isNotEmpty()) {
+
+            binding.autoCompleteTextView.dismissDropDown();
+
+            val geocoder = Geocoder(requireActivity())
+
+            addressList = geocoder.getFromLocationName(city, 1)
+
+            if (addressList?.size != 0) {
+                val address = addressList?.get(0)
+                val latitude = address?.latitude
+                val longitude = address?.longitude
+
+                if (latitude != null && longitude != null) {
+
+                    val latLng = LatLng(latitude, longitude)
+                    googleMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+                    val cameraPosition =
+                        CameraPosition.Builder().target(latLng).zoom(12f).build()
+                    googleMap?.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            cameraPosition
+                        )
+                    )
+
+                    binding.autoCompleteTextView.setText("")
+                    DeviceUtils.hideKeyboard(requireActivity())
+
+                }
+
+            }
+
+        }
     }
 
 }

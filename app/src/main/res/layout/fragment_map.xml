@@ -23,8 +23,47 @@
             android:layoutDirection="rtl"
             android:theme="@style/AppSearchView"
             app:iconifiedByDefault="false"
+            android:visibility="invisible"
             app:queryBackground="@android:color/transparent"
             app:queryHint="@string/search_user_area" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:hint="@string/enter_a_location"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:elevation="5dp"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:drawableStart="@drawable/ic_baseline_search_24"
+            android:theme="@style/AppSearchView"
+            android:background="@drawable/edt_bg"
+            android:drawablePadding="@dimen/_10sdp"
+            android:imeOptions="actionDone"
+            android:visibility="visible"
+            android:lines="1"
+            android:inputType="text" />
+
+        <AutoCompleteTextView
+            android:id="@+id/searchTextView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_50"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/edt_bg"
+            android:elevation="5dp"
+            android:hint="@string/search_city"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:drawableStart="@drawable/ic_baseline_search_24"
+            android:theme="@style/AppSearchView"
+            android:drawablePadding="@dimen/_10sdp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:visibility="gone"
+            android:lines="1" />
 
 
 

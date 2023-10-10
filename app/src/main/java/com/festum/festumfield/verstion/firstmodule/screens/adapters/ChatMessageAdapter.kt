@@ -63,8 +63,7 @@ class ChatMessageAdapter(
 
             else -> {
 
-                val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.chat_date_item_layout, parent, false)
+                val view: View = LayoutInflater.from(parent.context).inflate(R.layout.chat_date_item_layout, parent, false)
                 ViewHolder(view)
             }
         }

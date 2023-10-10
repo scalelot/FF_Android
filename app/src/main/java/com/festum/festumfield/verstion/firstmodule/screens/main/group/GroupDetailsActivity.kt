@@ -16,7 +16,6 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityGroupDetailsBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.AddMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.EditGroupMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AddMembersDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
@@ -52,6 +51,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
     private var friendsListAdapter: EditGroupMembersListAdapter? = null
     private val groupMembers = arrayListOf<FriendsListItems>()
     private val addGroupMembers = arrayListOf<FriendsListItems>()
+    private var removeMembersList = arrayListOf<String>()
     private var profileKey: String = ""
     private var removeUserID: String = ""
 
@@ -89,7 +89,11 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                     aboutUs = it.membersList?.aboutUs,
                     id = it.membersList?.id
                 )
+
                 groupMembers.add(members)
+
+                it.membersList?.id?.let { it1 -> removeMembersList.add(it1) }
+
             }
 
             binding.groupName.text = membersList.name
@@ -104,6 +108,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
             binding.backArrow.setOnClickListener {
                 finish()
+                removeMembersList.clear()
             }
         }
 
@@ -136,7 +141,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
         binding.llAddUser.setOnClickListener {
 
-            val dialog = AddMembersDialog(membersList, this)
+            val dialog = AddMembersDialog(membersList, this, removeMembersList)
             dialog.show(supportFragmentManager, "AddMembersDialog")
 
         }
@@ -380,6 +385,8 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
             groupid = membersList.id,
             members = membersIds
         )
+
+        items.id?.let { removeMembersList.add(it) }
 
         removeUserID = items.id.toString()
 

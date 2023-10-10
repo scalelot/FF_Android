@@ -13,14 +13,11 @@ import androidx.lifecycle.Lifecycle
 import com.festum.festumfield.databinding.AddMembersItemsBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseDialogFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.AddMembersListAdapter
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupMembersListAdapter
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
-import com.festum.festumfield.verstion.firstmodule.viemodels.FriendProductViewModel
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -29,8 +26,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
 @AndroidEntryPoint
-class AddMembersDialog(private val membersList: FriendsListItems,
-    private val onClick : GroupInterface) :
+class AddMembersDialog(
+    private val membersList: FriendsListItems,
+    private val onClick: GroupInterface,
+    private val addMembersList: ArrayList<String>
+) :
     BaseDialogFragment<FriendsListViewModel>(),
     GroupInterface {
 
@@ -39,7 +39,6 @@ class AddMembersDialog(private val membersList: FriendsListItems,
     private var membersListItems = arrayListOf<FriendsListItems>()
     private var addMembersListItems = arrayListOf<FriendsListItems>()
     private val addMemberList = arrayListOf<FriendsListItems>()
-    private var addMembersList = arrayListOf<String>()
 
     override fun getContentView(): View {
         binding = AddMembersItemsBinding.inflate(layoutInflater)
@@ -47,12 +46,6 @@ class AddMembersDialog(private val membersList: FriendsListItems,
     }
 
     override fun initUi() {
-
-        membersList.members?.forEach {
-
-            it.membersList?.id?.let { it1 -> addMembersList.add(it1) }
-
-        }
 
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
@@ -95,9 +88,9 @@ class AddMembersDialog(private val membersList: FriendsListItems,
 
                 if (friendsListData != null) {
 
-                    friendsListData.forEach {friends ->
+                    friendsListData.forEach { friends ->
 
-                        if (friends.members.isNullOrEmpty()){
+                        if (friends.members.isNullOrEmpty()) {
                             membersListItems.add(friends)
                         }
 
@@ -105,7 +98,7 @@ class AddMembersDialog(private val membersList: FriendsListItems,
 
                     membersListItems.forEach {
 
-                        if (!addMembersList.contains(it.id)){
+                        if (!addMembersList.contains(it.id)) {
 
                             addMembersListItems.add(it)
 
@@ -116,7 +109,8 @@ class AddMembersDialog(private val membersList: FriendsListItems,
 
                     Handler(Looper.getMainLooper()).postDelayed({
 
-                        friendsListAdapter = AddMembersListAdapter(requireActivity(), addMembersListItems, this)
+                        friendsListAdapter =
+                            AddMembersListAdapter(requireActivity(), addMembersListItems, this)
                         binding.recyclerviewContactList.adapter = friendsListAdapter
 
                     }, 100)
@@ -159,14 +153,14 @@ class AddMembersDialog(private val membersList: FriendsListItems,
             DeviceUtils.hideKeyboard(requireActivity())
         })
 
-        viewModel.addMembersData.observe(this){
+        viewModel.addMembersData.observe(this) {
 
-            if (it != null){
+            if (it != null) {
 
-                onClick.onAddMemberClick(FriendsListItems(),true)
+                onClick.onAddMemberClick(FriendsListItems(), true)
                 dismiss()
 
-            }else{
+            } else {
 
                 Toast.makeText(requireActivity(), "Something get wrong", Toast.LENGTH_SHORT).show()
             }
@@ -203,6 +197,7 @@ class AddMembersDialog(private val membersList: FriendsListItems,
         bottomSheet.layoutParams = layoutParams
 
     }
+
     private fun filter(text: String) {
 
         val filteredList = ArrayList<FriendsListItems>()
@@ -230,9 +225,9 @@ class AddMembersDialog(private val membersList: FriendsListItems,
 
 
     override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
-        if (b){
+        if (b) {
             addMemberList.add(items)
-        }else{
+        } else {
             addMemberList.remove(items)
         }
     }

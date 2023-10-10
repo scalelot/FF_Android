@@ -7,26 +7,53 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Const;
+import com.festum.festumfield.verstion.firstmodule.screens.adapters.PlaceAutocompleteAdapter;
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.AutoSuggestAdapter;
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.OnSearchCity;
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.ResponseSearch;
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.RetrofitClient;
+import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
-public class MapsLocationActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+@AndroidEntryPoint
+public class MapsLocationActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, OnSearchCity {
 
     private GoogleMap mMap;
     public Criteria criteria;
@@ -34,6 +61,15 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
     LocationManager locationManager;
     Boolean isProfileLocation;
     Boolean isBusinessLocation;
+
+
+    private AutoSuggestAdapter autoSuggestAdapter;
+    private ArrayList<ResponseSearch> responseSearch;
+
+    private AutoCompleteTextView autoCompleteTextView;
+    private PlaceAutocompleteAdapter adapter;
+    private PlacesClient placesClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +81,87 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        /*autoCompleteTextView = findViewById(R.id.searchTextView);
+
+        ResponseSearch responseSearch1 = new ResponseSearch();
+        responseSearch1.setLocalizedName("Surat");
+
+        ArrayList<ResponseSearch> responseSearchList = new ArrayList<>();
+
+        autoSuggestAdapter = new AutoSuggestAdapter(this, R.layout.list_item_search_auto, R.id.text1, responseSearchList, this);
+        autoCompleteTextView.setThreshold(1);
+        autoCompleteTextView.setAdapter(autoSuggestAdapter);
+
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                searchLocation(autoCompleteTextView.getText().toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+        });*/
+
+
+
+        String apiKey = getResources().getString(R.string.google_maps_key_new_one);
+        Places.initialize(getApplicationContext(), apiKey);
+
+        placesClient = Places.createClient(this);
+
+        autoCompleteTextView = findViewById(R.id.searchTextView);
+        adapter = new PlaceAutocompleteAdapter(this, this);
+
+        autoCompleteTextView.setAdapter(adapter);
+
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString();
+                if (query.length() >= 2) {
+                    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+                    FindAutocompletePredictionsRequest predictionsRequest =
+                            FindAutocompletePredictionsRequest.builder()
+                                    .setTypeFilter(TypeFilter.CITIES)
+                                    .setSessionToken(token)
+                                    .setQuery(query)
+                                    .build();
+
+                    placesClient.findAutocompletePredictions(predictionsRequest)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    adapter.setPredictions(task.getResult());
+                                } else {
+                                    Log.e("TAG", "Prediction fetching task unsuccessful");
+                                }
+                            });
+                } else {
+                    adapter.clearPredictions();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+
     }
 
     @Override
@@ -200,4 +315,78 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
         Log.d("Latitude", "status");
     }
 
+    @Override
+    public void onSearchCity(@NonNull String city) {
+
+        List<Address> addressList = null;
+
+        if (!city.isEmpty()) {
+            autoCompleteTextView.dismissDropDown();
+
+            Geocoder geocoder = new Geocoder(this);
+
+            try {
+                addressList = geocoder.getFromLocationName(city, 1);
+
+                if (addressList != null && !addressList.isEmpty()) {
+                    Address address = addressList.get(0);
+                    double latitude = address.getLatitude();
+                    double longitude = address.getLongitude();
+
+                    if (latitude != 0 && longitude != 0) {
+                        LatLng latLng = new LatLng(latitude, longitude);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12f).build();
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                        autoCompleteTextView.setText("");
+                        DeviceUtils.INSTANCE.hideKeyboard(this);
+
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    private void searchLocation(CharSequence text) {
+
+
+        Call<List<ResponseSearch>> call4 = RetrofitClient.INSTANCE.getInstance().getModel().getSearch(
+                "application/x-www-form-urlencoded", text,
+                "srRLeAmTroxPinDG8Aus3Ikl6tLGJd94", "en-us", "value"
+
+        );
+        call4.enqueue(new Callback<List<ResponseSearch>>() {
+            @Override
+            public void onResponse(Call<List<ResponseSearch>> call, Response<List<ResponseSearch>> response)
+
+            {
+
+                responseSearch  = new ArrayList<>();
+                List<ResponseSearch> post5 = response.body();
+                if (post5 != null)
+
+                {
+
+                    responseSearch.addAll(post5);
+                    autoSuggestAdapter.setData(responseSearch);
+                    autoSuggestAdapter.notifyDataSetChanged();
+
+                }
+
+            }
+            @Override
+            public void onFailure(Call<List<ResponseSearch>> call, Throwable t) {
+
+                Log.e("SearchBar", "onError: " + t.getMessage());
+
+            }
+
+        });
+
+    }
 }

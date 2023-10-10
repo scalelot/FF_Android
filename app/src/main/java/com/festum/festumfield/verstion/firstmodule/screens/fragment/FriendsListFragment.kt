@@ -240,7 +240,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
             Log.e("TAG", "getMessage: $data")
 
-        }?.on("updateMyMedia") { args ->
+        }?.on("updateUserMedia") { args ->
 
             val data = args[0] as JSONObject
 
@@ -254,7 +254,36 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
         }?.on("endCall") { args ->
 
-            Log.e("TAG", "endCall: ${args.asList()}")
+            try {
+                val data = args[0] as JSONObject
+                Log.e("TAG", "endCall: ${data}" )
+            }catch (e : Exception){
+                Log.e("TAG", "endCall: ${e.message}" )
+            }
+
+        }?.on("webrtcUpdateUserMedia"){  args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "endCall: $data")
+
+        }?.on("webrtcMessage"){  args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "webrtcMessage: $data")
+
+        }?.on("incomingCall"){  args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "incomingCall: $data")
+
+        }?.on("incomingNotification"){  args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "incomingNotification: $data")
 
         }
 

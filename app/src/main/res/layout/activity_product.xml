@@ -287,4 +287,5 @@
             android:textSize="@dimen/sp_16"
             android:visibility="visible" />
     </LinearLayout>
+
 </RelativeLayout>
