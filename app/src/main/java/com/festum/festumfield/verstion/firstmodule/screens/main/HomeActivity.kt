@@ -3,9 +3,12 @@ package com.festum.festumfield.verstion.firstmodule.screens.main
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -24,14 +27,17 @@ import com.festum.festumfield.Fragment.ContactFragment
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityHomeBinding
+import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
@@ -43,14 +49,17 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var upComingCallBinding: UpcomingCallBinding
     private var friendsFragment: FriendsListFragment? = null
     private var itemData: FriendsListItems? = null
+    private var upComingCallUser: FriendsListItems? = null
 
     override fun getContentView(): View {
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -65,6 +74,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
     override fun setupUi() {
+
+        getUpComingCall()
 
         binding.userImg.setOnClickListener {
 
@@ -139,11 +150,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     }
 
                     R.id.new_group -> {
-                        startActivity(Intent(this@HomeActivity, CreateNewGroupActivity::class.java))
-                        return@OnMenuItemClickListener true
-                    }
-
-                    R.id.group -> {
                         startActivity(Intent(this@HomeActivity, NewGroupActivity::class.java))
                         return@OnMenuItemClickListener true
                     }
@@ -177,12 +183,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             if (profileData != null) {
 
                 AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
-                AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
+                AppPreferencesDelegates.get().businessProfile =
+                    profileData.isBusinessProfileCreated == true
                 AppPreferencesDelegates.get().userName = profileData.fullName.toString()
 
                 AppPreferencesDelegates.get().personalProfile = true
 
-                val applicationClass : FestumApplicationClass = application as FestumApplicationClass
+                val applicationClass: FestumApplicationClass = application as FestumApplicationClass
                 applicationClass.onCreate()
 
                 val menu: Menu = binding.bottomNavigationView.menu
@@ -213,7 +220,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 pinVisibility(isPinClick = true, isPinSet = true)
                 friendsFragment?.setOnPin(itemData, true)
                 null
-            }else{
+            } else {
                 pinVisibility(isPinClick = true, isPinSet = false)
                 friendsFragment?.setOnPin(itemData, false)
                 null
@@ -330,13 +337,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
     override fun setPin(friendItem: FriendsListItems) {
-        pinVisibility(false,friendItem.isPinned)
+        pinVisibility(false, friendItem.isPinned)
         itemData = friendItem
     }
 
     override fun checkItemPin(friendItem: FriendsListItems) {}
 
-    private fun pinVisibility(isPinClick: Boolean, isPinSet : Boolean?) {
+    private fun pinVisibility(isPinClick: Boolean, isPinSet: Boolean?) {
 
         if (!isPinClick) {
             binding.userImg.visibility = View.INVISIBLE
@@ -348,9 +355,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             binding.ivBusinessAccount.visibility = View.GONE
             binding.pin.visibility = View.VISIBLE
 
-            if (isPinSet == true){
+            if (isPinSet == true) {
                 binding.unPin.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.unPin.visibility = View.GONE
             }
 
@@ -365,6 +372,67 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             binding.pin.visibility = View.GONE
             binding.unPin.visibility = View.GONE
         }
+
+    }
+
+    private fun getUpComingCall() {
+
+        SocketManager.mSocket?.on("callUser") { args ->
+
+            val data = args[0] as JSONObject
+
+            runOnUiThread {
+
+                val signal = data.optJSONObject("signal")
+                val from = data.optString("from")
+                val name = data.optString("name")
+                val isVideoCall = data.optBoolean("isVideoCall")
+
+                friendsListItems?.forEach {
+
+
+                    if (it.id?.uppercase()?.contains(from) == true) {
+                        upComingCallUser = it
+                    }
+
+                }
+
+
+
+                Handler(Looper.getMainLooper()).postDelayed({
+
+                    upComingCallView(upComingCallUser, signal)
+
+                }, 300)
+
+            }
+
+        }
+
+    }
+
+    private fun upComingCallView(upComingCallUser: FriendsListItems?, signal: JSONObject?) {
+
+        upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
+
+        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(upComingCallBinding.root)
+
+        Glide.with(this@HomeActivity)
+            .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
+            .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
+
+        upComingCallBinding.upcomingUsername.text = upComingCallUser?.fullName
+
+        upComingCallBinding.llCallCut.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        upComingCallBinding.llCallRecive.setOnClickListener {
+
+        }
+
+        dialog.show()
 
     }
 

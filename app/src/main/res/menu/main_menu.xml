@@ -13,7 +13,4 @@
         android:id="@+id/setting"
         android:title="@string/setting"/>
 
-    <item
-        android:id="@+id/group"
-        android:title="Group"/>
 </menu>

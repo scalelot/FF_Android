@@ -34,7 +34,12 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
     private lateinit var binding: FragmentFriendsListBinding
 
     private var friendsListAdapter: FriendsListAdapter? = null
-    private var friendsListItems: ArrayList<FriendsListItems>? = null
+
+    companion object {
+
+        var friendsListItems: ArrayList<FriendsListItems>? = null
+
+    }
 
     override fun getContentView(): View {
         binding = FragmentFriendsListBinding.inflate(layoutInflater)
@@ -233,12 +238,6 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
                 val mOnlineUsers = jsonObject.optString("userId")
                 friendsListAdapter?.updateOffline(mOnlineUsers)
             }
-
-        }?.on("callUser") { args ->
-
-            val data = args[0] as JSONObject
-
-            Log.e("TAG", "getMessage: $data")
 
         }?.on("updateUserMedia") { args ->
 

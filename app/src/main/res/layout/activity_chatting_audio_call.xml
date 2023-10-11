@@ -55,7 +55,6 @@
         android:textColor="@color/call_icon_bg"
         android:textSize="@dimen/text_16" />
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/sp_50"
