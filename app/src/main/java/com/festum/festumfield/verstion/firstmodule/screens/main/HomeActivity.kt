@@ -50,6 +50,15 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+import org.webrtc.DataChannel
+import org.webrtc.IceCandidate
+import org.webrtc.MediaConstraints
+import org.webrtc.MediaStream
+import org.webrtc.PeerConnection
+import org.webrtc.PeerConnectionFactory
+import org.webrtc.RtpReceiver
+import org.webrtc.SdpObserver
+import org.webrtc.SessionDescription
 
 
 @AndroidEntryPoint
@@ -60,6 +69,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var friendsFragment: FriendsListFragment? = null
     private var itemData: FriendsListItems? = null
     private var upComingCallUser: FriendsListItems? = null
+    var sdpAnswer = ""
 
     override fun getContentView(): View {
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -76,6 +86,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     override fun setupUi() {
 
         getUpComingCall()
+
+        PeerConnectionFactory.initialize(
+            PeerConnectionFactory.InitializationOptions.builder(this).createInitializationOptions()
+        )
 
         binding.userImg.setOnClickListener {
 
@@ -164,6 +178,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             pinVisibility(isPinClick = true, isPinSet = false)
             friendsFragment?.pinNotSelected(itemData)
         }
+
         binding.pin.setOnClickListener {
             viewModel.setPin(itemData, true)
         }
@@ -381,9 +396,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             val data = args[0] as JSONObject
 
+            Log.e("TAG", "getUpComingCall: $data")
+
             runOnUiThread {
 
                 val signal = data.optJSONObject("signal")
+                val type = signal?.optString("type")
+                val sdp = signal?.optString("sdp")
                 val from = data.optString("from")
                 val name = data.optString("name")
                 val isVideoCall = data.optBoolean("isVideoCall")
@@ -401,17 +420,146 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 Handler(Looper.getMainLooper()).postDelayed({
 
-                    upComingCallView(upComingCallUser, signal)
+                    upComingCallView(upComingCallUser, from)
 
                 }, 300)
 
+                val peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory()
+                val iceServers = mutableListOf<PeerConnection.IceServer>()
+
+                val peerConnection = peerConnectionFactory.createPeerConnection(
+                    iceServers,
+                    object : PeerConnection.Observer {
+                        override fun onIceCandidate(iceCandidate: IceCandidate) {
+                            Log.e("TAG", "onIceCandidate: ---$iceCandidate")
+                        }
+
+                        override fun onIceCandidatesRemoved(p0: Array<out IceCandidate>?) {
+                            Log.e("TAG", "onIceCandidatesRemoved: ---" + p0.toString() )
+                        }
+
+                        override fun onDataChannel(dataChannel: DataChannel) {
+                            Log.e("TAG", "onDataChannel: ---" + dataChannel.label() )
+                        }
+                        override fun onRenegotiationNeeded() {
+                            Log.e("TAG", "onRenegotiationNeeded: ---" + "+-+-+-+-+" )
+                        }
+
+                        override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
+                            Log.e("TAG", "onAddTrack: ---" + p1.toString() )
+                            Log.e("TAG", "onAddTrack+++: ---" + p0.toString() )
+                        }
+
+                        override fun onIceConnectionChange(iceConnectionState: PeerConnection.IceConnectionState) {
+                            Log.e("TAG", "onIceConnectionChange: ---$iceConnectionState")
+
+                        }
+
+                        override fun onConnectionChange(peerConnectionState: PeerConnection.PeerConnectionState) {
+
+                            Log.e("TAG", "onConnectionChange: ---${peerConnectionState.name}")
+                        }
+
+                        override fun onSignalingChange(signalingState: PeerConnection.SignalingState) {
+                            Log.e("TAG", "onSignalingChange: --- " + signalingState.name)
+
+                        }
+
+                        override fun onIceConnectionReceivingChange(b: Boolean) {
+                            Log.e("TAG", "onIceConnectionReceivingChange: --- $b")
+                        }
+
+                        override fun onIceGatheringChange(iceGatheringState: PeerConnection.IceGatheringState) {
+
+                            Log.e("TAG", "onIceGatheringChange: --- " + iceGatheringState.name)
+
+                        }
+
+                        override fun onAddStream(mediaStream: MediaStream) {
+
+                            Log.e("TAG", "onAddStream: --- " + mediaStream.audioTracks.toString())
+                            // Handle the incoming audio stream
+                        }
+
+                        override fun onRemoveStream(mediaStream: MediaStream) {
+
+                            Log.e("TAG", "onRemoveStream: --- " + mediaStream.audioTracks.toString())
+
+                        }
+
+                    })
+
+                val sdpDescription = SessionDescription(SessionDescription.Type.OFFER, sdp)
+                peerConnection?.setRemoteDescription(object : SdpObserver {
+                    override fun onCreateSuccess(sessionDescription: SessionDescription) {
+
+                        Log.e("TAG", "sessionDescription:-- " +sessionDescription.description )
+
+                    }
+                    override fun onSetSuccess() {
+                        // Create an answer and set it as the local description
+                        peerConnection.createAnswer(object : SdpObserver {
+
+                            override fun onCreateSuccess(sessionDescription: SessionDescription) {
+
+                                peerConnection.setLocalDescription(object : SdpObserver {
+
+                                    override fun onCreateSuccess(sessionDescription: SessionDescription) {
+                                        Log.e("TAG", "onCreateSuccess:+++++ " +sessionDescription.description )
+                                    }
+
+                                    override fun onSetSuccess() {
+                                        // Send the answer with your local description to the remote user via your signaling server
+                                        sdpAnswer = sessionDescription.description // Assuming sessionDescription is the SDP answer
+                                    }
+
+                                    override fun onCreateFailure(string: String?) {
+                                        Log.e("TAG", "onCreateFailure:+++++ " +sessionDescription.description )
+                                    }
+
+                                    override fun onSetFailure(string: String?) {
+                                        Log.e("TAG", "onSetFailure:+++++ " +sessionDescription.description )
+                                    }
+                                }, sessionDescription)
+
+                                Log.e("TAG", "onCreateSuccess:++11+++ " +sessionDescription.description )
+
+                            }
+
+                            override fun onSetSuccess() {
+
+                                Log.e("TAG", "onSetSuccess:++++----+++ " + "Success")
+
+                            }
+
+                            override fun onCreateFailure(string: String?) {
+                                Log.e("TAG", "onCreateFailure:++++----+++ $string")
+                            }
+
+                            override fun onSetFailure(string: String?) {
+                                Log.e("TAG", "onSetFailure:++++----+++ $string")
+                            }
+
+                            // Implement other SdpObserver methods
+                        }, MediaConstraints())
+                    }
+
+                    override fun onCreateFailure(string: String?) {
+                        Log.e("TAG", "onCreateFailure:++++--++--+++ $string")
+                    }
+
+                    override fun onSetFailure(string: String?) {
+                        Log.e("TAG", "onSetFailure:++++--++--+++ $string")
+                    }
+
+                    // Implement other SdpObserver methods
+                }, sdpDescription)
             }
-
         }
-
     }
 
-    private fun upComingCallView(upComingCallUser: FriendsListItems?, signal: JSONObject?) {
+
+    private fun upComingCallView(upComingCallUser: FriendsListItems?, signal: String) {
 
         upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
 
@@ -425,12 +573,26 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         upComingCallBinding.upcomingUsername.text = upComingCallUser?.fullName
 
         upComingCallBinding.llCallCut.setOnClickListener {
+
+            val jsonObj = JSONObject()
+            jsonObj.put("id", signal)
+            SocketManager.mSocket?.emit("endCall",jsonObj)
             dialog.dismiss()
         }
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
+            val data = JSONObject().apply {
+                put("type", "answer") // Type of the message (you can adjust this according to your protocol)
+                put("sdp", sdpAnswer) // Include your SDP answer
+                put("myMediaStatus", "mute") // Include any other relevant data
+            }
+
+            SocketManager.mSocket?.emit("answerCall", data)
+
         }
+
+
 
         dialog.show()
 

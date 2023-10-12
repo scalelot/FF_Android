@@ -318,6 +318,7 @@
     <!--ChatingAudioCallActivity-->
     <string name="ringing">Ringing...</string>
     <string name="calling">Calling...</string>
+    <string name="incoming_calling">Incoming call...</string>
 
     <!--    Like & comment-->
     <string name="like_commen">Like &amp; comment</string>
