@@ -592,8 +592,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         }
 
-
-
         dialog.show()
 
     }

@@ -79,7 +79,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
             .into(binding.groupProfileImage)
 
 
-        if (membersList.members?.isNotEmpty() == true) {
+        /*if (membersList.members?.isNotEmpty() == true) {
 
             membersList.members?.forEach {
 
@@ -110,7 +110,10 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                 finish()
                 removeMembersList.clear()
             }
-        }
+        }*/
+
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        viewModel.friendsList(friendListBody)
 
         binding.editImg.setOnClickListener {
             if (AppPreferencesDelegates.get().userName.isBlank()) {
@@ -141,15 +144,15 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
         binding.llAddUser.setOnClickListener {
 
-            val dialog = AddMembersDialog(membersList, this, removeMembersList)
+            val dialog = AddMembersDialog(addMemberList, this, removeMembersList)
             dialog.show(supportFragmentManager, "AddMembersDialog")
 
         }
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun setupObservers() {
-
 
 
         viewModel.groupProfilePictureData.observe(this) { groupProfilePictureData ->
@@ -216,11 +219,11 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                             aboutUs = it.membersList?.aboutUs,
                             id = it.membersList?.id
                         )
+                        it.membersList?.id?.let { it1 -> removeMembersList.add(it1) }
                         addGroupMembers.add(members)
                     }
 
                     binding.groupName.text = addMemberList.name
-
 
                     binding.txtPeople.text = addMemberList.members?.size.toString() + " peoples"
 
