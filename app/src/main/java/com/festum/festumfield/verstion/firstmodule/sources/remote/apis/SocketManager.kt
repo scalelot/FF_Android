@@ -37,7 +37,9 @@ object SocketManager {
     }
 
     private var onConnect: Emitter.Listener = Emitter.Listener {
+
         Log.e("mSocket", "Socket Connected!")
+
         try {
 
             val jsonObj = JSONObject()

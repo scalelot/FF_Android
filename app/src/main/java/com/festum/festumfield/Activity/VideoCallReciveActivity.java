@@ -43,9 +43,10 @@ import org.webrtc.VideoTrack;
 
 import java.util.ArrayList;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-
+@AndroidEntryPoint
 public class VideoCallReciveActivity extends BaseActivity {
 
     public static final String TAG = "VideoCallReciveActivityoikjrsdogjori";
@@ -84,7 +85,7 @@ public class VideoCallReciveActivity extends BaseActivity {
         surface_view2 = findViewById(R.id.surface_view2);
         ll_switch_camera = findViewById(R.id.ll_switch_camera);
 
-        int cameraCount = Camera.getNumberOfCameras();
+        /*int cameraCount = Camera.getNumberOfCameras();
 
         for (int i = 0; i < cameraCount; i++) {
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -102,7 +103,7 @@ public class VideoCallReciveActivity extends BaseActivity {
                 backCameraID = i;
                 break;
             }
-        }
+        }*/
 
         ll_switch_camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,13 +123,19 @@ public class VideoCallReciveActivity extends BaseActivity {
 
         createVideoTrackFromCameraAndShowIt();
 
+        /*initializeSurfaceViews();
+
+        initializePeerConnectionFactory();
+
+        createVideoTrackFromCameraAndShowIt();
+
         initializePeerConnections();
 
         startStreamingVideo();
 
-        doCall();
+        doCall();*/
 
-        mSocket.on("callAccepted", new Emitter.Listener() {
+        /*mSocket.on("callAccepted", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject jsonObject = (JSONObject) args[0];
@@ -143,7 +150,7 @@ public class VideoCallReciveActivity extends BaseActivity {
                 }
 
             }
-        });
+        });*/
 
     }
 
@@ -422,7 +429,7 @@ public class VideoCallReciveActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(VideoCallReciveActivity.this, ChatingActivity.class));
+//        startActivity(new Intent(VideoCallReciveActivity.this, ChatingActivity.class));
         finish();
     }
 }

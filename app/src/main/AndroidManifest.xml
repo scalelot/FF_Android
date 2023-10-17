@@ -48,6 +48,7 @@
     <uses-feature android:name="android.hardware.camera.flash" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.camera.front"/>
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
 
     <queries>

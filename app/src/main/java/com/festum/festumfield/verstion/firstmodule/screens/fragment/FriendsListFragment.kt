@@ -270,7 +270,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
             val data = args[0] as JSONObject
 
-            Log.e("TAG", "webrtcMessage: $data")
+//            Log.e("TAG", "webrtcMessage: $data")
 
         }?.on("incomingCall"){  args ->
 

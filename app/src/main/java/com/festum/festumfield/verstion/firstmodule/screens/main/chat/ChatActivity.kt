@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
-import com.festum.festumfield.Activity.ReelsActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ChatActivityBinding
@@ -24,6 +23,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -39,6 +39,7 @@ import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -46,6 +47,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
@@ -230,6 +232,14 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             binding.imgProduct.visibility = View.VISIBLE
         } else {
             binding.imgProduct.visibility = View.GONE
+        }
+
+        binding.imgVideoCall.setOnClickListener {
+
+            val i = Intent(this@ChatActivity,VideoCallingActivity::class.java)
+            i.putExtra("toUser", friendsItem.id)
+            startActivity(i)
+
         }
 
     }
@@ -565,8 +575,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         Dexter.withContext(this@ChatActivity)
             .withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true) {
@@ -588,9 +597,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     token?.continuePermissionRequest()
                 }
 
-            }).withErrorListener {}
+            }).withErrorListener {}.check()
 
-            .check()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import java.io.File
 import java.util.*
@@ -17,6 +19,14 @@ import java.util.*
 class IntentUtil {
 
     companion object {
+
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        var storge_permissions_33 = arrayOf(
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.CAMERA
+        )
 
         var PICK_IMAGE_CHOOSER_REQUEST_CODE = 200
         var PICK_IMAGE_VIDEO_CHOOSER_REQUEST_CODE = 300
@@ -91,6 +101,36 @@ class IntentUtil {
             return ActivityCompat.checkSelfPermission(
                 activity,
                 Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+
+        }
+
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        fun readAudioPermission(activity: Activity): Boolean {
+
+            return ActivityCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    ) == PackageManager.PERMISSION_GRANTED
+
+        }
+
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        fun readVideoPermission(activity: Activity): Boolean {
+
+            return ActivityCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.READ_MEDIA_VIDEO
+                    ) == PackageManager.PERMISSION_GRANTED
+
+        }
+
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        fun readImagesPermission(activity: Activity): Boolean {
+
+            return ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.READ_MEDIA_IMAGES
             ) == PackageManager.PERMISSION_GRANTED
 
         }
