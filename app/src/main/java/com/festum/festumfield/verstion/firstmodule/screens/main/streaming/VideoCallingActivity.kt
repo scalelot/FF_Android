@@ -198,6 +198,23 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
             switchCamera(currentCameraID)
         }
 
+        binding.llVideoCallCut.setOnClickListener {
+
+            try {
+
+                val jsonObj = JSONObject()
+                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+                SocketManager.mSocket?.emit("endCall", jsonObj)
+                finish()
+
+            }catch (e : Exception){
+                Log.e("TAG", "error:" + e.message )
+            }
+
+
+
+        }
+
         initializeSurfaceViews()
 
         initializePeerConnectionFactory()
@@ -207,8 +224,6 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
         initializePeerConnections()
 
         startStreamingVideo()
-
-        doCall()
 
         /*initializePeerConnections()
 
@@ -254,8 +269,8 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
         videoTrackFromCamera?.addSink(binding.surfaceView)
 
         //create an AudioSource instance
-        audioSource = factory!!.createAudioSource(audioConstraints)
-        localAudioTrack = factory!!.createAudioTrack("audio101", audioSource)
+        audioSource = factory?.createAudioSource(audioConstraints)
+        localAudioTrack = factory?.createAudioTrack("audio101", audioSource)
 
     }
 
@@ -331,25 +346,27 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
         val pcConstraints = MediaConstraints()
         val pcObserver: PeerConnection.Observer = object : PeerConnection.Observer {
             override fun onSignalingChange(signalingState: SignalingState) {
-                Log.d(VideoCallReciveActivity.TAG, "onSignalingChange: ")
+                Log.e("TAG", "onSignalingChange: ")
             }
 
             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
-                Log.d(VideoCallReciveActivity.TAG, "onIceConnectionChange: ")
+                Log.e("TAG", "onIceConnectionChange: ")
             }
 
             override fun onIceConnectionReceivingChange(b: Boolean) {
-                Log.d(VideoCallReciveActivity.TAG, "onIceConnectionReceivingChange: ")
+                Log.e("TAG", "onIceConnectionReceivingChange: ")
             }
 
             override fun onIceGatheringChange(iceGatheringState: IceGatheringState) {
-                Log.d(VideoCallReciveActivity.TAG, "onIceGatheringChange: ")
+                Log.e("TAG", "onIceGatheringChange: ")
             }
 
             override fun onIceCandidate(iceCandidate: IceCandidate) {
-                Log.d(VideoCallReciveActivity.TAG, "onIceCandidate: ")
+
+                Log.e("TAG", "iceCandidate--++-: $iceCandidate")
+
                 val callData = JSONObject()
-                try {
+                /*try {
                     callData.put("userToCall", remoteId)
                     callData.put("signalData", iceCandidate.sdp)
                     callData.put("from", AppPreferencesDelegates.get().channelId)
@@ -359,15 +376,35 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                     SocketManager.mSocket?.emit("callUser", callData);
                 } catch (e: JSONException) {
                     e.printStackTrace()
+                }*/
+
+                try {
+                    callData.put("ice", iceCandidate.sdp)
+                    callData.put("uuid", AppPreferencesDelegates.get().channelId)
+                    callData.put("dest", remoteId)
+                    callData.put("channelID", AppPreferencesDelegates.get().channelId)
+
+                    SocketManager.mSocket?.emit("webrtcMessage", callData)?.on("webrtcMessage"){
+                            args ->
+                        val data = args[0] as JSONObject
+
+                        Log.e("TAG", "webrtcMessage-++--: $data")
+                        doCall()
+
+                    }
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
                 }
+
             }
 
             override fun onIceCandidatesRemoved(iceCandidates: Array<IceCandidate>) {
-                Log.d(VideoCallReciveActivity.TAG, "onIceCandidatesRemoved: ")
+                Log.e("TAG", "onIceCandidatesRemoved: ")
             }
 
             override fun onAddStream(mediaStream: MediaStream) {
-                Log.e("VideoCallReciveActivity.TAG", "onAddStream: " + mediaStream.videoTracks.size)
+                Log.e("TAG", "onAddStream: " + mediaStream.videoTracks.size)
                 val remoteVideoTrack = mediaStream.videoTracks[0]
                 Log.e("remoteVideoTrack: ", remoteVideoTrack.toString())
                 val remoteAudioTrack = mediaStream.audioTracks[0]
@@ -377,15 +414,15 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onRemoveStream(mediaStream: MediaStream) {
-                Log.d(VideoCallReciveActivity.TAG, "onRemoveStream: ")
+                Log.e("TAG", "onRemoveStream: ")
             }
 
             override fun onDataChannel(dataChannel: DataChannel) {
-                Log.d(VideoCallReciveActivity.TAG, "onDataChannel: ")
+                Log.e("TAG", "onDataChannel: ")
             }
 
             override fun onRenegotiationNeeded() {
-                Log.d(VideoCallReciveActivity.TAG, "onRenegotiationNeeded: ")
+                Log.e("TAG", "onRenegotiationNeeded: ")
                 //                peerConnection.createOffer(new CustomSdpObserver() {
 //                    @Override
 //                    public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -430,37 +467,30 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                 signalDataJson.put("type", sessionDescription.type.canonicalForm())
                 signalDataJson.put("sdp", sessionDescription.description)
 
+                val webRtcMessage = JSONObject().apply {
 
+                    put("sdp",sessionDescription.description)
+                    put("uuid",AppPreferencesDelegates.get().channelId)
+                    put("dest",remoteId)
+                    put("channelID",AppPreferencesDelegates.get().channelId)
+
+                }
+
+                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+
+                Log.e("TAG", "onCreateSuccess---:$webRtcMessage")
 
                 try {
 
-                    val message = JSONObject().apply {
-
-                        val jsonArray = JSONArray()
-                        jsonArray.put(remoteId)
-                        jsonArray.put(AppPreferencesDelegates.get().channelId)
-                        put("memberIds",jsonArray)
-                        put("fromId", AppPreferencesDelegates.get().channelId)
-                        put("name", AppPreferencesDelegates.get().userName)
-                        put("isVideoCall", true)
-
-                    }
-
-                    SocketManager.mSocket?.emit("callUser", message)?.on("webrtcMessage"){ args ->
+                    SocketManager.mSocket?.on("webrtcMessage"){ args ->
 
                         val data = args[0] as JSONObject
 
-                        val webRtcMessage = JSONObject().apply {
-
-                            put("sdp",signalDataJson)
-                            put("uuid","")
-                            put("dest","")
-                            put("channelID","")
-                        }
+                        Log.e("TAG", "onCreateSuccess+++:${data}")
 
                     }
 
-                    Log.e("TAG", "onCreateSuccess:$message")
+
 
                 } catch (e: JSONException) {
                     Log.e("sdpMediaConstraintsError", e.toString())
@@ -503,5 +533,6 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
         }
     }
+
 
 }

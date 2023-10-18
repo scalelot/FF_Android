@@ -236,9 +236,29 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         binding.imgVideoCall.setOnClickListener {
 
-            val i = Intent(this@ChatActivity,VideoCallingActivity::class.java)
-            i.putExtra("toUser", friendsItem.id)
-            startActivity(i)
+            val message = JSONObject().apply {
+
+                val jsonArray = JSONArray()
+                jsonArray.put(friendsItem.id)
+                jsonArray.put(AppPreferencesDelegates.get().channelId)
+                put("memberIds",jsonArray)
+                put("fromId", AppPreferencesDelegates.get().channelId)
+                put("name", AppPreferencesDelegates.get().userName)
+                put("isVideoCall", true)
+
+                val i = Intent(this@ChatActivity,VideoCallingActivity::class.java)
+                i.putExtra("toUser", friendsItem.id)
+                startActivity(i)
+
+            }
+
+            SocketManager.mSocket?.emit("callUser", message)?.on("webrtcMessage"){
+                    args ->
+                val data = args[0] as JSONObject
+
+
+
+            }
 
         }
 

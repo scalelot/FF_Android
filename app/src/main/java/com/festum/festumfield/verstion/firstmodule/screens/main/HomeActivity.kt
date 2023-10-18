@@ -424,12 +424,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             }
 
-        }?.on("endCall") { args ->
-
-            val data = args[0] as JSONObject
-
-            Log.e("TAG", data.toString())
-
         }
 
     }
@@ -452,9 +446,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             val jsonObj = JSONObject()
             jsonObj.put("id", signal)
-            SocketManager.mSocket?.emit("endCall", jsonObj)?.on("endCall") { argu ->
-                Log.e("TAG", "endCall:-- $argu")
-            }
+            SocketManager.mSocket?.emit("endCall", jsonObj)
             stopAudio()
             dialog.dismiss()
 
@@ -462,7 +454,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
-            val intent = Intent(this@HomeActivity, VideoCallReciveActivity::class.java)
+            val intent = Intent(this@HomeActivity, VideoCallingActivity::class.java)
             intent.putExtra("toUser", signal)
             startActivity(intent)
             stopAudio()
