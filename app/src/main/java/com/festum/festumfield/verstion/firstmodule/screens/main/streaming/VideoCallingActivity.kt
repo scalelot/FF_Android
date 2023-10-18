@@ -7,7 +7,6 @@ import android.hardware.Camera.CameraInfo
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.festum.festumfield.Activity.VideoCallReciveActivity
@@ -27,7 +26,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.AudioSource
@@ -95,6 +93,9 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
         Manifest.permission.CAMERA
     )
 
+    var userFragment = ""
+    var remoteUserName = ""
+
     lateinit var permission: Array<String>
 
     override fun getContentView(): View {
@@ -105,9 +106,33 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun setupUi() {
 
+        remoteId = intent.getStringExtra("toUser")
+
+        val webRtcMessage = JSONObject().apply {
+
+            put("displayName",AppPreferencesDelegates.get().userName)
+            put("uuid",AppPreferencesDelegates.get().channelId)
+            put("dest","all")
+            put("channelID",remoteId)
+
+        }
+
+        SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+
+//        onCallReceive()
+
         ActivityCompat.requestPermissions(this@VideoCallingActivity, permissions(), 1)
 
-        remoteId = intent.getStringExtra("toUser")
+        var receiverData = JSONObject()
+
+        SocketManager.mSocket?.on("webrtcMessage"){ args ->
+
+            receiverData = args[0] as JSONObject
+
+            remoteUserName = receiverData.optString("displayName")
+            Log.e("TAG", "setupUi:----------$receiverData")
+
+        }
 
     }
 
@@ -225,11 +250,13 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
+        doCall()
+
         /*initializePeerConnections()
 
         startStreamingVideo()*/
 
-//        doCall()
+
 
     }
 
@@ -358,15 +385,55 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onIceGatheringChange(iceGatheringState: IceGatheringState) {
-                Log.e("TAG", "onIceGatheringChange: ")
+                Log.e("TAG", "onIceGatheringChange: " + iceGatheringState.name)
             }
 
             override fun onIceCandidate(iceCandidate: IceCandidate) {
 
-                Log.e("TAG", "iceCandidate--++-: $iceCandidate")
+                Log.e("TAG", "iceCandidate--+^^+-: ${iceCandidate.sdp}")
+                Log.e("TAG", "iceCandidate--+^^+-: ${iceCandidate.sdpMid}")
+                Log.e("TAG", "iceCandidate--+^^+-: ${iceCandidate.sdpMLineIndex}")
+                Log.e("TAG", "iceCandidate--+^^+-: ${userFragment}")
 
+                val candidate = JSONObject()
+
+                candidate.put("candidate", iceCandidate.sdp)
+                candidate.put("sdpMid", "0")
+                candidate.put("sdpMLineIndex", 0)
+                candidate.put("usernameFragment", remoteUserName)
+
+                val webRtcMessage = JSONObject().apply {
+
+                    put("ice",candidate)
+                    put("uuid",AppPreferencesDelegates.get().channelId)
+                    put("dest",remoteId)
+                    put("channelID",remoteId)
+
+                }
+
+                Log.e("TAG", "onIceCandidate:--- $webRtcMessage")
+
+                /*SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)?.on("webrtcMessage"){ args ->
+
+                    val receiverData = args[0] as JSONObject
+
+                    Log.e("TAG", "webrtcMessage---$receiverData")
+
+                }*/
+
+                /*val webRtcMessage = JSONObject().apply {
+
+                    put("ice",signalDataJson)
+                    put("uuid",AppPreferencesDelegates.get().channelId)
+                    put("dest",remoteId)
+                    put("channelID",remoteId)
+
+                }
+
+                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)*/
+                /*
                 val callData = JSONObject()
-                /*try {
+                *//*try {
                     callData.put("userToCall", remoteId)
                     callData.put("signalData", iceCandidate.sdp)
                     callData.put("from", AppPreferencesDelegates.get().channelId)
@@ -376,7 +443,7 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                     SocketManager.mSocket?.emit("callUser", callData);
                 } catch (e: JSONException) {
                     e.printStackTrace()
-                }*/
+                }*//*
 
                 try {
                     callData.put("ice", iceCandidate.sdp)
@@ -384,18 +451,9 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                     callData.put("dest", remoteId)
                     callData.put("channelID", AppPreferencesDelegates.get().channelId)
 
-                    SocketManager.mSocket?.emit("webrtcMessage", callData)?.on("webrtcMessage"){
-                            args ->
-                        val data = args[0] as JSONObject
-
-                        Log.e("TAG", "webrtcMessage-++--: $data")
-                        doCall()
-
-                    }
-
                 } catch (e: JSONException) {
                     e.printStackTrace()
-                }
+                }*/
 
             }
 
@@ -451,7 +509,9 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 //                }, new MediaConstraints());
             }
 
-            override fun onAddTrack(rtpReceiver: RtpReceiver, mediaStreams: Array<MediaStream>) {}
+            override fun onAddTrack(rtpReceiver: RtpReceiver, mediaStreams: Array<MediaStream>) {
+
+            }
         }
         return factory?.createPeerConnection(rtcConfig, pcConstraints, pcObserver)
     }
@@ -467,18 +527,22 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                 signalDataJson.put("type", sessionDescription.type.canonicalForm())
                 signalDataJson.put("sdp", sessionDescription.description)
 
+                Log.e("TAG", "peerConnection---$signalDataJson")
+
+                userFragment = extractUsernameFragment(sessionDescription.description)
+
                 val webRtcMessage = JSONObject().apply {
 
-                    put("sdp",sessionDescription.description)
+                    put("sdp",signalDataJson)
                     put("uuid",AppPreferencesDelegates.get().channelId)
                     put("dest",remoteId)
-                    put("channelID",AppPreferencesDelegates.get().channelId)
+                    put("channelID",remoteId)
 
                 }
 
                 SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
 
-                Log.e("TAG", "onCreateSuccess---:$webRtcMessage")
+                /*Log.e("TAG", "onCreateSuccess---:$webRtcMessage")
 
                 try {
 
@@ -495,7 +559,7 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                 } catch (e: JSONException) {
                     Log.e("sdpMediaConstraintsError", e.toString())
                     e.printStackTrace()
-                }
+                }*/
 
             }
 
@@ -532,6 +596,22 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
                 onCameraPermission()
             }
         }
+    }
+
+    private fun onCallReceive(){
+
+
+
+    }
+
+    private fun extractUsernameFragment(sdp: String): String {
+        val lines = sdp.split("\r\n")
+        for (line in lines) {
+            if (line.startsWith("a=ice-ufrag:")) {
+                return line.substring("a=ice-ufrag:".length)
+            }
+        }
+        return ""
     }
 
 

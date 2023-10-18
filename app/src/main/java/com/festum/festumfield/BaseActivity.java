@@ -41,7 +41,7 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
 
-        promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("Biometric Authentication").setSubtitle("Login using Figerprint & Face").setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL).build();
+//        promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("Biometric Authentication").setSubtitle("Login using Figerprint & Face").setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL).build();
     }
 
     @Override

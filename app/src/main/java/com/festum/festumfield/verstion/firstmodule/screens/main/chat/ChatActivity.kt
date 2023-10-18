@@ -252,13 +252,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             }
 
-            SocketManager.mSocket?.emit("callUser", message)?.on("webrtcMessage"){
-                    args ->
-                val data = args[0] as JSONObject
-
-
-
-            }
+            SocketManager.mSocket?.emit("callUser", message)
 
         }
 
