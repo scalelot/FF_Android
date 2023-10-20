@@ -39,6 +39,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.WebrtcActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
@@ -455,6 +456,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         upComingCallBinding.llCallRecive.setOnClickListener {
 
             val intent = Intent(this@HomeActivity, VideoCallingActivity::class.java)
+//            val intent = Intent(this@HomeActivity, WebrtcActivity::class.java)
             intent.putExtra("toUser", signal)
             startActivity(intent)
             stopAudio()

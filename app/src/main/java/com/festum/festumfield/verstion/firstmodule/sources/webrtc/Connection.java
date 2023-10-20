@@ -90,12 +90,12 @@ public class Connection implements PeerConnection.Observer {
         localRenderer.init(eglContext, new RendererCommon.RendererEvents() {
             @Override
             public void onFirstFrameRendered() {
-                Log.e("TAG", "onFirstFrameRendered");
+//                Log.e("TAG", "onFirstFrameRendered");
             }
 
             @Override
             public void onFrameResolutionChanged(int i, int i1, int i2) {
-                Log.e("TAG", "Frame resolution changed");
+//                Log.e("TAG", "Frame resolution changed");
             }
         });
 
@@ -111,7 +111,7 @@ public class Connection implements PeerConnection.Observer {
 
         mMediaStream.addTrack(videoTrack);
         mMediaStream.addTrack(audioTrack);
-        Log.e("TAG", "media devices initialized");
+//        Log.e("TAG", "media devices initialized");
     }
 
     public void createOffer() {
@@ -132,25 +132,25 @@ public class Connection implements PeerConnection.Observer {
         mPeerConnection.createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                Log.e("TAG", "Local offer created:" + sessionDescription.description);
+//                Log.e("TAG", "Local offer created:" + sessionDescription.description);
                 mPeerConnection.setLocalDescription(this, sessionDescription);
             }
 
             @Override
             public void onSetSuccess() {
-                Log.e("TAG", "Local description set success");
+//                Log.e("TAG", "Local description set success");
 
                 mListener.onLocalOffer(mPeerConnection.getLocalDescription());
             }
 
             @Override
             public void onCreateFailure(String s) {
-                Log.e("TAG", "Failed to create local offer error:" + s);
+//                Log.e("TAG", "Failed to create local offer error:" + s);
             }
 
             @Override
             public void onSetFailure(String s) {
-                Log.e("TAG", "Failed to set local description error:" + s);
+//                Log.e("TAG", "Failed to set local description error:" + s);
             }
         }, mediaConstraints);
     }
@@ -160,24 +160,24 @@ public class Connection implements PeerConnection.Observer {
         final SdpObserver observer = new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                Log.e("TAG", "Local answer created");
+//                Log.e("TAG", "Local answer created");
                 mListener.onLocalAnswer(sessionDescription);
                 mPeerConnection.setLocalDescription(this,sessionDescription);
             }
 
             @Override
             public void onSetSuccess() {
-                Log.e("TAG", "Set description was successful");
+//                Log.e("TAG", "Set description was successful");
             }
 
             @Override
             public void onCreateFailure(String s) {
-                Log.e("TAG", "Failed to create local answer error:" + s);
+//                Log.e("TAG", "Failed to create local answer error:" + s);
             }
 
             @Override
             public void onSetFailure(String s) {
-                Log.e("TAG", "Failed to set description error:" + s);
+//                Log.e("TAG", "Failed to set description error:" + s);
             }
         };
 
@@ -192,13 +192,13 @@ public class Connection implements PeerConnection.Observer {
     }
 
     public void addRemoteIceCandidate(final JSONObject iceCandidateData) throws JSONException {
-        Log.e("TAG", "Check " + iceCandidateData.toString());
+//        Log.e("TAG", "Check " + iceCandidateData.toString());
         final String sdpMid = iceCandidateData.getString("sdpMid");
         final int sdpMLineIndex = iceCandidateData.getInt("sdpMLineIndex");
         String sdp = iceCandidateData.getString("candidate");
 
         final IceCandidate iceCandidate = new IceCandidate(sdpMid, sdpMLineIndex, sdp);
-        Log.e("TAG", "add remote candidate " + iceCandidate.toString());
+//        Log.e("TAG", "add remote candidate " + iceCandidate.toString());
         mPeerConnection.addIceCandidate(iceCandidate);
     }
 
@@ -214,7 +214,7 @@ public class Connection implements PeerConnection.Observer {
         try {
             mVideoCapturer.stopCapture();
         } catch (InterruptedException ie) {
-            Log.e("TAG", "Failed to stop capture", ie);
+//            Log.e("TAG", "Failed to stop capture", ie);
         }
 
         mPeerConnection.close();
@@ -228,9 +228,9 @@ public class Connection implements PeerConnection.Observer {
         final String[] deviceNames = cameraEnumerator.getDeviceNames();
 
         for (final String deviceName : deviceNames) {
-            Log.e("TAG", "Found device: " + deviceName);
+//            Log.e("TAG", "Found device: " + deviceName);
             if (cameraEnumerator.isFrontFacing(deviceName)) {
-                Log.e("TAG", "Found front device");
+//                Log.e("TAG", "Found front device");
                 return cameraEnumerator.createCapturer(deviceName, null);
             }
         }
@@ -246,64 +246,64 @@ public class Connection implements PeerConnection.Observer {
         iceServers.add(PeerConnection.IceServer.builder(STUN_SERVER_URL).createIceServer());
 
         mPeerConnection = mFactory.createPeerConnection(iceServers, this);
-        Log.e("TAG", "Peer Connection created");
+//        Log.e("TAG", "Peer Connection created");
     }
 
     @Override
     public void onAddStream(MediaStream mediaStream) {
-        Log.e("TAG", "onAddStream");
+//        Log.e("TAG", "onAddStream");
     }
 
     @Override
     public void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams) {
-        Log.e("TAG", "onAddTrack");
+//        Log.e("TAG", "onAddTrack");
         mListener.onAddStream(receiver.track());
     }
 
     @Override
     public void onIceConnectionReceivingChange(boolean b) {
-        Log.e("TAG", "onIceConnectionReceivingChange");
+//        Log.e("TAG", "onIceConnectionReceivingChange");
     }
 
     @Override
     public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
-        Log.e("TAG", "onIceGatheringChange state=" + iceGatheringState.toString());
+//        Log.e("TAG", "onIceGatheringChange state=" + iceGatheringState.toString());
     }
 
     @Override
     public void onDataChannel(DataChannel dataChannel) {
-        Log.e("TAG", "onDataChannel");
+//        Log.e("TAG", "onDataChannel");
     }
 
     @Override
     public void onRenegotiationNeeded() {
-        Log.e("TAG", "onRenegotiationNeeded");
+//        Log.e("TAG", "onRenegotiationNeeded");
     }
 
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
-        Log.e("TAG", "onIceCandidate");
+//        Log.e("TAG", "onIceCandidate");
 
         mListener.onIceCandidateReceived(iceCandidate);
     }
 
     @Override
     public void onSignalingChange(PeerConnection.SignalingState signalingState) {
-        Log.e("TAG", "onSignalingChange state=" + signalingState.toString());
+//        Log.e("TAG", "onSignalingChange state=" + signalingState.toString());
     }
 
     @Override
     public void onIceCandidatesRemoved(IceCandidate[] iceCandidates) {
-        Log.e("TAG", "onIceCandidatesRemoved");
+//        Log.e("TAG", "onIceCandidatesRemoved");
     }
 
     @Override
     public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
-        Log.e("TAG", "onIceConnectionChange state=" + iceConnectionState.toString());
+//        Log.e("TAG", "onIceConnectionChange state=" + iceConnectionState.toString());
     }
 
     @Override
     public void onRemoveStream(MediaStream mediaStream) {
-        Log.e("TAG", "onRemoveStream");
+//        Log.e("TAG", "onRemoveStream");
     }
 }

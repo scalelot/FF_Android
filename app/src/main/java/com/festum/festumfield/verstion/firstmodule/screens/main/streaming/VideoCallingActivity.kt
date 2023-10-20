@@ -50,6 +50,7 @@ import org.webrtc.PeerConnection.SignalingState
 import org.webrtc.PeerConnectionFactory
 import org.webrtc.PeerConnectionFactory.InitializationOptions
 import org.webrtc.RtpReceiver
+import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
 import org.webrtc.VideoCapturer
@@ -123,14 +124,33 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         ActivityCompat.requestPermissions(this@VideoCallingActivity, permissions(), 1)
 
-        var receiverData = JSONObject()
 
         SocketManager.mSocket?.on("webrtcMessage"){ args ->
 
-            receiverData = args[0] as JSONObject
+            val receiverData = args[0] as JSONObject
 
-            remoteUserName = receiverData.optString("displayName")
-            Log.e("TAG", "setupUi:----------$receiverData")
+            if (receiverData.optString("displayName").isNotEmpty()){
+                remoteUserName = receiverData.optString("displayName")
+
+                Log.e("TAG", "setupUi:----------$remoteUserName")
+            }
+
+            if (receiverData.optJSONObject("ice") != null){
+
+                val iceCandidate = receiverData.optJSONObject("ice")
+                addRemoteIceCandidate(iceCandidate)
+
+            }
+
+            if (receiverData.optString("type").isNotEmpty() || receiverData.optString("sdp").isNotEmpty()){
+
+                val sdpResponse =  receiverData.optJSONObject("sdp")
+
+                Log.e("TAG", "ice:----------$sdpResponse")
+
+                createAnswerFromRemoteOffer(sdpResponse.optString("sdp"))
+
+            }
 
         }
 
@@ -399,8 +419,9 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 candidate.put("candidate", iceCandidate.sdp)
                 candidate.put("sdpMid", "0")
-                candidate.put("sdpMLineIndex", 0)
-                candidate.put("usernameFragment", remoteUserName)
+                candidate.put("sdpMLineIndex", 1)
+                candidate.put("usernameFragment", userFragment)
+
 
                 val webRtcMessage = JSONObject().apply {
 
@@ -411,7 +432,9 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 }
 
-                Log.e("TAG", "onIceCandidate:--- $webRtcMessage")
+//                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+
+//                Log.e("TAG", "onIceCandidate:--- $webRtcMessage")
 
                 /*SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)?.on("webrtcMessage"){ args ->
 
@@ -566,6 +589,10 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
             override fun onCreateFailure(s: String) {
                 Log.e("sdpMediaConstraints-Failure", s)
             }
+
+            override fun onSetSuccess() {
+                super.onSetSuccess()
+            }
         }, sdpMediaConstraints)
     }
 
@@ -612,6 +639,58 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
         }
         return ""
+    }
+
+    private fun createAnswerFromRemoteOffer(remoteOffer: String?) {
+
+        val observer: SdpObserver = object : SdpObserver {
+            override fun onCreateSuccess(sessionDescription: SessionDescription) {
+                Log.e("TAG", "Local answer created")
+                peerConnection?.setLocalDescription(this,sessionDescription)
+            }
+
+            override fun onSetSuccess() {
+                Log.e(
+                    "TAG",
+                    "Set description was successful"
+                )
+            }
+
+            override fun onCreateFailure(s: String) {
+                Log.e(
+                    "TAG",
+                    "Failed to create local answer error:$s"
+                )
+            }
+
+            override fun onSetFailure(s: String) {
+                Log.e(
+                    "TAG",
+                    "Failed to set description error:$s"
+                )
+            }
+        }
+        val sessionDescription = SessionDescription(SessionDescription.Type.ANSWER, remoteOffer)
+        val mediaConstraints = MediaConstraints()
+        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
+        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
+        peerConnection?.setRemoteDescription(observer, sessionDescription)
+        peerConnection?.createAnswer(observer, mediaConstraints)
+
+    }
+
+    @Throws(JSONException::class)
+    fun addRemoteIceCandidate(iceCandidateData: JSONObject) {
+        Log.e("TAG", "Check $iceCandidateData")
+        val sdpMid = iceCandidateData.getString("sdpMid")
+        val sdpMLineIndex = iceCandidateData.getInt("sdpMLineIndex")
+        val sdp = iceCandidateData.getString("candidate")
+        val iceCandidate = IceCandidate(sdpMid, sdpMLineIndex, sdp)
+        Log.e(
+            "TAG",
+            "add remote candidate $iceCandidate"
+        )
+        peerConnection?.addIceCandidate(iceCandidate)
     }
 
 

@@ -48,7 +48,9 @@
     <uses-feature android:name="android.hardware.camera.flash" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-feature android:name="android.hardware.camera.front"/>
+
+    <uses-feature android:name="android.hardware.camera.front" />
+
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
 
     <queries>
@@ -71,6 +73,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".verstion.firstmodule.screens.main.streaming.WebrtcActivity"
+            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.EditGroupActivity"
             android:exported="false" />
