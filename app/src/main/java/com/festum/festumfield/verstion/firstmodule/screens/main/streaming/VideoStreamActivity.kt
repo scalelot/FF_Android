@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import org.webrtc.IceCandidate
 import org.webrtc.MediaStream
+import org.webrtc.SessionDescription
 
 @AndroidEntryPoint
 class VideoStreamActivity : BaseActivity<ChatViewModel>() {
@@ -151,6 +152,49 @@ class VideoStreamActivity : BaseActivity<ChatViewModel>() {
             if (receiverData.optString("type").isNotEmpty() || receiverData.optString("sdp").isNotEmpty()){
 
                 Log.e("TAG", "callingSdp:----------$receiverData")
+
+                /*"answer_received" ->{
+
+                    val session = SessionDescription(
+                        SessionDescription.Type.ANSWER,
+                        message.data.toString()
+                    )
+                    rtcClient?.onRemoteSessionReceived(session)
+                    runOnUiThread {
+                        binding.remoteViewLoading.visibility = View.GONE
+                    }
+                }
+                "offer_received" ->{
+                    runOnUiThread {
+                        setIncomingCallLayoutVisible()
+                        binding.incomingNameTV.text = "${message.name.toString()} is calling you"
+                        binding.acceptButton.setOnClickListener {
+                            setIncomingCallLayoutGone()
+                            setCallLayoutVisible()
+                            setWhoToCallLayoutGone()
+
+                            binding.apply {
+                                rtcClient?.initializeSurfaceView(localView)
+                                rtcClient?.initializeSurfaceView(remoteView)
+                                rtcClient?.startLocalVideo(localView)
+                            }
+                            val session = SessionDescription(
+                                SessionDescription.Type.OFFER,
+                                message.data.toString()
+                            )
+                            rtcClient?.onRemoteSessionReceived(session)
+                            rtcClient?.answer(message.name!!)
+                            target = message.name!!
+                            binding.remoteViewLoading.visibility = View.GONE
+
+                        }
+                        binding.rejectButton.setOnClickListener {
+                            setIncomingCallLayoutGone()
+                        }
+
+                    }
+
+                }*/
 
             }
 
