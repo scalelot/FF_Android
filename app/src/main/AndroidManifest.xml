@@ -74,6 +74,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".verstion.firstmodule.screens.main.streaming.VideoStreamActivity"
+            android:exported="false" />
+        <activity
             android:name=".verstion.firstmodule.screens.main.streaming.WebrtcActivity"
             android:exported="false" />
         <activity

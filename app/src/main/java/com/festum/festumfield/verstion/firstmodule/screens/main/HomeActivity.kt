@@ -38,8 +38,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
-import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.WebrtcActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoStreamActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
@@ -402,7 +401,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 val type = signal?.optString("type")
                 val sdp = signal?.optString("sdp")
                 val from = data.optString("fromId")
-                val name = data.optString("fromId")
+                val name = data.optString("name")
                 val isVideoCall = data.optBoolean("channelID")
 
 
@@ -415,11 +414,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 }
 
-                playAudio(this@HomeActivity,"skype")
+                playAudio(this@HomeActivity, "skype")
 
                 Handler(Looper.getMainLooper()).postDelayed({
 
-                    upComingCallView(upComingCallUser, from)
+                    upComingCallView(upComingCallUser, from, name)
 
                 }, 300)
 
@@ -430,7 +429,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
 
-    private fun upComingCallView(upComingCallUser: FriendsListItems?, signal: String) {
+    private fun upComingCallView(
+        upComingCallUser: FriendsListItems?,
+        signal: String,
+        name: String
+    ) {
 
         upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
 
@@ -455,12 +458,20 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
-            val intent = Intent(this@HomeActivity, VideoCallingActivity::class.java)
+
+
+            val intent = Intent(this@HomeActivity, VideoStreamActivity::class.java)
 //            val intent = Intent(this@HomeActivity, WebrtcActivity::class.java)
-            intent.putExtra("toUser", signal)
+//            val intent = Intent(this@HomeActivity, VideoCallingActivity::class.java)
+            intent.putExtra("remoteChannelId", signal)
+            intent.putExtra("remoteUser", name)
+            intent.putExtra("callReceive", true)
             startActivity(intent)
             stopAudio()
             dialog.dismiss()
+
+
+
 
         }
 
@@ -471,7 +482,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     @SuppressLint("DiscouragedApi")
     private fun playAudio(mContext: Context, fileName: String) {
         try {
-            mMediaPlayer = MediaPlayer.create(mContext, mContext.resources.getIdentifier(fileName, "raw", mContext.packageName))
+            mMediaPlayer = MediaPlayer.create(
+                mContext,
+                mContext.resources.getIdentifier(fileName, "raw", mContext.packageName)
+            )
             mMediaPlayer.start()
 
         } catch (ex: Exception) {

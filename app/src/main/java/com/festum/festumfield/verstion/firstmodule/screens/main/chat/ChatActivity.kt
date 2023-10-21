@@ -24,6 +24,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDi
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoStreamActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.WebrtcActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
@@ -247,14 +248,19 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 put("name", AppPreferencesDelegates.get().userName)
                 put("isVideoCall", true)
 
-                val i = Intent(this@ChatActivity,VideoCallingActivity::class.java)
-//                val i = Intent(this@ChatActivity,WebrtcActivity::class.java)
-                i.putExtra("toUser", friendsItem.id)
-                startActivity(i)
-
             }
 
             SocketManager.mSocket?.emit("callUser", message)
+
+            val i = Intent(this@ChatActivity,VideoStreamActivity::class.java)
+//                val i = Intent(this@ChatActivity,VideoCallingActivity::class.java)
+//                val i = Intent(this@ChatActivity,WebrtcActivity::class.java)
+            i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
+            i.putExtra("remoteUser", friendsItem.fullName)
+            i.putExtra("callReceive", false)
+            startActivity(i)
+
+
 
         }
 
