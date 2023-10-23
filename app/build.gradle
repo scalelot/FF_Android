@@ -10,6 +10,11 @@ plugins {
 
 android {
 
+    sourceSets.main {
+        jniLibs.srcDir 'libs'
+        jni.srcDirs = [] //disable automatic ndk-build call
+    }
+
     compileSdk 33
 
     namespace 'com.festum.festumfield'
@@ -150,7 +155,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.2.1'
 
     //Webrtc
-    implementation 'org.webrtc:google-webrtc:1.0.32006'
+//    implementation 'org.webrtc:google-webrtc:1.0.32006'
 
     /**
      * Rx
@@ -222,6 +227,11 @@ dependencies {
 
     //Permissions
     implementation 'com.guolindev.permissionx:permissionx:1.6.1'
+
+//    implementation 'org.webrtc:google-webrtc:1.0.+'
+    implementation files('libs/autobanh.jar')
+    implementation files('libs/base_java.jar')
+    implementation files('libs/libjingle_peerconnection.jar')
 
 }
 

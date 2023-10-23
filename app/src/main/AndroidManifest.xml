@@ -73,12 +73,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".verstion.firstmodule.screens.main.streaming.VideoStreamActivity"
-            android:exported="false" />
-        <activity
-            android:name=".verstion.firstmodule.screens.main.streaming.WebrtcActivity"
-            android:exported="false" />
+            android:name=".verstion.firstmodule.screens.webrtc.CompleteActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor"
+            android:exported="false"/>
+
         <activity
             android:name=".verstion.firstmodule.screens.main.group.EditGroupActivity"
             android:exported="false" />
@@ -95,9 +96,6 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity
-            android:name=".verstion.firstmodule.screens.main.streaming.VideoCallingActivity"
-            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.profile.CreateBusinessProfileActivity"
             android:exported="false"
@@ -230,10 +228,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key_new_one" />
 
-        <activity
-            android:name=".Activity.VideoCallReciveActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.VideoCallActivity"
             android:exported="false"

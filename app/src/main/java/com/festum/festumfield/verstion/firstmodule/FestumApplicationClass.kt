@@ -23,6 +23,10 @@ class FestumApplicationClass : MultiDexApplication() {
 
     companion object {
         lateinit var appInstance: Application
+//        init {
+//            System.loadLibrary("jingle_peerconnection")
+//        }
+
     }
 
     private var mSocket: Socket? = null

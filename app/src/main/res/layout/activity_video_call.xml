@@ -30,7 +30,7 @@
         android:layout_marginTop="@dimen/margin_20"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/name"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="@dimen/text_18" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_marginTop="@dimen/margin_10"
         android:fontFamily="@font/roboto_regular"
         android:text="@string/ringing"
-        android:textColor="@color/call_icon_bg"
+        android:textColor="@color/dialog_choose_text_color"
         android:textSize="@dimen/text_16" />
 
     <RelativeLayout

@@ -38,7 +38,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
-import com.festum.festumfield.verstion.firstmodule.screens.main.streaming.VideoStreamActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.CompleteActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
@@ -404,21 +404,21 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 val name = data.optString("name")
                 val isVideoCall = data.optBoolean("channelID")
 
-
-
                 friendsListItems?.forEach {
 
-                    if (it.id?.contains(from) == true) {
+                    if (it.id?.contains(from.toString().lowercase()) == true) {
                         upComingCallUser = it
                     }
 
                 }
 
+
+
                 playAudio(this@HomeActivity, "skype")
 
                 Handler(Looper.getMainLooper()).postDelayed({
 
-                    upComingCallView(upComingCallUser, from, name)
+                    upComingCallView(upComingCallUser, from.toString().lowercase(), name)
 
                 }, 300)
 
@@ -444,7 +444,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
             .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
 
-        upComingCallBinding.upcomingUsername.text = upComingCallUser?.fullName
+        upComingCallBinding.upcomingUsername.text = name
 
         upComingCallBinding.llCallCut.setOnClickListener {
 
@@ -458,20 +458,24 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
+            val webRtcMessage = JSONObject().apply {
 
+                put("displayName",AppPreferencesDelegates.get().userName)
+                put("uuid",AppPreferencesDelegates.get().channelId)
+                put("dest",signal.lowercase())
+                put("channelID",signal.lowercase())
 
-            val intent = Intent(this@HomeActivity, VideoStreamActivity::class.java)
-//            val intent = Intent(this@HomeActivity, WebrtcActivity::class.java)
-//            val intent = Intent(this@HomeActivity, VideoCallingActivity::class.java)
-            intent.putExtra("remoteChannelId", signal)
+            }
+
+            SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+
+            val intent = Intent(this@HomeActivity, CompleteActivity::class.java)
+            intent.putExtra("remoteChannelId", signal.lowercase())
             intent.putExtra("remoteUser", name)
             intent.putExtra("callReceive", true)
             startActivity(intent)
             stopAudio()
             dialog.dismiss()
-
-
-
 
         }
 
