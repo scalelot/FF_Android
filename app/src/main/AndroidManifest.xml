@@ -75,8 +75,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.CompleteActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".verstion.firstmodule.screens.webrtc.VideoCallingActivity"
             android:screenOrientation="fullSensor"
             android:exported="false"/>
 

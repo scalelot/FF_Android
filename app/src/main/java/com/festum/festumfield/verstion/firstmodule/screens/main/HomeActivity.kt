@@ -38,7 +38,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.CompleteActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.VideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
@@ -418,11 +418,17 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 Handler(Looper.getMainLooper()).postDelayed({
 
-                    upComingCallView(upComingCallUser, from.toString().lowercase(), name)
+                     upComingCallView(upComingCallUser, from.toString().lowercase(), name)
 
                 }, 300)
 
             }
+
+        }?.on("callUser"){ args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "callUser:---- $data")
 
         }
 
@@ -458,7 +464,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
-            val webRtcMessage = JSONObject().apply {
+            /*val webRtcMessage = JSONObject().apply {
 
                 put("displayName",AppPreferencesDelegates.get().userName)
                 put("uuid",AppPreferencesDelegates.get().channelId)
@@ -467,9 +473,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             }
 
-            SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+            SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)*/
 
-            val intent = Intent(this@HomeActivity, CompleteActivity::class.java)
+            val intent = Intent(this@HomeActivity, VideoCallingActivity::class.java)
             intent.putExtra("remoteChannelId", signal.lowercase())
             intent.putExtra("remoteUser", name)
             intent.putExtra("callReceive", true)

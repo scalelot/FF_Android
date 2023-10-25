@@ -155,7 +155,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.2.1'
 
     //Webrtc
-//    implementation 'org.webrtc:google-webrtc:1.0.32006'
+    implementation 'org.webrtc:google-webrtc:1.0.32006'
 
     /**
      * Rx
@@ -229,9 +229,9 @@ dependencies {
     implementation 'com.guolindev.permissionx:permissionx:1.6.1'
 
 //    implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation files('libs/autobanh.jar')
-    implementation files('libs/base_java.jar')
-    implementation files('libs/libjingle_peerconnection.jar')
+//    implementation files('libs/autobanh.jar')
+//    implementation files('libs/base_java.jar')
+//    implementation files('libs/libjingle_peerconnection.jar')
 
 }
 

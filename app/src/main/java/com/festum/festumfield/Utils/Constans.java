@@ -6,6 +6,8 @@ public class Constans {
 
     public static String SOCKET_SERVER_URL = "https://api.festumfield.com";
 
+//    public static String SOCKET_VIDEO_SERVER_URL = "https://404f-163-53-179-11.ngrok-free.app";
+
     public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
     public static String BASE_URL = "https://api.festumfield.com/apis/v1/";

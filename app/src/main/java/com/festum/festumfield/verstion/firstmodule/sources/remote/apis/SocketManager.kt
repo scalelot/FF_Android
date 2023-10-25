@@ -23,6 +23,7 @@ object SocketManager {
 
         try {
             mSocket = IO.socket(Constans.SOCKET_SERVER_URL, options)
+//            mSocket = IO.socket(Constans.SOCKET_VIDEO_SERVER_URL, options)
             mSocket?.on(Socket.EVENT_CONNECT, onConnect)
             mSocket?.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
             mSocket?.on(Socket.EVENT_DISCONNECT, onDisconnect)

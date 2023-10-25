@@ -17,9 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityVideoCallBinding
-import com.festum.festumfield.databinding.ActivityVideoCallingBinding
 import com.festum.festumfield.databinding.ChatActivityBinding
-import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ChatMessageAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
@@ -27,7 +25,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.CompleteActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.VideoCallingActivity
 
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
@@ -44,7 +42,6 @@ import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -257,8 +254,15 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             }
 
             SocketManager.mSocket?.emit("callUser", message)
+//
+            val i = Intent(this@ChatActivity,VideoCallingActivity::class.java)
+            i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
+            i.putExtra("remoteUser", friendsItem.fullName)
+            i.putExtra("callReceive", false)
+            startActivity(i)
 
-            upComingCallView(friendsItem)
+
+//            upComingCallView(friendsItem)
 
 
         }
@@ -534,12 +538,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }?.on("webrtcMessage") { args ->
 
-            val i = Intent(this@ChatActivity,CompleteActivity::class.java)
-            i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
-            i.putExtra("remoteUser", friendsItem.fullName)
-            i.putExtra("callReceive", false)
-            startActivity(i)
-
             upComingCallDialog?.dismiss()
 
 //            val data = args[0] as JSONObject
@@ -557,13 +555,37 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 //
 //            SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
 
+//            Log.e("TAG", "getUserStatus:---- $data")
+
+
+
         }?.on("endCall") { args ->
+
+
+
+            try {
+                val data = args[0] as JSONObject
+                upComingCallDialog?.dismiss()
+
+            }catch (e : Exception){
+                upComingCallDialog?.dismiss()
+            }
+
+
+
+
+
+        }?.on("callAccepted",) { args ->
 
             val data = args[0] as JSONObject
 
-            Log.e("TAG", "getUserStatus:--- $data")
+            Log.e("TAG", "callAccepted:---- $data")
 
-            upComingCallDialog?.dismiss()
+        }?.on("answerCall"){ args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "answerCall:---- $data")
 
         }
 
