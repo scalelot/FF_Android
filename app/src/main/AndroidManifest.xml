@@ -75,21 +75,35 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".verstion.firstmodule.screens.webrtc.AppCallingActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+
+        <activity
+            android:name=".verstion.firstmodule.screens.webrtc.AudioCallingActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+
+        <activity
             android:name=".verstion.firstmodule.screens.webrtc.VideoCallingActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:exported="false"/>
 
         <activity
             android:name=".verstion.firstmodule.screens.main.group.EditGroupActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.GroupDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.CreateGroupActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.NewGroupActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
