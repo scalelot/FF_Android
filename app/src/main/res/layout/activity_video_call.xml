@@ -63,9 +63,10 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/speaker"
                 android:layout_width="@dimen/sp_25"
                 android:layout_height="@dimen/sp_25"
-                android:src="@drawable/ic_video_call_icon"
+                android:src="@drawable/ic_baseline_speaker_up_24"
                 app:tint="@color/call_icon" />
 
         </LinearLayout>
@@ -98,10 +99,11 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/mute"
                 android:layout_width="@dimen/sp_25"
                 android:layout_height="@dimen/sp_25"
-                android:src="@drawable/ic_mute_icon"
-                app:tint="@color/call_icon" />
+                android:src="@drawable/ic_baseline_mic_24"
+                app:tint="@color/call_icon"  />
 
         </LinearLayout>
     </RelativeLayout>

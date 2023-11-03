@@ -88,6 +88,11 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var localAudioTrack: AudioTrack? = null
 
+    private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
+    private var isSpeakerMode = true
+    private var isMute = false
+
+
     var storge_permissions = arrayOf(Manifest.permission.CAMERA)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     var storge_permissions_33 = arrayOf(
@@ -275,7 +280,33 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
                 Log.e("TAG", "error:" + e.message )
             }
 
+        }
 
+        binding.llVideoCall.setOnClickListener {
+
+            if (isSpeakerMode){
+                isSpeakerMode = false
+                binding.speaker.setImageResource(R.drawable.ic_baseline_hearing_24)
+                rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
+            }else{
+                isSpeakerMode = true
+                binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
+                rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
+
+            }
+
+        }
+
+        binding.llMute.setOnClickListener {
+
+            if (isMute){
+                isMute = false
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+            }else{
+                isMute = true
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+            }
+            localAudioTrack?.setEnabled(isMute)
 
         }
 
@@ -291,6 +322,7 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         doCall()
 
+        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
         /*initializePeerConnections()
 
         startStreamingVideo()*/
@@ -648,10 +680,6 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
         peerConnection?.setRemoteDescription(observer, sessionDescription)
-        peerConnection?.createAnswer(observer, mediaConstraints)
-
-
-
 
     }
 

@@ -1,15 +1,17 @@
 package com.festum.festumfield.verstion.firstmodule.screens.webrtc
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
+import android.media.AudioManager
 import android.os.Build
+import android.telecom.CallAudioState.ROUTE_SPEAKER
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-
 import com.festum.festumfield.CustomSdpObserver
 import com.festum.festumfield.R
 import com.festum.festumfield.databinding.ActivityVideoCallingBinding
@@ -47,7 +49,6 @@ import org.webrtc.PeerConnection.IceServer
 import org.webrtc.PeerConnection.RTCConfiguration
 import org.webrtc.PeerConnection.SignalingState
 import org.webrtc.PeerConnectionFactory
-
 import org.webrtc.RtpReceiver
 import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
@@ -55,6 +56,7 @@ import org.webrtc.SurfaceTextureHelper
 import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
+
 
 @AndroidEntryPoint
 class VideoCallingActivity : BaseActivity<ChatViewModel>() {
@@ -101,6 +103,9 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     lateinit var permission: Array<String>
 
+    private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
+    private var isSpeakerMode = true
+
     override fun getContentView(): View {
         binding = ActivityVideoCallingBinding.inflate(layoutInflater)
         return binding.root
@@ -113,6 +118,8 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
         remoteId = intent.getStringExtra("remoteChannelId")
         isCalling = intent.getBooleanExtra("callReceive", false)
 
+
+
         val webRtcMessage = JSONObject().apply {
 
             put("displayName",AppPreferencesDelegates.get().userName)
@@ -123,8 +130,6 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
         }
 
         SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
-
-//        onCallReceive()
 
         ActivityCompat.requestPermissions(this@VideoCallingActivity, permissions(), 1)
 
@@ -478,50 +483,6 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
 
-//                Log.e("TAG", "onIceCandidate:--- $webRtcMessage")
-
-                /*SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)?.on("webrtcMessage"){ args ->
-
-                    val receiverData = args[0] as JSONObject
-
-                    Log.e("TAG", "webrtcMessage---$receiverData")
-
-                }*/
-
-                /*val webRtcMessage = JSONObject().apply {
-
-                    put("ice",signalDataJson)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId)
-                    put("channelID",remoteId)
-
-                }
-
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)*/
-                /*
-                val callData = JSONObject()
-                *//*try {
-                    callData.put("userToCall", remoteId)
-                    callData.put("signalData", iceCandidate.sdp)
-                    callData.put("from", AppPreferencesDelegates.get().channelId)
-                    callData.put("name", AppPreferencesDelegates.get().userName)
-                    callData.put("isVideoCall", true)
-
-                    SocketManager.mSocket?.emit("callUser", callData);
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }*//*
-
-                try {
-                    callData.put("ice", iceCandidate.sdp)
-                    callData.put("uuid", AppPreferencesDelegates.get().channelId)
-                    callData.put("dest", remoteId)
-                    callData.put("channelID", AppPreferencesDelegates.get().channelId)
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }*/
-
             }
 
             override fun onIceCandidatesRemoved(iceCandidates: Array<IceCandidate>) {
@@ -650,10 +611,13 @@ class VideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             override fun onSetSuccess() {
 
+
                 Log.e(
                     "TAG",
                     "Set description was successful"
                 )
+
+
             }
 
             override fun onCreateFailure(s: String) {

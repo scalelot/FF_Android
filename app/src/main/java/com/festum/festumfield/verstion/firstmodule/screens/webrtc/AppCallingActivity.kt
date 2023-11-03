@@ -63,7 +63,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var remoteId: String? = null
     private var remoteUser: String? = null
-    private var isCalling: Boolean? = null
+    private var callReceive: Boolean? = null
 
     private var frontCameraID = 1
     private var backCameraID = 0
@@ -76,7 +76,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
     /* PeerConnection */
 
 
-
     private var peerConnection: PeerConnection? = null
 
     var factory: PeerConnectionFactory? = null
@@ -87,7 +86,9 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var localAudioTrack: AudioTrack? = null
 
-    var storge_permissions = arrayOf(Manifest.permission.CAMERA)
+    var storge_permissions = arrayOf(Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO)
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     var storge_permissions_33 = arrayOf(
         Manifest.permission.READ_MEDIA_IMAGES,
@@ -97,7 +98,13 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
     )
 
     var userFragment = ""
-    var remoteUserName = ""
+    var remoteOffer : String = ""
+
+    private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
+    private var isSpeakerMode = true
+    private var isMute = false
+
+    private var isCameraPause = false
 
     lateinit var permission: Array<String>
 
@@ -111,25 +118,22 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
-        isCalling = intent.getBooleanExtra("callReceive", false)
+        callReceive = intent.getBooleanExtra("callReceive", false)
 
         val webRtcMessage = JSONObject().apply {
 
-            put("displayName",AppPreferencesDelegates.get().userName)
-            put("uuid",AppPreferencesDelegates.get().channelId)
-            put("dest","all")
-            put("channelID",remoteId)
+            put("displayName", AppPreferencesDelegates.get().userName)
+            put("uuid", AppPreferencesDelegates.get().channelId)
+            put("dest", "all")
+            put("channelID", remoteId)
 
         }
 
-        SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
-
-//        onCallReceive()
+        SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
         ActivityCompat.requestPermissions(this@AppCallingActivity, permissions(), 1)
 
-
-        SocketManager.mSocket?.on("webrtcMessage"){ args ->
+        SocketManager.mSocket?.on("webrtcMessage") { args ->
 
             val receiverData = args[0] as JSONObject
 
@@ -149,57 +153,29 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
             val dest = receiverData.optString("dest")
             val channelID = receiverData.optString("channelID")
 
-            if (type.equals("offer")){
+            if (type.equals("offer")) {
 
                 Log.e("TAG", "offer:----------$receiverData")
+
+                handleRemoteVideoOffer(sdpOffer)
+
 
             } else if (type.equals("answer")) {
 
                 Log.e("TAG", "answer:----------$receiverData")
 
                 createAnswerFromRemoteOffer(sdpOffer)
-//                doCall()
 
-            }else{
+            } else {
 
             }
 
-            Log.e("TAG", "setupUi:----------$receiverData")
 
-
-            if (iceCandidate != null){
+            if (iceCandidate != null) {
 
                 addRemoteIceCandidate(iceCandidate)
 
             }
-
-
-            /*if (receiverData.optString("displayName").isNotEmpty()){
-                remoteUserName = receiverData.optString("displayName")
-
-                Log.e("TAG", "setupUi:----------$remoteUserName")
-            }
-
-            if (receiverData.optJSONObject("ice") != null){
-
-                val iceCandidate = receiverData.optJSONObject("ice")
-
-                if (iceCandidate != null) {
-
-                }
-
-            }
-
-            if (receiverData.optString("type").isNotEmpty() || receiverData.optString("sdp").isNotEmpty()){
-
-
-                val sdpResponse =  receiverData.optJSONObject("sdp")
-
-                Log.e("TAG", "ice:----------$sdpResponse")
-
-                createAnswerFromRemoteOffer(sdpResponse.optString("sdp"))
-
-            }*/
 
         }
 
@@ -211,10 +187,10 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         if (IntentUtil.cameraPermission(this@AppCallingActivity)
             && IntentUtil.readAudioPermission(this@AppCallingActivity)
             && IntentUtil.readVideoPermission(this@AppCallingActivity)
-            && IntentUtil.readImagesPermission(this@AppCallingActivity))
-        {
+            && IntentUtil.readImagesPermission(this@AppCallingActivity)
+        ) {
             init()
-        } else{
+        } else {
 
         }
 
@@ -232,7 +208,8 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
                 Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.CAMERA)
+                Manifest.permission.CAMERA
+            )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true) {
@@ -261,7 +238,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    fun init(){
+    fun init() {
 
         val cameraCount = Camera.getNumberOfCameras()
 
@@ -301,11 +278,48 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 SocketManager.mSocket?.emit("endCall", jsonObj)
                 finish()
 
-            }catch (e : Exception){
-                Log.e("TAG", "error:" + e.message )
+            } catch (e: Exception) {
+                Log.e("TAG", "error:" + e.message)
             }
 
+        }
 
+        binding.llVideoCall.setOnClickListener {
+            if (isCameraPause){
+                isCameraPause = false
+                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
+            }else{
+                isCameraPause = true
+                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
+            }
+            videoTrackFromCamera?.setEnabled(isCameraPause)
+        }
+
+        binding.llMessage.setOnClickListener {
+
+            if (isSpeakerMode){
+                isSpeakerMode = false
+                binding.speaker.setImageResource(R.drawable.ic_baseline_hearing_24)
+                rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
+            }else{
+                isSpeakerMode = true
+                binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
+                rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
+
+            }
+
+        }
+
+        binding.llMute.setOnClickListener {
+
+            if (isMute){
+                isMute = false
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+            }else{
+                isMute = true
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+            }
+            localAudioTrack?.setEnabled(isMute)
 
         }
 
@@ -321,11 +335,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         doCall()
 
-        /*initializePeerConnections()
-
-        startStreamingVideo()*/
-
-
+        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
     }
 
@@ -342,10 +352,19 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
     }
 
     private fun initializePeerConnectionFactory() {
-        val initializationOptions = PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true).createInitializationOptions()
+        val initializationOptions =
+            PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true)
+                .createInitializationOptions()
         PeerConnectionFactory.initialize(initializationOptions)
-        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(DefaultVideoEncoderFactory(rootEglBase?.eglBaseContext, true, true))
-            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext)).createPeerConnectionFactory()
+        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(
+            DefaultVideoEncoderFactory(
+                rootEglBase?.eglBaseContext,
+                true,
+                true
+            )
+        )
+            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext))
+            .createPeerConnectionFactory()
     }
 
     private fun createVideoTrackFromCameraAndShowIt() {
@@ -354,7 +373,8 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         val videoCapture: VideoCapturer? = createVideoCapture()
         var videoSource: VideoSource? = null
 
-        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
+        val surfaceTextureHelper =
+            SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
         videoSource = factory?.createVideoSource(videoCapture?.isScreencast == true)
         videoCapture?.initialize(surfaceTextureHelper, this, videoSource?.capturerObserver)
 
@@ -380,7 +400,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         mediaStream?.addTrack(localAudioTrack)
         peerConnection?.addStream(mediaStream)
 
-//        sendMessage("got user media");
     }
 
     private fun createVideoCapture(): VideoCapturer? {
@@ -437,7 +456,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         val url2 = "stun:stun.l.google.com:19302"
         iceServers.add(IceServer(url))
         iceServers.add(IceServer(url2))
-//        iceServers.add(IceServer(URL))
         val rtcConfig = RTCConfiguration(iceServers)
         val pcConstraints = MediaConstraints()
         val pcObserver: PeerConnection.Observer = object : PeerConnection.Observer {
@@ -464,63 +482,34 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 candidate.put("candidate", iceCandidate.sdp)
                 candidate.put("sdpMid", iceCandidate.sdpMid)
                 candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
-//                candidate.put("usernameFragment", userFragment)
 
+                if (callReceive == true){
 
-                val webRtcMessage = JSONObject().apply {
+                    val webRtcMessage = JSONObject().apply {
 
-                    put("ice",candidate)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId?.lowercase())
-                    put("channelID",remoteId?.lowercase())
+                        put("ice", candidate)
+                        put("uuid", AppPreferencesDelegates.get().channelId)
+                        put("dest", remoteId?.lowercase())
+                        put("channelID", remoteId?.lowercase())
 
-                }
+                    }
 
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+                    SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
-//                Log.e("TAG", "onIceCandidate:--- $webRtcMessage")
+                } else {
 
-                /*SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)?.on("webrtcMessage"){ args ->
+                    val webRtcMessage = JSONObject().apply {
 
-                    val receiverData = args[0] as JSONObject
+                        put("ice", candidate)
+                        put("uuid", remoteId?.lowercase())
+                        put("dest", AppPreferencesDelegates.get().channelId)
+                        put("channelID", AppPreferencesDelegates.get().channelId)
 
-                    Log.e("TAG", "webrtcMessage---$receiverData")
+                    }
 
-                }*/
-
-                /*val webRtcMessage = JSONObject().apply {
-
-                    put("ice",signalDataJson)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId)
-                    put("channelID",remoteId)
+                    SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
                 }
-
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)*/
-                /*
-                val callData = JSONObject()
-                *//*try {
-                    callData.put("userToCall", remoteId)
-                    callData.put("signalData", iceCandidate.sdp)
-                    callData.put("from", AppPreferencesDelegates.get().channelId)
-                    callData.put("name", AppPreferencesDelegates.get().userName)
-                    callData.put("isVideoCall", true)
-
-                    SocketManager.mSocket?.emit("callUser", callData);
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }*//*
-
-                try {
-                    callData.put("ice", iceCandidate.sdp)
-                    callData.put("uuid", AppPreferencesDelegates.get().channelId)
-                    callData.put("dest", remoteId)
-                    callData.put("channelID", AppPreferencesDelegates.get().channelId)
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }*/
 
             }
 
@@ -560,6 +549,9 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
     private fun doCall() {
 
         val sdpMediaConstraints = MediaConstraints()
+        sdpMediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToCreateVideo", "true"))
+        sdpMediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToCreateAudio", "true"))
+
         peerConnection?.createOffer(object : CustomSdpObserver() {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
 
@@ -574,14 +566,14 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
                 val webRtcMessage = JSONObject().apply {
 
-                    put("sdp",signalDataJson)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId)
-                    put("channelID",remoteId)
+                    put("sdp", signalDataJson)
+                    put("uuid", AppPreferencesDelegates.get().channelId)
+                    put("dest", remoteId)
+                    put("channelID", remoteId)
 
                 }
 
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+                SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
             }
 
@@ -594,6 +586,62 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
             }
         }, sdpMediaConstraints)
     }
+
+    private fun handleRemoteVideoOffer(remoteSdp: String?) {
+
+        val observer: SdpObserver = object : SdpObserver {
+            override fun onCreateSuccess(sessionDescription: SessionDescription) {
+                peerConnection?.setLocalDescription(this, sessionDescription)
+                val signalDataJson = JSONObject()
+                signalDataJson.put("type", sessionDescription.type.canonicalForm())
+                signalDataJson.put("sdp", sessionDescription.description)
+
+                Log.e("TAG", "peerConnection-+-$signalDataJson")
+
+                val webRtcMessage = JSONObject().apply {
+
+                    put("sdp", signalDataJson)
+                    put("uuid", remoteId?.lowercase())
+                    put("dest", AppPreferencesDelegates.get().channelId)
+                    put("channelID", AppPreferencesDelegates.get().channelId)
+
+                }
+
+                SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
+
+            }
+
+            override fun onSetSuccess() {
+
+                Log.e(
+                    "TAG",
+                    "Set description was successful"
+                )
+            }
+
+            override fun onCreateFailure(s: String) {
+                Log.e(
+                    "TAG",
+                    "Failed to create local answer error:$s"
+                )
+            }
+
+            override fun onSetFailure(s: String) {
+                Log.e(
+                    "TAG",
+                    "Failed to set description error:$s"
+                )
+            }
+        }
+        val sessionDescription = SessionDescription(SessionDescription.Type.OFFER, remoteSdp)
+        val mediaConstraints = MediaConstraints()
+        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
+        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
+        peerConnection?.setRemoteDescription(observer, sessionDescription)
+        peerConnection?.createAnswer(observer, mediaConstraints)
+
+    }
+
 
     fun permissions(): Array<String> {
         try {
@@ -624,12 +672,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         }
     }
 
-    private fun onCallReceive(){
-
-
-
-    }
-
     private fun extractUsernameFragment(sdp: String): String {
         val lines = sdp.split("\r\n")
         for (line in lines) {
@@ -644,7 +686,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         val observer: SdpObserver = object : SdpObserver {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
-                peerConnection?.setLocalDescription(this,sessionDescription)
+                peerConnection?.setLocalDescription(this, sessionDescription)
                 Log.e("TAG", "Local answer created")
             }
 
@@ -672,12 +714,20 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         }
         val sessionDescription = SessionDescription(SessionDescription.Type.ANSWER, remoteOffer)
         val mediaConstraints = MediaConstraints()
-        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
-        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
+        mediaConstraints.mandatory.add(
+            MediaConstraints.KeyValuePair(
+                "AnswerToReceiveVideo",
+                "true"
+            )
+        )
+        mediaConstraints.mandatory.add(
+            MediaConstraints.KeyValuePair(
+                "AnswerToReceiveAudio",
+                "true"
+            )
+        )
         peerConnection?.setRemoteDescription(observer, sessionDescription)
-        peerConnection?.createAnswer(observer, mediaConstraints)
-
-
+//        peerConnection?.createAnswer(observer, mediaConstraints)
 
 
     }
