@@ -1,6 +1,7 @@
 package com.festum.festumfield.verstion.firstmodule.screens.webrtc
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
@@ -119,61 +120,76 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
-
-        val webRtcMessage = JSONObject().apply {
-
-            put("displayName", AppPreferencesDelegates.get().userName)
-            put("uuid", AppPreferencesDelegates.get().channelId)
-            put("dest", "all")
-            put("channelID", remoteId)
-
-        }
-
-        SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
-
         ActivityCompat.requestPermissions(this@AppCallingActivity, permissions(), 1)
 
-        SocketManager.mSocket?.on("webrtcMessage") { args ->
+        runOnUiThread {
 
-            val receiverData = args[0] as JSONObject
+            val webRtcMessage = JSONObject().apply {
 
-            val sdpResponse = receiverData.optJSONObject("sdp")
-            val type = sdpResponse?.optString("type")
-            val sdpOffer = sdpResponse?.optString("sdp")
-
-            val iceCandidate = receiverData.optJSONObject("ice")
-
-            val candidate = iceCandidate?.optString("candidate")
-            val sdpMid = iceCandidate?.optString("sdpMid")
-            val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
-            val usernameFragment = iceCandidate?.optString("usernameFragment")
-
-            val displayName = receiverData.optString("displayName")
-            val uuid = receiverData.optString("uuid")
-            val dest = receiverData.optString("dest")
-            val channelID = receiverData.optString("channelID")
-
-            if (type.equals("offer")) {
-
-                Log.e("TAG", "offer:----------$receiverData")
-
-                handleRemoteVideoOffer(sdpOffer)
-
-
-            } else if (type.equals("answer")) {
-
-                Log.e("TAG", "answer:----------$receiverData")
-
-                createAnswerFromRemoteOffer(sdpOffer)
-
-            } else {
+                put("displayName", AppPreferencesDelegates.get().userName)
+                put("uuid", AppPreferencesDelegates.get().channelId)
+                put("dest", remoteId)
+                put("channelID", remoteId)
 
             }
 
+            Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
+            Log.e("TAG", "remoteId:--- $remoteId")
 
-            if (iceCandidate != null) {
+            SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)?.on("webrtcMessage") { args ->
 
-                addRemoteIceCandidate(iceCandidate)
+                val receiverData = args[0] as JSONObject
+
+                val sdpResponse = receiverData.optJSONObject("sdp")
+                val type = sdpResponse?.optString("type")
+                val sdpOffer = sdpResponse?.optString("sdp")
+
+                val iceCandidate = receiverData.optJSONObject("ice")
+
+                val candidate = iceCandidate?.optString("candidate")
+                val sdpMid = iceCandidate?.optString("sdpMid")
+                val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
+                val usernameFragment = iceCandidate?.optString("usernameFragment")
+
+                val displayName = receiverData.optString("displayName")
+                val uuid = receiverData.optString("uuid")
+                val dest = receiverData.optString("dest")
+                val channelID = receiverData.optString("channelID")
+
+                if (type.equals("offer")) {
+
+                    Log.e("TAG", "offer:----------$receiverData")
+
+                    handleRemoteVideoOffer(sdpOffer)
+
+
+                } else if (type.equals("answer")) {
+
+                    Log.e("TAG", "answer:----------$receiverData")
+
+                    createAnswerFromRemoteOffer(sdpOffer)
+
+                } else {
+
+                }
+
+
+                if (iceCandidate != null) {
+
+                    addRemoteIceCandidate(iceCandidate)
+
+                }
+
+            }?.on("endCall") { args ->
+
+                try {
+                    val data = args[0] as JSONObject
+                    AppPreferencesDelegates.get().isVideoCalling = true
+                    finish()
+
+                } catch (e: Exception) {
+                    finish()
+                }
 
             }
 
@@ -276,7 +292,9 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 val jsonObj = JSONObject()
                 jsonObj.put("id", AppPreferencesDelegates.get().channelId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
+                AppPreferencesDelegates.get().isVideoCalling = true
                 finish()
+
 
             } catch (e: Exception) {
                 Log.e("TAG", "error:" + e.message)
@@ -287,12 +305,14 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         binding.llVideoCall.setOnClickListener {
             if (isCameraPause){
                 isCameraPause = false
-                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
+                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_24)
+                videoTrackFromCamera?.setEnabled(true)
             }else{
                 isCameraPause = true
                 binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
+                videoTrackFromCamera?.setEnabled(false)
             }
-            videoTrackFromCamera?.setEnabled(isCameraPause)
+
         }
 
         binding.llMessage.setOnClickListener {
@@ -314,12 +334,14 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
             if (isMute){
                 isMute = false
-                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+                localAudioTrack?.setEnabled(true)
             }else{
                 isMute = true
-                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+                localAudioTrack?.setEnabled(false)
             }
-            localAudioTrack?.setEnabled(isMute)
+
 
         }
 
@@ -332,6 +354,10 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         initializePeerConnections()
 
         startStreamingVideo()
+
+        if (callReceive == false){
+            doCall()
+        }
 
         doCall()
 
@@ -483,33 +509,33 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 candidate.put("sdpMid", iceCandidate.sdpMid)
                 candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
 
-                if (callReceive == true){
+//                if (callReceive == true){
 
                     val webRtcMessage = JSONObject().apply {
 
                         put("ice", candidate)
                         put("uuid", AppPreferencesDelegates.get().channelId)
-                        put("dest", remoteId?.lowercase())
-                        put("channelID", remoteId?.lowercase())
+                        put("dest", remoteId)
+                        put("channelID", remoteId)
 
                     }
 
                     SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
-                } else {
-
-                    val webRtcMessage = JSONObject().apply {
-
-                        put("ice", candidate)
-                        put("uuid", remoteId?.lowercase())
-                        put("dest", AppPreferencesDelegates.get().channelId)
-                        put("channelID", AppPreferencesDelegates.get().channelId)
-
-                    }
-
-                    SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
-
-                }
+//                } else {
+//
+//                    val webRtcMessage = JSONObject().apply {
+//
+//                        put("ice", candidate)
+//                        put("uuid", remoteId?.lowercase())
+//                        put("dest", AppPreferencesDelegates.get().channelId)
+//                        put("channelID", AppPreferencesDelegates.get().channelId)
+//
+//                    }
+//
+//                    SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
+//
+//                }
 
             }
 
@@ -587,7 +613,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         }, sdpMediaConstraints)
     }
 
-    private fun handleRemoteVideoOffer(remoteSdp: String?) {
+    private fun handleRemoteVideoOffer(offer : String?) {
 
         val observer: SdpObserver = object : SdpObserver {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
@@ -601,7 +627,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 val webRtcMessage = JSONObject().apply {
 
                     put("sdp", signalDataJson)
-                    put("uuid", remoteId?.lowercase())
+                    put("uuid", remoteId)
                     put("dest", AppPreferencesDelegates.get().channelId)
                     put("channelID", AppPreferencesDelegates.get().channelId)
 
@@ -633,12 +659,13 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 )
             }
         }
-        val sessionDescription = SessionDescription(SessionDescription.Type.OFFER, remoteSdp)
+        val sessionDescription = SessionDescription(SessionDescription.Type.OFFER, offer)
         val mediaConstraints = MediaConstraints()
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-        peerConnection?.setRemoteDescription(observer, sessionDescription)
         peerConnection?.createAnswer(observer, mediaConstraints)
+        peerConnection?.setRemoteDescription(observer, sessionDescription)
+
 
     }
 
@@ -714,20 +741,10 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         }
         val sessionDescription = SessionDescription(SessionDescription.Type.ANSWER, remoteOffer)
         val mediaConstraints = MediaConstraints()
-        mediaConstraints.mandatory.add(
-            MediaConstraints.KeyValuePair(
-                "AnswerToReceiveVideo",
-                "true"
-            )
-        )
-        mediaConstraints.mandatory.add(
-            MediaConstraints.KeyValuePair(
-                "AnswerToReceiveAudio",
-                "true"
-            )
-        )
+        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
+        mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
         peerConnection?.setRemoteDescription(observer, sessionDescription)
-//        peerConnection?.createAnswer(observer, mediaConstraints)
+        peerConnection?.createAnswer(observer, mediaConstraints)
 
 
     }

@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
@@ -26,8 +27,6 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDi
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
 import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.VideoCallingActivity
-
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -41,6 +40,7 @@ import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_VIDEO_CALLING
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.google.gson.Gson
 import com.karumi.dexter.Dexter
@@ -75,7 +75,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private lateinit var friendsItem: FriendsListItems
 
     private lateinit var upComingCallBinding: ActivityVideoCallBinding
-    private var upComingCallDialog : Dialog? = null
+    private var upComingCallDialog: Dialog? = null
 
     var format = SimpleDateFormat()
     var mSocket: Socket? = null
@@ -83,6 +83,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private var productItemData: ProductItem? = null
     private var productId: String? = null
     private var sendProductId: String? = null
+
+    //    private var isVideoCall : Boolean ?= null
+    private var isVideoCall : String ?= "isVideoCall"
+
 
     private var chatMessageAdapter: ChatMessageAdapter? = null
 //    private var productListAdapter: ProductListAdapter? = null
@@ -100,10 +104,11 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         getUserStatus()
 
-
         val intent = intent.extras
 
         val jsonList = intent?.getString("friendsList")
+
+        AppPreferencesDelegates.get().isVideoCalling = true
 
         friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
         receiverUserName = friendsItem.fullName.toString()
@@ -139,15 +144,15 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
         }
 
-        if (friendsItem.members != null){
+        if (friendsItem.members != null) {
 
             val groupMembers = friendsItem.members as? List<MembersList>
 
-            if (groupMembers != null){
+            if (groupMembers != null) {
 
                 binding.userName.text = friendsItem.name
 
-                for (i in groupMembers.indices){
+                for (i in groupMembers.indices) {
                     val userNamesList = groupMembers.mapNotNull { it.membersList?.fullName }
                     val commaSeparatedUserNames = userNamesList.joinToString(", ")
                     binding.textOnline.text = commaSeparatedUserNames
@@ -158,14 +163,14 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         binding.rlUser.setOnClickListener {
 
-            if (friendsItem.members?.isNotEmpty() == true){
+            if (friendsItem.members?.isNotEmpty() == true) {
 
                 val intent = Intent(this@ChatActivity, GroupDetailsActivity::class.java)
                 val jsonItem = Gson().toJson(friendsItem)
                 intent.putExtra("groupMembersList", jsonItem)
                 startActivity(intent)
 
-            }else{
+            } else {
                 return@setOnClickListener
             }
 
@@ -245,25 +250,19 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             val message = JSONObject().apply {
 
                 val jsonArray = JSONArray()
-                jsonArray.put(friendsItem.id)
-                jsonArray.put(AppPreferencesDelegates.get().channelId)
-                put("memberIds",jsonArray)
-                put("fromId", AppPreferencesDelegates.get().channelId)
+                jsonArray.put(friendsItem.id?.lowercase())
+                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                put("memberIds", jsonArray)
+                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
                 put("name", AppPreferencesDelegates.get().userName)
                 put("isVideoCall", true)
 
             }
 
             SocketManager.mSocket?.emit("callUser", message)
-//
-            val i = Intent(this@ChatActivity,AppCallingActivity::class.java)
-            i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
-            i.putExtra("remoteUser", friendsItem.fullName)
-            i.putExtra("callReceive", false)
-            startActivity(i)
 
 
-//            upComingCallView(friendsItem)
+            upComingCallView(friendsItem)
 
 
         }
@@ -472,7 +471,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 newItemList(data, text, media, productItem)
             }
 
-
         }
     }
 
@@ -539,7 +537,22 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }?.on("webrtcMessage") { args ->
 
-            upComingCallDialog?.dismiss()
+            val data = args[0] as JSONObject
+
+            if (AppPreferencesDelegates.get().isVideoCalling) {
+
+                val i = Intent(this@ChatActivity, AppCallingActivity::class.java)
+                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
+                i.putExtra("remoteUser", friendsItem.fullName)
+                i.putExtra("callReceive", false)
+                startActivityForResult(i, IS_VIDEO_CALLING)
+                AppPreferencesDelegates.get().isVideoCalling = false
+
+                Handler(Looper.getMainLooper()).postDelayed({upComingCallDialog?.dismiss()},1000)
+
+            }
+
+
 
 //            val data = args[0] as JSONObject
 //            val from = data.optString("fromId")
@@ -559,34 +572,16 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 //            Log.e("TAG", "getUserStatus:---- $data")
 
 
-
         }?.on("endCall") { args ->
-
-
 
             try {
                 val data = args[0] as JSONObject
                 upComingCallDialog?.dismiss()
 
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 upComingCallDialog?.dismiss()
             }
 
-
-
-
-
-        }?.on("callAccepted",) { args ->
-
-            val data = args[0] as JSONObject
-
-            Log.e("TAG", "callAccepted:---- $data")
-
-        }?.on("answerCall"){ args ->
-
-            val data = args[0] as JSONObject
-
-            Log.e("TAG", "answerCall:---- $data")
 
         }
 
@@ -652,7 +647,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         Dexter.withContext(this@ChatActivity)
             .withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true) {
@@ -846,7 +842,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         /* ProductDetailsDialog */
         Log.e("TAG", "chatProduct: $item")
 
-        val dialog = item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
+        val dialog =
+            item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
         dialog?.show(supportFragmentManager, "productDetails")
 
     }
@@ -876,6 +873,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
             .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.videocallImage)
 
+        upComingCallBinding.llVideoCall.visibility = View.GONE
+        upComingCallBinding.llCameraSwipe.visibility = View.GONE
+        upComingCallBinding.llMute.visibility = View.GONE
+
         upComingCallBinding.videocallUsername.text = upComingCallUser?.fullName
 
         upComingCallBinding.llCallCut.setOnClickListener {
@@ -883,12 +884,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             val jsonObj = JSONObject()
             jsonObj.put("id", upComingCallUser?.id)
             SocketManager.mSocket?.emit("endCall", jsonObj)
-            upComingCallDialog?.dismiss()
-
-        }
-
-        upComingCallBinding.llVideoCall.setOnClickListener {
-
             upComingCallDialog?.dismiss()
 
         }

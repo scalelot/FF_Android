@@ -33,6 +33,7 @@ class IntentUtil {
         var PRODUCT_REQUEST_CODE = 100
         var IMAGE_PICKER_SELECT = 201
         var DOCUMENT_PICKER_SELECT = 301
+        var IS_VIDEO_CALLING = 401
         var imgPath: File? = null
         var vidPath: File? = null
         fun getPickImageChooserIntent(

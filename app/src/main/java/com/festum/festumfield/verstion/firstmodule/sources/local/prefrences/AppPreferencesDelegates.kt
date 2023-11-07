@@ -10,6 +10,7 @@ class AppPreferencesDelegates private constructor() {
     var businessProfile by BusinessProfileRegisteredDelegate()
     var onLineUser by OnlineIdDelegate()
     var notificationToken by NotificationTokenDelegate()
+    var isVideoCalling by IsVideoCallDelegate()
 
     companion object {
         private var INSTANCE: AppPreferencesDelegates? = null
