@@ -11,6 +11,7 @@ class AppPreferencesDelegates private constructor() {
     var onLineUser by OnlineIdDelegate()
     var notificationToken by NotificationTokenDelegate()
     var isVideoCalling by IsVideoCallDelegate()
+    var isAudioCalling by IsAudioCallDelegate()
 
     companion object {
         private var INSTANCE: AppPreferencesDelegates? = null

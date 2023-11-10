@@ -27,6 +27,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDi
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
 import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -40,6 +41,7 @@ import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_AUDIO_CALLING
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_VIDEO_CALLING
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.google.gson.Gson
@@ -84,8 +86,11 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private var productId: String? = null
     private var sendProductId: String? = null
 
+    private var isVideoCalling = false
+    private var isAudioCalling = false
+
     //    private var isVideoCall : Boolean ?= null
-    private var isVideoCall : String ?= "isVideoCall"
+    private var isVideoCall: String? = "isVideoCall"
 
 
     private var chatMessageAdapter: ChatMessageAdapter? = null
@@ -107,8 +112,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         val intent = intent.extras
 
         val jsonList = intent?.getString("friendsList")
-
-        AppPreferencesDelegates.get().isVideoCalling = true
 
         friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
         receiverUserName = friendsItem.fullName.toString()
@@ -263,6 +266,31 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
 
             upComingCallView(friendsItem)
+
+            isVideoCalling = true
+
+
+        }
+
+        binding.imgContact.setOnClickListener {
+
+            val message = JSONObject().apply {
+
+                val jsonArray = JSONArray()
+                jsonArray.put(friendsItem.id?.lowercase())
+                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                put("memberIds", jsonArray)
+                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+                put("name", AppPreferencesDelegates.get().userName)
+                put("isVideoCall", false)
+
+            }
+
+            SocketManager.mSocket?.emit("callUser", message)
+
+            upComingCallView(friendsItem)
+
+            isAudioCalling = true
 
 
         }
@@ -524,64 +552,46 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             }
 
-//            val i = Intent()
-//            i.type = "image/*"
-//            i.action = Intent.ACTION_GET_CONTENT
-//
-//            // pass the constant to compare it
-//            // with the returned requestCode
-//
-//            // pass the constant to compare it
-//            // with the returned requestCode
-//            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
-
         }?.on("webrtcMessage") { args ->
 
             val data = args[0] as JSONObject
 
-            if (AppPreferencesDelegates.get().isVideoCalling) {
-
+            if (isVideoCalling) {
                 val i = Intent(this@ChatActivity, AppCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem.fullName)
                 i.putExtra("callReceive", false)
                 startActivityForResult(i, IS_VIDEO_CALLING)
-                AppPreferencesDelegates.get().isVideoCalling = false
+                isVideoCalling = false
 
-                Handler(Looper.getMainLooper()).postDelayed({upComingCallDialog?.dismiss()},1000)
-
+                Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
             }
 
+            if (isAudioCalling) {
+
+                val i = Intent(this@ChatActivity, AudioCallingActivity::class.java)
+                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
+                i.putExtra("remoteUser", friendsItem.fullName)
+                i.putExtra("callReceive", false)
+                startActivityForResult(i, IS_AUDIO_CALLING)
+                isAudioCalling = false
+
+                Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
 
 
-//            val data = args[0] as JSONObject
-//            val from = data.optString("fromId")
-//            val name = data.optString("name")
-//
-//            val webRtcMessage = JSONObject().apply {
-//
-//                put("displayName",name)
-//                put("uuid",from.lowercase())
-//                put("dest",AppPreferencesDelegates.get().channelId)
-//                put("channelID",AppPreferencesDelegates.get().channelId)
-//
-//            }
-//
-//            SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
-
-//            Log.e("TAG", "getUserStatus:---- $data")
-
+            }
 
         }?.on("endCall") { args ->
 
             try {
                 val data = args[0] as JSONObject
                 upComingCallDialog?.dismiss()
+                AppPreferencesDelegates.get().isVideoCalling = true
+                AppPreferencesDelegates.get().isAudioCalling = true
 
             } catch (e: Exception) {
                 upComingCallDialog?.dismiss()
             }
-
 
         }
 

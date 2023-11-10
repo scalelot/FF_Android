@@ -407,6 +407,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 //                val isVideoCall = data.optBoolean("channelID")
                 val isVideoCall = data.optBoolean("isVideoCall")
 
+
                 friendsListItems?.forEach {
 
                     if (it.id?.contains(from.toString().lowercase()) == true) {
@@ -414,8 +415,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     }
 
                 }
-
-
 
                 playAudio(this@HomeActivity, "skype")
 

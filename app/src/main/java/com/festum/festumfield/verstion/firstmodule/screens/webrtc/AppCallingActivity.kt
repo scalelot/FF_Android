@@ -1,7 +1,6 @@
 package com.festum.festumfield.verstion.firstmodule.screens.webrtc
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-
 import com.festum.festumfield.CustomSdpObserver
 import com.festum.festumfield.R
 import com.festum.festumfield.databinding.ActivityVideoCallingBinding
@@ -48,7 +46,6 @@ import org.webrtc.PeerConnection.IceServer
 import org.webrtc.PeerConnection.RTCConfiguration
 import org.webrtc.PeerConnection.SignalingState
 import org.webrtc.PeerConnectionFactory
-
 import org.webrtc.RtpReceiver
 import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
@@ -160,16 +157,16 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
                     Log.e("TAG", "offer:----------$receiverData")
 
+
                     handleRemoteVideoOffer(sdpOffer)
 
 
-                } else if (type.equals("answer")) {
+                }
+                if (type.equals("answer")) {
 
                     Log.e("TAG", "answer:----------$receiverData")
 
                     createAnswerFromRemoteOffer(sdpOffer)
-
-                } else {
 
                 }
 
@@ -185,10 +182,11 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 try {
                     val data = args[0] as JSONObject
                     AppPreferencesDelegates.get().isVideoCalling = true
-                    finish()
+                    AppPreferencesDelegates.get().isAudioCalling = true
+                    stop()
 
                 } catch (e: Exception) {
-                    finish()
+                    stop()
                 }
 
             }
@@ -196,7 +194,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         }
 
     }
-
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestCameraAndMicAccess() {
@@ -293,6 +290,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 jsonObj.put("id", AppPreferencesDelegates.get().channelId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
                 AppPreferencesDelegates.get().isVideoCalling = true
+                AppPreferencesDelegates.get().isAudioCalling = true
                 finish()
 
 
@@ -355,11 +353,11 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-        if (callReceive == false){
+        if (callReceive == true){
             doCall()
         }
 
-        doCall()
+//        doCall()
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
@@ -509,8 +507,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 candidate.put("sdpMid", iceCandidate.sdpMid)
                 candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
 
-//                if (callReceive == true){
-
                     val webRtcMessage = JSONObject().apply {
 
                         put("ice", candidate)
@@ -521,21 +517,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                     }
 
                     SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
-
-//                } else {
-//
-//                    val webRtcMessage = JSONObject().apply {
-//
-//                        put("ice", candidate)
-//                        put("uuid", remoteId?.lowercase())
-//                        put("dest", AppPreferencesDelegates.get().channelId)
-//                        put("channelID", AppPreferencesDelegates.get().channelId)
-//
-//                    }
-//
-//                    SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
-//
-//                }
 
             }
 
@@ -588,8 +569,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
                 Log.e("TAG", "peerConnection---$signalDataJson")
 
-                userFragment = extractUsernameFragment(sessionDescription.description)
-
                 val webRtcMessage = JSONObject().apply {
 
                     put("sdp", signalDataJson)
@@ -627,9 +606,9 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 val webRtcMessage = JSONObject().apply {
 
                     put("sdp", signalDataJson)
-                    put("uuid", remoteId)
-                    put("dest", AppPreferencesDelegates.get().channelId)
-                    put("channelID", AppPreferencesDelegates.get().channelId)
+                    put("uuid", AppPreferencesDelegates.get().channelId)
+                    put("dest", remoteId)
+                    put("channelID", remoteId)
 
                 }
 
@@ -663,8 +642,8 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         val mediaConstraints = MediaConstraints()
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-        peerConnection?.createAnswer(observer, mediaConstraints)
         peerConnection?.setRemoteDescription(observer, sessionDescription)
+        peerConnection?.createAnswer(observer, mediaConstraints)
 
 
     }
@@ -744,8 +723,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
         mediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
         peerConnection?.setRemoteDescription(observer, sessionDescription)
-        peerConnection?.createAnswer(observer, mediaConstraints)
-
 
     }
 
@@ -761,6 +738,35 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
             "add remote candidate $iceCandidate"
         )
         peerConnection?.addIceCandidate(iceCandidate)
+    }
+
+    private fun stop() {
+
+        if (localAudioTrack != null) {
+            localAudioTrack = null
+        }
+        if (localAudioTrack != null) {
+            localAudioTrack?.dispose()
+        }
+        if (videoCapture != null) {
+            try {
+                videoCapture?.stopCapture()
+                videoCapture?.dispose()
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }
+        if (binding.surfaceView != null) {
+            binding.surfaceView.release()
+        }
+        if (binding.surfaceView2 != null) {
+            binding.surfaceView2.release()
+        }
+        if (peerConnection != null) {
+            peerConnection?.close()
+        }
+
+        finish()
     }
 
 
