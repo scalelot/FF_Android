@@ -65,10 +65,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var friendsFragment: FriendsListFragment? = null
     private var itemData: FriendsListItems? = null
     private var upComingCallUser: FriendsListItems? = null
-    var sdpAnswer = ""
+    var dialog : Dialog? = null
 
     private var audioFileName: String = "skype"
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
+
+
 
     override fun getContentView(): View {
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -84,11 +86,20 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     override fun setupUi() {
 
-        getUpComingCall()
-
         /*PeerConnectionFactory.initialize(
             PeerConnectionFactory.InitializationOptions.builder(this).createInitializationOptions()
         )*/
+
+        upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            getUpComingCall()
+
+        }, 500)
+
+        dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog?.setContentView(upComingCallBinding.root)
 
         binding.userImg.setOnClickListener {
 
@@ -197,11 +208,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             if (profileData != null) {
 
                 AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
-                AppPreferencesDelegates.get().businessProfile =
-                    profileData.isBusinessProfileCreated == true
+                AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
                 AppPreferencesDelegates.get().userName = profileData.fullName.toString()
-
                 AppPreferencesDelegates.get().personalProfile = true
+
 
                 val applicationClass: FestumApplicationClass = application as FestumApplicationClass
                 applicationClass.onCreate()
@@ -248,6 +258,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         super.onResume()
         /* Get Profile */
         viewModel.getProfile()
+
     }
 
     private fun selectFragment(item: MenuItem) {
@@ -418,11 +429,16 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 playAudio(this@HomeActivity, "skype")
 
-                Handler(Looper.getMainLooper()).postDelayed({
 
-                     upComingCallView(upComingCallUser, from.toString().lowercase(), name, isVideoCall)
+                runOnUiThread {
 
-                }, 300)
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        upComingCallView(upComingCallUser, from.toString().lowercase(), name, isVideoCall)
+
+                    }, 500)
+
+                }
 
             }
 
@@ -444,11 +460,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         isVideoCall: Boolean
     ) {
 
-        upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
-
-        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
-        dialog.setContentView(upComingCallBinding.root)
-
         Glide.with(this@HomeActivity)
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
             .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
@@ -461,22 +472,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             jsonObj.put("id", signal)
             SocketManager.mSocket?.emit("endCall", jsonObj)
             stopAudio()
-            dialog.dismiss()
+            dialog?.dismiss()
 
         }
 
         upComingCallBinding.llCallRecive.setOnClickListener {
-
-            /*val webRtcMessage = JSONObject().apply {
-
-                put("displayName",AppPreferencesDelegates.get().userName)
-                put("uuid",AppPreferencesDelegates.get().channelId)
-                put("dest",signal.lowercase())
-                put("channelID",signal.lowercase())
-
-            }
-
-            SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)*/
 
             if (isVideoCall){
 
@@ -486,7 +486,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 intent.putExtra("callReceive", true)
                 startActivity(intent)
                 stopAudio()
-                dialog.dismiss()
+                dialog?.dismiss()
 
             } else {
 
@@ -496,15 +496,14 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 intent.putExtra("callReceive", true)
                 startActivity(intent)
                 stopAudio()
-                dialog.dismiss()
+                dialog?.dismiss()
 
             }
 
 
-
         }
 
-        dialog.show()
+        dialog?.show()
 
     }
 

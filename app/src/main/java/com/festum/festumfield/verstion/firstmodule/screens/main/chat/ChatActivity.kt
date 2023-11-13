@@ -259,6 +259,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
                 put("name", AppPreferencesDelegates.get().userName)
                 put("isVideoCall", true)
+                put("isCallingFromApp", true)
 
             }
 

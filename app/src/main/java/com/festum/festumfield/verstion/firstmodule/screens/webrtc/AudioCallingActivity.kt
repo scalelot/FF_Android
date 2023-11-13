@@ -1,19 +1,21 @@
 package com.festum.festumfield.verstion.firstmodule.screens.webrtc
 
 import android.Manifest
+import android.R.attr.duration
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-
 import com.festum.festumfield.CustomSdpObserver
 import com.festum.festumfield.R
 import com.festum.festumfield.databinding.ActivityVideoCallBinding
-import com.festum.festumfield.databinding.ActivityVideoCallingBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -48,7 +50,6 @@ import org.webrtc.PeerConnection.IceServer
 import org.webrtc.PeerConnection.RTCConfiguration
 import org.webrtc.PeerConnection.SignalingState
 import org.webrtc.PeerConnectionFactory
-
 import org.webrtc.RtpReceiver
 import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
@@ -56,15 +57,25 @@ import org.webrtc.SurfaceTextureHelper
 import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
+
 
 @AndroidEntryPoint
 class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     private lateinit var binding: ActivityVideoCallBinding
 
+    private val handler = Handler(Looper.getMainLooper())
+    private var callDurationInSeconds = 0
+
     private var remoteId: String? = null
     private var remoteUser: String? = null
-    private var isCalling: Boolean? = null
+    private var callReceive: Boolean? = null
+
+//    private var callReceive: Boolean? = null
 
     private var frontCameraID = 1
     private var backCameraID = 0
@@ -93,13 +104,12 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
     private var isMute = false
 
 
-    var storge_permissions = arrayOf(Manifest.permission.CAMERA)
+    var storge_permissions = arrayOf( Manifest.permission.RECORD_AUDIO)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     var storge_permissions_33 = arrayOf(
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.READ_MEDIA_VIDEO,
-        Manifest.permission.READ_MEDIA_AUDIO,
-        Manifest.permission.CAMERA
+        Manifest.permission.READ_MEDIA_AUDIO
     )
 
     var userFragment = ""
@@ -117,8 +127,10 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
-        isCalling = intent.getBooleanExtra("callReceive", false)
+        callReceive = intent.getBooleanExtra("callReceive", false)
         ActivityCompat.requestPermissions(this@AudioCallingActivity, permissions(), 1)
+
+        binding.videocallUsername.text = remoteUser
 
         runOnUiThread {
 
@@ -306,7 +318,6 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
                 isSpeakerMode = true
                 binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
-
             }
 
         }
@@ -315,12 +326,13 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
             if (isMute){
                 isMute = false
-                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+                localAudioTrack?.setEnabled(true)
             }else{
                 isMute = true
-                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+                localAudioTrack?.setEnabled(false)
             }
-            localAudioTrack?.setEnabled(isMute)
 
         }
 
@@ -334,7 +346,9 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-        doCall()
+        if (callReceive == false){
+            doCall()
+        }
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
         /*initializePeerConnections()
@@ -498,6 +512,8 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
                 Log.e("TAG", "onAddStream: " + mediaStream.audioTracks.size)
                 val remoteAudioTrack = mediaStream.audioTracks[0]
                 remoteAudioTrack.setEnabled(true)
+                startCallDurationTimer()
+
             }
 
             override fun onRemoveStream(mediaStream: MediaStream) {
@@ -737,6 +753,29 @@ class AudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         finish()
     }
+
+    private fun startCallDurationTimer() {
+        handler.post(object : Runnable {
+            override fun run() {
+                updateCallDuration()
+                handler.postDelayed(this, 1000)
+            }
+        })
+    }
+
+    private fun updateCallDuration() {
+        callDurationInSeconds++
+        val minutes = callDurationInSeconds / 60
+        val seconds = callDurationInSeconds % 60
+        val formattedDuration = String.format("%02d:%02d", minutes, seconds)
+        binding.videocallTxt.text = formattedDuration
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
 
 
 }

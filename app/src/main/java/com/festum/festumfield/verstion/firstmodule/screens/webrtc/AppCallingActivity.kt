@@ -353,11 +353,9 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-        if (callReceive == true){
+        if (callReceive == false){
             doCall()
         }
-
-//        doCall()
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
