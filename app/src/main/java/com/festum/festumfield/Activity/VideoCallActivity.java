@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.R;
 import com.festum.festumfield.View.VideoCallSurfaceView;
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.VideoCallingActivity;
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,7 +53,7 @@ public class VideoCallActivity extends BaseActivity {
         ll_videoCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(VideoCallActivity.this, VideoCallingActivity.class));
+                startActivity(new Intent(VideoCallActivity.this, WebVideoCallingActivity.class));
                 finish();
             }
         });

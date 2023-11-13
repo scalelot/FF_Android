@@ -49,7 +49,7 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.VideoCallingActivity;
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.gson.Gson;
@@ -700,7 +700,7 @@ public class ChatingActivity extends BaseActivity implements View.OnClickListene
             startActivity(new Intent(ChatingActivity.this, MainActivity.class));
             finish();
         } else if (id == R.id.img_video_call) {
-            Intent intent = new Intent(ChatingActivity.this, VideoCallingActivity.class);
+            Intent intent = new Intent(ChatingActivity.this, WebVideoCallingActivity.class);
             intent.putExtra("toUserId", toUserIds);
             intent.putExtra("userName", userName);
             intent.putExtra("loginUser", loginUserId);

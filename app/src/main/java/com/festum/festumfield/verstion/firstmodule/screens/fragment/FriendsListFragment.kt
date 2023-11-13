@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -20,11 +18,10 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.databinding.UpcomingCallBinding
-import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
@@ -33,7 +30,6 @@ import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsL
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.socket.client.Socket
 import org.json.JSONObject
 import java.util.*
 
@@ -318,7 +314,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
             if (isVideoCall){
 
-                val intent = Intent(requireActivity(), AppCallingActivity::class.java)
+                val intent = Intent(requireActivity(), AppVideoCallingActivity::class.java)
                 intent.putExtra("remoteChannelId", signal.lowercase())
                 intent.putExtra("remoteUser", name)
                 intent.putExtra("callReceive", true)
@@ -328,7 +324,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
             } else {
 
-                val intent = Intent(requireActivity(), AudioCallingActivity::class.java)
+                val intent = Intent(requireActivity(), WebAudioCallingActivity::class.java)
                 intent.putExtra("remoteChannelId", signal.lowercase())
                 intent.putExtra("remoteUser", name)
                 intent.putExtra("callReceive", true)

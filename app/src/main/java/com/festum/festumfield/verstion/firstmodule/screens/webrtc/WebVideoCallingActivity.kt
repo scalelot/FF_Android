@@ -54,8 +54,9 @@ import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 
+
 @AndroidEntryPoint
-class AppCallingActivity : BaseActivity<ChatViewModel>() {
+class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private lateinit var binding: ActivityVideoCallingBinding
 
@@ -72,7 +73,6 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
     private var rootEglBase: EglBase? = null
 
     /* PeerConnection */
-
 
     private var peerConnection: PeerConnection? = null
 
@@ -117,7 +117,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
-        ActivityCompat.requestPermissions(this@AppCallingActivity, permissions(), 1)
+        ActivityCompat.requestPermissions(this@WebVideoCallingActivity, permissions(), 1)
 
         runOnUiThread {
 
@@ -197,10 +197,10 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestCameraAndMicAccess() {
-        if (IntentUtil.cameraPermission(this@AppCallingActivity)
-            && IntentUtil.readAudioPermission(this@AppCallingActivity)
-            && IntentUtil.readVideoPermission(this@AppCallingActivity)
-            && IntentUtil.readImagesPermission(this@AppCallingActivity)
+        if (IntentUtil.cameraPermission(this@WebVideoCallingActivity)
+            && IntentUtil.readAudioPermission(this@WebVideoCallingActivity)
+            && IntentUtil.readVideoPermission(this@WebVideoCallingActivity)
+            && IntentUtil.readImagesPermission(this@WebVideoCallingActivity)
         ) {
             init()
         } else {
@@ -216,7 +216,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onCameraPermission() {
 
-        Dexter.withContext(this@AppCallingActivity)
+        Dexter.withContext(this@WebVideoCallingActivity)
             .withPermissions(
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
@@ -231,7 +231,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
                     } else {
                         AppPermissionDialog.showPermission(
-                            this@AppCallingActivity,
+                            this@WebVideoCallingActivity,
                             getString(R.string.request_camera_mic_permissions_text),
                             getString(R.string.media_permission_title)
                         )
@@ -353,9 +353,7 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-        if (callReceive == false){
-            doCall()
-        }
+        doCall()
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
@@ -505,16 +503,16 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
                 candidate.put("sdpMid", iceCandidate.sdpMid)
                 candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
 
-                    val webRtcMessage = JSONObject().apply {
+                val webRtcMessage = JSONObject().apply {
 
-                        put("ice", candidate)
-                        put("uuid", AppPreferencesDelegates.get().channelId)
-                        put("dest", remoteId)
-                        put("channelID", remoteId)
+                    put("ice", candidate)
+                    put("uuid", AppPreferencesDelegates.get().channelId)
+                    put("dest", remoteId)
+                    put("channelID", remoteId)
 
-                    }
+                }
 
-                    SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
+                SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
             }
 
@@ -766,6 +764,5 @@ class AppCallingActivity : BaseActivity<ChatViewModel>() {
 
         finish()
     }
-
 
 }

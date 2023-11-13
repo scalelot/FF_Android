@@ -77,17 +77,22 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.AppCallingActivity"
+            android:name=".verstion.firstmodule.screens.webrtc.AppAudioCallingActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
 
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.AudioCallingActivity"
+            android:name=".verstion.firstmodule.screens.webrtc.AppVideoCallingActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
 
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.VideoCallingActivity"
+            android:name=".verstion.firstmodule.screens.webrtc.WebAudioCallingActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+
+        <activity
+            android:name=".verstion.firstmodule.screens.webrtc.WebVideoCallingActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
 

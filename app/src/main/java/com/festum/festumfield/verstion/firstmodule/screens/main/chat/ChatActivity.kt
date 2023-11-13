@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
@@ -26,8 +25,8 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -265,7 +264,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             SocketManager.mSocket?.emit("callUser", message)
 
-
             upComingCallView(friendsItem)
 
             isVideoCalling = true
@@ -284,6 +282,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
                 put("name", AppPreferencesDelegates.get().userName)
                 put("isVideoCall", false)
+                put("isCallingFromApp", true)
 
             }
 
@@ -558,7 +557,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             val data = args[0] as JSONObject
 
             if (isVideoCalling) {
-                val i = Intent(this@ChatActivity, AppCallingActivity::class.java)
+                val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem.fullName)
                 i.putExtra("callReceive", false)
@@ -570,7 +569,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (isAudioCalling) {
 
-                val i = Intent(this@ChatActivity, AudioCallingActivity::class.java)
+                val i = Intent(this@ChatActivity, WebAudioCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem.fullName)
                 i.putExtra("callReceive", false)

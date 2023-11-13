@@ -38,9 +38,10 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AudioCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.VideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
@@ -417,6 +418,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 val name = data.optString("name")
 //                val isVideoCall = data.optBoolean("channelID")
                 val isVideoCall = data.optBoolean("isVideoCall")
+                val isCallingFromApp = data.optBoolean("isCallingFromApp")
 
 
                 friendsListItems?.forEach {
@@ -434,7 +436,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                     Handler(Looper.getMainLooper()).postDelayed({
 
-                        upComingCallView(upComingCallUser, from.toString().lowercase(), name, isVideoCall)
+                        upComingCallView(upComingCallUser, from.toString().lowercase(), name, isVideoCall, isCallingFromApp)
 
                     }, 500)
 
@@ -457,7 +459,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         upComingCallUser: FriendsListItems?,
         signal: String,
         name: String,
-        isVideoCall: Boolean
+        isVideoCall: Boolean,
+        isCallingFromApp: Boolean
     ) {
 
         Glide.with(this@HomeActivity)
@@ -478,25 +481,47 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
+
             if (isVideoCall){
 
-                val intent = Intent(this@HomeActivity, AppCallingActivity::class.java)
-                intent.putExtra("remoteChannelId", signal.lowercase())
-                intent.putExtra("remoteUser", name)
-                intent.putExtra("callReceive", true)
-                startActivity(intent)
-                stopAudio()
-                dialog?.dismiss()
+                if (isCallingFromApp){
+                    val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                    intent.putExtra("remoteChannelId", signal.lowercase())
+                    intent.putExtra("remoteUser", name)
+                    intent.putExtra("callReceive", true)
+                    startActivity(intent)
+                    stopAudio()
+                    dialog?.dismiss()
+                } else {
+                    val intent = Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                    intent.putExtra("remoteChannelId", signal.lowercase())
+                    intent.putExtra("remoteUser", name)
+                    intent.putExtra("callReceive", true)
+                    startActivity(intent)
+                    stopAudio()
+                    dialog?.dismiss()
+                }
+
 
             } else {
 
-                val intent = Intent(this@HomeActivity, AudioCallingActivity::class.java)
-                intent.putExtra("remoteChannelId", signal.lowercase())
-                intent.putExtra("remoteUser", name)
-                intent.putExtra("callReceive", true)
-                startActivity(intent)
-                stopAudio()
-                dialog?.dismiss()
+                if (isCallingFromApp){
+                    val intent = Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
+                    intent.putExtra("remoteChannelId", signal.lowercase())
+                    intent.putExtra("remoteUser", name)
+                    intent.putExtra("callReceive", true)
+                    startActivity(intent)
+                    stopAudio()
+                    dialog?.dismiss()
+                } else {
+                    val intent = Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
+                    intent.putExtra("remoteChannelId", signal.lowercase())
+                    intent.putExtra("remoteUser", name)
+                    intent.putExtra("callReceive", true)
+                    startActivity(intent)
+                    stopAudio()
+                    dialog?.dismiss()
+                }
 
             }
 
