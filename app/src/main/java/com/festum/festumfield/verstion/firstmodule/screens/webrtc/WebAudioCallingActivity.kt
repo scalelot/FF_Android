@@ -13,8 +13,10 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.bumptech.glide.Glide
 import com.festum.festumfield.CustomSdpObserver
 import com.festum.festumfield.R
+import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityVideoCallBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
@@ -128,9 +130,15 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
+
+        val profileImage = intent.getStringExtra("profileImage")
         ActivityCompat.requestPermissions(this@WebAudioCallingActivity, permissions(), 1)
 
         binding.videocallUsername.text = remoteUser
+
+        Glide.with(this@WebAudioCallingActivity)
+            .load(Constans.Display_Image_URL + profileImage)
+            .placeholder(R.drawable.ic_user_img).into(binding.videocallImage)
 
         runOnUiThread {
 
@@ -284,15 +292,6 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
             }
         }
 
-        binding.llCameraSwipe.setOnClickListener {
-            currentCameraID = if (currentCameraID == backCameraID) {
-                frontCameraID
-            } else {
-                backCameraID
-            }
-            switchCamera(currentCameraID)
-        }
-
         binding.llCallCut.setOnClickListener {
 
             try {
@@ -419,15 +418,6 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     private fun useCamera2(): Boolean {
         return Camera2Enumerator.isSupported(this)
-    }
-
-    private fun switchCamera(cameraID: Int) {
-
-        if (videoCapture is CameraVideoCapturer) {
-            val cameraVideoCapture = videoCapture as CameraVideoCapturer
-            cameraVideoCapture.switchCamera(null)
-        }
-
     }
 
     private fun createCameraCapture(enumerator: CameraEnumerator): VideoCapturer? {

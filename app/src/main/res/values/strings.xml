@@ -439,5 +439,6 @@
     <string name="enter_a_location">Enter a location</string>
 
     <string name="request_camera_mic_permissions_text">Please allow access to your camera and mic.</string>
+    <string name="request_mic_permissions_text">Please allow access to your mic.</string>
 
 </resources>

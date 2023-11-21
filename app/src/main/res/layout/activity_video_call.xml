@@ -45,19 +45,19 @@
         android:textColor="@color/dialog_choose_text_color"
         android:textSize="@dimen/text_16" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/sp_50"
         android:layout_above="@+id/ll_call_cut"
         android:layout_marginBottom="@dimen/margin_50"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <LinearLayout
             android:id="@+id/ll_videoCall"
             android:layout_width="@dimen/sp_50"
             android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/margin_30"
-            android:layout_toLeftOf="@+id/ll_camera_swipe"
+            android:layout_marginEnd="@dimen/margin_30"
             android:background="@drawable/icon_bg"
             android:backgroundTint="@color/call_icon_bg"
             android:gravity="center">
@@ -72,28 +72,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_camera_swipe"
-            android:layout_width="@dimen/sp_50"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/icon_bg"
-            android:backgroundTint="@color/call_icon_bg"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="@dimen/sp_25"
-                android:layout_height="@dimen/sp_25"
-                android:src="@drawable/ic_swich_camera"
-                app:tint="@color/call_icon" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/ll_mute"
             android:layout_width="@dimen/sp_50"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/margin_30"
-            android:layout_toRightOf="@+id/ll_camera_swipe"
+            android:layout_marginStart="@dimen/margin_30"
             android:background="@drawable/icon_bg"
             android:backgroundTint="@color/call_icon_bg"
             android:gravity="center">
@@ -106,7 +88,7 @@
                 app:tint="@color/call_icon"  />
 
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_call_cut"

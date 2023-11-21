@@ -2,10 +2,15 @@ package com.festum.festumfield.verstion.firstmodule.screens.webrtc
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
+import android.hardware.camera2.CameraCharacteristics
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.Surface
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -18,6 +23,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppP
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
+
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -53,6 +59,7 @@ import org.webrtc.SurfaceTextureHelper
 import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
+import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
@@ -66,6 +73,9 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
     private var frontCameraID = 1
     private var backCameraID = 0
     private var currentCameraID = 1
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var callDurationInSeconds = 0
 
     private var videoCapture: VideoCapturer? = null
 
@@ -118,6 +128,9 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
         ActivityCompat.requestPermissions(this@AppVideoCallingActivity, permissions(), 1)
+
+        binding.fromText.text = AppPreferencesDelegates.get().userName
+        binding.toText.text = remoteUser
 
         runOnUiThread {
 
@@ -253,33 +266,11 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     fun init() {
 
-        val cameraCount = Camera.getNumberOfCameras()
-
-        for (i in 0 until cameraCount) {
-            val cameraInfo = CameraInfo()
-            Camera.getCameraInfo(i, cameraInfo)
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                frontCameraID = i
-                break
-            }
-        }
-
-        for (i in 0 until cameraCount) {
-            val cameraInfo = CameraInfo()
-            Camera.getCameraInfo(i, cameraInfo)
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                backCameraID = i
-                break
-            }
-        }
 
         binding.llSwitchCamera.setOnClickListener {
-            currentCameraID = if (currentCameraID == backCameraID) {
-                frontCameraID
-            } else {
-                backCameraID
-            }
-            switchCamera(currentCameraID)
+
+            switchCamera()
+
         }
 
         binding.llVideoCallCut.setOnClickListener {
@@ -426,10 +417,12 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private fun createVideoCapture(): VideoCapturer? {
 
+        val cameraFacing = CameraCharacteristics.LENS_FACING_FRONT
+
         videoCapture = if (useCamera2()) {
-            createCameraCapture(Camera2Enumerator(this))
+            createCameraCapture(Camera2Enumerator(this),cameraFacing)
         } else {
-            createCameraCapture(Camera1Enumerator(true))
+            createCameraCapture(Camera1Enumerator(true),cameraFacing)
         }
         return videoCapture
 
@@ -439,7 +432,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
         return Camera2Enumerator.isSupported(this)
     }
 
-    private fun switchCamera(cameraID: Int) {
+    private fun switchCamera() {
 
         if (videoCapture is CameraVideoCapturer) {
             val cameraVideoCapture = videoCapture as CameraVideoCapturer
@@ -448,11 +441,13 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    private fun createCameraCapture(enumerator: CameraEnumerator): VideoCapturer? {
+    private fun createCameraCapture(enumerator: CameraEnumerator, cameraFacing : Int): VideoCapturer? {
 
         val deviceNames = enumerator.deviceNames
         for (deviceName in deviceNames) {
-            if (enumerator.isFrontFacing(deviceName)) {
+            if (enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
+                enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK
+            ) {
                 val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
                 if (videoCapture != null) {
                     return videoCapture
@@ -460,7 +455,8 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
         }
         for (deviceName in deviceNames) {
-            if (!enumerator.isFrontFacing(deviceName)) {
+            if (!enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
+                !enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
                 val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
                 if (videoCapture != null) {
                     return videoCapture
@@ -529,6 +525,8 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 remoteAudioTrack.setEnabled(true)
                 remoteVideoTrack.setEnabled(true)
                 remoteVideoTrack.addSink(binding.surfaceView2)
+                startCallDurationTimer()
+                binding.durationText.visibility = View.VISIBLE
             }
 
             override fun onRemoveStream(mediaStream: MediaStream) {
@@ -767,5 +765,27 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
         finish()
     }
 
+    private fun startCallDurationTimer() {
+        handler.post(object : Runnable {
+            override fun run() {
+                updateCallDuration()
+                handler.postDelayed(this, 1000)
+            }
+        })
+    }
+
+    private fun updateCallDuration() {
+        callDurationInSeconds++
+        val minutes = callDurationInSeconds / 60
+        val seconds = callDurationInSeconds % 60
+        val formattedDuration = String.format("%02d:%02d", minutes, seconds)
+        binding.durationText.text = formattedDuration
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+        binding.durationText.visibility = View.INVISIBLE
+    }
 
 }

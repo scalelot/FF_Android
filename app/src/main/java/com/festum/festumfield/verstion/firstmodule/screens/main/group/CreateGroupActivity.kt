@@ -108,13 +108,13 @@ class CreateGroupActivity : BaseActivity<FriendsListViewModel>(), GroupInterface
                 return@setOnClickListener
             }
 
-            if (createGroupBody.description.isNullOrEmpty()) {
-                binding.edtDescription.requestFocus()
-                binding.edtDescription.error = "Enter Description"
-                Snackbar.make(binding.mainRelative, "Enter Description", Snackbar.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            }
+//            if (createGroupBody.description.isNullOrEmpty()) {
+//                binding.edtDescription.requestFocus()
+//                binding.edtDescription.error = "Enter Description"
+//                Snackbar.make(binding.mainRelative, "Enter Description", Snackbar.LENGTH_SHORT)
+//                    .show()
+//                return@setOnClickListener
+//            }
 
             if (membersIds.isEmpty()) {
                 Snackbar.make(binding.mainRelative, "Members not found", Snackbar.LENGTH_SHORT)

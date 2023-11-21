@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -72,6 +74,9 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var rootEglBase: EglBase? = null
 
+    private val handler = Handler(Looper.getMainLooper())
+    private var callDurationInSeconds = 0
+
     /* PeerConnection */
 
     private var peerConnection: PeerConnection? = null
@@ -118,6 +123,9 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
         ActivityCompat.requestPermissions(this@WebVideoCallingActivity, permissions(), 1)
+
+        binding.fromText.text = AppPreferencesDelegates.get().userName
+        binding.toText.text = remoteUser
 
         runOnUiThread {
 
@@ -527,6 +535,8 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 remoteAudioTrack.setEnabled(true)
                 remoteVideoTrack.setEnabled(true)
                 remoteVideoTrack.addSink(binding.surfaceView2)
+                startCallDurationTimer()
+                binding.durationText.visibility = View.VISIBLE
             }
 
             override fun onRemoveStream(mediaStream: MediaStream) {
@@ -763,6 +773,29 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         }
 
         finish()
+    }
+
+    private fun startCallDurationTimer() {
+        handler.post(object : Runnable {
+            override fun run() {
+                updateCallDuration()
+                handler.postDelayed(this, 1000)
+            }
+        })
+    }
+
+    private fun updateCallDuration() {
+        callDurationInSeconds++
+        val minutes = callDurationInSeconds / 60
+        val seconds = callDurationInSeconds % 60
+        val formattedDuration = String.format("%02d:%02d", minutes, seconds)
+        binding.durationText.text = formattedDuration
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+        binding.durationText.visibility = View.INVISIBLE
     }
 
 }
