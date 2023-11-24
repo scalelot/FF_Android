@@ -113,6 +113,8 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
     private var isMute = false
 
     private var isCameraPause = false
+    private var isCameraRotation = false
+
 
     lateinit var permission: Array<String>
 
@@ -268,6 +270,14 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
 
         binding.llSwitchCamera.setOnClickListener {
+
+            if (isCameraRotation){
+                isCameraRotation = false
+                binding.surfaceView.setMirror(true)
+            }else{
+                isCameraRotation = true
+                binding.surfaceView.setMirror(false)
+            }
 
             switchCamera()
 

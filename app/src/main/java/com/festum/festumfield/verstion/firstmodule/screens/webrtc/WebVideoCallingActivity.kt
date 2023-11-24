@@ -100,6 +100,9 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         Manifest.permission.CAMERA
     )
 
+
+
+
     var userFragment = ""
     var remoteOffer : String = ""
 
@@ -108,6 +111,8 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
     private var isMute = false
 
     private var isCameraPause = false
+
+    private var isCameraRotation = false
 
     lateinit var permission: Array<String>
 
@@ -261,33 +266,18 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     fun init() {
 
-        val cameraCount = Camera.getNumberOfCameras()
-
-        for (i in 0 until cameraCount) {
-            val cameraInfo = CameraInfo()
-            Camera.getCameraInfo(i, cameraInfo)
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                frontCameraID = i
-                break
-            }
-        }
-
-        for (i in 0 until cameraCount) {
-            val cameraInfo = CameraInfo()
-            Camera.getCameraInfo(i, cameraInfo)
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                backCameraID = i
-                break
-            }
-        }
-
         binding.llSwitchCamera.setOnClickListener {
-            currentCameraID = if (currentCameraID == backCameraID) {
-                frontCameraID
-            } else {
-                backCameraID
+
+            if (isCameraRotation){
+                isCameraRotation = false
+                binding.surfaceView.setMirror(true)
+            }else{
+                isCameraRotation = true
+                binding.surfaceView.setMirror(false)
             }
-            switchCamera(currentCameraID)
+
+            switchCamera()
+
         }
 
         binding.llVideoCallCut.setOnClickListener {
@@ -445,7 +435,7 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         return Camera2Enumerator.isSupported(this)
     }
 
-    private fun switchCamera(cameraID: Int) {
+    private fun switchCamera() {
 
         if (videoCapture is CameraVideoCapturer) {
             val cameraVideoCapture = videoCapture as CameraVideoCapturer
