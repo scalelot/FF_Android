@@ -338,7 +338,6 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 localAudioTrack?.setEnabled(false)
             }
 
-
         }
 
         initializeSurfaceViews()

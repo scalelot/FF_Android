@@ -424,7 +424,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="location_permission_title">Location Permission</string>
-    <string name="media_permission_title">Media Permission</string>
+    <string name="media_permission_title">Permission</string>
     <string name="location_permission">To serve you best user experience we need permissions from location services</string>
     <string name="media_permission">To serve you best user experience we need permissions from media services</string>
     <string name="gujarat">gujarat</string>
@@ -438,7 +438,13 @@
     <string name="search_city">Search city</string>
     <string name="enter_a_location">Enter a location</string>
 
+    <string name="app_permission">Application Permissions</string>
+
     <string name="request_camera_mic_permissions_text">Please allow access to your camera and mic.</string>
     <string name="request_mic_permissions_text">Please allow access to your mic.</string>
+
+    <string name="location_disclosure_dialog_message"><![CDATA[ <p>Welcome to Festum Field! We\'re excited to have you on board for an amazing experience. To ensure you make the most of our app, we kindly request your permission to access certain features. </p> <p>Festum Field requires access to your device\'s </p>\u2022 Camera permission</p><p>\u2022 Contacts permission</p> <p>\u2022 Media permission</p> <p>\u2022 Location permission</p> <p>\u2022 Microphone permission</p> <p>\u2022 Phone permission</p> <p>\u2022 Notification permission</p> </p> <p>to provide you with a seamless and personalized experience. Rest assured that we prioritize your privacy and only use these permissions to enhance your event experience. Your data is handled securely and in accordance with our privacy policy. Thank you for choosing Festum Field, and we look forward to making your event moments unforgettable!"</p> ]]></string>
+    <string name="permission_check">"Oops! It seems like Festum Field is missing a few essential permissions to unlock its full potential. No worries, though – getting everything set up is quick and easy. To ensure you enjoy all the features seamlessly, please head to your device settings and grant Festum Field access to your camera, location, contacts, media, microphone, phone and notifications. Don't worry, we respect your privacy and only use these permissions to enhance your experience. Once you've given the green light, you'll be ready to immerse yourself in the full Festum Field experience. Thanks for your cooperation, and let the festivities begin!"</string>
+    <string name="location_disclosure_dialog_positive_button">Continue</string>
 
 </resources>

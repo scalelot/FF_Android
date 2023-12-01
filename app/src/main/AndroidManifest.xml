@@ -31,7 +31,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -75,43 +75,41 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".verstion.firstmodule.screens.main.ApplicationPermissionActivity"
+            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.webrtc.AppAudioCallingActivity"
-            android:screenOrientation="portrait"
-            android:exported="false"/>
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.webrtc.AppVideoCallingActivity"
-            android:screenOrientation="portrait"
-            android:exported="false"/>
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.webrtc.WebAudioCallingActivity"
-            android:screenOrientation="portrait"
-            android:exported="false"/>
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.webrtc.WebVideoCallingActivity"
-            android:screenOrientation="portrait"
-            android:exported="false"/>
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.EditGroupActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.GroupDetailsActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.CreateGroupActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.NewGroupActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:screenOrientation="portrait"

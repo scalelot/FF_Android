@@ -1,6 +1,9 @@
 package com.festum.festumfield.Activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -10,7 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.text.HtmlCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -26,10 +32,12 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass;
+import com.festum.festumfield.verstion.firstmodule.screens.main.ApplicationPermissionActivity;
 import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
 import static com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.*;
 
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
+import com.festum.festumfield.verstion.firstmodule.utils.LocationUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -181,12 +189,16 @@ public class LoginVerifyActivity extends BaseActivity {
 
 
 //                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+                    startActivity(new Intent(LoginVerifyActivity.this, ApplicationPermissionActivity.class));
+
+//                    showLocationDisclosure();
+//                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 
                     /*FestumApplicationClass festumApplicationClass = new FestumApplicationClass();
                     festumApplicationClass.initializeSocket();*/
 
-                    finish();
+//                    finish();
 
                 }
             }, new com.android.volley.Response.ErrorListener() {
@@ -264,4 +276,44 @@ public class LoginVerifyActivity extends BaseActivity {
         startActivity(new Intent(LoginVerifyActivity.this, LoginActivity.class));
         finish();
     }
+
+    private void showLocationDisclosure() {
+
+        new AlertDialog.Builder(this)
+                .setMessage(
+                        HtmlCompat.fromHtml(getString(R.string.location_disclosure_dialog_message),
+                                HtmlCompat.FROM_HTML_MODE_LEGACY)
+                )
+                .setPositiveButton(R.string.location_disclosure_dialog_positive_button, (dialog, which) -> dialog.dismiss())
+                .setOnDismissListener(dialog -> requestLocationPermissions.launch(LocationUtils.LOCATION_PERMISSIONS))
+                .show();
+    }
+
+    ActivityResultLauncher<String[]> requestLocationPermissions = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(),
+            this::onActivityResult);
+
+    ActivityResultLauncher<String> requestBackgroundLocationPermission = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result){
+                    Log.e("TAG", result.toString());
+                }
+            });
+
+    private void onActivityResult(Map<String, Boolean> result) {
+        boolean granted = true;
+
+        for (Map.Entry<String, Boolean> x : result.entrySet()) {
+            if (!x.getValue()) {
+                granted = false;
+            }
+        }
+
+        if (granted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Log.e("TAG", "onActivityResult:----");
+//            requestBackgroundLocationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }
+    }
+
 }
