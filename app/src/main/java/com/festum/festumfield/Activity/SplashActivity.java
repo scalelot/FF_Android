@@ -14,6 +14,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -78,6 +79,7 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         }, 1000);
+
     }
 
     @Override

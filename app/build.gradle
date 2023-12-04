@@ -15,7 +15,7 @@ android {
         jni.srcDirs = [] //disable automatic ndk-build call
     }
 
-    compileSdk 33
+    compileSdk 34
 
     namespace 'com.festum.festumfield'
 
@@ -23,7 +23,7 @@ android {
     defaultConfig {
         applicationId "com.festum.festumfield"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -65,7 +65,7 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'

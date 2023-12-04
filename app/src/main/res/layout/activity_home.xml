@@ -11,13 +11,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar">
 
         <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sp_56"
-            android:background="@drawable/rectangle_8">
+            android:layout_height="@dimen/sp_56">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_img"

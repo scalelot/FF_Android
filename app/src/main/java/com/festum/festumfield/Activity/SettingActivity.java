@@ -2,11 +2,13 @@ package com.festum.festumfield.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,10 +20,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -54,7 +59,7 @@ public class SettingActivity extends BaseActivity {
 
     ImageView ic_back_arrow, img_close, ic_close;
     AppCompatButton btn_clear_data, btn_select_file;
-    SwitchButton noti_switch;
+    SwitchButton noti_switch, darkModeSwitch;
     RelativeLayout chat_backup, block_contact, change_number, contact_us, help, conversation, sign_out, upload_excel;
     File myFile;
     Uri uri;
@@ -86,6 +91,7 @@ public class SettingActivity extends BaseActivity {
         ic_back_arrow = findViewById(R.id.ic_back_arrow);
         btn_clear_data = findViewById(R.id.btn_clear_data);
         noti_switch = findViewById(R.id.noti_switch);
+        darkModeSwitch = findViewById(R.id.darkModeSwitch);
         block_contact = findViewById(R.id.block_contact);
         chat_backup = findViewById(R.id.chat_backup);
         change_number = findViewById(R.id.change_number);
@@ -188,10 +194,31 @@ public class SettingActivity extends BaseActivity {
                 startActivity(intent);
                 finish();
 
-
-
             }
         });
+
+        darkModeSwitch.setChecked(AppPreferencesDelegates.Companion.get().isNightModeOn());
+
+        darkModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    AppPreferencesDelegates.Companion.get().setFirstStart(false);
+                    AppPreferencesDelegates.Companion.get().setNightModeOn(true);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    recreate();
+                } else {
+                    AppPreferencesDelegates.Companion.get().setFirstStart(false);
+                    AppPreferencesDelegates.Companion.get().setNightModeOn(false);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    recreate();
+                }
+
+            }
+
+        });
+
     }
 
     private void uploadExcelDialog() {
@@ -423,11 +450,18 @@ public class SettingActivity extends BaseActivity {
         });
 
         dialog.show();
+
+
     }
 
     @Override
     public void onBackPressed() {
-        /*startActivity(new Intent(SettingActivity.this, MainActivity.class));*/
+        super.onBackPressed();
+
+        Intent intent = new Intent();
+        intent.putExtra("darkTheme", AppPreferencesDelegates.Companion.get().isNightModeOn());
+        setResult(Activity.RESULT_OK, intent);
         finish();
+
     }
 }

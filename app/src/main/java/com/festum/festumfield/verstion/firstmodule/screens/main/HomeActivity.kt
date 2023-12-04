@@ -4,9 +4,11 @@ import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
@@ -21,6 +23,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -75,7 +78,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
 
-
     override fun getContentView(): View {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         return binding.root
@@ -88,6 +90,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun setupUi() {
 
         /*PeerConnectionFactory.initialize(
@@ -168,7 +171,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     }
 
                     R.id.setting -> {
-                        startActivity(Intent(this@HomeActivity, SettingActivity::class.java))
+                        val requestCode = 777
+                        startActivityForResult(Intent(this@HomeActivity, SettingActivity::class.java),requestCode)
                         return@OnMenuItemClickListener true
                     }
 
@@ -262,6 +266,33 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         super.onResume()
         /* Get Profile */
         viewModel.getProfile()
+
+        if (isDarkModeOn()){
+            changeToLightMode()
+        }
+
+//        if (get().isNightModeOn) {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        } else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode != Activity.RESULT_OK) return
+        when(requestCode) {
+            777 -> {
+                Handler(Looper.getMainLooper()).postDelayed({
+
+                    recreate()
+
+                }, 100)
+            }
+            // Other result codes
+            else -> {}
+        }
 
     }
 
@@ -404,6 +435,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun getUpComingCall() {
 
         SocketManager.mSocket?.on("incomingCall") { args ->
@@ -456,6 +488,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         }
 
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -644,5 +677,15 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             .check()
 
     }
+
+    private fun isDarkModeOn(): Boolean {
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    private fun changeToLightMode(){
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+    }
+
 
 }

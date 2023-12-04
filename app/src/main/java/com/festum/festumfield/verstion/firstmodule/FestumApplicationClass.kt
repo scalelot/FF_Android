@@ -3,19 +3,15 @@ package com.festum.festumfield.verstion.firstmodule
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import com.festum.festumfield.Utils.Constans.SOCKET_SERVER_URL
-import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.Companion.get
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.pixplicity.easyprefs.library.Prefs
 import dagger.hilt.android.HiltAndroidApp
-import io.socket.client.IO
 import io.socket.client.Socket
-import io.socket.emitter.Emitter
-import org.json.JSONException
-import org.json.JSONObject
 
 
 @HiltAndroidApp
@@ -32,8 +28,10 @@ class FestumApplicationClass : MultiDexApplication() {
     private var mSocket: Socket? = null
 
     override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
+
         MultiDex.install(base)
+        super.attachBaseContext(base)
+
     }
 
     override fun onCreate() {
@@ -48,6 +46,18 @@ class FestumApplicationClass : MultiDexApplication() {
         appInstance = this
 
         SocketManager.initializeSocket()
+
+        get().isFirstStart = false
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && get().isFirstStart) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        } else {
+            if (get().isNightModeOn) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         /*initializeSocket()*/
 

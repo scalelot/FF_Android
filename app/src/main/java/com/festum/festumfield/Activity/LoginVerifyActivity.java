@@ -3,6 +3,7 @@ package com.festum.festumfield.Activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.android.volley.AuthFailureError;
@@ -43,7 +46,9 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import in.aabhasjindal.otptextview.OTPListener;
@@ -62,6 +67,33 @@ public class LoginVerifyActivity extends BaseActivity {
     String c_code;
     RequestQueue queue;
     OtpTextView otpTextView;
+
+    public static String[] storge_permissions = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION};
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public static String[] storge_permissions_33 = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS};
+
+    List<String> listPermissionsNeeded = new ArrayList<>();
+    String perStr = "";
 
 
 
@@ -180,25 +212,11 @@ public class LoginVerifyActivity extends BaseActivity {
 
                     VerifyOtpModel verifyOtpModel = new Gson().fromJson(response.toString(), VerifyOtpModel.class);
 
-                    Toast.makeText(LoginVerifyActivity.this, verifyOtpModel.getMessage(), Toast.LENGTH_LONG).show();
-
-//                    MyApplication.setAuthToken(getApplicationContext(), "bearer " + verifyOtpModel.getData().getToken());
+                    Snackbar.make(ll_linear, verifyOtpModel.getMessage(), Snackbar.LENGTH_SHORT).show();
 
                     AppPreferencesDelegates.Companion.get().setToken("bearer " + verifyOtpModel.getData().getToken());
 
-
-
-//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-                    startActivity(new Intent(LoginVerifyActivity.this, ApplicationPermissionActivity.class));
-
-//                    showLocationDisclosure();
-//                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-
-                    /*FestumApplicationClass festumApplicationClass = new FestumApplicationClass();
-                    festumApplicationClass.initializeSocket();*/
-
-//                    finish();
+                    checkPermissions();
 
                 }
             }, new com.android.volley.Response.ErrorListener() {
@@ -273,7 +291,7 @@ public class LoginVerifyActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(LoginVerifyActivity.this, LoginActivity.class));
+        super.onBackPressed();
         finish();
     }
 
@@ -314,6 +332,38 @@ public class LoginVerifyActivity extends BaseActivity {
             Log.e("TAG", "onActivityResult:----");
 //            requestBackgroundLocationPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         }
+    }
+
+    private boolean checkPermissions() {
+        int result = 0;
+
+        listPermissionsNeeded.clear();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            for (String p : storge_permissions_33) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
+        } else {
+            for (String p : storge_permissions) {
+                result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(p);
+
+                }
+            }
+        }
+        Log.e("checkPermissions:", String.valueOf(listPermissionsNeeded));
+        if (!listPermissionsNeeded.isEmpty()) {
+            startActivity(new Intent(LoginVerifyActivity.this, ApplicationPermissionActivity.class));
+            return false;
+        }else {
+            startActivity(new Intent(LoginVerifyActivity.this, HomeActivity.class));
+        }
+        return true;
     }
 
 }
