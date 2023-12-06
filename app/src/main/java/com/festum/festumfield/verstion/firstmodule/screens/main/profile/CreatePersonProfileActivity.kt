@@ -4,7 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -43,6 +45,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -186,12 +189,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                     this@CreatePersonProfileActivity
                 )
             ) {
-                startActivity(
-                    Intent(
-                        this@CreatePersonProfileActivity,
-                        MapsLocationActivity::class.java
-                    ).putExtra("isProfileLocation", true)
-                )
+                onLocationCheck()
             } else
                 AppPermissionDialog.showPermission(
                     this@CreatePersonProfileActivity,
@@ -787,6 +785,45 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
             intent,
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
         )
+    }
+
+    private fun onLocationCheck(){
+        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var gps_enabled = false
+        var network_enabled = false
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (_: Exception) {
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        } catch (_: Exception) {
+        }
+
+        if (!gps_enabled && !network_enabled) {
+
+            MaterialAlertDialogBuilder(
+                this,
+                R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog
+            )
+                .setTitle(getString(R.string.gps_enable))
+                .setMessage(getString(R.string.turn_on_your_location))
+                .setPositiveButton("OK") { dialogInterface, i ->
+                    dialogInterface.dismiss()
+
+                }
+                .show()
+        } else {
+            startActivity(
+                Intent(
+                    this@CreatePersonProfileActivity,
+                    MapsLocationActivity::class.java
+                ).putExtra("isProfileLocation", true)
+            )
+        }
+
     }
 
 }

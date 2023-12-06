@@ -384,6 +384,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         startActivity(
             Intent(
                 this@ProfilePreviewActivity,

@@ -1,10 +1,14 @@
 package com.festum.festumfield.verstion.firstmodule.screens.fragment
 
+
 import android.animation.FloatEvaluator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -13,19 +17,19 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.AutoCompleteTextView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.SearchView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -85,76 +89,12 @@ class MapFragment : BaseFragment<FriendsListViewModel>(), OnMapReadyCallback, On
 
     override fun initUi() {
 
-        val mapFragment =
-            childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         /* Get Profile */
         viewModel.getProfile()
 
-
-
-        /*autoSuggestAdapter = AutoSuggestAdapter(requireActivity(), R.layout.list_item_search_auto, R.id.text1, responseSearch, this)
-        val input = AutoCompleteTextView(requireActivity())
-        input.setTextColor(resources.getColor(R.color.white))
-        binding.searchTextView.threshold = 1
-        binding.searchTextView.setAdapter(autoSuggestAdapter)
-
-        binding.searchTextView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                searchLocation(s.toString())
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-
-        })
-
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-                var addressList: List<Address?>? = null
-
-                if (query?.isNotEmpty() == true) {
-
-                    val geocoder = Geocoder(requireActivity())
-
-                    addressList = geocoder.getFromLocationName(query, 1)
-
-                    if (addressList?.size != 0) {
-                        val address = addressList?.get(0)
-                        val latitude = address?.latitude
-                        val longitude = address?.longitude
-
-                        if (latitude != null && longitude != null) {
-
-                            val latLng = LatLng(latitude, longitude)
-                            googleMap?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-                            val cameraPosition =
-                                CameraPosition.Builder().target(latLng).zoom(12f).build()
-                            googleMap?.animateCamera(
-                                CameraUpdateFactory.newCameraPosition(
-                                    cameraPosition
-                                )
-                            )
-
-                        }
-
-                    }
-
-                }
-
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-
-                return false
-            }
-        })*/
 
         val apiKey = resources.getString(R.string.google_maps_key_new_one)
         Places.initialize(requireActivity(), apiKey)

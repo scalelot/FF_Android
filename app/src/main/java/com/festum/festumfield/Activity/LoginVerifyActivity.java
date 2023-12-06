@@ -204,6 +204,7 @@ public class LoginVerifyActivity extends BaseActivity {
         try {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("otp", otpval);
+            params.put("fcmtoken", AppPreferencesDelegates.Companion.get().getFcmToken());
             request = new JsonObjectRequest(Request.Method.POST, Constans.verify_otp, new JSONObject(params), new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -232,7 +233,7 @@ public class LoginVerifyActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-                    map.put("authorization", "bearer " + csrfToken);
+//                    map.put("authorization", "bearer " + csrfToken);
                     return map;
                 }
 

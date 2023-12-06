@@ -4,6 +4,7 @@ package com.festum.festumfield.verstion.firstmodule.sources.local.prefrences
 class AppPreferencesDelegates private constructor() {
 
     var token by TokenDelegate()
+    var fcmToken by FcmTokenDelegate()
     var channelId by ChannelIdDelegate()
     var userName by UserNameDelegate()
     var personalProfile by PersonalProfileRegisteredDelegate()

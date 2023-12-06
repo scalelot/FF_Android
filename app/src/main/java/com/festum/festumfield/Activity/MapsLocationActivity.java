@@ -1,11 +1,13 @@
 package com.festum.festumfield.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.PlaceAutocompleteAdapter;
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.AutoSuggestAdapter;
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.OnSearchCity;
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.searchcity.ResponseSearch;
@@ -116,6 +119,11 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
         });*/
 
+        if (AppPreferencesDelegates.Companion.get().isNightModeOn()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
 
         String apiKey = getResources().getString(R.string.google_maps_key_new_one);
@@ -352,41 +360,4 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
     }
 
-    private void searchLocation(CharSequence text) {
-
-
-        Call<List<ResponseSearch>> call4 = RetrofitClient.INSTANCE.getInstance().getModel().getSearch(
-                "application/x-www-form-urlencoded", text,
-                "srRLeAmTroxPinDG8Aus3Ikl6tLGJd94", "en-us", "value"
-
-        );
-        call4.enqueue(new Callback<List<ResponseSearch>>() {
-            @Override
-            public void onResponse(Call<List<ResponseSearch>> call, Response<List<ResponseSearch>> response)
-
-            {
-
-                responseSearch  = new ArrayList<>();
-                List<ResponseSearch> post5 = response.body();
-                if (post5 != null)
-
-                {
-
-                    responseSearch.addAll(post5);
-                    autoSuggestAdapter.setData(responseSearch);
-                    autoSuggestAdapter.notifyDataSetChanged();
-
-                }
-
-            }
-            @Override
-            public void onFailure(Call<List<ResponseSearch>> call, Throwable t) {
-
-                Log.e("SearchBar", "onError: " + t.getMessage());
-
-            }
-
-        });
-
-    }
 }

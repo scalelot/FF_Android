@@ -110,7 +110,7 @@ public class RunningPromotionFragment extends Fragment {
     public void getNotificationItem(int page, int limit, String search, String status, String short_field, int short_option) {
         if (page > limit) {
             Toast.makeText(getActivity(), "That's all the data..", Toast.LENGTH_SHORT).show();
-            idPBLoading.setVisibility(View.GONE);
+//            idPBLoading.setVisibility(View.GONE);
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -129,7 +129,7 @@ public class RunningPromotionFragment extends Fragment {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.fetch_notification, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    idPBLoading.setVisibility(View.GONE);
+//                    idPBLoading.setVisibility(View.GONE);
                     Log.e("FetchNotification=>", response.toString());
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");

@@ -4,17 +4,19 @@ import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -49,6 +51,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallin
 import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.Companion.get
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
@@ -92,10 +95,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun setupUi() {
-
-        /*PeerConnectionFactory.initialize(
-            PeerConnectionFactory.InitializationOptions.builder(this).createInitializationOptions()
-        )*/
 
         upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
 
@@ -171,8 +170,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     }
 
                     R.id.setting -> {
-                        val requestCode = 777
-                        startActivityForResult(Intent(this@HomeActivity, SettingActivity::class.java),requestCode)
+
+                        this.startActivityForResult(Intent(this@HomeActivity, SettingActivity::class.java),1)
                         return@OnMenuItemClickListener true
                     }
 
@@ -215,10 +214,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             if (profileData != null) {
 
-                AppPreferencesDelegates.get().channelId = profileData.channelID.toString()
-                AppPreferencesDelegates.get().businessProfile = profileData.isBusinessProfileCreated == true
-                AppPreferencesDelegates.get().userName = profileData.fullName.toString()
-                AppPreferencesDelegates.get().personalProfile = true
+                get().channelId = profileData.channelID.toString()
+                get().businessProfile = profileData.isBusinessProfileCreated == true
+                get().userName = profileData.fullName.toString()
+                get().personalProfile = true
 
 
                 val applicationClass: FestumApplicationClass = application as FestumApplicationClass
@@ -264,34 +263,32 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     override fun onResume() {
         super.onResume()
+
         /* Get Profile */
         viewModel.getProfile()
-
-        if (isDarkModeOn()){
-            changeToLightMode()
-        }
-
-//        if (get().isNightModeOn) {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//        } else {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//        }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode != Activity.RESULT_OK) return
-        when(requestCode) {
-            777 -> {
-                Handler(Looper.getMainLooper()).postDelayed({
 
-                    recreate()
+        if (requestCode == 1) {
 
-                }, 100)
+            val resultString = data?.getBooleanExtra("darkTheme",false)
+
+            if (resultString == true) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-            // Other result codes
-            else -> {}
+            /* For Dark Theme */
+            val intent = intent
+            overridePendingTransition(0, 0)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            finish()
+            overridePendingTransition(0, 0)
+            startActivity(intent)
+
         }
 
     }
@@ -307,7 +304,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     /* For create profile */
                     createProfileDialog()
                 } else {
-                    onPermission()
+                    onLocationCheck()
                 }
 
             R.id.call ->
@@ -683,8 +680,45 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
     }
 
-    private fun changeToLightMode(){
+    private fun changeToNightMode(){
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+    }
+
+    private fun onLocationCheck(){
+
+        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var gps_enabled = false
+        var network_enabled = false
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (_: Exception) {
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        } catch (_: Exception) {
+        }
+
+        if (!gps_enabled && !network_enabled) {
+
+            MaterialAlertDialogBuilder(
+                this,
+                R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog
+            )
+                .setTitle(getString(R.string.gps_enable))
+                .setMessage(getString(R.string.turn_on_your_location))
+                .setPositiveButton("OK") { dialogInterface, i ->
+                    dialogInterface.dismiss()
+
+                }
+                .show()
+        } else {
+            onPermission()
+        }
+
     }
 
 

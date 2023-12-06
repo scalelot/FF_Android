@@ -19,7 +19,7 @@
             android:singleLine="true"
             android:background="@color/tab_bg"
             android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textColor="#EC000000"
+            android:textColor="@color/black"
             android:textSize="14sp" />
 
 </LinearLayout>

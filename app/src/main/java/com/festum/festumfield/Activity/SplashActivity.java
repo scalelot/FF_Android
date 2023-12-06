@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -71,7 +72,9 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 if (AppPreferencesDelegates.Companion.get().getToken().isEmpty()) {
+
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
                 } else {
 
                     checkPermissions();

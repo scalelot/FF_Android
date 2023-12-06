@@ -61,7 +61,7 @@ public class LoginActivity extends BaseActivity {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
             public void onSuccess(String s) {
-               AppPreferencesDelegates.Companion.get().setNotificationToken(s);
+               AppPreferencesDelegates.Companion.get().setFcmToken(s);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -84,7 +84,7 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
                 try {
                     FileUtils.hideKeyboard(LoginActivity.this);
-                    String newToken = AppPreferencesDelegates.Companion.get().getNotificationToken();
+                    String newToken = AppPreferencesDelegates.Companion.get().getFcmToken();
                     String phoneNumber = edtPhone.getText().toString().trim();
 
                     if (phoneNumber.isEmpty()) {

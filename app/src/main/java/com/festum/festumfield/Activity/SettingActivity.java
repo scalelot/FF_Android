@@ -103,7 +103,10 @@ public class SettingActivity extends BaseActivity {
         ic_back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Intent intent = new Intent();
+                intent.putExtra("darkTheme", AppPreferencesDelegates.Companion.get().isNightModeOn());
+                setResult(1, intent);
+                finish();
             }
         });
 
@@ -204,15 +207,13 @@ public class SettingActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-                    AppPreferencesDelegates.Companion.get().setFirstStart(false);
                     AppPreferencesDelegates.Companion.get().setNightModeOn(true);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    recreate();
+                    SettingActivity.this.recreate();
                 } else {
-                    AppPreferencesDelegates.Companion.get().setFirstStart(false);
                     AppPreferencesDelegates.Companion.get().setNightModeOn(false);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    recreate();
+                    SettingActivity.this.recreate();
                 }
 
             }
@@ -456,12 +457,10 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
         Intent intent = new Intent();
         intent.putExtra("darkTheme", AppPreferencesDelegates.Companion.get().isNightModeOn());
-        setResult(Activity.RESULT_OK, intent);
+        setResult(1, intent);
         finish();
-
+        super.onBackPressed();
     }
 }

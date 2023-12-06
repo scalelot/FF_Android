@@ -4,11 +4,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
+import com.festum.festumfield.Activity.LoginActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
@@ -23,7 +25,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.e("Tag", token);
+        AppPreferencesDelegates.Companion.get().setFcmToken(token);
     }
 
     @Override

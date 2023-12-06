@@ -447,4 +447,7 @@
     <string name="permission_check">"Oops! It seems like Festum Field is missing a few essential permissions to unlock its full potential. No worries, though – getting everything set up is quick and easy. To ensure you enjoy all the features seamlessly, please head to your device settings and grant Festum Field access to your camera, location, contacts, media, microphone, phone and notifications. Don't worry, we respect your privacy and only use these permissions to enhance your experience. Once you've given the green light, you'll be ready to immerse yourself in the full Festum Field experience. Thanks for your cooperation, and let the festivities begin!"</string>
     <string name="location_disclosure_dialog_positive_button">Continue</string>
 
+    <string name="gps_enable">GPS Enable</string>
+    <string name="turn_on_your_location">Turn on your location. \nFestum Field is not find your location, we highly recommend turning on your device\'s location services.</string>
+
 </resources>

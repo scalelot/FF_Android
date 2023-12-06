@@ -9,12 +9,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--        <item name="fontFamily">@font/roboto_regular</item>-->
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+<!--        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>-->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyled</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyled</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/DialogButtonStyled</item>
         <item name="snackbarStyle">@style/MySnackBarStyle</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="DialogButtonStyled" parent="Theme.MaterialComponents.DayNight.NoActionBar">
