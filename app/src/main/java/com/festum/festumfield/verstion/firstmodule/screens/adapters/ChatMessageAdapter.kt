@@ -113,6 +113,11 @@ class ChatMessageAdapter(
 
                 messageBinding.sendTxt.text = item.content?.text?.message
                 messageBinding.sendTxtTime.text = item.createdAt?.convertToFormattedTime()
+                if (item.status.equals("sent")){
+                    messageBinding.sendTxtSeen.setImageResource(R.drawable.ic_unseen)
+                }else{
+                    messageBinding.sendTxtSeen.setImageResource(R.drawable.ic_seen)
+                }
                 messageBinding.rlLeft.visibility = View.GONE
                 messageBinding.rlRight.visibility = View.VISIBLE
 
@@ -150,6 +155,11 @@ class ChatMessageAdapter(
 
                 imageBinding.sendImage.setLargeImagePath(image)
 
+                if (item.status.equals("sent")){
+                    imageBinding.sendImgSeen.setImageResource(R.drawable.ic_unseen)
+                }else{
+                    imageBinding.sendImgSeen.setImageResource(R.drawable.ic_seen)
+                }
 
 
                 if (item.content?.text?.message.isNullOrEmpty()){
@@ -233,6 +243,11 @@ class ChatMessageAdapter(
 
                 productBinding.sendProtime.text = item.createdAt?.convertToFormattedTime()
 
+                if (item.status.equals("sent")){
+                    productBinding.sendProseen.setImageResource(R.drawable.ic_unseen)
+                }else{
+                    productBinding.sendProseen.setImageResource(R.drawable.ic_seen)
+                }
 
                 if (item.content?.product?.productid?.images?.isNotEmpty() == true){
 

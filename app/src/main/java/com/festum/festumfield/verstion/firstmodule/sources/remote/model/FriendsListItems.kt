@@ -94,4 +94,10 @@ data class FriendsListItems(
     @field:SerializedName("description")
     var description : String? = null,
 
+    @field:SerializedName("unreadmessage_count")
+    var unreadMessageCount : Int? = null,
+
+    @field:SerializedName("lastchatmessage")
+    var lastChatMessage : GroupMessageItem? = null
+
 ) : Serializable

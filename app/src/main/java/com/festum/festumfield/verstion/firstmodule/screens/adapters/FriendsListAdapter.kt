@@ -19,7 +19,6 @@ import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import com.google.gson.Gson
 import org.json.JSONObject
-import java.io.Serializable
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -64,6 +63,10 @@ class FriendsListAdapter(
 
             if (item.fullName == null){
                 binding.txtUserName.text = item.name
+            }
+
+            if (item.fullName == null && item.name == null){
+                binding.txtUserName.text = item.contactNo
             }
 
             if (item.isPinned == true){
@@ -138,7 +141,58 @@ class FriendsListAdapter(
 
             binding.chatUserTime.text = item.lastMessage?.timestamp?.let { getTimeInMillis(it) }
 
-            binding.txtChatCount.text = item.messageSize
+            if (item.members?.isNotEmpty() == true){
+                binding.chatUserTime.text = item.lastChatMessage?.timestamp?.let { getTimeInMillis(it) }
+
+                if (item.lastChatMessage != null) {
+
+                    when (item.lastChatMessage?.message?.contentType) {
+                        "text" -> {
+                            binding.txtMessage.text = item.lastChatMessage?.message?.content?.text?.message
+                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                null,
+                                null,
+                                null,
+                                null
+                            )
+                        }
+
+                        "media" -> {
+                            binding.txtMessage.text = context.getString(R.string.image)
+                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                context.resources.getDrawable(R.drawable.ic_friends_image_vector),
+                                null,
+                                null,
+                                null
+                            )
+                        }
+
+                        "product" -> {
+                            binding.txtMessage.text = context.getString(R.string.product)
+                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                context.resources.getDrawable(R.drawable.ic_friends_product_image),
+                                null,
+                                null,
+                                null
+                            )
+                        }
+
+                        "" -> {
+                            binding.txtMessage.text = ""
+                        }
+                    }
+
+                }
+            }
+
+            binding.txtChatCount.text = item.unreadMessageCount.toString()
+
+            if (item.unreadMessageCount == 0){
+                binding.txtChatCount.visibility = View.GONE
+            }else{
+                binding.txtChatCount.text = item.unreadMessageCount.toString()
+                binding.txtChatCount.visibility = View.VISIBLE
+            }
 
             when (checkedPosition) {
                 -1 -> {
@@ -257,7 +311,7 @@ class FriendsListAdapter(
             createdAt = getCurrentUTCTime(),
             isPinned = friendsListItems?.isPinned,
             isNewMessage = true,
-            messageSize = "1",
+            unreadMessageCount = friendsListItems?.unreadMessageCount,
             online = friendsListItems?.online
         )
 

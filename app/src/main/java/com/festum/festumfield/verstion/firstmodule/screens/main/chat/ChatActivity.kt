@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -253,7 +254,15 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         binding.imgVideoCall.setOnClickListener {
 
-            onVideoCallPermission()
+            if (friendsItem.members?.isNotEmpty() == true) {
+
+                onGroupVideoCallPermission()
+
+            } else {
+
+                onVideoCallPermission()
+
+            }
 
         }
 
@@ -306,6 +315,14 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             }
             chatMessageAdapter?.setItems(listItems)
             binding.msgRV.scrollToPosition(listItems.size - 1)
+
+            /* Chat message seen */
+
+            for (i in chatList.indices){
+                if (chatList[i].to?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
+                    viewModel.getMessageSeen(chatList[i].id.toString())
+                }
+            }
 
             binding.idPBLoading.visibility = View.GONE
 
@@ -408,6 +425,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 }
             }, 500)
 
+            if (sendData != null){
+                viewModel.getMessageDeliver(sendData.mainId.toString())
+            }
+
         }
 
         viewModel.productData.observe(this) { productData ->
@@ -425,6 +446,27 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             )
 
             Log.e("TAG", "setupObservers:$productItemData")
+
+        }
+
+        viewModel.messageDeliverData.observe(this) {
+
+            if (it?.status == 200){
+
+                Log.e("TAG", "messageSeenData:---" + it.toString() )
+
+            }
+
+            Log.e("TAG", "messageDeliverData:---" + it.toString() )
+        }
+
+        viewModel.messageSeenData.observe(this) {
+
+            if (it?.status == 200){
+
+                Log.e("TAG", "messageSeenData:---" + it.toString() )
+
+            }
 
         }
 
@@ -958,6 +1000,60 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                         AppPermissionDialog.showPermission(
                             this@ChatActivity,
                             getString(R.string.request_mic_permissions_text),
+                            getString(R.string.media_permission_title)
+                        )
+                    }
+
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    p0: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    token?.continuePermissionRequest()
+                }
+
+            }).withErrorListener {}
+            .check()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun onGroupVideoCallPermission() {
+
+        Dexter.withContext(this@ChatActivity)
+            .withPermissions(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.CAMERA)
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                    if (permission?.areAllPermissionsGranted() == true) {
+
+                        val message = JSONObject().apply {
+
+                            val jsonArray = JSONArray()
+                            jsonArray.put(friendsItem.id?.lowercase())
+                            jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                            put("memberIds", jsonArray)
+                            put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+                            put("name", AppPreferencesDelegates.get().userName)
+                            put("isVideoCall", true)
+                            put("isCallingFromApp", true)
+
+                        }
+
+                        SocketManager.mSocket?.emit("callUser", message)
+
+                        upComingCallView(friendsItem)
+
+                        isVideoCalling = true
+
+                    } else {
+                        AppPermissionDialog.showPermission(
+                            this@ChatActivity,
+                            getString(R.string.request_camera_mic_permissions_text),
                             getString(R.string.media_permission_title)
                         )
                     }

@@ -11,15 +11,22 @@ import com.festum.festumfield.MyApplication
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
+import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.io.File
@@ -35,6 +42,8 @@ class ChatViewModel @Inject constructor(
     var sendData = MutableLiveData<SendMessageResponse?>()
     var productData = MutableLiveData<ProductResponse?>()
     var friendProductData = MutableLiveData<ArrayList<FriendsProducts>?>()
+    var messageDeliverData = MutableLiveData<ApiBody?>()
+    var messageSeenData = MutableLiveData<ApiBody?>()
 
     fun getChatMessageHistory(receiverId: String, page: Int, limit: Int) {
 
@@ -142,6 +151,56 @@ class ChatViewModel @Inject constructor(
             }, {
                 productData.value = null
             })
+    }
+
+    fun getMessageDeliver(messageId: String){
+
+        val messageItem = MessageStatusBody(messageid = messageId)
+
+        api.messageDelivered(messageItem).enqueue(object : Callback<ApiBody> {
+            override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
+
+                if (response.isSuccessful) {
+                    messageDeliverData.value = response.body()
+                } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<ApiBody>() {}.type
+                    val errorResponse: ApiBody? =
+                        gson.fromJson(response.errorBody()?.charStream(), type)
+                    messageDeliverData.value = errorResponse
+                }
+            }
+
+            override fun onFailure(call: Call<ApiBody>, t: Throwable) {
+                messageDeliverData.value = null
+            }
+
+        })
+    }
+
+    fun getMessageSeen(messageId: String){
+
+        val messageItem = MessageStatusBody(messageid = messageId)
+
+        api.messageSeen(messageItem).enqueue(object : Callback<ApiBody> {
+            override fun onResponse(call: Call<ApiBody>, response: Response<ApiBody>) {
+
+                if (response.isSuccessful) {
+                    messageSeenData.value = response.body()
+                } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<ApiBody>() {}.type
+                    val errorResponse: ApiBody? =
+                        gson.fromJson(response.errorBody()?.charStream(), type)
+                    messageSeenData.value = errorResponse
+                }
+            }
+
+            override fun onFailure(call: Call<ApiBody>, t: Throwable) {
+                messageSeenData.value = null
+            }
+
+        })
     }
 
 }

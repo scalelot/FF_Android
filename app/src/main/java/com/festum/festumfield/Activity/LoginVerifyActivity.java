@@ -233,7 +233,7 @@ public class LoginVerifyActivity extends BaseActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> map = new HashMap<>();
                     map.put("Content-Type", "application/json");
-//                    map.put("authorization", "bearer " + csrfToken);
+                    map.put("authorization", "bearer " + csrfToken);
                     return map;
                 }
 

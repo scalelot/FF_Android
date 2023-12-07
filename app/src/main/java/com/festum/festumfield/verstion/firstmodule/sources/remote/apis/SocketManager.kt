@@ -3,6 +3,7 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 import android.util.Log
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.di.ApiModule
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -22,8 +23,7 @@ object SocketManager {
         options.reconnectionAttempts = Int.MAX_VALUE
 
         try {
-            mSocket = IO.socket(Constans.SOCKET_SERVER_URL, options)
-//            mSocket = IO.socket(Constans.SOCKET_VIDEO_SERVER_URL, options)
+            mSocket = IO.socket(ApiModule.BASE_URL_SOCKET, options)
             mSocket?.on(Socket.EVENT_CONNECT, onConnect)
             mSocket?.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
             mSocket?.on(Socket.EVENT_DISCONNECT, onDisconnect)

@@ -13,4 +13,5 @@ data class ChatListBody(
 
 	@field:SerializedName("page")
 	val page: Int? = null
+
 ) : Serializable

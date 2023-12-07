@@ -2,8 +2,6 @@ package com.festum.festumfield.Utils;
 
 public class Constans {
 
-    public static String CHAT_SERVER_URL = "https://api.festumfield.com";
-
     public static String SOCKET_SERVER_URL = "https://api.festumfield.com";
 
 //    public static String SOCKET_VIDEO_SERVER_URL = "https://404f-163-53-179-11.ngrok-free.app";

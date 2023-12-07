@@ -72,7 +72,7 @@ class AddMembersListAdapter(
 
             binding.chatUserTime.text = item.lastMessage?.timestamp?.let { getTimeInMillis(it) }
 
-            binding.txtChatCount.text = item.messageSize
+            binding.txtChatCount.text = item.unreadMessageCount.toString()
 
             if (item.isNewMessage == true) {
                 binding.ivSelect.visibility = View.VISIBLE

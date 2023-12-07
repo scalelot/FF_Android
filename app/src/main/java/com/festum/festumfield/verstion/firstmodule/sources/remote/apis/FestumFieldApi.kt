@@ -10,6 +10,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreatePro
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
@@ -96,5 +97,15 @@ interface FestumFieldApi {
     fun removeMembersInGroup(
         @Body createGroupBody : CreateGroupBody
     ) : Observable<ApiResponse<GroupListItems>>
+
+    @POST("chatstatus/delivered")
+    fun messageDelivered(
+        @Body createGroupBody : MessageStatusBody
+    ) : Call<ApiBody>
+
+    @POST("chatstatus/seen")
+    fun messageSeen(
+        @Body createGroupBody : MessageStatusBody
+    ) : Call<ApiBody>
 
 }
