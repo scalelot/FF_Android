@@ -58,7 +58,7 @@ import java.util.Map;
 public class AddProductActivity extends BaseActivity {
     ImageView ic_back;
     LinearLayout lin_add_images;
-    RelativeLayout rl_ads,rl_addProduct;
+    RelativeLayout rl_ads, rl_addProduct;
     ImageView img_add_image, img_product1, img_product2, img_product3;
     EditText edt_pro_name, edt_pro_price, edt_pro_des, edt_offer;
     EditText edt_pro_code, edt_category, edt_subcategory;
@@ -160,7 +160,9 @@ public class AddProductActivity extends BaseActivity {
 //                    Snackbar.make(rl_addProduct, "Upload Images", Toast.LENGTH_LONG).show();
 //                } else
 
-                    if (edt_pro_name.getText().toString().equals("")) {
+                int discountValue = Integer.parseInt(edt_offer.getText().toString().trim());
+
+                if (edt_pro_name.getText().toString().equals("")) {
                     edt_pro_name.setError(getResources().getString(R.string.please_enter_pro_name));
 
                 } else if (edt_pro_price.getText().toString().equals("")) {
@@ -181,7 +183,12 @@ public class AddProductActivity extends BaseActivity {
                 } else if (edt_pro_code.getText().toString().equals("")) {
                     edt_pro_code.setError(getResources().getString(R.string.please_enter_pro_pcode));
 
+                } else if (discountValue >= 100) {
+
+                    edt_offer.setError(getResources().getString(R.string.please_enter_pro_offer_set));
+
                 } else {
+
                     FileUtils.DisplayLoading(context);
                     if (edit_pro != null) {
                         updateProductInfo(proId, edt_pro_name.getText().toString().trim(), edt_pro_price.getText().toString().trim(), edt_pro_des.getText().toString().trim(), edt_category.getText().toString().trim(), edt_subcategory.getText().toString().trim(), edt_offer.getText().toString().trim(), edt_pro_code.getText().toString().trim(), imagesArrayList);
@@ -222,7 +229,7 @@ public class AddProductActivity extends BaseActivity {
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
                 if (file != null) {
-                    uploadImage( file);
+                    uploadImage(file);
                 } else {
                     Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
                 }
@@ -238,7 +245,7 @@ public class AddProductActivity extends BaseActivity {
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
                 if (file != null) {
-                    uploadImage( file);
+                    uploadImage(file);
                 } else {
                     Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
                 }
@@ -253,7 +260,7 @@ public class AddProductActivity extends BaseActivity {
                 String path = RealPathUtil.getRealPath(AddProductActivity.this, selectImage);
                 File file = new File(path);
                 if (file != null) {
-                    uploadImage( file);
+                    uploadImage(file);
                 } else {
                     Toast.makeText(AddProductActivity.this, "Upload Images", Toast.LENGTH_LONG).show();
                 }
@@ -282,7 +289,7 @@ public class AddProductActivity extends BaseActivity {
                         Log.e("ProUploadImg=>", response.toString());
                         ProductImagesModel productImagesModel = new Gson().fromJson(response.toString(), ProductImagesModel.class);
 
-                            imagesArrayList.add(productImagesModel.getData().getKey());
+                        imagesArrayList.add(productImagesModel.getData().getKey());
 
 
 //                        getProductDetails(proId);
@@ -399,10 +406,6 @@ public class AddProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(context);
                     Log.e("UpdateProduct=>", response.toString());
-
-                    CreateProductModel createProductModel = new Gson().fromJson(response.toString(), CreateProductModel.class);
-
-                    startActivity(new Intent(getApplicationContext(), ProductActivity.class));
                     finish();
 
                 }
@@ -455,41 +458,41 @@ public class AddProductActivity extends BaseActivity {
                     for (int i = 0; i < productModel.getProductDetailsModel().getImages().size(); i++) {
                         imagesArrayList.add(productModel.getProductDetailsModel().getImages().get(i).toString());
 
-                        if (productModel.getProductDetailsModel().getImages().get(0) != null){
+                        if (productModel.getProductDetailsModel().getImages().get(0) != null) {
                             Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(0)).into(img_add_image);
                         }
 
-                        if (productModel.getProductDetailsModel().getImages().size() == 2){
-                            if (productModel.getProductDetailsModel().getImages().get(1) != null){
+                        if (productModel.getProductDetailsModel().getImages().size() == 2) {
+                            if (productModel.getProductDetailsModel().getImages().get(1) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             }
                         }
 
-                        if (productModel.getProductDetailsModel().getImages().size() == 3){
-                            if (productModel.getProductDetailsModel().getImages().get(2) != null){
+                        if (productModel.getProductDetailsModel().getImages().size() == 3) {
+                            if (productModel.getProductDetailsModel().getImages().get(2) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             }
                         }
-                        if (productModel.getProductDetailsModel().getImages().size() == 4){
-                            if (productModel.getProductDetailsModel().getImages().get(3) != null){
+                        if (productModel.getProductDetailsModel().getImages().size() == 4) {
+                            if (productModel.getProductDetailsModel().getImages().get(3) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(1)).into(img_product1);
                             }
                         }
 
-                        if (productModel.getProductDetailsModel().getImages().size() > 4){
-                            if (productModel.getProductDetailsModel().getImages().get(0) != null){
+                        if (productModel.getProductDetailsModel().getImages().size() > 4) {
+                            if (productModel.getProductDetailsModel().getImages().get(0) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(productModel.getProductDetailsModel().getImages().size() - 4)).into(img_add_image);
                             }
 
-                            if (productModel.getProductDetailsModel().getImages().get(1) != null){
+                            if (productModel.getProductDetailsModel().getImages().get(1) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(productModel.getProductDetailsModel().getImages().size() - 3)).into(img_product1);
                             }
 
-                            if (productModel.getProductDetailsModel().getImages().get(2) != null){
+                            if (productModel.getProductDetailsModel().getImages().get(2) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(productModel.getProductDetailsModel().getImages().size() - 2)).into(img_product2);
                             }
 
-                            if (productModel.getProductDetailsModel().getImages().get(3) != null){
+                            if (productModel.getProductDetailsModel().getImages().get(3) != null) {
                                 Glide.with(getApplicationContext()).load(Constans.Display_Image_URL + productModel.getProductDetailsModel().getImages().get(productModel.getProductDetailsModel().getImages().size() - 1)).into(img_product3);
                             }
                         }

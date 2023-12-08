@@ -51,7 +51,6 @@ import java.io.File
 class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
     OnMapReadyCallback {
 
-
     private lateinit var binding: ActivityCreateBusinessBinding
 
     private var map: GoogleMap? = null
@@ -125,8 +124,8 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 description = binding.edtDescription.text.toString(),
                 interestedCategory = binding.edtInterestedCategory.text.toString(),
                 interestedSubCategory = binding.edtInterestedSubcategory.text.toString(),
-                latitude = Const.lattitude,
-                longitude = Const.longitude
+                latitude = Const.b_lattitude,
+                longitude = Const.b_longitude
             )
 
             if (businessProfile.name.isNullOrEmpty()){
@@ -157,7 +156,7 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 return@setOnClickListener
             }
 
-            if (Const.b_lattitude == null){
+            if (Const.b_longitude == null){
                 Snackbar.make(binding.linear, resources.getString(R.string.please_enter_b_location), Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -204,7 +203,13 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
                     val brochure: String = profileBusinessData.brochure
                     val pdfName = brochure.substring(brochure.lastIndexOf('/') + 1)
-                    binding.edtBrochure.text = pdfName
+
+                    if (pdfName.isEmpty()){
+                        binding.edtBrochure.text = getString(R.string.brochure)
+                    }else{
+                        binding.edtBrochure.text = pdfName
+                    }
+
                     binding.edtBrochure.setOnClickListener {
                         val uri =
                             Uri.parse(Constans.Display_Image_URL + profileBusinessData.brochure)
@@ -227,7 +232,6 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                     if (profileBusinessData.location?.coordinates?.isNotEmpty() == true) {
                         val long = profileBusinessData.location.coordinates[0]
                         val lat = profileBusinessData.location.coordinates[1]
-
                         if (lat != null && long != null) {
                             val latLng = LatLng(lat, long)
                             Const.b_lattitude = lat
@@ -235,6 +239,8 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                             map?.addMarker(MarkerOptions().position(latLng))
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
                         }
+                    }else{
+                        Toast.makeText(this@CreateBusinessProfileActivity,  "Empty Map", Toast.LENGTH_SHORT).show()
                     }
                 }, 500)
 
@@ -449,6 +455,8 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
                 map?.addMarker(MarkerOptions().position(userLocation))
                 map?.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12f))
             }
+        }else{
+
         }
     }
 

@@ -60,7 +60,6 @@ public class ProductActivity extends BaseActivity {
     TextView txt_skip_for_now;
     LinearLayout lin_add_product;
     Context context;
-    ArrayList<ProductDetailsModel> productDetailsModelArrayList = new ArrayList<>();
     int page = 1, limit = Integer.MAX_VALUE;
     String searchData = "";
     NestedScrollView nestedScrollView;
@@ -88,9 +87,6 @@ public class ProductActivity extends BaseActivity {
         nestedScrollView = findViewById(R.id.nestedScrollView);
         idPBLoading = findViewById(R.id.idPBLoading);
 
-        if (!productDetailsModelArrayList.isEmpty()) {
-            productDetailsModelArrayList.clear();
-        }
 
         recycle_add_new_product.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
@@ -217,6 +213,9 @@ public class ProductActivity extends BaseActivity {
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
                     Log.e("GetProductLists=>", response.toString());
+
+                    ArrayList<ProductDetailsModel> productDetailsModelArrayList = new ArrayList<>();
+
                     try {
                         JSONObject dataJsonObject = response.getJSONObject("Data");
 
@@ -228,6 +227,7 @@ public class ProductActivity extends BaseActivity {
                             ProductDetailsModel productDetailsModel = new Gson().fromJson(jsonObject.toString(), ProductDetailsModel.class);
                             productDetailsModelArrayList.add(productDetailsModel);
                         }
+
                         if (productDetailsModelArrayList != null ) {
                             lin_not_empty.setVisibility(View.VISIBLE);
                             lin_empty_view.setVisibility(View.GONE);

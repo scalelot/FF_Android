@@ -47,6 +47,7 @@
                 android:layout_marginLeft="@dimen/margin_10"
                 android:layout_marginRight="@dimen/margin_10"
                 android:padding="@dimen/margin_6"
+                android:visibility="gone"
                 android:src="@drawable/icon_delete" />
 
         </RelativeLayout>
@@ -78,7 +79,7 @@
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_15"
                 android:layout_marginRight="@dimen/margin_20"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/SliderDots"
@@ -242,6 +243,7 @@
             android:layout_gravity="right"
             android:layout_marginRight="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"
+            android:visibility="gone"
             android:src="@drawable/icon_edit_with_shadow" />
 
         <androidx.appcompat.widget.AppCompatButton

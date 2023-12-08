@@ -151,6 +151,7 @@
     <string name="please_enter_pro_price">Please enter product price</string>
     <string name="please_enter_pro_des">Please enter product description</string>
     <string name="please_enter_pro_offer">Please enter product offer</string>
+    <string name="please_enter_pro_offer_set">Please enter a discount between 0 and 100</string>
     <string name="please_enter_pro_pcode">Please enter product code</string>
     <string name="cup_cake">Cup Cake</string>
     <string name="there_are_des">There are many variations to have...</string>

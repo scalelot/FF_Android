@@ -191,7 +191,9 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                     if (isProfileLocation) {
                         Const.lattitude = location.getLatitude();
                         Const.longitude = location.getLongitude();
-                    } else {
+                    }
+
+                    if (isBusinessLocation){
                         Const.b_lattitude = location.getLatitude();
                         Const.b_longitude = location.getLongitude();
                     }
@@ -226,7 +228,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                 if (isProfileLocation) {
                     Const.lattitude = marker.getPosition().latitude;
                     Const.longitude = marker.getPosition().longitude;
-                } else {
+                } if (isBusinessLocation) {
                     Const.b_lattitude = marker.getPosition().latitude;
                     Const.b_longitude = marker.getPosition().longitude;
                 }
@@ -260,7 +262,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
                 if (isProfileLocation) {
                     Const.lattitude = latLng.latitude;
                     Const.longitude = latLng.longitude;
-                } else {
+                } if(isBusinessLocation) {
                     Const.b_lattitude = latLng.latitude;
                     Const.b_longitude = latLng.longitude;
                 }
@@ -289,7 +291,7 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
         if (isProfileLocation) {
             Const.lattitude = location.getLatitude();
             Const.longitude = location.getLongitude();
-        } else {
+        } if(isBusinessLocation) {
             Const.b_lattitude = location.getLatitude();
             Const.b_longitude = location.getLongitude();
         }

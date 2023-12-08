@@ -89,12 +89,8 @@ public class ProductDetailsActivity extends BaseActivity {
 
         if (isFromUser.equals("Product")) {
             btn_inquiry_message.setVisibility(View.GONE);
-            ic_delete.setVisibility(View.VISIBLE);
-            ic_p_edit.setVisibility(View.VISIBLE);
         } else {
             btn_inquiry_message.setVisibility(View.VISIBLE);
-            ic_delete.setVisibility(View.GONE);
-            ic_p_edit.setVisibility(View.GONE);
         }
 
         ic_back.setOnClickListener(new View.OnClickListener() {

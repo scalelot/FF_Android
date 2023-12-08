@@ -128,7 +128,7 @@
                             android:src="@drawable/ic_business_beg" />
 
                         <TextView
-                            android:id="@+id/business_name"
+                            android:id="@+id/text_business_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_10"
@@ -139,10 +139,10 @@
                             android:textSize="@dimen/text_14" />
 
                         <TextView
-                            android:id="@+id/text_business_name"
+                            android:id="@+id/business_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/business_name"
+                            android:layout_below="@+id/text_business_name"
                             android:layout_marginLeft="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_5"
                             android:layout_toRightOf="@+id/img_business"
@@ -171,7 +171,7 @@
                             android:src="@drawable/ic_category_icon" />
 
                         <TextView
-                            android:id="@+id/category_name"
+                            android:id="@+id/txt_category"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_10"
@@ -182,10 +182,10 @@
                             android:textSize="@dimen/text_14" />
 
                         <TextView
-                            android:id="@+id/txt_category"
+                            android:id="@+id/category_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/category_name"
+                            android:layout_below="@+id/txt_category"
                             android:layout_marginLeft="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_5"
                             android:layout_toRightOf="@+id/img_category"
@@ -214,7 +214,7 @@
                             android:src="@drawable/ic_subcategory_icon" />
 
                         <TextView
-                            android:id="@+id/subcategory_name"
+                            android:id="@+id/txt_subcategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_10"
@@ -225,10 +225,10 @@
                             android:textSize="@dimen/text_14" />
 
                         <TextView
-                            android:id="@+id/txt_subcategory"
+                            android:id="@+id/subcategory_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/subcategory_name"
+                            android:layout_below="@+id/txt_subcategory"
                             android:layout_marginLeft="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_5"
                             android:layout_toRightOf="@+id/img_subcategory"
@@ -257,7 +257,7 @@
                             android:src="@drawable/ic_about_icon" />
 
                         <TextView
-                            android:id="@+id/discription_name"
+                            android:id="@+id/txt_discription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_10"
@@ -268,10 +268,10 @@
                             android:textSize="@dimen/text_14" />
 
                         <TextView
-                            android:id="@+id/txt_discription"
+                            android:id="@+id/discription_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/discription_name"
+                            android:layout_below="@+id/txt_discription"
                             android:layout_marginLeft="@dimen/margin_10"
                             android:layout_marginTop="@dimen/margin_5"
                             android:layout_toRightOf="@+id/img_discription"

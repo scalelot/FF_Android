@@ -71,7 +71,12 @@ class BusinessInformationFragment(var profileData: ProfileResponse) : BaseFragme
 
                     val brochure: String = profileBusinessData.brochure
                     val pdfName = brochure.substring(brochure.lastIndexOf('/') + 1)
-                    binding.businessBrochure.text = pdfName
+
+                    if (pdfName.isEmpty()) {
+                        binding.relBrochure.visibility = View.GONE
+                    } else {
+                        binding.businessBrochure.text = pdfName
+                    }
 
                     binding.relBrochure.setOnClickListener {
                         val uri = Uri.parse(Constans.Display_Image_URL + profileBusinessData.brochure)
