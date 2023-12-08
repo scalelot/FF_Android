@@ -83,6 +83,7 @@ class FriendsListAdapter(
                     )
                 );
                 binding.txtChatCount.visibility = View.VISIBLE
+                binding.txtChatCount.text = item.unreadMessageCount.toString()
 
                 if (item.isPinned == true){
                     binding.chatPin.visibility = View.INVISIBLE
@@ -90,8 +91,22 @@ class FriendsListAdapter(
 
             } else {
                 binding.txtMessage.setTextColor(ContextCompat.getColor(context, R.color.grey));
-                binding.txtChatCount.visibility = View.GONE
+
+                if (item.unreadMessageCount == 0){
+                    binding.txtChatCount.visibility = View.GONE
+                }else{
+                    binding.txtChatCount.text = item.unreadMessageCount.toString()
+                    binding.txtMessage.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorAccent
+                        )
+                    )
+                    binding.txtChatCount.visibility = View.VISIBLE
+                }
+
             }
+
 
             if (item.online == true){
                 binding.ivTypeImg.visibility = View.VISIBLE
@@ -185,14 +200,7 @@ class FriendsListAdapter(
                 }
             }
 
-            binding.txtChatCount.text = item.unreadMessageCount.toString()
 
-            if (item.unreadMessageCount == 0){
-                binding.txtChatCount.visibility = View.GONE
-            }else{
-                binding.txtChatCount.text = item.unreadMessageCount.toString()
-                binding.txtChatCount.visibility = View.VISIBLE
-            }
 
             when (checkedPosition) {
                 -1 -> {
@@ -311,7 +319,7 @@ class FriendsListAdapter(
             createdAt = getCurrentUTCTime(),
             isPinned = friendsListItems?.isPinned,
             isNewMessage = true,
-            unreadMessageCount = friendsListItems?.unreadMessageCount,
+            unreadMessageCount = 1,
             online = friendsListItems?.online
         )
 
@@ -345,7 +353,8 @@ class FriendsListAdapter(
             id = friendsListItems?.id,
             isPinned = friendsListItems?.isPinned,
             online = true,
-            members = friendsListItems?.members
+            members = friendsListItems?.members,
+            unreadMessageCount = friendsListItems?.unreadMessageCount
         )
 
         if (friendsListItems != null){
@@ -378,7 +387,8 @@ class FriendsListAdapter(
             id = friendsListItems?.id,
             isPinned = friendsListItems?.isPinned,
             online = false,
-            members = friendsListItems?.members
+            members = friendsListItems?.members,
+            unreadMessageCount = friendsListItems?.unreadMessageCount
         )
 
         if (friendsListItems != null){

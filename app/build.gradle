@@ -232,6 +232,10 @@ dependencies {
     //Permissions
     implementation 'com.guolindev.permissionx:permissionx:1.6.1'
 
+    //Update Activity
+    implementation 'com.github.DJSeokHo:EasyEventObserver:1.0.6'
+
+
 //    implementation 'org.webrtc:google-webrtc:1.0.+'
 //    implementation files('libs/autobanh.jar')
 //    implementation files('libs/base_java.jar')

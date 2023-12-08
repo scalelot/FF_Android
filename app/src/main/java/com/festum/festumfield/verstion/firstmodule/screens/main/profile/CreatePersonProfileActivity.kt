@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
@@ -35,9 +36,12 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.Companion.get
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.SocialMediaLinksItem
+import com.festum.festumfield.verstion.firstmodule.utils.EventConstants
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_EDIT_PROFILE
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -52,6 +56,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.swein.easyeventobserver.EventCenter
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
@@ -75,6 +80,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
     private var hobbiesArrayList = ArrayList<String>()
     private var socialMediaLinkArrayList = ArrayList<SocialMediaLinksItem>()
     private var map: GoogleMap? = null
+    private var isEditProfile = false
 
     override fun getContentView(): View {
         binding = ActivityCreateProfileBinding.inflate(layoutInflater)
@@ -89,6 +95,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
         val editProfile = intent.getStringExtra("EditProfile")
         if (editProfile?.isNotEmpty() == true) {
             binding.title.text = editProfile
+            isEditProfile = true
         }
 
 
@@ -244,7 +251,6 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             socialMediaLink()
 
-
             val profileData = CreateProfileModel(
                 fullName = binding.edtName.text.toString(),
                 userName = binding.edtNickname.text.toString(),
@@ -262,8 +268,6 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 longitude = Const.longitude,
                 interestedin = radioGenderValue.uppercase()
             )
-
-            Toast.makeText(this@CreatePersonProfileActivity, "" + radioGenderValue.uppercase(), Toast.LENGTH_SHORT).show()
 
             if (profileData.fullName.isNullOrEmpty()) {
                 binding.edtName.requestFocus()
@@ -348,8 +352,6 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                 interestedin = interestedIn
             )
 
-            Toast.makeText(this@CreatePersonProfileActivity, "" + radioGenderValue.uppercase(), Toast.LENGTH_SHORT).show()
-
             if (profileData.fullName.isNullOrEmpty()) {
                 binding.edtName.requestFocus()
                 binding.edtName.error = "Enter Full Name"
@@ -421,7 +423,7 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
                     .placeholder(R.drawable.ic_user)
                     .into(binding.profileImage)
 
-                AppPreferencesDelegates.get().personalProfile = true
+               get().personalProfile = true
 
                 binding.edtName.setText(profileData.fullName)
                 binding.edtNickname.setText(profileData.nickName)
@@ -552,14 +554,14 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             if (it?.status == 200) {
 
-                AppPreferencesDelegates.get().personalProfile = true
+                get().personalProfile = true
 
-                startActivity(
-                    Intent(
-                        this@CreatePersonProfileActivity,
-                        ProfilePreviewActivity::class.java
-                    )
-                )
+                val dictionary = mutableMapOf<String,Any>()
+
+                dictionary["isEdit"] = "update"
+                EventCenter.sendEvent(EventConstants.UPDATE_PERSON_PROFILE,this,dictionary)
+
+                finish()
 
             }
 
@@ -573,7 +575,12 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
 
             if (it?.status == 200) {
 
-                AppPreferencesDelegates.get().personalProfile = true
+                get().businessProfile = true
+
+                /*val intent = Intent()
+                intent.putExtra("EditBusinessProfile", true)
+                setResult(1, intent)
+                finish()*/
 
                 startActivity(
                     Intent(
@@ -825,5 +832,6 @@ class CreatePersonProfileActivity : BaseActivity<ProfileViewModel>(), TokenListe
         }
 
     }
+
 
 }

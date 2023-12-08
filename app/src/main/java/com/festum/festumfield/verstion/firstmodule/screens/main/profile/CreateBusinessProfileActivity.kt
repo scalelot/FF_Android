@@ -426,8 +426,6 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
                     viewModel.setBusinessBrochure(file)
 
-
-
                 }
 
             }

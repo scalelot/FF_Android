@@ -127,7 +127,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.profile.CreatePersonProfileActivity"
-            android:exported="false"
+            android:exported="true"
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
@@ -137,7 +137,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.profile.ProfilePreviewActivity"
-            android:exported="false"
+            android:exported="true"
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity

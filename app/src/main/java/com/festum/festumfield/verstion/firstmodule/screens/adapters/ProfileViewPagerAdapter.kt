@@ -14,7 +14,6 @@ class ProfileViewPagerAdapter(var profileData: ProfileResponse, fm: FragmentMana
         return when (position) {
             0 -> PersonalInformationFragment(profileData)
             1 -> BusinessInformationFragment(profileData)
-//            2 -> ReelsFragment(profileData)
             else -> PersonalInformationFragment(profileData)
         }
     }

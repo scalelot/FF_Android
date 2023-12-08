@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -30,7 +29,6 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialo
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
 import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -144,8 +142,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }
 
-
-
         if (receiverUserName.isNotEmpty() && receiverUserId.isNotEmpty()) {
             binding.userName.text = receiverUserName
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
@@ -254,21 +250,22 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         binding.imgVideoCall.setOnClickListener {
 
-            if (friendsItem.members?.isNotEmpty() == true) {
-
-                onGroupVideoCallPermission()
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                onVideoCallPermission(true)
             } else {
-
-                onVideoCallPermission()
-
+                onVideoCallPermission(false)
             }
+
 
         }
 
         binding.imgContact.setOnClickListener {
 
-            onAudioCallPermission()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                onAudioCallPermission(true)
+            } else {
+                onAudioCallPermission(false)
+            }
 
         }
 
@@ -277,6 +274,17 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     override fun setupObservers() {
 
         viewModel.chatData.observe(this) { chatList ->
+
+             // Chat message seen
+
+            /*if (chatList != null){
+                for (i in chatList.indices){
+                    if (chatList[i].to?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
+                        viewModel.getMessageSeen(chatList[0].id.toString())
+                        break
+                    }
+                }
+            }*/
 
             chatList?.reverse()
 
@@ -315,14 +323,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             }
             chatMessageAdapter?.setItems(listItems)
             binding.msgRV.scrollToPosition(listItems.size - 1)
-
-            /* Chat message seen */
-
-            for (i in chatList.indices){
-                if (chatList[i].to?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
-                    viewModel.getMessageSeen(chatList[i].id.toString())
-                }
-            }
 
             binding.idPBLoading.visibility = View.GONE
 
@@ -425,9 +425,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 }
             }, 500)
 
-            if (sendData != null){
+            /*if (sendData != null){
                 viewModel.getMessageDeliver(sendData.mainId.toString())
-            }
+            }*/
 
         }
 
@@ -912,109 +912,211 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun onVideoCallPermission() {
+    private fun onVideoCallPermission(isTiramisu: Boolean) {
 
-        Dexter.withContext(this@ChatActivity)
-            .withPermissions(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.CAMERA)
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
+        if (isTiramisu){
+            Dexter.withContext(this@ChatActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.CAMERA)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
 
-                        val message = JSONObject().apply {
+                            val message = JSONObject().apply {
 
-                            val jsonArray = JSONArray()
-                            jsonArray.put(friendsItem.id?.lowercase())
-                            jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
-                            put("memberIds", jsonArray)
-                            put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
-                            put("name", AppPreferencesDelegates.get().userName)
-                            put("isVideoCall", true)
-                            put("isCallingFromApp", true)
+                                val jsonArray = JSONArray()
+                                jsonArray.put(friendsItem.id?.lowercase())
+                                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                                put("memberIds", jsonArray)
+                                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+                                put("name", AppPreferencesDelegates.get().userName)
+                                put("isVideoCall", true)
+                                put("isCallingFromApp", true)
 
+                            }
+
+                            SocketManager.mSocket?.emit("callUser", message)
+
+                            upComingCallView(friendsItem)
+
+                            isVideoCalling = true
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@ChatActivity,
+                                getString(R.string.request_camera_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
                         }
 
-                        SocketManager.mSocket?.emit("callUser", message)
-
-                        upComingCallView(friendsItem)
-
-                        isVideoCalling = true
-
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@ChatActivity,
-                            getString(R.string.request_camera_mic_permissions_text),
-                            getString(R.string.media_permission_title)
-                        )
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
+                .check()
+        }else{
+            Dexter.withContext(this@ChatActivity)
+                .withPermissions(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
 
-            }).withErrorListener {}
-            .check()
+                            val message = JSONObject().apply {
+
+                                val jsonArray = JSONArray()
+                                jsonArray.put(friendsItem.id?.lowercase())
+                                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                                put("memberIds", jsonArray)
+                                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+                                put("name", AppPreferencesDelegates.get().userName)
+                                put("isVideoCall", true)
+                                put("isCallingFromApp", true)
+
+                            }
+
+                            SocketManager.mSocket?.emit("callUser", message)
+
+                            upComingCallView(friendsItem)
+
+                            isVideoCalling = true
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@ChatActivity,
+                                getString(R.string.request_camera_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+                .check()
+        }
+
 
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun onAudioCallPermission() {
+    private fun onAudioCallPermission(isTiramisu: Boolean) {
 
-        Dexter.withContext(this@ChatActivity)
-            .withPermissions(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO)
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
+        if (isTiramisu){
 
-                        val message = JSONObject().apply {
+            Dexter.withContext(this@ChatActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
 
-                            val jsonArray = JSONArray()
-                            jsonArray.put(friendsItem.id?.lowercase())
-                            jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
-                            put("memberIds", jsonArray)
-                            put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
-                            put("name", AppPreferencesDelegates.get().userName)
-                            put("isVideoCall", false)
-                            put("isCallingFromApp", true)
+                            val message = JSONObject().apply {
 
+                                val jsonArray = JSONArray()
+                                jsonArray.put(friendsItem.id?.lowercase())
+                                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                                put("memberIds", jsonArray)
+                                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+                                put("name", AppPreferencesDelegates.get().userName)
+                                put("isVideoCall", false)
+                                put("isCallingFromApp", true)
+
+                            }
+
+                            SocketManager.mSocket?.emit("callUser", message)
+
+                            upComingCallView(friendsItem)
+
+                            isAudioCalling = true
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@ChatActivity,
+                                getString(R.string.request_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
                         }
 
-                        SocketManager.mSocket?.emit("callUser", message)
-
-                        upComingCallView(friendsItem)
-
-                        isAudioCalling = true
-
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@ChatActivity,
-                            getString(R.string.request_mic_permissions_text),
-                            getString(R.string.media_permission_title)
-                        )
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
+                .check()
 
-            }).withErrorListener {}
-            .check()
+        } else {
+
+            Dexter.withContext(this@ChatActivity)
+                .withPermissions(Manifest.permission.RECORD_AUDIO)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+
+                            val message = JSONObject().apply {
+
+                                val jsonArray = JSONArray()
+                                jsonArray.put(friendsItem.id?.lowercase())
+                                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+                                put("memberIds", jsonArray)
+                                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+                                put("name", AppPreferencesDelegates.get().userName)
+                                put("isVideoCall", false)
+                                put("isCallingFromApp", true)
+
+                            }
+
+                            SocketManager.mSocket?.emit("callUser", message)
+
+                            upComingCallView(friendsItem)
+
+                            isAudioCalling = true
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@ChatActivity,
+                                getString(R.string.request_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+                .check()
+
+        }
+
 
     }
 

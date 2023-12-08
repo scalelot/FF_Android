@@ -515,18 +515,23 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
-
             if (isVideoCall){
 
-                onCameraPermission(isCallingFromApp,signal.lowercase(),name)
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    onCameraPermission(isCallingFromApp,signal.lowercase(),name,true)
+                } else {
+                    onCameraPermission(isCallingFromApp,signal.lowercase(),name,false)
+                }
 
             } else {
 
-                onAudioPermission(isCallingFromApp,signal.lowercase(),name,upComingCallUser?.profileimage)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    onAudioPermission(isCallingFromApp,signal.lowercase(),name,upComingCallUser?.profileimage,true)
+                } else {
+                    onAudioPermission(isCallingFromApp,signal.lowercase(),name,upComingCallUser?.profileimage,false)
+                }
 
             }
-
 
         }
 
@@ -562,56 +567,105 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun onCameraPermission(isCallingFromApp: Boolean, remoteChannelId: String, name: String) {
+    private fun onCameraPermission(isCallingFromApp: Boolean, remoteChannelId: String, name: String, isTiramisu : Boolean) {
 
-        Dexter.withContext(this@HomeActivity)
-            .withPermissions(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.CAMERA)
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
+        if (isTiramisu){
+            Dexter.withContext(this@HomeActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.CAMERA)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
 
-                        if (isCallingFromApp){
-                            val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
-                            intent.putExtra("remoteChannelId", remoteChannelId)
-                            intent.putExtra("remoteUser", name)
-                            intent.putExtra("callReceive", true)
-                            startActivity(intent)
-                            stopAudio()
-                            dialog?.dismiss()
+                            if (isCallingFromApp){
+                                val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            } else {
+
+                                val intent = Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            }
+
                         } else {
-
-                            val intent = Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
-                            intent.putExtra("remoteChannelId", remoteChannelId)
-                            intent.putExtra("remoteUser", name)
-                            intent.putExtra("callReceive", true)
-                            startActivity(intent)
-                            stopAudio()
-                            dialog?.dismiss()
+                            AppPermissionDialog.showPermission(
+                                this@HomeActivity,
+                                getString(R.string.request_camera_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
                         }
 
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@HomeActivity,
-                            getString(R.string.request_camera_mic_permissions_text),
-                            getString(R.string.media_permission_title)
-                        )
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
+                .check()
+        } else {
+            Dexter.withContext(this@HomeActivity)
+                .withPermissions(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
 
-            }).withErrorListener {}
-            .check()
+                            if (isCallingFromApp){
+                                val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            } else {
+
+                                val intent = Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            }
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@HomeActivity,
+                                getString(R.string.request_camera_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+                .check()
+        }
 
     }
 
@@ -620,58 +674,113 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         isCallingFromApp: Boolean,
         remoteChannelId: String,
         name: String,
-        profileimage: String?
+        profileimage: String?,
+        isTiramisu : Boolean
     ) {
 
-        Dexter.withContext(this@HomeActivity)
-            .withPermissions(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO)
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
+        if (isTiramisu) {
 
-                        if (isCallingFromApp){
-                            val intent = Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
-                            intent.putExtra("remoteChannelId", remoteChannelId)
-                            intent.putExtra("remoteUser", name)
-                            intent.putExtra("callReceive", true)
-                            intent.putExtra("profileImage", profileimage)
-                            startActivity(intent)
-                            stopAudio()
-                            dialog?.dismiss()
+            Dexter.withContext(this@HomeActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+
+                            if (isCallingFromApp){
+                                val intent = Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                intent.putExtra("profileImage", profileimage)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            } else {
+                                val intent = Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                intent.putExtra("profileImage", profileimage)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            }
+
+
                         } else {
-                            val intent = Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
-                            intent.putExtra("remoteChannelId", remoteChannelId)
-                            intent.putExtra("remoteUser", name)
-                            intent.putExtra("callReceive", true)
-                            intent.putExtra("profileImage", profileimage)
-                            startActivity(intent)
-                            stopAudio()
-                            dialog?.dismiss()
+                            AppPermissionDialog.showPermission(
+                                this@HomeActivity,
+                                getString(R.string.request_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
                         }
 
-
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@HomeActivity,
-                            getString(R.string.request_mic_permissions_text),
-                            getString(R.string.media_permission_title)
-                        )
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
+                .check()
 
-            }).withErrorListener {}
-            .check()
+        } else {
+
+            Dexter.withContext(this@HomeActivity)
+                .withPermissions(Manifest.permission.RECORD_AUDIO)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+
+                            if (isCallingFromApp){
+                                val intent = Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                intent.putExtra("profileImage", profileimage)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            } else {
+                                val intent = Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
+                                intent.putExtra("remoteChannelId", remoteChannelId)
+                                intent.putExtra("remoteUser", name)
+                                intent.putExtra("callReceive", true)
+                                intent.putExtra("profileImage", profileimage)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+                            }
+
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@HomeActivity,
+                                getString(R.string.request_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+                .check()
+
+        }
+
 
     }
 

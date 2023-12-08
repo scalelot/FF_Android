@@ -22,8 +22,10 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionD
 import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
+import com.festum.festumfield.verstion.firstmodule.utils.EventConstants
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_EDIT_PROFILE
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
@@ -33,6 +35,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.swein.easyeventobserver.EventCenter
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
@@ -75,9 +78,10 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         val item = binding.viewPager.currentItem
 
-        if (item == 0){
+        if (item == 0) {
             binding.btnEditProfile.setOnClickListener {
-                val intent = Intent(this@ProfilePreviewActivity, CreatePersonProfileActivity::class.java)
+                val intent =
+                    Intent(this@ProfilePreviewActivity, CreatePersonProfileActivity::class.java)
                 intent.putExtra("EditProfile", resources.getString(R.string.edit_personal_profile))
                 startActivity(intent)
             }
@@ -89,21 +93,30 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
                 when (tab.position) {
                     0 -> {
-                        binding.btnEditProfile.text = resources.getString(R.string.edit_personal_profile)
+                        binding.btnEditProfile.text =
+                            resources.getString(R.string.edit_personal_profile)
                         binding.llBusinessProduct.visibility = View.GONE
-                        if (AppPreferencesDelegates.get().personalProfile) {
+                        if (AppPreferencesDelegates.get().userName.isNotEmpty()) {
                             binding.btnEditProfile.visibility = View.VISIBLE
                         } else {
                             binding.btnEditProfile.visibility = View.INVISIBLE
                         }
                         binding.btnEditProfile.setOnClickListener {
-                            val intent = Intent(this@ProfilePreviewActivity, CreatePersonProfileActivity::class.java)
-                            intent.putExtra("EditProfile", resources.getString(R.string.edit_personal_profile))
-                            startActivity(intent)
+                            val intent = Intent(
+                                this@ProfilePreviewActivity,
+                                CreatePersonProfileActivity::class.java
+                            )
+                            intent.putExtra(
+                                "EditProfile",
+                                resources.getString(R.string.edit_personal_profile)
+                            )
+                            startActivityForResult(intent, IS_EDIT_PROFILE)
                         }
                     }
+
                     1 -> {
-                        binding.btnEditProfile.text = resources.getString(R.string.edit_business_profile)
+                        binding.btnEditProfile.text =
+                            resources.getString(R.string.edit_business_profile)
                         if (businessProfile == true) {
                             binding.llBusinessProduct.visibility = View.VISIBLE
                             binding.btnEditProfile.visibility = View.VISIBLE
@@ -112,8 +125,14 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                             binding.btnEditProfile.visibility = View.INVISIBLE
                         }
                         binding.btnEditProfile.setOnClickListener {
-                            val intent = Intent(this@ProfilePreviewActivity, CreateBusinessProfileActivity::class.java)
-                            intent.putExtra("EditProfile", resources.getString(R.string.edit_business_profile))
+                            val intent = Intent(
+                                this@ProfilePreviewActivity,
+                                CreateBusinessProfileActivity::class.java
+                            )
+                            intent.putExtra(
+                                "EditProfile",
+                                resources.getString(R.string.edit_business_profile)
+                            )
                             startActivity(intent)
                         }
                     }
@@ -125,16 +144,18 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             override fun onTabUnselected(tab: TabLayout.Tab) {
 
             }
+
             override fun onTabReselected(tab: TabLayout.Tab) {}
 
         })
 
-        binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {}
+            ) {
+            }
 
             override fun onPageSelected(position: Int) {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
@@ -146,18 +167,13 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
         })
 
         binding.icBack.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@ProfilePreviewActivity,
-                    HomeActivity::class.java
-                )
-            )
+            finish()
         }
 
-        if (AppPreferencesDelegates.get().userName.isNotEmpty()){
+        if (AppPreferencesDelegates.get().userName.isNotEmpty()) {
             binding.editImg.visibility = View.VISIBLE
             binding.btnEditProfile.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.editImg.visibility = View.GONE
             binding.btnEditProfile.visibility = View.INVISIBLE
         }
@@ -165,11 +181,11 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
         /* Profile Picture Set */
         binding.editImg.setOnClickListener {
 
-            if (AppPreferencesDelegates.get().userName.isBlank()){
+            if (AppPreferencesDelegates.get().userName.isBlank()) {
 
                 createProfileDialog()
 
-            }else{
+            } else {
                 if (IntentUtil.readPermission(
                         this@ProfilePreviewActivity
                     ) && IntentUtil.writePermission(
@@ -183,6 +199,31 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
         }
 
+        EventCenter.addEventObserver(
+            EventConstants.UPDATE_PERSON_PROFILE,
+            this,
+            object : EventCenter.EventRunnable {
+                override fun run(arrow: String, poster: Any, data: MutableMap<String, Any>?) {
+
+                    data?.let {
+
+                        val isEdit = data["isEdit"] as String
+
+                        if (isEdit == "update") {
+
+                            val intent = intent
+                            overridePendingTransition(0, 0)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                            finish()
+                            overridePendingTransition(0, 0)
+                            startActivity(intent)
+
+                        }
+
+                    }
+                }
+
+            })
 
     }
 
@@ -214,18 +255,23 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                                 "Facebook" -> {
                                     binding.icFb.visibility = View.VISIBLE
                                 }
+
                                 "Instagram" -> {
                                     binding.icInsta.visibility = View.VISIBLE
                                 }
+
                                 "Twitter" -> {
                                     binding.icTwitter.visibility = View.VISIBLE
                                 }
+
                                 "Linkedin" -> {
                                     binding.icLinkdin.visibility = View.VISIBLE
                                 }
+
                                 "Pinterest" -> {
                                     binding.icPinterest.visibility = View.VISIBLE
                                 }
+
                                 "Youtube" -> {
                                     binding.icYoutube.visibility = View.VISIBLE
                                 }
@@ -235,7 +281,8 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
                     }
 
                     /* Set View Pager */
-                    binding.viewPager.adapter = ProfileViewPagerAdapter(profileData,supportFragmentManager)
+                    binding.viewPager.adapter =
+                        ProfileViewPagerAdapter(profileData, supportFragmentManager)
 
                 }
 
@@ -271,10 +318,14 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true){
+                    if (permission?.areAllPermissionsGranted() == true) {
                         openIntent()
                     } else {
-                        AppPermissionDialog.showPermission(this@ProfilePreviewActivity,getString(R.string.media_permission),getString(R.string.media_permission_title))
+                        AppPermissionDialog.showPermission(
+                            this@ProfilePreviewActivity,
+                            getString(R.string.media_permission),
+                            getString(R.string.media_permission_title)
+                        )
                     }
 
                 }
@@ -337,15 +388,18 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             }
         }
 
+
     }
 
-    private fun createProfileDialog(){
+    private fun createProfileDialog() {
 
-        MaterialAlertDialogBuilder(this, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+        MaterialAlertDialogBuilder(
+            this,
+            R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog
+        )
             .setTitle(getString(R.string.create_profile))
             .setMessage(getString(R.string.crate_profile))
-            .setPositiveButton("OK") {
-                    dialogInterface, i ->
+            .setPositiveButton("OK") { dialogInterface, i ->
                 dialogInterface.dismiss()
 
             }
@@ -354,14 +408,17 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        if (AppPreferencesDelegates.get().personalProfile){
-            viewModel.getProfile()
+
+        /*if (AppPreferencesDelegates.get().userName.isNotEmpty() || AppPreferencesDelegates.get().businessProfile){
+            val intent = intent
+            overridePendingTransition(0, 0)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            finish()
+            overridePendingTransition(0, 0)
+            startActivity(intent)
             binding.editImg.visibility = View.VISIBLE
             binding.btnEditProfile.visibility = View.VISIBLE
-        }else{
-            binding.editImg.visibility = View.GONE
-            binding.btnEditProfile.visibility = View.INVISIBLE
-        }
+        }*/
     }
 
     private fun cropImage(uri: Uri) {
@@ -385,12 +442,18 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(
+        /*startActivity(
             Intent(
                 this@ProfilePreviewActivity,
                 HomeActivity::class.java
             )
-        )
+        )*/
+        finish()
+    }
+
+    override fun onDestroy() {
+        EventCenter.removeAllObserver(this)
+        super.onDestroy()
     }
 
 }
