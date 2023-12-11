@@ -1,8 +1,6 @@
-package com.festum.festumfield.verstion.firstmodule.screens.webrtc
+package com.festum.festumfield.verstion.firstmodule.screens.main.webrtc
 
 import android.Manifest
-import android.R.attr.duration
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
@@ -13,11 +11,9 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import com.bumptech.glide.Glide
 import com.festum.festumfield.CustomSdpObserver
 import com.festum.festumfield.R
-import com.festum.festumfield.Utils.Constans
-import com.festum.festumfield.databinding.ActivityVideoCallBinding
+import com.festum.festumfield.databinding.ActivityVideoCallingBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -59,25 +55,16 @@ import org.webrtc.SurfaceTextureHelper
 import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
-import java.util.Timer
-import java.util.TimerTask
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 
 @AndroidEntryPoint
-class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
+class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
-    private lateinit var binding: ActivityVideoCallBinding
-
-    private val handler = Handler(Looper.getMainLooper())
-    private var callDurationInSeconds = 0
+    private lateinit var binding: ActivityVideoCallingBinding
 
     private var remoteId: String? = null
     private var remoteUser: String? = null
     private var callReceive: Boolean? = null
-
-//    private var callReceive: Boolean? = null
 
     private var frontCameraID = 1
     private var backCameraID = 0
@@ -87,9 +74,10 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var rootEglBase: EglBase? = null
 
+    private val handler = Handler(Looper.getMainLooper())
+    private var callDurationInSeconds = 0
+
     /* PeerConnection */
-
-
 
     private var peerConnection: PeerConnection? = null
 
@@ -101,26 +89,35 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var localAudioTrack: AudioTrack? = null
 
-    private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
-    private var isSpeakerMode = true
-    private var isMute = false
+    var storge_permissions = arrayOf(Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO)
 
-
-    var storge_permissions = arrayOf( Manifest.permission.RECORD_AUDIO)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     var storge_permissions_33 = arrayOf(
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.READ_MEDIA_VIDEO,
-        Manifest.permission.READ_MEDIA_AUDIO
+        Manifest.permission.READ_MEDIA_AUDIO,
+        Manifest.permission.CAMERA
     )
 
+
+
+
     var userFragment = ""
-    var remoteUserName = ""
+    var remoteOffer : String = ""
+
+    private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
+    private var isSpeakerMode = true
+    private var isMute = false
+
+    private var isCameraPause = false
+
+    private var isCameraRotation = false
 
     lateinit var permission: Array<String>
 
     override fun getContentView(): View {
-        binding = ActivityVideoCallBinding.inflate(layoutInflater)
+        binding = ActivityVideoCallingBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -130,14 +127,10 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
-        val profileImage = intent.getStringExtra("profileImage")
-        ActivityCompat.requestPermissions(this@AppAudioCallingActivity, permissions(), 1)
+        ActivityCompat.requestPermissions(this@WebVideoCallingActivity, permissions(), 1)
 
-        binding.videocallUsername.text = remoteUser
-
-        Glide.with(this@AppAudioCallingActivity)
-            .load(Constans.Display_Image_URL + profileImage)
-            .placeholder(R.drawable.ic_user_img).into(binding.videocallImage)
+        binding.fromText.text = AppPreferencesDelegates.get().userName
+        binding.toText.text = remoteUser
 
         runOnUiThread {
 
@@ -177,6 +170,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
                     Log.e("TAG", "offer:----------$receiverData")
 
+
                     handleRemoteVideoOffer(sdpOffer)
 
 
@@ -200,7 +194,8 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
                 try {
                     val data = args[0] as JSONObject
-
+                    AppPreferencesDelegates.get().isVideoCalling = true
+                    AppPreferencesDelegates.get().isAudioCalling = true
                     stop()
 
                 } catch (e: Exception) {
@@ -213,16 +208,15 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestCameraAndMicAccess() {
-        if (IntentUtil.cameraPermission(this@AppAudioCallingActivity)
-            && IntentUtil.readAudioPermission(this@AppAudioCallingActivity)
-            && IntentUtil.readVideoPermission(this@AppAudioCallingActivity)
-            && IntentUtil.readImagesPermission(this@AppAudioCallingActivity))
-        {
+        if (IntentUtil.cameraPermission(this@WebVideoCallingActivity)
+            && IntentUtil.readAudioPermission(this@WebVideoCallingActivity)
+            && IntentUtil.readVideoPermission(this@WebVideoCallingActivity)
+            && IntentUtil.readImagesPermission(this@WebVideoCallingActivity)
+        ) {
             init()
-        } else{
+        } else {
 
         }
 
@@ -235,12 +229,13 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onCameraPermission() {
 
-        Dexter.withContext(this@AppAudioCallingActivity)
+        Dexter.withContext(this@WebVideoCallingActivity)
             .withPermissions(
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
                 Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.CAMERA)
+                Manifest.permission.CAMERA
+            )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true) {
@@ -249,7 +244,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
                     } else {
                         AppPermissionDialog.showPermission(
-                            this@AppAudioCallingActivity,
+                            this@WebVideoCallingActivity,
                             getString(R.string.request_camera_mic_permissions_text),
                             getString(R.string.media_permission_title)
                         )
@@ -269,44 +264,54 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    fun init(){
+    fun init() {
 
-        val cameraCount = Camera.getNumberOfCameras()
+        binding.llSwitchCamera.setOnClickListener {
 
-        for (i in 0 until cameraCount) {
-            val cameraInfo = CameraInfo()
-            Camera.getCameraInfo(i, cameraInfo)
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                frontCameraID = i
-                break
+            if (isCameraRotation){
+                isCameraRotation = false
+                binding.surfaceView.setMirror(true)
+            }else{
+                isCameraRotation = true
+                binding.surfaceView.setMirror(false)
             }
+
+            switchCamera()
+
         }
 
-        for (i in 0 until cameraCount) {
-            val cameraInfo = CameraInfo()
-            Camera.getCameraInfo(i, cameraInfo)
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                backCameraID = i
-                break
-            }
-        }
-
-        binding.llCallCut.setOnClickListener {
+        binding.llVideoCallCut.setOnClickListener {
 
             try {
 
                 val jsonObj = JSONObject()
                 jsonObj.put("id", AppPreferencesDelegates.get().channelId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
+                AppPreferencesDelegates.get().isVideoCalling = true
+                AppPreferencesDelegates.get().isAudioCalling = true
                 finish()
 
-            }catch (e : Exception){
-                Log.e("TAG", "error:" + e.message )
+
+            } catch (e: Exception) {
+                Log.e("TAG", "error:" + e.message)
             }
 
         }
 
         binding.llVideoCall.setOnClickListener {
+            if (isCameraPause){
+                isCameraPause = false
+                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_24)
+                videoTrackFromCamera?.setEnabled(true)
+            }else{
+                isCameraPause = true
+                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
+                videoTrackFromCamera?.setEnabled(false)
+            }
+
+        }
+
+        binding.llMessage.setOnClickListener {
 
             if (isSpeakerMode){
                 isSpeakerMode = false
@@ -316,6 +321,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
                 isSpeakerMode = true
                 binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
+
             }
 
         }
@@ -344,31 +350,38 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-        if (callReceive == false){
-            doCall()
-        }
+        doCall()
 
-        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
-        /*initializePeerConnections()
-
-        startStreamingVideo()*/
-
-
+        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
     }
 
     private fun initializeSurfaceViews() {
 
         rootEglBase = EglBase.create()
-
+        binding.surfaceView.init(rootEglBase?.eglBaseContext, null)
+        binding.surfaceView.setEnableHardwareScaler(true)
+        binding.surfaceView.setMirror(true)
+        binding.surfaceView2.init(rootEglBase?.eglBaseContext, null)
+        binding.surfaceView2.setEnableHardwareScaler(true)
+        binding.surfaceView2.setMirror(true)
 
     }
 
     private fun initializePeerConnectionFactory() {
-        val initializationOptions = PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true).createInitializationOptions()
+        val initializationOptions =
+            PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true)
+                .createInitializationOptions()
         PeerConnectionFactory.initialize(initializationOptions)
-        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(DefaultVideoEncoderFactory(rootEglBase?.eglBaseContext, true, true))
-            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext)).createPeerConnectionFactory()
+        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(
+            DefaultVideoEncoderFactory(
+                rootEglBase?.eglBaseContext,
+                true,
+                true
+            )
+        )
+            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext))
+            .createPeerConnectionFactory()
     }
 
     private fun createVideoTrackFromCameraAndShowIt() {
@@ -377,7 +390,8 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         val videoCapture: VideoCapturer? = createVideoCapture()
         var videoSource: VideoSource? = null
 
-        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
+        val surfaceTextureHelper =
+            SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
         videoSource = factory?.createVideoSource(videoCapture?.isScreencast == true)
         videoCapture?.initialize(surfaceTextureHelper, this, videoSource?.capturerObserver)
 
@@ -385,6 +399,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         videoTrackFromCamera?.setEnabled(true)
 
         videoCapture?.startCapture(1024, 720, 30)
+        videoTrackFromCamera?.addSink(binding.surfaceView)
 
         //create an AudioSource instance
         audioSource = factory?.createAudioSource(audioConstraints)
@@ -402,7 +417,6 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         mediaStream?.addTrack(localAudioTrack)
         peerConnection?.addStream(mediaStream)
 
-//        sendMessage("got user media");
     }
 
     private fun createVideoCapture(): VideoCapturer? {
@@ -420,7 +434,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         return Camera2Enumerator.isSupported(this)
     }
 
-    private fun switchCamera(cameraID: Int) {
+    private fun switchCamera() {
 
         if (videoCapture is CameraVideoCapturer) {
             val cameraVideoCapture = videoCapture as CameraVideoCapturer
@@ -459,7 +473,6 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         val url2 = "stun:stun.l.google.com:19302"
         iceServers.add(IceServer(url))
         iceServers.add(IceServer(url2))
-//        iceServers.add(IceServer(URL))
         val rtcConfig = RTCConfiguration(iceServers)
         val pcConstraints = MediaConstraints()
         val pcObserver: PeerConnection.Observer = object : PeerConnection.Observer {
@@ -486,19 +499,17 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
                 candidate.put("candidate", iceCandidate.sdp)
                 candidate.put("sdpMid", iceCandidate.sdpMid)
                 candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
-//                candidate.put("usernameFragment", userFragment)
-
 
                 val webRtcMessage = JSONObject().apply {
 
-                    put("ice",candidate)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId)
-                    put("channelID",remoteId)
+                    put("ice", candidate)
+                    put("uuid", AppPreferencesDelegates.get().channelId)
+                    put("dest", remoteId)
+                    put("channelID", remoteId)
 
                 }
 
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+                SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
             }
 
@@ -507,11 +518,14 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onAddStream(mediaStream: MediaStream) {
-                Log.e("TAG", "onAddStream: " + mediaStream.audioTracks.size)
+                Log.e("TAG", "onAddStream: " + mediaStream.videoTracks.size)
+                val remoteVideoTrack = mediaStream.videoTracks[0]
                 val remoteAudioTrack = mediaStream.audioTracks[0]
                 remoteAudioTrack.setEnabled(true)
+                remoteVideoTrack.setEnabled(true)
+                remoteVideoTrack.addSink(binding.surfaceView2)
                 startCallDurationTimer()
-
+                binding.durationText.visibility = View.VISIBLE
             }
 
             override fun onRemoveStream(mediaStream: MediaStream) {
@@ -659,12 +673,6 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         }
     }
 
-    private fun onCallReceive(){
-
-
-
-    }
-
     private fun extractUsernameFragment(sdp: String): String {
         val lines = sdp.split("\r\n")
         for (line in lines) {
@@ -679,7 +687,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         val observer: SdpObserver = object : SdpObserver {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
-                peerConnection?.setLocalDescription(this,sessionDescription)
+                peerConnection?.setLocalDescription(this, sessionDescription)
                 Log.e("TAG", "Local answer created")
             }
 
@@ -732,11 +740,9 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         if (localAudioTrack != null) {
             localAudioTrack = null
         }
-
-        if (localAudioTrack != null){
-            localAudioTrack = null
+        if (localAudioTrack != null) {
+            localAudioTrack?.dispose()
         }
-
         if (videoCapture != null) {
             try {
                 videoCapture?.stopCapture()
@@ -744,6 +750,12 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
+        }
+        if (binding.surfaceView != null) {
+            binding.surfaceView.release()
+        }
+        if (binding.surfaceView2 != null) {
+            binding.surfaceView2.release()
         }
         if (peerConnection != null) {
             peerConnection?.close()
@@ -766,14 +778,13 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         val minutes = callDurationInSeconds / 60
         val seconds = callDurationInSeconds % 60
         val formattedDuration = String.format("%02d:%02d", minutes, seconds)
-        binding.videocallTxt.text = formattedDuration
+        binding.durationText.text = formattedDuration
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        binding.durationText.visibility = View.INVISIBLE
     }
-
-
 
 }

@@ -319,7 +319,7 @@ class FriendsListAdapter(
             createdAt = getCurrentUTCTime(),
             isPinned = friendsListItems?.isPinned,
             isNewMessage = true,
-            unreadMessageCount = 1,
+            unreadMessageCount = friendsListItems?.unreadMessageCount?.plus(1),
             online = friendsListItems?.online
         )
 

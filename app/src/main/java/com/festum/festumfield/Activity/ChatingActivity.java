@@ -49,7 +49,7 @@ import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity;
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebVideoCallingActivity;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.gson.Gson;

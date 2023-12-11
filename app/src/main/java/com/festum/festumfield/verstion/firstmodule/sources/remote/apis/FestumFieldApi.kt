@@ -2,6 +2,9 @@ package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 
 import com.app.easyday.app.sources.ApiResponse
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallEndBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallHistoryBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallStartBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatPinBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
@@ -107,5 +110,20 @@ interface FestumFieldApi {
     fun messageSeen(
         @Body createGroupBody : MessageStatusBody
     ) : Call<ApiBody>
+
+    @POST("call")
+    fun getCallHistory(
+        @Body body: CallHistoryBody
+    ) : Observable<ApiResponse<CallHistoryResponse>>
+
+    @POST("call/start")
+    fun callStart(
+        @Body callStartBody: CallStartBody
+    ) : Observable<ApiResponse<CallResponse>>
+
+    @POST("call/end")
+    fun callEnd(
+        @Body callEndBody: CallEndBody
+    ) : Observable<ApiResponse<CallResponse>>
 
 }

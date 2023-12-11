@@ -34,6 +34,7 @@ data class FriendsProductsResponse(
 
 	@field:SerializedName("totalDocs")
 	val totalDocs: Int? = null
+
 ) : Serializable
 
 

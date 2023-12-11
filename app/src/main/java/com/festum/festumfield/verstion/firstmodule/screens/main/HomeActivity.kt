@@ -41,15 +41,16 @@ import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.CallHistoryFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppAudioCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.Companion.get
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
@@ -308,7 +309,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 }
 
             R.id.call ->
-                pushFragment(CallsFragment())
+                pushFragment(CallHistoryFragment())
 
             R.id.contact ->
                 pushFragment(ContactFragment())

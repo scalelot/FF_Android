@@ -12,7 +12,11 @@ import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallEndBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallHistoryBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallStartBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -32,7 +36,6 @@ import rx.schedulers.Schedulers
 import java.io.File
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val api: FestumFieldApi
@@ -41,7 +44,9 @@ class ChatViewModel @Inject constructor(
     var chatData = MutableLiveData<ArrayList<DocsItem>?>()
     var sendData = MutableLiveData<SendMessageResponse?>()
     var productData = MutableLiveData<ProductResponse?>()
-    var friendProductData = MutableLiveData<ArrayList<FriendsProducts>?>()
+    var callStartData = MutableLiveData<CallResponse?>()
+    var callEndData = MutableLiveData<CallResponse?>()
+    var callHistoryData = MutableLiveData<ArrayList<CallHistoryItem>?>()
     var messageDeliverData = MutableLiveData<ApiBody?>()
     var messageSeenData = MutableLiveData<ApiBody?>()
 
@@ -201,6 +206,47 @@ class ChatViewModel @Inject constructor(
             }
 
         })
+    }
+
+    fun callHistory(){
+
+        val callHistoryBody = CallHistoryBody(limit = Int.MAX_VALUE, page = 1)
+        api.getCallHistory(callHistoryBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                callHistoryData.value = resp.Data?.docs as ArrayList<CallHistoryItem>
+            }, {
+                callHistoryData.value = null
+            })
+
+    }
+
+    fun callStart(from : String?, to : String?, isVideoCall : Boolean, isGroupCall : Boolean, status : String){
+
+        val callStartBody = CallStartBody(from = from, to = to, isVideoCall = isVideoCall, isGroupCall = isGroupCall, status = status)
+
+        api.callStart(callStartBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                callStartData.value = resp.Data
+            }, {
+                callStartData.value = null
+            })
+
+    }
+
+    fun callEnd(callId : String?){
+
+        val callEndBody = CallEndBody(callId = callId)
+
+        api.callEnd(callEndBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                callEndData.value = resp.Data
+            }, {
+                callEndData.value = null
+            })
+
     }
 
 }

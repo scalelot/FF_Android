@@ -1,4 +1,4 @@
-package com.festum.festumfield.verstion.firstmodule.screens.webrtc
+package com.festum.festumfield.verstion.firstmodule.screens.main.webrtc
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -163,10 +163,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
                 val usernameFragment = iceCandidate?.optString("usernameFragment")
 
-                val displayName = receiverData.optString("displayName")
-                val uuid = receiverData.optString("uuid")
-                val dest = receiverData.optString("dest")
-                val channelID = receiverData.optString("channelID")
+
 
                 if (type.equals("offer")) {
 

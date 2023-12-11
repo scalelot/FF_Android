@@ -1,8 +1,12 @@
 package com.festum.festumfield.Service;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,9 +15,12 @@ import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.Activity.LoginActivity;
+import com.festum.festumfield.Activity.SplashActivity;
+import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -42,9 +49,9 @@ public class MyFirebaseService extends FirebaseMessagingService {
                 String productImg = message.getData().get("product_image");
 
                 NotificationChannel channel = new NotificationChannel(channelId, "Message Notification", NotificationManager.IMPORTANCE_HIGH);
+                channel.enableLights(true);
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.createNotificationChannel(channel);
-                channel.enableLights(true);
 
                 NotificationCompat.Builder notification = null;
                 if (!productImg.isEmpty()) {
@@ -64,9 +71,11 @@ public class MyFirebaseService extends FirebaseMessagingService {
                 }
 
                 manager.notify(1, notification.build());
+                Log.e("onMessageReceived:====", "Error Notification Show");
             } else {
                 Log.e("onMessageReceived:=", "Error Notification Show");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

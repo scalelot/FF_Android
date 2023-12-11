@@ -1,4 +1,4 @@
-package com.festum.festumfield.verstion.firstmodule.screens.webrtc
+package com.festum.festumfield.verstion.firstmodule.screens.main.webrtc
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver

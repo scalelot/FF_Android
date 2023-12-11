@@ -20,8 +20,8 @@ import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
@@ -215,14 +215,19 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
         SocketManager.mSocket?.on("newMessage") { args ->
 
-            val data = args[0] as JSONObject
-
             activity?.runOnUiThread {
+
+                val data = args[0] as JSONObject
+
+                Log.e("TAG", "getMessage:--- $data")
 
                 friendsListAdapter?.updateItem(data)
                 binding.chatRecyclerview.scrollToPosition(0)
 
             }
+
+
+
 
         }?.on("userConnected") { args ->
 
@@ -264,7 +269,71 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
                 Log.e("TAG", "endCall: ${e.message}" )
             }
 
+        }?.on("onIncomingChat") { args ->
+
+            activity?.runOnUiThread {
+
+                val data = args[0] as JSONObject
+
+                /*friendsListAdapter?.updateItem(data)
+                binding.chatRecyclerview.scrollToPosition(0)*/
+                Log.e("TAG", "getMessage:--- $data")
+
+            }
+
+
+        }?.on("onGroupCallStarted") { args ->
+
+            activity?.runOnUiThread {
+
+                val data = args[0] as JSONObject
+
+                /*friendsListAdapter?.updateItem(data)
+                binding.chatRecyclerview.scrollToPosition(0)*/
+                Log.e("TAG", "getMessage:--- $data")
+
+            }
+
+
+        }?.on("onGroupUpdate") { args ->
+
+            activity?.runOnUiThread {
+
+                val data = args[0] as JSONObject
+
+                /*friendsListAdapter?.updateItem(data)
+                binding.chatRecyclerview.scrollToPosition(0)*/
+                Log.e("TAG", "getMessage:--- $data")
+
+            }
+
+
+        }?.on("onGroupCreation") { args ->
+
+            activity?.runOnUiThread {
+
+                val data = args[0] as JSONObject
+
+                /*friendsListAdapter?.updateItem(data)
+                binding.chatRecyclerview.scrollToPosition(0)*/
+                Log.e("TAG", "getMessage:--- $data")
+
+            }
+
+
+        }?.on("onCallStarted") { args ->
+
+            activity?.runOnUiThread {
+
+                val data = args[0] as JSONObject
+
+                Log.e("TAG", "getMessage:--- $data")
+
+            }
+
+
         }
+
 
     }
 

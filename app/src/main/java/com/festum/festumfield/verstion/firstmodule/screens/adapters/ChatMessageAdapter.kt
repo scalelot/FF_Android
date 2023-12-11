@@ -173,21 +173,6 @@ class ChatMessageAdapter(
                     .placeholder(R.mipmap.ic_app_logo)
                     .into(imageBinding.sendImage)
 
-                /*val options = RequestOptions()
-                imageBinding.reciveImg.clipToOutline = true
-
-                Glide.with(context.applicationContext)
-                    .load(image)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .apply(
-                        options.centerCrop()
-                            .skipMemoryCache(true)
-                            .priority(Priority.HIGH)
-                            .format(DecodeFormat.PREFER_ARGB_8888)
-                    )
-                    .into(imageBinding.sendImage)*/
-
 
 
             } else {

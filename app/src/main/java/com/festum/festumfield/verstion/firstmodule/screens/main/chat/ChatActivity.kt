@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -27,8 +28,8 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.AppVideoCallingActivity
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
@@ -86,6 +87,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private var productItemData: ProductItem? = null
     private var productId: String? = null
     private var sendProductId: String? = null
+    private var callId: String? = null
 
     private var isVideoCalling = false
     private var isAudioCalling = false
@@ -275,16 +277,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         viewModel.chatData.observe(this) { chatList ->
 
-             // Chat message seen
-
-            /*if (chatList != null){
-                for (i in chatList.indices){
-                    if (chatList[i].to?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
-                        viewModel.getMessageSeen(chatList[0].id.toString())
-                        break
-                    }
-                }
-            }*/
+            if (AppPreferencesDelegates.get().channelId == chatList?.get(0)?.to?.id?.uppercase().toString()){
+                viewModel.getMessageSeen(chatList?.get(0)?.id.toString())
+            }
 
             chatList?.reverse()
 
@@ -470,6 +465,12 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }
 
+        viewModel.callStartData.observe(this){ callStartData ->
+
+            callId = callStartData?.id
+
+        }
+
     }
 
     fun getMessage() {
@@ -575,6 +576,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 isVideoCalling = false
 
                 Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
+
             }
 
             if (isAudioCalling) {
@@ -598,6 +600,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 upComingCallDialog?.dismiss()
                 AppPreferencesDelegates.get().isVideoCalling = true
                 AppPreferencesDelegates.get().isAudioCalling = true
+
+                /* Call End */
+                viewModel.callEnd(callId)
 
             } catch (e: Exception) {
                 upComingCallDialog?.dismiss()
@@ -748,6 +753,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             fullName = receiverUserName
         )
         val to = To(id = data.getString("to"))
+
         val newItem = DocsItem(
             v = data.optInt("v"),
             context = data.optString("context"),
@@ -940,6 +946,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                             SocketManager.mSocket?.emit("callUser", message)
 
+                            /* Call Start */
+
+                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,false,"")
+
                             upComingCallView(friendsItem)
 
                             isVideoCalling = true
@@ -986,6 +996,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             }
 
                             SocketManager.mSocket?.emit("callUser", message)
+
+                            /* Call Start */
+
+                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,false,"")
 
                             upComingCallView(friendsItem)
 
@@ -1046,6 +1060,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                             upComingCallView(friendsItem)
 
+                            /* Call Start */
+                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),false,false,"")
+
                             isAudioCalling = true
 
                         } else {
@@ -1092,6 +1109,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             SocketManager.mSocket?.emit("callUser", message)
 
                             upComingCallView(friendsItem)
+
+                            /* Call Start */
+                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),false,false,"")
 
                             isAudioCalling = true
 

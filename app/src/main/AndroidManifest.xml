@@ -76,22 +76,22 @@
             android:exported="false"
             android:configChanges="uiMode" />
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.AppAudioCallingActivity"
+            android:name=".verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity"
             android:exported="false"
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.AppVideoCallingActivity"
+            android:name=".verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity"
             android:exported="false"
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.WebAudioCallingActivity"
+            android:name=".verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity"
             android:exported="false"
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".verstion.firstmodule.screens.webrtc.WebVideoCallingActivity"
+            android:name=".verstion.firstmodule.screens.main.webrtc.WebVideoCallingActivity"
             android:exported="false"
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />

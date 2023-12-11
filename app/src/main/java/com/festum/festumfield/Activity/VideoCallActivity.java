@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.R;
 import com.festum.festumfield.View.VideoCallSurfaceView;
-import com.festum.festumfield.verstion.firstmodule.screens.webrtc.WebVideoCallingActivity;
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebVideoCallingActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

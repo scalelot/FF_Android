@@ -1,15 +1,14 @@
 package com.festum.festumfield.verstion.firstmodule.sources.remote.model
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
-data class FriendsListResponse(
+data class CallHistoryResponse(
 
 	@field:SerializedName("hasPrevPage")
 	val hasPrevPage: Boolean? = null,
 
 	@field:SerializedName("docs")
-	val docs: ArrayList<FriendsListItems?>? = null,
+	val docs: ArrayList<CallHistoryItem?>? = null,
 
 	@field:SerializedName("hasNextPage")
 	val hasNextPage: Boolean? = null,
@@ -35,8 +34,4 @@ data class FriendsListResponse(
 	@field:SerializedName("totalDocs")
 	val totalDocs: Int? = null
 
-) : Serializable
-
-
-
-
+)
