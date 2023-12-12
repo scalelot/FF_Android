@@ -118,13 +118,9 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
         viewModel.friendsListData.observe(this) { friendsListData ->
 
-            Log.e("TAG", "setObservers:--- $friendsListData")
-
             if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
 
                 if (friendsListData != null) {
-
-
 
                     friendsListItems = friendsListData
 
@@ -213,23 +209,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
     @SuppressLint("NotifyDataSetChanged")
     fun getMessage() {
 
-        SocketManager.mSocket?.on("newMessage") { args ->
-
-            activity?.runOnUiThread {
-
-                val data = args[0] as JSONObject
-
-                Log.e("TAG", "getMessage:--- $data")
-
-                friendsListAdapter?.updateItem(data)
-                binding.chatRecyclerview.scrollToPosition(0)
-
-            }
-
-
-
-
-        }?.on("userConnected") { args ->
+        SocketManager.mSocket?.on("userConnected") { args ->
 
             val data = args[0] as JSONObject
 
@@ -269,71 +249,86 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
                 Log.e("TAG", "endCall: ${e.message}" )
             }
 
-        }?.on("onIncomingChat") { args ->
-
-            activity?.runOnUiThread {
-
-                val data = args[0] as JSONObject
-
-                /*friendsListAdapter?.updateItem(data)
-                binding.chatRecyclerview.scrollToPosition(0)*/
-                Log.e("TAG", "getMessage:--- $data")
-
-            }
-
-
-        }?.on("onGroupCallStarted") { args ->
-
-            activity?.runOnUiThread {
-
-                val data = args[0] as JSONObject
-
-                /*friendsListAdapter?.updateItem(data)
-                binding.chatRecyclerview.scrollToPosition(0)*/
-                Log.e("TAG", "getMessage:--- $data")
-
-            }
-
-
-        }?.on("onGroupUpdate") { args ->
-
-            activity?.runOnUiThread {
-
-                val data = args[0] as JSONObject
-
-                /*friendsListAdapter?.updateItem(data)
-                binding.chatRecyclerview.scrollToPosition(0)*/
-                Log.e("TAG", "getMessage:--- $data")
-
-            }
-
-
-        }?.on("onGroupCreation") { args ->
-
-            activity?.runOnUiThread {
-
-                val data = args[0] as JSONObject
-
-                /*friendsListAdapter?.updateItem(data)
-                binding.chatRecyclerview.scrollToPosition(0)*/
-                Log.e("TAG", "getMessage:--- $data")
-
-            }
-
-
-        }?.on("onCallStarted") { args ->
-
-            activity?.runOnUiThread {
-
-                val data = args[0] as JSONObject
-
-                Log.e("TAG", "getMessage:--- $data")
-
-            }
-
-
         }
 
+//        val jsonObj = JSONObject()
+//        jsonObj.put("channelID", AppPreferencesDelegates.get().channelId)
+//        SocketManager.mSocket?.emit("init", jsonObj)?.on(
+//            "onIncomingChat"
+//        ) { args ->
+//
+//            val jsonObject = args[0] as JSONObject
+//
+//        }
+
+
+        SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId) { args ->
+
+            activity?.runOnUiThread {
+
+                val message = args[0] as JSONObject
+
+                val data = message.optJSONObject("data")
+
+                when(message.optString("event").toString()){
+
+                    "onIncomingChat" -> {
+
+
+                        if (data != null) {
+
+                            val isGroupMessage = data.optBoolean("isGroupMessage")
+                            val groupId = data.optString("groupId")
+
+                            if (isGroupMessage){
+                                friendsListAdapter?.updateGroupItem(data,groupId)
+                                binding.chatRecyclerview.scrollToPosition(0)
+                            }else{
+                                friendsListAdapter?.updateItem(data)
+                                binding.chatRecyclerview.scrollToPosition(0)
+                            }
+
+                        }
+
+
+                    }
+
+                    "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
+                    "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
+                    "onGroupUpdate" -> {
+
+                        activity?.runOnUiThread {
+
+                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+                            viewModel.friendsList(friendListBody)
+                            Log.e("TAG", "getMessage:--- $data")
+
+                        }
+
+                        Log.e("TAG", "onGroupUpdate---: $data")
+
+                    }
+                    "onGroupCreation" -> {
+
+                        activity?.runOnUiThread {
+
+                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+                            viewModel.friendsList(friendListBody)
+                            Log.e("TAG", "getMessage:--- $data")
+
+                        }
+
+                        Log.e("TAG", "onGroupUpdate----: $data")
+
+                    }
+
+                }
+
+                Log.e("TAG", "getMessage:--$message")
+
+            }
+
+        }
 
     }
 

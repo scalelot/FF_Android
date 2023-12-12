@@ -54,6 +54,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
+import io.socket.emitter.Emitter
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -112,6 +113,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         getMessage()
 
         getUserStatus()
+
 
         val intent = intent.extras
 
@@ -271,11 +273,19 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }
 
+//        setupSocketListeners()
+
     }
 
     override fun setupObservers() {
 
         viewModel.chatData.observe(this) { chatList ->
+
+            if (chatList.isNullOrEmpty()){
+
+                binding.idPBLoading.visibility = View.GONE
+
+            }
 
             if (AppPreferencesDelegates.get().channelId == chatList?.get(0)?.to?.id?.uppercase().toString()){
                 viewModel.getMessageSeen(chatList?.get(0)?.id.toString())
@@ -420,9 +430,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 }
             }, 500)
 
-            /*if (sendData != null){
+            if (sendData != null){
                 viewModel.getMessageDeliver(sendData.mainId.toString())
-            }*/
+            }
 
         }
 
@@ -448,7 +458,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (it?.status == 200){
 
-                Log.e("TAG", "messageSeenData:---" + it.toString() )
+                Log.e("TAG", "messageSeenData:---$it")
 
             }
 
@@ -459,7 +469,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (it?.status == 200){
 
-                Log.e("TAG", "messageSeenData:---" + it.toString() )
+                Log.e("TAG", "messageSeenData:---$it")
 
             }
 
@@ -475,39 +485,66 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
     fun getMessage() {
 
-        SocketManager.mSocket?.on("newMessage") { args ->
+        /*SocketManager.mSocket?.on("newMessage") { args ->
 
             val data = args[0] as JSONObject
 
             Log.e("TAG", "getMessage: $data")
 
-            val contentList = data.getJSONObject("content")
-            val messageList = contentList.getJSONObject("text")
-            val mediaList = contentList.getJSONObject("media")
-            val product = contentList.getJSONObject("product")
+        }*/
 
-            val media = Media(
-                path = mediaList.optString("path"),
-                mime = mediaList.optString("mime"),
-                name = mediaList.optString("name"),
-                type = mediaList.optString("type")
-            )
-            val productId = ProductItem(id = product.optString("productid"))
+        SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId){ args ->
 
-            val productItem = Product(productid = productId)
-            val text = Text(messageList.optString("message"))
+            val message = args[0] as JSONObject
 
-            if (productItem.productid?.id?.isNotEmpty() == true) {
-                viewModel.getProduct(productItem.productid.id)
+            val data = message.optJSONObject("data")
 
-                Executors.newSingleThreadScheduledExecutor().schedule({
-                    if (productItemData != null) {
-                        newItemList(data, text, media, Product(productid = productItemData))
+            when(message.optString("event").toString()){
+
+                "onIncomingChat" -> {
+
+                    Log.e("TAG", "onIncomingChat---:--- $data")
+
+                    val contentList = data?.getJSONObject("content")
+                    val messageList = contentList?.getJSONObject("text")
+                    val mediaList = contentList?.getJSONObject("media")
+                    val product = contentList?.getJSONObject("product")
+
+                    val media = Media(
+                        path = mediaList?.optString("path"),
+                        mime = mediaList?.optString("mime"),
+                        name = mediaList?.optString("name"),
+                        type = mediaList?.optString("type")
+                    )
+                    val productId = ProductItem(id = product?.optString("productid"))
+
+                    val productItem = Product(productid = productId)
+                    val text = Text(messageList?.optString("message"))
+
+                    if (productItem.productid?.id?.isNotEmpty() == true) {
+                        viewModel.getProduct(productItem.productid.id)
+
+                        Executors.newSingleThreadScheduledExecutor().schedule({
+                            if (productItemData != null) {
+                                if (data != null) {
+                                    newItemList(data, text, media, Product(productid = productItemData))
+                                }
+                            }
+                        }, 2, TimeUnit.SECONDS)
+
+                    } else {
+                        if (data != null) {
+                            newItemList(data, text, media, productItem)
+                        }
                     }
-                }, 2, TimeUnit.SECONDS)
 
-            } else {
-                newItemList(data, text, media, productItem)
+                }
+
+                "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
+                "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
+                "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
+                "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
+
             }
 
         }
@@ -750,7 +787,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         val from = From(
             id = data.getString("from"),
             profileimage = receiverUserImage,
-            fullName = receiverUserName
+            fullName = data.getString("customername")
         )
         val to = To(id = data.getString("to"))
 
@@ -941,6 +978,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                                 put("name", AppPreferencesDelegates.get().userName)
                                 put("isVideoCall", true)
                                 put("isCallingFromApp", true)
+                                put("isGroupCalling", false)
 
                             }
 
@@ -992,6 +1030,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                                 put("name", AppPreferencesDelegates.get().userName)
                                 put("isVideoCall", true)
                                 put("isCallingFromApp", true)
+                                put("isGroupCalling", false)
 
                             }
 
@@ -1053,6 +1092,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                                 put("name", AppPreferencesDelegates.get().userName)
                                 put("isVideoCall", false)
                                 put("isCallingFromApp", true)
+                                put("isGroupCalling", false)
 
                             }
 
@@ -1103,6 +1143,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                                 put("name", AppPreferencesDelegates.get().userName)
                                 put("isVideoCall", false)
                                 put("isCallingFromApp", true)
+                                put("isGroupCalling", false)
 
                             }
 
@@ -1163,6 +1204,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             put("name", AppPreferencesDelegates.get().userName)
                             put("isVideoCall", true)
                             put("isCallingFromApp", true)
+                            put("isGroupCalling", false)
 
                         }
 
@@ -1193,5 +1235,29 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             .check()
 
     }
+
+    /*private fun setupSocketListeners() {
+
+        SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId, onIncomingChatListener)
+
+    }
+
+    private val onIncomingChatListener = Emitter.Listener { args ->
+
+        val message = args[0] as JSONObject
+
+        val data = message.optJSONObject("data")?.toString() ?: ""
+
+        when(message.optString("event").toString()){
+
+            "onIncomingChat" -> {  Log.e("TAG", "onIncomingChat---: $data")  }
+            "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
+            "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
+            "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
+            "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
+
+        }
+
+    }*/
 
 }

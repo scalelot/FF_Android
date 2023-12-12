@@ -65,6 +65,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import io.socket.emitter.Emitter
 import org.json.JSONObject
 
 
@@ -483,9 +484,17 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             Log.e("TAG", "callUser:---- $data")
 
+        }?.on("newFriendRequest"){ args ->
+
+            val data = args[0] as JSONObject
+
+            Log.e("TAG", "callUser:---- $data")
+
         }
 
     }
+
+
 
 
 
@@ -551,6 +560,29 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         } catch (ex: Exception) {
             ex.printStackTrace()
+        }
+    }
+
+    private fun setupSocketListeners() {
+
+        SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId, onIncomingChatListener)
+
+    }
+
+    private val onIncomingChatListener = Emitter.Listener { args ->
+        val message = args[0] as JSONObject
+
+        Log.e("TAG", "message---" + message )
+        val data = message.optJSONObject("data")?.toString() ?: ""
+
+        when(message.optString("event").toString()){
+
+            "onIncomingChat" -> {  Log.e("TAG", "onIncomingChat---: $data")  }
+            "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
+            "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
+            "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
+            "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
+
         }
     }
 

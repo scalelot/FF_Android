@@ -57,6 +57,7 @@ class ChatViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
                 chatData.value = resp.Data?.docs as ArrayList<DocsItem>?
+
             }, {
                 chatData.value = null
             })

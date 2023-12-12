@@ -65,6 +65,7 @@ class ChatMessageAdapter(
 
                 val view: View = LayoutInflater.from(parent.context).inflate(R.layout.chat_date_item_layout, parent, false)
                 ViewHolder(view)
+
             }
         }
     }
@@ -130,6 +131,7 @@ class ChatMessageAdapter(
                 messageBinding.rlLeft.visibility = View.VISIBLE
                 Glide.with(context).load(Constans.Display_Image_URL + item.from?.profileimage)
                     .placeholder(R.drawable.ic_user).into(messageBinding.reciveImgUser)
+
 
             }
 

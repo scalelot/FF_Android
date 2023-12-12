@@ -320,7 +320,72 @@ class FriendsListAdapter(
             isPinned = friendsListItems?.isPinned,
             isNewMessage = true,
             unreadMessageCount = friendsListItems?.unreadMessageCount?.plus(1),
-            online = friendsListItems?.online
+            online = friendsListItems?.online,
+            name = friendsListItems?.name,
+            timestamp = friendsListItems?.timestamp
+        )
+
+        val currentItemIndex = friendsList.indexOf(friendsListItems)
+        friendsList.removeAt(currentItemIndex)
+        friendsListItem.let { friendsList.add(0, it) }
+        notifyItemMoved(currentItemIndex, 0)
+        notifyItemChanged(0)
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateGroupItem(data: JSONObject, groupId: String) {
+
+        /* Check user */
+
+        var friendsListItems: FriendsListItems? = null
+        friendsList.forEach {
+            if (groupId == it.id) {
+                friendsListItems = it
+            }
+        }
+
+        val contentList = data.getJSONObject("content")
+        val messageList = contentList.getJSONObject("text")
+        val mediaList = contentList.getJSONObject("media")
+        val product = contentList.getJSONObject("product")
+
+        val text = Text(messageList.optString("message"))
+        val media = Media(
+            path = mediaList.optString("path"),
+            mime = mediaList.optString("mime"),
+            name = mediaList.optString("name"),
+            type = mediaList.optString("type")
+        )
+
+        val productItem = Product(ProductItem(id = product.optString("productid")))
+
+        val lastMessageItemList = LastMessageItem(
+            timestamp = data.optLong("timestamp"),
+            content = Content(text = text, media = media, product = productItem),
+            contentType = data.optString("contentType")
+        )
+
+        val groupLastMessage = GroupMessageItem(LastMessageItem(
+            timestamp = data.optLong("timestamp"),
+            content = Content(text = text, media = media, product = productItem),
+            contentType = data.optString("contentType")),
+            timestamp = data.optLong("timestamp"))
+
+
+        val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = lastMessageItemList,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            createdAt = getCurrentUTCTime(),
+            isPinned = friendsListItems?.isPinned,
+            isNewMessage = true,
+            unreadMessageCount = friendsListItems?.unreadMessageCount?.plus(1),
+            members = friendsListItems?.members,
+            online = friendsListItems?.online,
+            name = friendsListItems?.name,
+            lastChatMessage = groupLastMessage
         )
 
         val currentItemIndex = friendsList.indexOf(friendsListItems)

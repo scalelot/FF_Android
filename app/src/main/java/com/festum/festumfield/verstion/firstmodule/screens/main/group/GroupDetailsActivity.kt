@@ -115,6 +115,10 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
 
+        binding.backArrow.setOnClickListener {
+            finish()
+        }
+
         binding.editImg.setOnClickListener {
             if (AppPreferencesDelegates.get().userName.isBlank()) {
 
