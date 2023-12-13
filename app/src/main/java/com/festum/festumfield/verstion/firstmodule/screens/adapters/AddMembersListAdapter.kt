@@ -85,11 +85,11 @@ class AddMembersListAdapter(
                 if (item.isNewMessage == true) {
                     item.isNewMessage = false
                     binding.ivSelect.visibility = View.GONE
-                    onAddMemberClick.onAddMemberClick(item, false)
+                    onAddMemberClick.onAddMemberClick(item, false, arrayListOf())
                 } else {
                     item.isNewMessage = true
                     binding.ivSelect.visibility = View.VISIBLE
-                    onAddMemberClick.onAddMemberClick(item, true)
+                    onAddMemberClick.onAddMemberClick(item, true, arrayListOf())
                 }
             }
 

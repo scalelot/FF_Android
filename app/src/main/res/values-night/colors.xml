@@ -40,6 +40,8 @@
     <color name="call_icon">#888888</color>
     <color name="edt_dark">#ffffff</color>
 
+    <color name="remove_member_bg">#1C1B1B</color>
+
     <color name="gray">#4B5563</color>
 
     <color name="teal_700">#FF018786</color>

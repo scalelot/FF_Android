@@ -157,7 +157,7 @@ class AddMembersDialog(
 
             if (it != null) {
 
-                onClick.onAddMemberClick(FriendsListItems(), true)
+                onClick.onAddMemberClick(FriendsListItems(), true,addMembersList)
                 dismiss()
 
             } else {
@@ -224,7 +224,11 @@ class AddMembersDialog(
     }
 
 
-    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
+    override fun onAddMemberClick(
+        items: FriendsListItems,
+        b: Boolean,
+        addMembersList: ArrayList<String>
+    ) {
         if (b) {
             addMemberList.add(items)
         } else {

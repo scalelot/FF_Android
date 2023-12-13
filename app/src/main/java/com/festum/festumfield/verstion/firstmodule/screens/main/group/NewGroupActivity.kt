@@ -21,7 +21,6 @@ import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewMode
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
 import java.util.Locale
 
 
@@ -167,8 +166,12 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
 
+    override fun onAddMemberClick(
+        items: FriendsListItems,
+        b: Boolean,
+        addMembersList: ArrayList<String>
+    ) {
         if (b){
             addMemberList.add(items)
         }else{
@@ -186,7 +189,6 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
         }else{
             binding.recyclerviewSelectedList.visibility = View.VISIBLE
         }
-
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")

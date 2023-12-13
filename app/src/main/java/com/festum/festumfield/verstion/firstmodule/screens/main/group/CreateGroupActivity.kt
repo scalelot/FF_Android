@@ -166,7 +166,13 @@ class CreateGroupActivity : BaseActivity<FriendsListViewModel>(), GroupInterface
 
     }
 
-    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
+
+
+    override fun onAddMemberClick(
+        items: FriendsListItems,
+        b: Boolean,
+        addMembersList: ArrayList<String>
+    ) {
 
     }
 

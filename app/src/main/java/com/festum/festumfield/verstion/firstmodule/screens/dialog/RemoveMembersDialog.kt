@@ -1,36 +1,15 @@
 package com.festum.festumfield.verstion.firstmodule.screens.dialog
 
-import android.app.Dialog
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
-import com.festum.festumfield.databinding.AddMembersItemsBinding
 import com.festum.festumfield.databinding.RemoveMemberItemBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseDialogFragment
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.AddMembersListAdapter
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupMembersListAdapter
-import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
-import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
-import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
-import com.festum.festumfield.verstion.firstmodule.viemodels.FriendProductViewModel
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
 class RemoveMembersDialog(private val membersList: FriendsListItems,
@@ -77,7 +56,11 @@ class RemoveMembersDialog(private val membersList: FriendsListItems,
     }
 
 
-    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
+    override fun onAddMemberClick(
+        items: FriendsListItems,
+        b: Boolean,
+        addMembersList: ArrayList<String>
+    ) {
     }
 
     override fun onRemoveMemberClick(items: FriendsListItems, position: Int) {

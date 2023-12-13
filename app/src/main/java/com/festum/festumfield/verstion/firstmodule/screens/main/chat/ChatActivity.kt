@@ -337,98 +337,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
-            Handler(Looper.getMainLooper()).postDelayed({
-
-                val from = From(id = sendData?.from)
-                val to = To(id = sendData?.to)
-
-                val text = Text(sendData?.content?.text?.message)
-                val media = Media(
-                    path = sendData?.content?.media?.path,
-                    mime = sendData?.content?.media?.mime,
-                    name = sendData?.content?.media?.name,
-                    type = sendData?.content?.media?.type
-                )
-
-                val newItem = DocsItem(
-                    createdAt = sendData?.createdAt,
-                    v = sendData?.v,
-                    context = sendData?.context,
-                    from = from,
-                    mainId = sendData?.id,
-                    to = to,
-                    id = sendData?.id,
-                    contentType = sendData?.contentType,
-                    content = Content(
-                        text = text,
-                        product = Product(productItemData),
-                        media = media
-                    ),
-                    timestamp = sendData?.timestamp,
-                    status = sendData?.status,
-                    updatedAt = sendData?.updatedAt
-
-                )
-
-                val date = format.parse(newItem.createdAt)
-
-                val code = date?.time?.let { it1 ->
-
-                    DateTimeUtils.getChatDate(
-                        it1,
-                        this@ChatActivity,
-                        true
-                    )
-
-                }
-
-                val listItem = listItems.find { it.sectionName == code }
-
-                binding.edtChating.setText("")
-
-                if (listItem == null) {
-                    //chat has today section
-                    val now = DateTimeUtils.getNowSeconds()
-                    val today =
-                        DateTimeUtils.getChatDate(now, this@ChatActivity, true)
-                    val titleItem =
-                        DateTimeUtils.getChatDate(
-                            date.time,
-                            this@ChatActivity,
-                            true
-                        )
-                    val day = DateTimeUtils.getChatDate(
-                        date.time,
-                        this@ChatActivity,
-                        true
-                    )
-                    val isToday = day == today
-
-                    val listSection =
-                        code?.let { it1 ->
-                            ListSection(
-                                titleItem,
-                                it1, isToday, !isToday && date.time < now
-                            )
-                        }
-                    listSection?.sectionName = code
-                    if (listSection != null) {
-                        listItems.add(listSection)
-                        chatMessageAdapter?.addItem(listSection)
-                    }
-                } else {
-                    newItem.sectionName = code
-                    listItems.add(newItem)
-                    //There is no today section
-                }
-
-                chatMessageAdapter?.addItem(newItem)
-                chatMessageAdapter?.itemCount?.let { it1 ->
-                    binding.msgRV.smoothScrollToPosition(
-                        it1
-                    )
-                }
-            }, 500)
+            binding.edtChating.setText("")
 
             if (sendData != null){
                 viewModel.getMessageDeliver(sendData.mainId.toString())
@@ -786,7 +695,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         val from = From(
             id = data.getString("from"),
-            profileimage = receiverUserImage,
+            profileimage = data.getString("customerProfilePicture"),
             fullName = data.getString("customername")
         )
         val to = To(id = data.getString("to"))
@@ -1235,29 +1144,5 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             .check()
 
     }
-
-    /*private fun setupSocketListeners() {
-
-        SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId, onIncomingChatListener)
-
-    }
-
-    private val onIncomingChatListener = Emitter.Listener { args ->
-
-        val message = args[0] as JSONObject
-
-        val data = message.optJSONObject("data")?.toString() ?: ""
-
-        when(message.optString("event").toString()){
-
-            "onIncomingChat" -> {  Log.e("TAG", "onIncomingChat---: $data")  }
-            "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
-            "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
-            "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
-            "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
-
-        }
-
-    }*/
 
 }

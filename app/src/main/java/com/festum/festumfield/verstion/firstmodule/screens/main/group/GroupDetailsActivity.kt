@@ -148,7 +148,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
         binding.llAddUser.setOnClickListener {
 
-            val dialog = AddMembersDialog(addMemberList, this, removeMembersList)
+            val dialog = AddMembersDialog(addMemberList, this,  removeMembersList)
             dialog.show(supportFragmentManager, "AddMembersDialog")
 
         }
@@ -234,6 +234,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
                     Handler(Looper.getMainLooper()).postDelayed({
                         friendsListAdapter = EditGroupMembersListAdapter(this@GroupDetailsActivity, addGroupMembers, this)
                         binding.recyclerGroup.adapter = friendsListAdapter
+
                     },100)
 
                 }
@@ -360,7 +361,16 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
     }
 
-    override fun onAddMemberClick(items: FriendsListItems, b: Boolean) {
+    override fun onAddMemberClick(
+        items: FriendsListItems,
+        b: Boolean,
+        addMembersList: ArrayList<String>
+    ) {
+
+        addGroupMembers.clear()
+        removeMembersList.clear()
+
+        removeMembersList.addAll(addMembersList)
 
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
@@ -393,8 +403,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
             members = membersIds
         )
 
-        items.id?.let { removeMembersList.add(it) }
-
+        removeMembersList.remove(items.id)
         removeUserID = items.id.toString()
 
         viewModel.removeMembers(removeMembers)
