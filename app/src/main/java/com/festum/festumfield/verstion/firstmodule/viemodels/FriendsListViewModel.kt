@@ -47,10 +47,10 @@ class FriendsListViewModel @Inject constructor(
     var removeMembersData = MutableLiveData<GroupListItems?>()
 
     fun friendsList(friendListBody: FriendListBody){
-        api.getFriendsListProduct(friendListBody).subscribeOn(Schedulers.io())
+        api.getFriendsList(friendListBody).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
-                friendsListData.value = resp.Data?.docs as ArrayList<FriendsListItems>?
+                friendsListData.value = resp.Data
             }, {
                 friendsListData.value = null
                 Log.e("TAG", "friendsList:--- " + it.message )

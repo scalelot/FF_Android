@@ -51,9 +51,9 @@ interface FestumFieldApi {
     ): Observable<ApiResponse<FriendsProductsResponse>>
 
     @POST("friends/myfriends")
-    fun getFriendsListProduct(
+    fun getFriendsList(
         @Body body: FriendListBody
-    ): Observable<ApiResponse<FriendsListResponse>>
+    ): Observable<ApiResponse<ArrayList<FriendsListItems>>>
 
     @GET("profile/getprofile")
     fun getProfile(): Observable<ApiResponse<ProfileResponse>>

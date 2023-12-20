@@ -48,6 +48,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppGroupVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebVideoCallingActivity
@@ -77,7 +78,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var friendsFragment: FriendsListFragment? = null
     private var itemData: FriendsListItems? = null
     private var upComingCallUser: FriendsListItems? = null
-    var dialog : Dialog? = null
+    var dialog: Dialog? = null
 
     private var audioFileName: String = "skype"
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
@@ -173,7 +174,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                     R.id.setting -> {
 
-                        this.startActivityForResult(Intent(this@HomeActivity, SettingActivity::class.java),1)
+                        this.startActivityForResult(
+                            Intent(
+                                this@HomeActivity,
+                                SettingActivity::class.java
+                            ), 1
+                        )
                         return@OnMenuItemClickListener true
                     }
 
@@ -276,7 +282,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         if (requestCode == 1) {
 
-            val resultString = data?.getBooleanExtra("darkTheme",false)
+            val resultString = data?.getBooleanExtra("darkTheme", false)
 
             if (resultString == true) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -441,8 +447,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             val data = args[0] as JSONObject
 
-            Log.e("TAG", "getUpComingCall: $data")
-
             runOnUiThread {
 
                 val signal = data.optJSONObject("signal")
@@ -453,6 +457,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 //                val isVideoCall = data.optBoolean("channelID")
                 val isVideoCall = data.optBoolean("isVideoCall")
                 val isCallingFromApp = data.optBoolean("isCallingFromApp")
+                val isGroupCalling = data.optBoolean("isGroupCalling")
 
 
                 friendsListItems?.forEach {
@@ -470,7 +475,28 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                     Handler(Looper.getMainLooper()).postDelayed({
 
-                        upComingCallView(upComingCallUser, from.toString().lowercase(), name, isVideoCall, isCallingFromApp)
+                        if (isGroupCalling) {
+
+                            upComingGroupCallView(
+                                upComingCallUser,
+                                from.toString().lowercase(),
+                                name,
+                                isVideoCall,
+                                isCallingFromApp,
+                                true
+                            )
+
+                        } else {
+                            upComingCallView(
+                                upComingCallUser,
+                                from.toString().lowercase(),
+                                name,
+                                isVideoCall,
+                                isCallingFromApp,
+                                false
+                            )
+                        }
+
 
                     }, 500)
 
@@ -478,13 +504,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             }
 
-        }?.on("callUser"){ args ->
+        }?.on("callUser") { args ->
 
             val data = args[0] as JSONObject
 
             Log.e("TAG", "callUser:---- $data")
 
-        }?.on("newFriendRequest"){ args ->
+        }?.on("newFriendRequest") { args ->
 
             val data = args[0] as JSONObject
 
@@ -495,16 +521,14 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
 
-
-
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun upComingCallView(
         upComingCallUser: FriendsListItems?,
         signal: String,
         name: String,
         isVideoCall: Boolean,
-        isCallingFromApp: Boolean
+        isCallingFromApp: Boolean,
+        isGroupCalling: Boolean
     ) {
 
         Glide.with(this@HomeActivity)
@@ -525,20 +549,96 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         upComingCallBinding.llCallRecive.setOnClickListener {
 
-            if (isVideoCall){
+            if (isVideoCall) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    onCameraPermission(isCallingFromApp,signal.lowercase(),name,true)
+                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, true,isGroupCalling)
                 } else {
-                    onCameraPermission(isCallingFromApp,signal.lowercase(),name,false)
+                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, false,isGroupCalling)
                 }
 
             } else {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    onAudioPermission(isCallingFromApp,signal.lowercase(),name,upComingCallUser?.profileimage,true)
+                    onAudioPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        upComingCallUser?.profileimage,
+                        true
+                    )
                 } else {
-                    onAudioPermission(isCallingFromApp,signal.lowercase(),name,upComingCallUser?.profileimage,false)
+                    onAudioPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        upComingCallUser?.profileimage,
+                        false
+                    )
+                }
+
+            }
+
+        }
+
+        dialog?.show()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun upComingGroupCallView(
+        upComingCallUser: FriendsListItems?,
+        signal: String,
+        name: String,
+        isVideoCall: Boolean,
+        isCallingFromApp: Boolean,
+        isGroupCalling: Boolean
+    ) {
+
+        Glide.with(this@HomeActivity)
+            .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
+            .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
+
+        upComingCallBinding.upcomingUsername.text = name
+
+        upComingCallBinding.llCallCut.setOnClickListener {
+
+            val jsonObj = JSONObject()
+            jsonObj.put("id", signal)
+            SocketManager.mSocket?.emit("endCall", jsonObj)
+            stopAudio()
+            dialog?.dismiss()
+
+        }
+
+        upComingCallBinding.llCallRecive.setOnClickListener {
+
+            if (isVideoCall) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, true,isGroupCalling)
+                } else {
+                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, false,isGroupCalling)
+                }
+
+            } else {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    onAudioPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        upComingCallUser?.profileimage,
+                        true
+                    )
+                } else {
+                    onAudioPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        upComingCallUser?.profileimage,
+                        false
+                    )
                 }
 
             }
@@ -572,16 +672,30 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private val onIncomingChatListener = Emitter.Listener { args ->
         val message = args[0] as JSONObject
 
-        Log.e("TAG", "message---" + message )
+        Log.e("TAG", "message---" + message)
         val data = message.optJSONObject("data")?.toString() ?: ""
 
-        when(message.optString("event").toString()){
+        when (message.optString("event").toString()) {
 
-            "onIncomingChat" -> {  Log.e("TAG", "onIncomingChat---: $data")  }
-            "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
-            "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
-            "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
-            "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
+            "onIncomingChat" -> {
+                Log.e("TAG", "onIncomingChat---: $data")
+            }
+
+            "onGroupCallStarted" -> {
+                Log.e("TAG", "onGroupCallStarted---: $data")
+            }
+
+            "onCallStarted" -> {
+                Log.e("TAG", "onCallStarted---: $data")
+            }
+
+            "onGroupUpdate" -> {
+                Log.e("TAG", "onGroupUpdate---: $data")
+            }
+
+            "onGroupCreation" -> {
+                Log.e("TAG", "onGroupCreation---: $data")
+            }
 
         }
     }
@@ -600,36 +714,67 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun onCameraPermission(isCallingFromApp: Boolean, remoteChannelId: String, name: String, isTiramisu : Boolean) {
+    private fun onCameraPermission(
+        isCallingFromApp: Boolean,
+        remoteChannelId: String,
+        name: String,
+        isTiramisu: Boolean,
+        isGroupCalling: Boolean
+    ) {
 
-        if (isTiramisu){
+        if (isTiramisu) {
             Dexter.withContext(this@HomeActivity)
                 .withPermissions(
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
                     Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.CAMERA)
+                    Manifest.permission.CAMERA
+                )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if (isCallingFromApp){
-                                val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
-                                intent.putExtra("remoteChannelId", remoteChannelId)
-                                intent.putExtra("remoteUser", name)
-                                intent.putExtra("callReceive", true)
-                                startActivity(intent)
-                                stopAudio()
-                                dialog?.dismiss()
+
+                            if (isCallingFromApp) {
+
+                                if (isGroupCalling){
+
+                                    val intent = Intent(
+                                        this@HomeActivity,
+                                        AppGroupVideoCallingActivity::class.java
+                                    )
+                                    intent.putExtra("remoteChannelId", remoteChannelId)
+                                    intent.putExtra("remoteUser", name)
+                                    intent.putExtra("callReceive", true)
+                                    startActivity(intent)
+                                    stopAudio()
+                                    dialog?.dismiss()
+
+                                }else{
+
+                                    val intent =
+                                        Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                    intent.putExtra("remoteChannelId", remoteChannelId)
+                                    intent.putExtra("remoteUser", name)
+                                    intent.putExtra("callReceive", true)
+                                    startActivity(intent)
+                                    stopAudio()
+                                    dialog?.dismiss()
+
+                                }
+
+
                             } else {
 
-                                val intent = Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                val intent =
+                                    Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
                                 startActivity(intent)
                                 stopAudio()
                                 dialog?.dismiss()
+
                             }
 
                         } else {
@@ -655,13 +800,17 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             Dexter.withContext(this@HomeActivity)
                 .withPermissions(
                     Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.CAMERA)
+                    Manifest.permission.CAMERA
+                )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if (isCallingFromApp){
-                                val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                            if (isCallingFromApp && isGroupCalling) {
+                                val intent = Intent(
+                                    this@HomeActivity,
+                                    AppGroupVideoCallingActivity::class.java
+                                )
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -669,14 +818,27 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 stopAudio()
                                 dialog?.dismiss()
                             } else {
+                                if (isCallingFromApp) {
+                                    val intent =
+                                        Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                    intent.putExtra("remoteChannelId", remoteChannelId)
+                                    intent.putExtra("remoteUser", name)
+                                    intent.putExtra("callReceive", true)
+                                    startActivity(intent)
+                                    stopAudio()
+                                    dialog?.dismiss()
+                                } else {
 
-                                val intent = Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
-                                intent.putExtra("remoteChannelId", remoteChannelId)
-                                intent.putExtra("remoteUser", name)
-                                intent.putExtra("callReceive", true)
-                                startActivity(intent)
-                                stopAudio()
-                                dialog?.dismiss()
+                                    val intent =
+                                        Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                    intent.putExtra("remoteChannelId", remoteChannelId)
+                                    intent.putExtra("remoteUser", name)
+                                    intent.putExtra("callReceive", true)
+                                    startActivity(intent)
+                                    stopAudio()
+                                    dialog?.dismiss()
+                                }
+
                             }
 
                         } else {
@@ -708,7 +870,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         remoteChannelId: String,
         name: String,
         profileimage: String?,
-        isTiramisu : Boolean
+        isTiramisu: Boolean
     ) {
 
         if (isTiramisu) {
@@ -717,13 +879,15 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 .withPermissions(
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.READ_MEDIA_AUDIO)
+                    Manifest.permission.READ_MEDIA_AUDIO
+                )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if (isCallingFromApp){
-                                val intent = Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
+                            if (isCallingFromApp) {
+                                val intent =
+                                    Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -732,7 +896,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 stopAudio()
                                 dialog?.dismiss()
                             } else {
-                                val intent = Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
+                                val intent =
+                                    Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -771,8 +936,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if (isCallingFromApp){
-                                val intent = Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
+                            if (isCallingFromApp) {
+                                val intent =
+                                    Intent(this@HomeActivity, AppAudioCallingActivity::class.java)
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -781,7 +947,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 stopAudio()
                                 dialog?.dismiss()
                             } else {
-                                val intent = Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
+                                val intent =
+                                    Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -822,13 +989,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
     }
 
-    private fun changeToNightMode(){
+    private fun changeToNightMode() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
     }
 
-    private fun onLocationCheck(){
+    private fun onLocationCheck() {
 
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gps_enabled = false

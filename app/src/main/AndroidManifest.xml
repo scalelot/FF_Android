@@ -81,6 +81,12 @@
             android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".verstion.firstmodule.screens.main.webrtc.AppGroupVideoCallingActivity"
+            android:exported="false"
+            android:configChanges="uiMode"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity"
             android:exported="false"
             android:configChanges="uiMode"

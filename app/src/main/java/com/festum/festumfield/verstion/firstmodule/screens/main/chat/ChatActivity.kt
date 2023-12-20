@@ -28,6 +28,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppGroupVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
@@ -45,6 +46,7 @@ import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IMAGE_PICKER_SELECT
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_AUDIO_CALLING
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_VIDEO_CALLING
+import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_VIDEO_GROUP_CALLING
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.google.gson.Gson
 import com.karumi.dexter.Dexter
@@ -73,7 +75,6 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
     private lateinit var binding: ChatActivityBinding
 
-
     private lateinit var receiverUserId: String
     private lateinit var receiverUserName: String
     private lateinit var receiverUserImage: String
@@ -91,7 +92,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private var callId: String? = null
 
     private var isVideoCalling = false
+    private var isVideoGroupCalling = false
     private var isAudioCalling = false
+    private var isAudioGroupCalling = false
 
     //    private var isVideoCall : Boolean ?= null
     private var isVideoCall: String? = "isVideoCall"
@@ -536,6 +539,21 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                 Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
 
+            }
+
+            if (isVideoGroupCalling){
+
+                val intent = Intent(this@ChatActivity, AppGroupVideoCallingActivity::class.java)
+                val jsonItem = Gson().toJson(friendsItem)
+                intent.putExtra("groupList", jsonItem)
+                startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
+                isVideoGroupCalling = false
+
+                Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
+
+            }
+
+            if (isAudioGroupCalling){
 
             }
 
@@ -862,6 +880,37 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         upComingCallDialog?.show()
 
     }
+    private fun upComingGroupCallView(
+        upComingCallUser: FriendsListItems?,
+    ) {
+
+        upComingCallBinding = ActivityVideoCallBinding.inflate(layoutInflater)
+
+        upComingCallDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        upComingCallDialog?.setContentView(upComingCallBinding.root)
+
+        Glide.with(this@ChatActivity)
+            .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
+            .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.videocallImage)
+
+        upComingCallBinding.llVideoCall.visibility = View.GONE
+        upComingCallBinding.llMute.visibility = View.GONE
+
+        upComingCallBinding.videocallUsername.text = upComingCallUser?.name
+
+        upComingCallBinding.llCallCut.setOnClickListener {
+
+            val jsonObj = JSONObject()
+            jsonObj.put("id", upComingCallUser?.id)
+            SocketManager.mSocket?.emit("endCall", jsonObj)
+            upComingCallDialog?.dismiss()
+
+        }
+
+        upComingCallDialog?.show()
+
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onVideoCallPermission(isTiramisu: Boolean) {
@@ -877,29 +926,11 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            val message = JSONObject().apply {
-
-                                val jsonArray = JSONArray()
-                                jsonArray.put(friendsItem.id?.lowercase())
-                                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
-                                put("memberIds", jsonArray)
-                                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
-                                put("name", AppPreferencesDelegates.get().userName)
-                                put("isVideoCall", true)
-                                put("isCallingFromApp", true)
-                                put("isGroupCalling", false)
-
+                            if(friendsItem.members == null){
+                                onIndividualVideoCall()
+                            }else{
+                                onIndividualGroupVideoCall()
                             }
-
-                            SocketManager.mSocket?.emit("callUser", message)
-
-                            /* Call Start */
-
-                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,false,"")
-
-                            upComingCallView(friendsItem)
-
-                            isVideoCalling = true
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -920,7 +951,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                 }).withErrorListener {}
                 .check()
-        }else{
+        } else {
             Dexter.withContext(this@ChatActivity)
                 .withPermissions(
                     Manifest.permission.RECORD_AUDIO,
@@ -929,29 +960,11 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            val message = JSONObject().apply {
-
-                                val jsonArray = JSONArray()
-                                jsonArray.put(friendsItem.id?.lowercase())
-                                jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
-                                put("memberIds", jsonArray)
-                                put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
-                                put("name", AppPreferencesDelegates.get().userName)
-                                put("isVideoCall", true)
-                                put("isCallingFromApp", true)
-                                put("isGroupCalling", false)
-
+                            if(friendsItem.members == null){
+                                onIndividualVideoCall()
+                            }else{
+                                onIndividualGroupVideoCall()
                             }
-
-                            SocketManager.mSocket?.emit("callUser", message)
-
-                            /* Call Start */
-
-                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,false,"")
-
-                            upComingCallView(friendsItem)
-
-                            isVideoCalling = true
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -1142,6 +1155,76 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             }).withErrorListener {}
             .check()
+
+    }
+
+    fun onIndividualAudioCall(){
+
+    }
+
+    fun onIndividualGroupAudioCall(){
+
+    }
+
+    fun onIndividualVideoCall(){
+
+        val message = JSONObject().apply {
+
+            val jsonArray = JSONArray()
+            jsonArray.put(friendsItem.id?.lowercase())
+            jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
+            put("memberIds", jsonArray)
+            put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
+            put("name", AppPreferencesDelegates.get().userName)
+            put("isVideoCall", true)
+            put("isCallingFromApp", true)
+            put("isGroupCalling", false)
+
+        }
+
+        SocketManager.mSocket?.emit("callUser", message)
+
+        /* Call Start */
+
+        viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,false,"")
+
+        upComingCallView(friendsItem)
+
+        isVideoCalling = true
+
+    }
+
+    fun onIndividualGroupVideoCall(){
+
+        val message = JSONObject().apply {
+
+            val jsonArray = JSONArray()
+            friendsItem.members?.forEach {
+                if (it.membersList?.id?.lowercase() == AppPreferencesDelegates.get().channelId.lowercase() ){
+                    Log.e("TAG", "onIndividualGroupVideoCall:--" + it.membersList.fullName )
+                }else{
+                    jsonArray.put(it.membersList?.id?.lowercase())
+
+                }
+            }
+            put("memberIds", jsonArray)
+            put("fromId", friendsItem.id?.lowercase())
+            put("name", friendsItem.name)
+            put("isVideoCall", true)
+            put("isCallingFromApp", true)
+            put("isGroupCalling", true)
+
+        }
+
+        SocketManager.mSocket?.emit("callUser", message)
+
+        /* Call Start */
+
+        viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,true,"")
+
+        upComingGroupCallView(friendsItem)
+
+        isVideoGroupCalling = true
 
     }
 
