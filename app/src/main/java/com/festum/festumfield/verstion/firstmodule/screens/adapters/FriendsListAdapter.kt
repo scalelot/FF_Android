@@ -225,6 +225,7 @@ class FriendsListAdapter(
 
                         notifyItemChanged(checkedPosition)
                         checkedPosition = absoluteAdapterPosition
+
                     }
 
                     pinInterface.checkItemPin(friendsList[absoluteAdapterPosition])

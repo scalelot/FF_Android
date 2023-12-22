@@ -340,7 +340,99 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             sendData?.content?.product?.productid?.let { viewModel.getProduct(it) }
 
-            binding.edtChating.setText("")
+            Handler(Looper.getMainLooper()).postDelayed({
+
+                val from = From(id = sendData?.from)
+                val to = To(id = sendData?.to)
+
+                val text = Text(sendData?.content?.text?.message)
+                val media = Media(
+                    path = sendData?.content?.media?.path,
+                    mime = sendData?.content?.media?.mime,
+                    name = sendData?.content?.media?.name,
+                    type = sendData?.content?.media?.type
+                )
+
+                val newItem = DocsItem(
+                    createdAt = sendData?.createdAt,
+                    v = sendData?.v,
+                    context = sendData?.context,
+                    from = from,
+                    mainId = sendData?.id,
+                    to = to,
+                    id = sendData?.id,
+                    contentType = sendData?.contentType,
+                    content = Content(
+                        text = text,
+                        product = Product(productItemData),
+                        media = media
+                    ),
+                    timestamp = sendData?.timestamp,
+                    status = sendData?.status,
+                    updatedAt = sendData?.updatedAt
+
+                )
+
+                val date = format.parse(newItem.createdAt)
+
+                val code = date?.time?.let { it1 ->
+
+                    DateTimeUtils.getChatDate(
+                        it1,
+                        this@ChatActivity,
+                        true
+                    )
+
+                }
+
+                val listItem = listItems.find { it.sectionName == code }
+
+                binding.edtChating.setText("")
+                binding.edtChating.setText("")
+
+                if (listItem == null) {
+                    //chat has today section
+                    val now = DateTimeUtils.getNowSeconds()
+                    val today =
+                        DateTimeUtils.getChatDate(now, this@ChatActivity, true)
+                    val titleItem =
+                        DateTimeUtils.getChatDate(
+                            date.time,
+                            this@ChatActivity,
+                            true
+                        )
+                    val day = DateTimeUtils.getChatDate(
+                        date.time,
+                        this@ChatActivity,
+                        true
+                    )
+                    val isToday = day == today
+
+                    val listSection =
+                        code?.let { it1 ->
+                            ListSection(
+                                titleItem,
+                                it1, isToday, !isToday && date.time < now
+                            )
+                        }
+                    listSection?.sectionName = code
+                    if (listSection != null) {
+                        listItems.add(listSection)
+                        chatMessageAdapter?.addItem(listSection)
+                    }
+                } else {
+                    newItem.sectionName = code
+                    listItems.add(newItem)
+                    //There is no today section
+                }
+
+                chatMessageAdapter?.addItem(newItem)
+                chatMessageAdapter?.itemCount?.let { it1 ->
+                    binding.msgRV.smoothScrollToPosition(
+                        it1
+                    )
+                }
+            }, 500)
 
             if (sendData != null){
                 viewModel.getMessageDeliver(sendData.mainId.toString())
@@ -457,6 +549,31 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
                 "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
 
+                "messageDelivered" -> {
+                    Log.e("TAG", "Delivered---: $data")
+
+
+                    val title = data?.getString("title")
+                    val messageItem = data?.getString("message")
+                    val banner = data?.getString("banner")
+                    val messageId = data?.getString("messageid")
+                    val timestamp = data?.getString("timestamp")
+
+                    if (messageId != null) {
+                        viewModel.getMessageSeen(messageId)
+                    }
+
+                }
+                "messageSeen" -> {
+
+                    Log.e("TAG", "Seen---: $data")
+
+                    /*if (data != null) {
+                        chatMessageAdapter?.updateItem(data)
+                    }*/
+
+                }
+
             }
 
         }
@@ -515,6 +632,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         }?.on("webrtcMessage") { args ->
 
             val data = args[0] as JSONObject
+
+            Log.e("TAG", "getUserStatus:----- $data")
 
             if (isVideoCalling) {
                 val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)
@@ -789,6 +908,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     it1
                 )
             }
+
         }
 
     }

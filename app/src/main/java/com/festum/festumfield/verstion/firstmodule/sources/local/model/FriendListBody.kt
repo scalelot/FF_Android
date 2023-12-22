@@ -8,6 +8,9 @@ data class FriendListBody(
 	@field:SerializedName("search")
 	val search: String? = null,
 
+	@field:SerializedName("isGroup")
+	val isGroup: Boolean? = null,
+
 	@field:SerializedName("limit")
 	val limit: Int? = null,
 

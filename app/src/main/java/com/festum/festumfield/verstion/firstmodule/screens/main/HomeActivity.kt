@@ -4,7 +4,6 @@ import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -16,7 +15,6 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -32,7 +30,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.festum.festumfield.Activity.*
-import com.festum.festumfield.Fragment.CallsFragment
 import com.festum.festumfield.Fragment.ContactFragment
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
@@ -45,6 +42,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.CallHistoryF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
+import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity
@@ -60,6 +58,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsL
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -552,9 +551,24 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             if (isVideoCall) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, true,isGroupCalling)
+                    onCameraPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        true,
+                        isGroupCalling,
+                        upComingCallUser
+                    )
                 } else {
-                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, false,isGroupCalling)
+
+                    onCameraPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        false,
+                        isGroupCalling,
+                        upComingCallUser
+                    )
                 }
 
             } else {
@@ -616,9 +630,23 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             if (isVideoCall) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, true,isGroupCalling)
+                    onCameraPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        true,
+                        isGroupCalling,
+                        upComingCallUser
+                    )
                 } else {
-                    onCameraPermission(isCallingFromApp, signal.lowercase(), name, false,isGroupCalling)
+                    onCameraPermission(
+                        isCallingFromApp,
+                        signal.lowercase(),
+                        name,
+                        false,
+                        isGroupCalling,
+                        upComingCallUser
+                    )
                 }
 
             } else {
@@ -719,8 +747,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         remoteChannelId: String,
         name: String,
         isTiramisu: Boolean,
-        isGroupCalling: Boolean
-    ) {
+        isGroupCalling: Boolean,
+        upComingCallUser: FriendsListItems?,
+
+        ) {
 
         if (isTiramisu) {
             Dexter.withContext(this@HomeActivity)
@@ -739,13 +769,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                                 if (isGroupCalling){
 
-                                    val intent = Intent(
-                                        this@HomeActivity,
-                                        AppGroupVideoCallingActivity::class.java
-                                    )
-                                    intent.putExtra("remoteChannelId", remoteChannelId)
-                                    intent.putExtra("remoteUser", name)
-                                    intent.putExtra("callReceive", true)
+                                    val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
+                                    val jsonItem = Gson().toJson(upComingCallUser)
+                                    intent.putExtra("groupList", jsonItem)
                                     startActivity(intent)
                                     stopAudio()
                                     dialog?.dismiss()
@@ -807,13 +833,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         if (permission?.areAllPermissionsGranted() == true) {
 
                             if (isCallingFromApp && isGroupCalling) {
-                                val intent = Intent(
-                                    this@HomeActivity,
-                                    AppGroupVideoCallingActivity::class.java
-                                )
-                                intent.putExtra("remoteChannelId", remoteChannelId)
-                                intent.putExtra("remoteUser", name)
-                                intent.putExtra("callReceive", true)
+
+                                val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
+                                val jsonItem = Gson().toJson(upComingCallUser)
+                                intent.putExtra("groupList", jsonItem)
                                 startActivity(intent)
                                 stopAudio()
                                 dialog?.dismiss()

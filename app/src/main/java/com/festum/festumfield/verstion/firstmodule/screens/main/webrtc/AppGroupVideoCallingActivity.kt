@@ -33,6 +33,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.AudioSource
@@ -135,7 +136,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
 
-        remoteId = friendsItem.id
+        friendsItem.members?.forEach {
+            remoteId = it.membersList?.id
+        }
 
         callReceive = true
         ActivityCompat.requestPermissions(this@AppGroupVideoCallingActivity, permissions(), 1)
@@ -149,18 +152,16 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 put("displayName", AppPreferencesDelegates.get().userName)
                 put("uuid", AppPreferencesDelegates.get().channelId)
-                friendsItem.members?.forEach {
-                    if (it.membersList?.id?.lowercase() == AppPreferencesDelegates.get().channelId.lowercase() ){
-                        Log.e("TAG", "onIndividualGroupVideoCall:--" + it.membersList.fullName )
-                    }else{
-                        put("dest", it.membersList?.id)
-                        put("channelID", it.membersList?.id)
-                    }
-                }
-
+                put("dest", remoteId)
+                put("channelID", remoteId)
 
             }
 
+            Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
+            Log.e("TAG", "remoteId:--- $remoteId")
+
+
+            Log.e("TAG", "onIndividualGroupVideoCall:------$webRtcMessage")
             Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
             Log.e("TAG", "remoteId:--- $remoteId")
 

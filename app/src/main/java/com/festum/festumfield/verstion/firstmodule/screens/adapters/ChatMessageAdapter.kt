@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -24,9 +25,17 @@ import com.festum.festumfield.databinding.ItemSentMessageBinding
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Content
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.DocsItem
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.LastMessageItem
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Media
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Product
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProductItem
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Text
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import com.squareup.picasso.Picasso
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -329,5 +338,13 @@ class ChatMessageAdapter(
         return parsedDate?.let { outputFormat.format(it) } ?: ""
     }
 
+    fun updateItem(data: JSONObject) {
+
+        /* Check user */
+        val userId = data.optString("messageid").lowercase()
+
+        Toast.makeText(context, "--+--" + userId, Toast.LENGTH_SHORT).show()
+
+    }
 
 }

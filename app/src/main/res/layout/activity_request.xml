@@ -38,7 +38,9 @@
                 android:text="@string/requests"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_18" />
+
         </RelativeLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
@@ -56,6 +58,6 @@
     <FrameLayout
         android:id="@+id/fram_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
