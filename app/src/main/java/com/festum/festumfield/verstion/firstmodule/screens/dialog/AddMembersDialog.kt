@@ -47,7 +47,7 @@ class AddMembersDialog(
 
     override fun initUi() {
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
         viewModel.friendsList(friendListBody)
 
         binding.icBack.setOnClickListener {

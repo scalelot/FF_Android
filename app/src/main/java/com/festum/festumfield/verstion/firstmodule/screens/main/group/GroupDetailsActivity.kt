@@ -112,7 +112,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
             }
         }*/
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
         viewModel.friendsList(friendListBody)
 
         binding.backArrow.setOnClickListener {
@@ -372,7 +372,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupInterfac
 
         removeMembersList.addAll(addMembersList)
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
         viewModel.friendsList(friendListBody)
 
     }

@@ -78,7 +78,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
         getMessage()
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
         viewModel.friendsList(friendListBody)
 
         binding.edtSearchText.addTextChangedListener(object : TextWatcher {
@@ -304,7 +304,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
                         activity?.runOnUiThread {
 
-                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
                             viewModel.friendsList(friendListBody)
                             Log.e("TAG", "getMessage:--- $data")
 
@@ -317,7 +317,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
 
                         activity?.runOnUiThread {
 
-                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
                             viewModel.friendsList(friendListBody)
                             Log.e("TAG", "getMessage:--- $data")
 
