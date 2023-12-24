@@ -213,6 +213,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     AppPreferencesDelegates.get().isVideoCalling = true
                     AppPreferencesDelegates.get().isAudioCalling = true
                     stop()
+                    finish()
 
                 } catch (e: Exception) {
                     stop()

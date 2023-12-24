@@ -202,6 +202,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
                     val data = args[0] as JSONObject
 
                     stop()
+                    finish()
 
                 } catch (e: Exception) {
                     stop()
@@ -468,7 +469,11 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
-                Log.e("TAG", "onIceConnectionChange: ")
+
+                if (iceConnectionState.name == "DISCONNECTED"){
+                    finish()
+                }
+
             }
 
             override fun onIceConnectionReceivingChange(b: Boolean) {

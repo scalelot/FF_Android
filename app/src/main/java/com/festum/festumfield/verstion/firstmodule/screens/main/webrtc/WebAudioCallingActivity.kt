@@ -203,6 +203,7 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
                     val data = args[0] as JSONObject
 
                     stop()
+                    finish()
 
                 } catch (e: Exception) {
                     stop()

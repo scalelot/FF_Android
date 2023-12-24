@@ -193,9 +193,11 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 try {
                     val data = args[0] as JSONObject
+                    Log.e("TAG", "setupUi: -----endCall---$data")
                     AppPreferencesDelegates.get().isVideoCalling = true
                     AppPreferencesDelegates.get().isAudioCalling = true
                     stop()
+                    finish()
 
                 } catch (e: Exception) {
                     stop()
@@ -489,7 +491,9 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
-                Log.e("TAG", "onIceConnectionChange: ")
+                if (iceConnectionState.name == "DISCONNECTED"){
+                    finish()
+                }
             }
 
             override fun onIceConnectionReceivingChange(b: Boolean) {

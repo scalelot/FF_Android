@@ -509,11 +509,33 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             Log.e("TAG", "callUser:---- $data")
 
-        }?.on("newFriendRequest") { args ->
+        }?.on("endCall") { args ->
 
-            val data = args[0] as JSONObject
+                try {
 
-            Log.e("TAG", "callUser:---- $data")
+                    val data = args[0] as JSONObject
+
+                    Log.e("TAG", "callUser:---- $data")
+
+
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        stopAudio()
+                        dialog?.dismiss()
+
+                    }, 500)
+
+                    /* Call End */
+                    /*viewModel.callEnd(callId)*/
+
+                } catch (e: Exception) {
+
+                    stopAudio()
+
+                    dialog?.dismiss()
+
+                }
 
         }
 
