@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
@@ -66,6 +67,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.emitter.Emitter
+import org.json.JSONArray
 import org.json.JSONObject
 
 
@@ -992,6 +994,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 stopAudio()
                                 dialog?.dismiss()
                             } else {
+
+                                Toast.makeText(this@HomeActivity, "", Toast.LENGTH_SHORT).show()
                                 val intent =
                                     Intent(this@HomeActivity, WebAudioCallingActivity::class.java)
                                 intent.putExtra("remoteChannelId", remoteChannelId)

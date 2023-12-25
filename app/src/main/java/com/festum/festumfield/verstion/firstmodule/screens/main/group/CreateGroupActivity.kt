@@ -153,13 +153,10 @@ class CreateGroupActivity : BaseActivity<FriendsListViewModel>(), GroupInterface
 
         viewModel.createGroupData.observe(this) { createGroupData ->
 
-            if (createGroupData != null) {
-
-                if (createGroupData.members?.isNotEmpty() == true) {
-                    startActivity(
-                        Intent(this@CreateGroupActivity, HomeActivity::class.java)
-                    )
-                }
+            if (createGroupData?.members?.isNotEmpty() == true) {
+                startActivity(
+                    Intent(this@CreateGroupActivity, HomeActivity::class.java)
+                )
             }
 
         }

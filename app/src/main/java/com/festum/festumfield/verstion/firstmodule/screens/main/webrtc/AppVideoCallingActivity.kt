@@ -12,6 +12,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Surface
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.festum.festumfield.CustomSdpObserver
@@ -68,6 +69,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var remoteId: String? = null
     private var remoteUser: String? = null
+    private var callId: String? = null
     private var callReceive: Boolean? = null
 
     private var frontCameraID = 1
@@ -129,6 +131,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
         remoteUser = intent.getStringExtra("remoteUser")
         remoteId = intent.getStringExtra("remoteChannelId")
         callReceive = intent.getBooleanExtra("callReceive", false)
+        callId = intent.getStringExtra("callId")
         ActivityCompat.requestPermissions(this@AppVideoCallingActivity, permissions(), 1)
 
         binding.fromText.text = AppPreferencesDelegates.get().userName
@@ -190,6 +193,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 }
 
             }?.on("endCall") { args ->
+
 
                 try {
                     val data = args[0] as JSONObject
@@ -287,12 +291,17 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
             try {
 
                 val jsonObj = JSONObject()
-                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+                jsonObj.put("id", remoteId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
                 AppPreferencesDelegates.get().isVideoCalling = true
                 AppPreferencesDelegates.get().isAudioCalling = true
+                stop()
                 finish()
 
+                viewModel.callEnd(AppPreferencesDelegates.get().isCallId)
+
+                Toast.makeText(this@AppVideoCallingActivity,"One---" +  callId, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AppVideoCallingActivity, "CallEnd", Toast.LENGTH_SHORT).show()
 
             } catch (e: Exception) {
                 Log.e("TAG", "error:" + e.message)

@@ -36,6 +36,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
 
+    public String callId,messageId,fromId,toId,toUserName;
+
     public static String[] storge_permissions = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
@@ -67,6 +69,31 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            messageId = extras.getString("messageid", "");
+
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+
+
+            String banner = (extras != null) ? extras.getString("banner", "") : "";
+            String callId = (extras != null) ? extras.getString("callid", "") : "";
+            String messageId = (extras != null) ? extras.getString("messageid", "") : "";
+            String fromId = (extras != null) ? extras.getString("fromId", "") : "";
+            String toId = (extras != null) ? extras.getString("toId", "") : "";
+            String fromUserName = (extras != null) ? extras.getString("fromUserName", "") : "";
+
+
+            Log.e("TAG", "onCreate:------ " + banner );
+            Log.e("TAG", "onCreate:------ " + callId );
+            Log.e("TAG", "onCreate:------ " + fromId );
+            Log.e("TAG", "onCreate:------ " + toId );
+            Log.e("TAG", "onCreate:------ " + fromUserName );
+            Log.e("TAG", "onCreate:------ " + messageId );
+
+//        }
 
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override

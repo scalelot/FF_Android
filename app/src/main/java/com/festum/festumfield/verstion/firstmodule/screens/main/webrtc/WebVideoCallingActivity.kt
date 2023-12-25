@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.festum.festumfield.CustomSdpObserver
@@ -194,6 +195,7 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 try {
                     val data = args[0] as JSONObject
+                    Log.e("TAG", "setupUi:--- $data")
                     AppPreferencesDelegates.get().isVideoCalling = true
                     AppPreferencesDelegates.get().isAudioCalling = true
                     stop()
@@ -283,14 +285,18 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llVideoCallCut.setOnClickListener {
 
+
             try {
 
                 val jsonObj = JSONObject()
-                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+                jsonObj.put("id", remoteId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
                 AppPreferencesDelegates.get().isVideoCalling = true
                 AppPreferencesDelegates.get().isAudioCalling = true
+                stop()
                 finish()
+
+                viewModel.callEnd(AppPreferencesDelegates.get().isCallId)
 
 
             } catch (e: Exception) {
@@ -482,7 +488,9 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
-                Log.e("TAG", "onIceConnectionChange: ")
+                if (iceConnectionState.name == "DISCONNECTED"){
+                    finish()
+                }
             }
 
             override fun onIceConnectionReceivingChange(b: Boolean) {

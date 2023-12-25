@@ -135,9 +135,10 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         val jsonList = intent?.getString("groupList")
 
         friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
+        val jsonArray = JSONArray()
 
         friendsItem.members?.forEach {
-            remoteId = it.membersList?.id
+            jsonArray.put(it.membersList?.id)
         }
 
         callReceive = true
@@ -152,8 +153,8 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 put("displayName", AppPreferencesDelegates.get().userName)
                 put("uuid", AppPreferencesDelegates.get().channelId)
-                put("dest", remoteId)
-                put("channelID", remoteId)
+                put("isGroupCall", true)
+                put("memberIds", jsonArray)
 
             }
 

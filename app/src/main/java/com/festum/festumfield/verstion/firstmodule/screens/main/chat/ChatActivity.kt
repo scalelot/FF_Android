@@ -483,6 +483,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             callId = callStartData?.id
 
+            AppPreferencesDelegates.get().isCallId = callId.toString()
+
         }
 
     }
@@ -559,9 +561,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     val messageId = data?.getString("messageid")
                     val timestamp = data?.getString("timestamp")
 
-                    if (messageId != null) {
+                    /*if (messageId != null) {
                         viewModel.getMessageSeen(messageId)
-                    }
+                    }*/
 
                 }
                 "messageSeen" -> {
@@ -638,8 +640,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             if (isVideoCalling) {
                 val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
+                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem.fullName)
-                i.putExtra("callReceive", false)
+                i.putExtra("callId", callId)
                 startActivityForResult(i, IS_VIDEO_CALLING)
                 isVideoCalling = false
 
@@ -651,8 +654,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                 val i = Intent(this@ChatActivity, WebAudioCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
+                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem.fullName)
-                i.putExtra("callReceive", false)
+                i.putExtra("callId", callId)
                 startActivityForResult(i, IS_AUDIO_CALLING)
                 isAudioCalling = false
 
@@ -665,6 +669,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 val intent = Intent(this@ChatActivity, AppGroupVideoCallingActivity::class.java)
                 val jsonItem = Gson().toJson(friendsItem)
                 intent.putExtra("groupList", jsonItem)
+                intent.putExtra("callId", callId)
                 startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
                 isVideoGroupCalling = false
 
@@ -1143,7 +1148,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             upComingCallView(friendsItem)
 
                             /* Call Start */
-                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),false,false,"")
+                            viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem.id?.lowercase(),false,false,"")
 
                             isAudioCalling = true
 
@@ -1194,7 +1199,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             upComingCallView(friendsItem)
 
                             /* Call Start */
-                            viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),false,false,"")
+                            viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to =friendsItem.id?.lowercase(),false,false,"")
 
                             isAudioCalling = true
 
@@ -1306,7 +1311,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         /* Call Start */
 
-        viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,false,"")
+        viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem.id?.lowercase(),true,false,"")
 
         upComingCallView(friendsItem)
 
@@ -1340,7 +1345,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         /* Call Start */
 
-        viewModel.callStart(friendsItem.id?.lowercase(),AppPreferencesDelegates.get().channelId.lowercase(),true,true,"")
+        viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem.id?.lowercase(),true,true,"")
 
         upComingGroupCallView(friendsItem)
 

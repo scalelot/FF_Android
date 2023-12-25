@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
@@ -201,7 +202,7 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
                 try {
                     val data = args[0] as JSONObject
-
+                    Log.e("TAG", "setupUi:--- $data")
                     stop()
                     finish()
 
@@ -273,6 +274,8 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     fun init(){
 
+        Toast.makeText(this@WebAudioCallingActivity, "WebAudioCallingActivity", Toast.LENGTH_SHORT).show()
+
         val cameraCount = Camera.getNumberOfCameras()
 
         for (i in 0 until cameraCount) {
@@ -295,12 +298,18 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llCallCut.setOnClickListener {
 
+
             try {
 
                 val jsonObj = JSONObject()
-                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+                jsonObj.put("id", remoteId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
+                stop()
                 finish()
+//                val jsonObj = JSONObject()
+//                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+//                SocketManager.mSocket?.emit("endCall", jsonObj)
+//                finish()
 
             }catch (e : Exception){
                 Log.e("TAG", "error:" + e.message )
@@ -346,8 +355,7 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-
-            doCall()
+        doCall()
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
         /*initializePeerConnections()
