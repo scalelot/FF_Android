@@ -57,8 +57,11 @@ class ChatViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
                 chatData.value = resp.Data?.docs as ArrayList<DocsItem>?
+                Log.e("TAG", "getChatMessageHistory:---- " + resp?.Data )
 
             }, {
+
+                Log.e("TAG", "getChatMessageHistory:--+++-- " + it?.message )
                 chatData.value = null
             })
     }

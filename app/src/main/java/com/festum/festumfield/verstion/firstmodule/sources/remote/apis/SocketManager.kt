@@ -50,6 +50,7 @@ object SocketManager {
             ) { args ->
                 val jsonObject = args[0] as JSONObject
                 AppPreferencesDelegates.get().onLineUser = jsonObject.optJSONObject("onlineUsers")?.toString() ?: ""
+
             }
 
         }catch (e: Exception) {

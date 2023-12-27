@@ -67,7 +67,6 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.emitter.Emitter
-import org.json.JSONArray
 import org.json.JSONObject
 
 
@@ -80,6 +79,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var itemData: FriendsListItems? = null
     private var upComingCallUser: FriendsListItems? = null
     var dialog: Dialog? = null
+
+    var callId: String? = null
+    var messageId: String? = null
+    var fromId:String? = null
+    var toId:String? = null
+    var toUserName:String? = null
+    var banner:String? = null
 
     private var audioFileName: String = "skype"
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
@@ -99,6 +105,56 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun setupUi() {
+
+
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            messageId = extras.getString("messageid", "");
+        val intent = intent
+        val extras = intent.extras
+
+
+         banner = if (extras != null) extras.getString("banner", "") else ""
+        callId = if (extras != null) extras.getString("callId", "") else ""
+         messageId = if (extras != null) extras.getString("messageId", "") else ""
+         fromId = if (extras != null) extras.getString("fromId", "") else ""
+         toId = if (extras != null) extras.getString("toId", "") else ""
+        toUserName = if (extras != null) extras.getString("toUserName", "") else ""
+
+
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            if (callId != null && callId?.isNotEmpty() == true){
+
+                friendsListItems?.forEach {
+
+                    if (it.id?.contains(fromId.toString().lowercase()) == true) {
+                        upComingCallUser = it
+                    }
+
+                }
+
+                upComingCallView(
+                    upComingCallUser,
+                    fromId.toString().lowercase(),
+                    toUserName.toString(),
+                    true,
+                    true,
+                    false,
+                    banner
+                )
+
+            }
+
+
+        }, 800)
+
+        Log.e("TAG", "banner:------ $banner")
+        Log.e("TAG", "callId:------ $callId")
+        Log.e("TAG", "fromId:------ $fromId")
+        Log.e("TAG", "toId:------ $toId")
+        Log.e("TAG", "fromUserName:------ $toUserName")
+        Log.e("TAG", "messageId:------ $messageId")
 
         upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
 
@@ -145,6 +201,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             }
 
         }
+
+
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             selectFragment(item)
@@ -306,7 +364,18 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         item.isChecked = true
         when (item.itemId) {
             R.id.chat ->
-                pushFragment(FriendsListFragment(this))
+
+                if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrEmpty() && callId == null){
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        pushFragment(FriendsListFragment(this,fromId))
+                        fromId = ""
+                        toId = ""
+
+                    }, 500)
+                }else{
+                    pushFragment(FriendsListFragment(this,""))
+                }
 
             R.id.location ->
                 if (AppPreferencesDelegates.get().userName.isBlank()) {
@@ -494,7 +563,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 name,
                                 isVideoCall,
                                 isCallingFromApp,
-                                false
+                                false,
+                                ""
                             )
                         }
 
@@ -551,12 +621,19 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         name: String,
         isVideoCall: Boolean,
         isCallingFromApp: Boolean,
-        isGroupCalling: Boolean
+        isGroupCalling: Boolean,
+        banner: String?
     ) {
 
-        Glide.with(this@HomeActivity)
-            .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
-            .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
+        if (banner != null && !banner.isNullOrEmpty()){
+            Glide.with(this@HomeActivity)
+                .load(Constans.Display_Image_URL + banner)
+                .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
+        }else{
+            Glide.with(this@HomeActivity)
+                .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
+                .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
+        }
 
         upComingCallBinding.upcomingUsername.text = name
 
@@ -717,15 +794,17 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     private fun setupSocketListeners() {
 
-        SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId, onIncomingChatListener)
+        SocketManager.mSocket?.on(get().channelId, onIncomingChatListener)
 
     }
 
     private val onIncomingChatListener = Emitter.Listener { args ->
+
         val message = args[0] as JSONObject
 
-        Log.e("TAG", "message---" + message)
-        val data = message.optJSONObject("data")?.toString() ?: ""
+        Log.e("TAG", "getMessage: -----$message")
+
+        val data = message.optJSONObject("data")
 
         when (message.optString("event").toString()) {
 
@@ -738,7 +817,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             }
 
             "onCallStarted" -> {
-                Log.e("TAG", "onCallStarted---: $data")
+
+                val callId = data?.optString("callid")
+
+                get().isCallId = callId ?: ""
+
             }
 
             "onGroupUpdate" -> {

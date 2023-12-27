@@ -300,8 +300,6 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 viewModel.callEnd(AppPreferencesDelegates.get().isCallId)
 
-                Toast.makeText(this@AppVideoCallingActivity,"One---" +  callId, Toast.LENGTH_SHORT).show()
-                Toast.makeText(this@AppVideoCallingActivity, "CallEnd", Toast.LENGTH_SHORT).show()
 
             } catch (e: Exception) {
                 Log.e("TAG", "error:" + e.message)

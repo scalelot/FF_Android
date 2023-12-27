@@ -36,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
 
-    public String callId,messageId,fromId,toId,toUserName;
+    public String callId, messageId, fromId, toId, toUserName, banner;
 
     public static String[] storge_permissions = {
             Manifest.permission.CAMERA,
@@ -74,24 +74,16 @@ public class SplashActivity extends BaseActivity {
 //        if (extras != null) {
 //            messageId = extras.getString("messageid", "");
 
-            Intent intent = getIntent();
-            Bundle extras = intent.getExtras();
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
 
 
-            String banner = (extras != null) ? extras.getString("banner", "") : "";
-            String callId = (extras != null) ? extras.getString("callid", "") : "";
-            String messageId = (extras != null) ? extras.getString("messageid", "") : "";
-            String fromId = (extras != null) ? extras.getString("fromId", "") : "";
-            String toId = (extras != null) ? extras.getString("toId", "") : "";
-            String fromUserName = (extras != null) ? extras.getString("fromUserName", "") : "";
-
-
-            Log.e("TAG", "onCreate:------ " + banner );
-            Log.e("TAG", "onCreate:------ " + callId );
-            Log.e("TAG", "onCreate:------ " + fromId );
-            Log.e("TAG", "onCreate:------ " + toId );
-            Log.e("TAG", "onCreate:------ " + fromUserName );
-            Log.e("TAG", "onCreate:------ " + messageId );
+        banner = (extras != null) ? extras.getString("banner", "") : "";
+        callId = (extras != null) ? extras.getString("callid", "") : "";
+        messageId = (extras != null) ? extras.getString("messageid", "") : "";
+        fromId = (extras != null) ? extras.getString("fromId", "") : "";
+        toId = (extras != null) ? extras.getString("toId", "") : "";
+        toUserName = (extras != null) ? extras.getString("toUserName", "") : "";
 
 //        }
 
@@ -156,8 +148,31 @@ public class SplashActivity extends BaseActivity {
         if (!listPermissionsNeeded.isEmpty()) {
             startActivity(new Intent(SplashActivity.this, ApplicationPermissionActivity.class));
             return false;
-        }else {
-            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+        } else {
+
+
+            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+            intent.putExtra("callId", callId);
+            intent.putExtra("banner",banner );
+            intent.putExtra("messageId", messageId);
+            intent.putExtra("fromId", fromId);
+            intent.putExtra("toId", toId);
+            intent.putExtra("toId", toId);
+            startActivity(intent);
+
+            /*if (!callId.isEmpty()){
+
+                Intent intent = new Intent();
+                intent.putExtra("callId",callId);
+                intent.putExtra("fromId",fromId);
+                intent.putExtra("toId",toId);
+                intent.putExtra("fromId",fromId);
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+
+            }else {
+
+            }*/
+
         }
         return true;
     }

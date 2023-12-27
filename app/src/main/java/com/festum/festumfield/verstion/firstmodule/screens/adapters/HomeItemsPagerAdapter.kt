@@ -12,11 +12,11 @@ class HomeItemsPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> FriendsListFragment(null)
+            0 -> FriendsListFragment(null,"")
             1 -> MapsFragment()
             2 -> CallsFragment()
             3 ->  ContactFragment()
-            else -> FriendsListFragment(null)
+            else -> FriendsListFragment(null,"")
         }
     }
 

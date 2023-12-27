@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity {
         });
 
        /* getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new ChatFragment()).commit();*/
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new FriendsListFragment(null)).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new FriendsListFragment(null,"")).commit();
 
         lin_chats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity {
                 iv_contact_list.setColorFilter(getColor(R.color.grey));
 
 //                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ChatFragment()).commit();
-                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new FriendsListFragment(null)).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new FriendsListFragment(null,"")).commit();
             }
         });
 

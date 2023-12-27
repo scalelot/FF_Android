@@ -306,10 +306,8 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
                 SocketManager.mSocket?.emit("endCall", jsonObj)
                 stop()
                 finish()
-//                val jsonObj = JSONObject()
-//                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
-//                SocketManager.mSocket?.emit("endCall", jsonObj)
-//                finish()
+
+                viewModel.callEnd(AppPreferencesDelegates.get().isCallId)
 
             }catch (e : Exception){
                 Log.e("TAG", "error:" + e.message )

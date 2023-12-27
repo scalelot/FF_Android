@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -56,7 +55,6 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
-import io.socket.emitter.Emitter
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -78,7 +76,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private lateinit var receiverUserId: String
     private lateinit var receiverUserName: String
     private lateinit var receiverUserImage: String
-    private lateinit var friendsItem: FriendsListItems
+    private var friendsItem: FriendsListItems? = null
 
     private lateinit var upComingCallBinding: ActivityVideoCallBinding
     private var upComingCallDialog: Dialog? = null
@@ -95,6 +93,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private var isVideoGroupCalling = false
     private var isAudioCalling = false
     private var isAudioGroupCalling = false
+    private var isCallStart = false
+    private var isCallAccpeted = false
 
     //    private var isVideoCall : Boolean ?= null
     private var isVideoCall: String? = "isVideoCall"
@@ -122,10 +122,16 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         val jsonList = intent?.getString("friendsList")
 
+        val fromId = intent?.getString("fromId")
+        val toId = intent?.getString("toId")
+        val messageId = intent?.getString("messageId")
+        val banner = intent?.getString("banner")
+
+
         friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
-        receiverUserName = friendsItem.fullName.toString()
-        receiverUserImage = friendsItem.profileimage.toString()
-        receiverUserId = friendsItem.id.toString()
+        receiverUserName = friendsItem?.fullName.toString()
+        receiverUserImage = friendsItem?.profileimage.toString()
+        receiverUserId = friendsItem?.id.toString()
         productId = intent?.getString("productId").toString()
 
         Log.e("TAG", "setupUi: $receiverUserId")
@@ -154,13 +160,13 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
         }
 
-        if (friendsItem.members != null) {
+        if (friendsItem?.members != null) {
 
-            val groupMembers = friendsItem.members as? List<MembersList>
+            val groupMembers = friendsItem?.members as? List<MembersList>
 
             if (groupMembers != null) {
 
-                binding.userName.text = friendsItem.name
+                binding.userName.text = friendsItem?.name
 
                 for (i in groupMembers.indices) {
                     val userNamesList = groupMembers.mapNotNull { it.membersList?.fullName }
@@ -173,7 +179,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         binding.rlUser.setOnClickListener {
 
-            if (friendsItem.members?.isNotEmpty() == true) {
+            if (friendsItem?.members?.isNotEmpty() == true) {
 
                 val intent = Intent(this@ChatActivity, GroupDetailsActivity::class.java)
                 val jsonItem = Gson().toJson(friendsItem)
@@ -485,9 +491,30 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             AppPreferencesDelegates.get().isCallId = callId.toString()
 
+            Handler(Looper.getMainLooper()).postDelayed({
+
+                if (!isCallAccpeted){
+
+                    val jsonObj = JSONObject()
+                    jsonObj.put("id", receiverUserId)
+                    SocketManager.mSocket?.emit("endCall", jsonObj)
+                    upComingCallDialog?.dismiss()
+                    AppPreferencesDelegates.get().isVideoCalling = true
+                    AppPreferencesDelegates.get().isAudioCalling = true
+
+                    /* Call End */
+                    viewModel.callEnd(callId)
+
+                }
+
+            }, 30000)
+//
+
         }
 
     }
+
+
 
     fun getMessage() {
 
@@ -502,6 +529,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId){ args ->
 
             val message = args[0] as JSONObject
+
+            Log.e("TAG", "getMessage: -----" + message )
 
             val data = message.optJSONObject("data")
 
@@ -566,6 +595,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     }*/
 
                 }
+
                 "messageSeen" -> {
 
                     Log.e("TAG", "Seen---: $data")
@@ -579,6 +609,9 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             }
 
         }
+
+
+
     }
 
     private fun getUserStatus() {
@@ -639,12 +672,13 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (isVideoCalling) {
                 val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)
-                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
-                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
-                i.putExtra("remoteUser", friendsItem.fullName)
+                i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
+                i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
+                i.putExtra("remoteUser", friendsItem?.fullName)
                 i.putExtra("callId", callId)
                 startActivityForResult(i, IS_VIDEO_CALLING)
                 isVideoCalling = false
+                isCallAccpeted = true
 
                 Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
 
@@ -653,12 +687,13 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             if (isAudioCalling) {
 
                 val i = Intent(this@ChatActivity, WebAudioCallingActivity::class.java)
-                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
-                i.putExtra("remoteChannelId", friendsItem.id?.lowercase())
-                i.putExtra("remoteUser", friendsItem.fullName)
+                i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
+                i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
+                i.putExtra("remoteUser", friendsItem?.fullName)
                 i.putExtra("callId", callId)
                 startActivityForResult(i, IS_AUDIO_CALLING)
                 isAudioCalling = false
+                isCallAccpeted = true
 
                 Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
 
@@ -672,6 +707,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 intent.putExtra("callId", callId)
                 startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
                 isVideoGroupCalling = false
+                isCallAccpeted = true
 
                 Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
 
@@ -1051,7 +1087,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if(friendsItem.members == null){
+                            if(friendsItem?.members == null){
                                 onIndividualVideoCall()
                             }else{
                                 onIndividualGroupVideoCall()
@@ -1085,7 +1121,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if(friendsItem.members == null){
+                            if(friendsItem?.members == null){
                                 onIndividualVideoCall()
                             }else{
                                 onIndividualGroupVideoCall()
@@ -1132,7 +1168,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             val message = JSONObject().apply {
 
                                 val jsonArray = JSONArray()
-                                jsonArray.put(friendsItem.id?.lowercase())
+                                jsonArray.put(friendsItem?.id?.lowercase())
                                 jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
                                 put("memberIds", jsonArray)
                                 put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
@@ -1148,9 +1184,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             upComingCallView(friendsItem)
 
                             /* Call Start */
-                            viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem.id?.lowercase(),false,false,"")
+                            viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem?.id?.lowercase(),false,false,"")
 
                             isAudioCalling = true
+                            isCallStart = true
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -1183,7 +1220,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             val message = JSONObject().apply {
 
                                 val jsonArray = JSONArray()
-                                jsonArray.put(friendsItem.id?.lowercase())
+                                jsonArray.put(friendsItem?.id?.lowercase())
                                 jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
                                 put("memberIds", jsonArray)
                                 put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
@@ -1199,9 +1236,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                             upComingCallView(friendsItem)
 
                             /* Call Start */
-                            viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to =friendsItem.id?.lowercase(),false,false,"")
+                            viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to =friendsItem?.id?.lowercase(),false,false,"")
 
                             isAudioCalling = true
+                            isCallStart = true
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -1244,7 +1282,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                         val message = JSONObject().apply {
 
                             val jsonArray = JSONArray()
-                            jsonArray.put(friendsItem.id?.lowercase())
+                            jsonArray.put(friendsItem?.id?.lowercase())
                             jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
                             put("memberIds", jsonArray)
                             put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
@@ -1296,7 +1334,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         val message = JSONObject().apply {
 
             val jsonArray = JSONArray()
-            jsonArray.put(friendsItem.id?.lowercase())
+            jsonArray.put(friendsItem?.id?.lowercase())
             jsonArray.put(AppPreferencesDelegates.get().channelId.lowercase())
             put("memberIds", jsonArray)
             put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
@@ -1311,11 +1349,12 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         /* Call Start */
 
-        viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem.id?.lowercase(),true,false,"")
+        viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem?.id?.lowercase(),true,false,"")
 
         upComingCallView(friendsItem)
 
         isVideoCalling = true
+        isCallStart = true
 
     }
 
@@ -1324,7 +1363,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         val message = JSONObject().apply {
 
             val jsonArray = JSONArray()
-            friendsItem.members?.forEach {
+            friendsItem?.members?.forEach {
                 if (it.membersList?.id?.lowercase() == AppPreferencesDelegates.get().channelId.lowercase() ){
                     Log.e("TAG", "onIndividualGroupVideoCall:--" + it.membersList.fullName )
                 }else{
@@ -1333,8 +1372,8 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 }
             }
             put("memberIds", jsonArray)
-            put("fromId", friendsItem.id?.lowercase())
-            put("name", friendsItem.name)
+            put("fromId", friendsItem?.id?.lowercase())
+            put("name", friendsItem?.name)
             put("isVideoCall", true)
             put("isCallingFromApp", true)
             put("isGroupCalling", true)
@@ -1345,12 +1384,23 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         /* Call Start */
 
-        viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem.id?.lowercase(),true,true,"")
+        viewModel.callStart(from = AppPreferencesDelegates.get().channelId.lowercase(),to = friendsItem?.id?.lowercase(),true,true,"")
 
         upComingGroupCallView(friendsItem)
 
         isVideoGroupCalling = true
+        isCallStart = true
 
+    }
+
+    fun on30SecondCall(){
+        if (isCallStart){
+
+            if (!isCallAccpeted){
+
+            }
+
+        }
     }
 
 }

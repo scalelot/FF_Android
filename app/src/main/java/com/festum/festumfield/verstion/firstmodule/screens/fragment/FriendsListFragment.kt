@@ -20,6 +20,7 @@ import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
+import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
@@ -29,13 +30,14 @@ import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.Cha
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import java.util.*
 
 
 @AndroidEntryPoint
-class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
+class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,private var fromId: String?) :
     BaseFragment<FriendsListViewModel>(), ChatPinInterface {
 
     private lateinit var binding: FragmentFriendsListBinding
@@ -161,14 +163,31 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?) :
                         }
                     }
 
-                    friendsListAdapter =
-                        FriendsListAdapter(requireActivity(), friendsListData, this, false)
+                    friendsListAdapter = FriendsListAdapter(requireActivity(), friendsListData, this, false)
                     binding.chatRecyclerview.adapter = friendsListAdapter
 
                     if (friendsListData.isEmpty()) {
                         binding.layoutEmpty.emptyLay.visibility = View.VISIBLE
                     } else {
                         binding.layoutEmpty.emptyLay.visibility = View.GONE
+                    }
+
+                    var friendsListItems = FriendsListItems()
+
+                    if (!fromId.isNullOrEmpty()){
+
+                        friendsListData.forEach {
+                            if (it.id?.lowercase() == fromId?.lowercase()){
+                                friendsListItems = it
+                            }
+                        }
+
+                        val intent = Intent(requireActivity(), ChatActivity::class.java)
+                        val jsonItem = Gson().toJson(friendsListItems)
+                        intent.putExtra("friendsList", jsonItem)
+                        requireActivity().startActivity(intent)
+                        fromId = ""
+
                     }
 
                 }
