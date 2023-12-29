@@ -25,6 +25,7 @@
     <string name="hiiiii">Hi,</string>
     <string name="name">Hunter Bryan</string>
     <string name="tab_chat">Chats</string>
+    <string name="tab_group">Groups</string>
     <string name="tab_find_friend">Find Friends</string>
     <string name="tab_calls">Calls</string>
     <string name="search">Search</string>

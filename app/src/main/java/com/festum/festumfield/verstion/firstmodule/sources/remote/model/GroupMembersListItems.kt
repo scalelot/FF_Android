@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.lang.reflect.Member
 
-data class GroupListItems(
+data class GroupMembersListItems(
 
     @field:SerializedName("aboutUs")
     val aboutUs: String? = null,
@@ -31,7 +31,7 @@ data class GroupListItems(
     val emailId: String? = null,
 
     @field:SerializedName("lastchatmessage")
-    val lastMessage: GroupMessageItem? = null,
+    val lastMessage: GroupMembersMessageItem? = null,
 
     @field:SerializedName("userName")
     val userName: String? = null,

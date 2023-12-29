@@ -7,6 +7,11 @@
         android:title="@string/tab_chat"/>
 
     <item
+        android:id="@+id/group"
+        android:icon="@drawable/ic_group"
+        android:title="@string/tab_group"/>
+
+    <item
         android:id="@+id/location"
         android:icon="@drawable/ic_tab_location_icon"
         android:title="@string/tab_find_friend"/>

@@ -16,7 +16,11 @@ import com.festum.festumfield.verstion.firstmodule.screens.adapters.AddMembersLi
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupMembersInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersList
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -27,8 +31,8 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class AddMembersDialog(
-    private val membersList: FriendsListItems,
-    private val onClick: GroupInterface,
+    private val membersList: GroupMembersListItems,
+    private val onClick: GroupMembersInterface,
     private val addMembersList: ArrayList<String>
 ) :
     BaseDialogFragment<FriendsListViewModel>(),
@@ -109,8 +113,7 @@ class AddMembersDialog(
 
                     Handler(Looper.getMainLooper()).postDelayed({
 
-                        friendsListAdapter =
-                            AddMembersListAdapter(requireActivity(), addMembersListItems, this)
+                        friendsListAdapter = AddMembersListAdapter(requireActivity(), addMembersListItems, this)
                         binding.recyclerviewContactList.adapter = friendsListAdapter
 
                     }, 100)
@@ -157,12 +160,13 @@ class AddMembersDialog(
 
             if (it != null) {
 
-                onClick.onAddMemberClick(FriendsListItems(), true,addMembersList)
+                onClick.onAddMemberClick(GroupMembersListItems(), true,addMembersList)
                 dismiss()
 
             } else {
 
                 Toast.makeText(requireActivity(), "Something get wrong", Toast.LENGTH_SHORT).show()
+
             }
 
         }

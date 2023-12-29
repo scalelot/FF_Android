@@ -71,6 +71,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".verstion.firstmodule.screens.main.chat.GroupChatActivity"
+            android:exported="false"
+            android:configChanges="uiMode" />
+
         <activity
             android:name=".verstion.firstmodule.screens.main.ApplicationPermissionActivity"
             android:exported="false"

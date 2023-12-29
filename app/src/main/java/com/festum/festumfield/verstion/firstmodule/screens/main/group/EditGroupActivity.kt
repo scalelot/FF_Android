@@ -20,6 +20,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
@@ -42,7 +43,7 @@ import java.io.File
 class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
 
     private lateinit var binding: ActivityEditGroupBinding
-    private lateinit var membersList: FriendsListItems
+    private lateinit var membersList: GroupListItems
     private var friendsListAdapter: GroupMembersListAdapter? = null
     private val groupMembers = arrayListOf<FriendsListItems>()
     private var profileKey: String = ""
@@ -58,7 +59,7 @@ class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
 
         val jsonList = intent?.getString("MembersList")
 
-        membersList = Gson().fromJson(jsonList, FriendsListItems::class.java)
+        membersList = Gson().fromJson(jsonList, GroupListItems::class.java)
 
         val profileImage = Constans.Display_Image_URL + membersList.profileimage
 

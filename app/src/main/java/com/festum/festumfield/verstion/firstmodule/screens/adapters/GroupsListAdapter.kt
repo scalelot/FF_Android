@@ -14,6 +14,7 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.UserChatListBinding
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.chat.GroupChatActivity
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
@@ -231,8 +232,44 @@ class GroupsListAdapter(
 //                    pinInterface.checkItemPin(friendsList[absoluteAdapterPosition])
 
                 } else  {
-                    val intent = Intent(context, ChatActivity::class.java)
-                    val jsonItem = Gson().toJson(item)
+                    val intent = Intent(context, GroupChatActivity::class.java)
+                    val addMemberList = GroupMembersListItems(
+                        aboutUs= item.aboutUs,
+                        isSender=item.isSender,
+                        isPinned=item.isPinned,
+                        gender=item.gender,
+                        nickName=item.nickName,
+                        fullName=item.fullName,
+                        name=item.name,
+                        emailId=item.emailId,
+                        lastMessage=GroupMembersMessageItem(
+                            message = item.lastMessage?.message?.id,
+                            timestamp = item.timestamp
+                        ),
+                        userName=item.userName,
+                        profileimage=item.profileimage,
+                        businessprofile = item.businessprofile,
+                        areaRange = item.areaRange,
+                        createdAt=item.createdAt,
+                        isBusinessProfileCreated=item.isBusinessProfileCreated,
+                        hobbies = item.hobbies,
+                        contactNo=item.contactNo,
+                        dob=item.dob,
+                        description=item.description,
+                        socialMediaLinks =item.socialMediaLinks,
+                        id=item.id,
+                        interestedin=item.interestedin,
+                        status=item.status,
+                        updatedAt=item.updatedAt,
+                        timestamp=item.timestamp,
+                        isNewMessage=item.isNewMessage,
+                        messageSize=item.messageSize,
+                        channelID=item.channelID,
+                        online=item.online,
+                        members  =item.members ,
+                        unreadMessageCount =item.unreadMessageCount,
+                    )
+                    val jsonItem = Gson().toJson(addMemberList)
                     intent.putExtra("friendsList", jsonItem)
                     context.startActivity(intent)
                 }

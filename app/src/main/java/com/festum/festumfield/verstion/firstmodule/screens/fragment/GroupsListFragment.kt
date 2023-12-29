@@ -19,7 +19,6 @@ import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
-import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupsListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
@@ -38,12 +37,12 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,private var fromId: String?) :
+class GroupsListFragment(private val chatPinInterface: ChatPinInterface?, private var fromId: String?) :
     BaseFragment<FriendsListViewModel>(), ChatPinInterface {
 
     private lateinit var binding: FragmentFriendsListBinding
 
-    private var friendsListAdapter: FriendsListAdapter? = null
+    private var groupsListAdapter: GroupsListAdapter? = null
     private lateinit var upComingCallBinding: UpcomingCallBinding
     var dialog : Dialog? = null
 
@@ -77,15 +76,14 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
             Toast.makeText(requireActivity(), myInt, Toast.LENGTH_SHORT).show()
         }
 
-        upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
+        binding.chatRecyclerview.visibility = View.GONE
 
-        binding.groupRecyclerview.visibility = View.GONE
+        upComingCallBinding = UpcomingCallBinding.inflate(layoutInflater)
 
         getMessage()
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
-        viewModel.friendsList(friendListBody)
-
+        val groupListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        viewModel.groupsList(groupListBody)
 
         binding.edtSearchText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -122,77 +120,14 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
     override fun setObservers() {
 
-        viewModel.friendsListData.observe(this) { friendsListData ->
+        viewModel.groupsListData.observe(this) { groupsListData ->
 
             if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
 
-                if (friendsListData != null) {
+                if (groupsListData != null) {
 
-                    friendsListItems = friendsListData
-
-                    /* Online - Offline*/
-                    var onLine = false
-                    val jsonObject = JSONObject(AppPreferencesDelegates.get().onLineUser)
-                    val onlineUserChannelId = jsonObject.keys()
-                    val onLineUserList = ArrayList<String>()
-
-                    /* Pin - Unpin */
-                    var setPin = false
-
-                    friendsListData.forEach {
-
-                        while (onlineUserChannelId.hasNext()) {
-                            val key = onlineUserChannelId.next()
-                            onLineUserList.add(key)
-                        }
-
-                        if (onLineUserList.contains(it.id?.uppercase())) {
-                            it.online = true
-                            onLine = true
-                        }
-
-                        if (it.isPinned == true) {
-                            setPin = true
-                        }
-
-                    }
-
-                    if (setPin) {
-                        friendsListData.sortByDescending { item -> item.isPinned }
-                    } else {
-                        if (onLine){
-                            friendsListData.sortByDescending { item -> item.online }
-                        }else{
-                            friendsListData.sortByDescending { item -> item.lastMessage?.updatedAt }
-                        }
-                    }
-
-                    friendsListAdapter = FriendsListAdapter(requireActivity(), friendsListData, this, false)
-                    binding.chatRecyclerview.adapter = friendsListAdapter
-
-                    if (friendsListData.isEmpty()) {
-                        binding.layoutEmpty.emptyLay.visibility = View.VISIBLE
-                    } else {
-                        binding.layoutEmpty.emptyLay.visibility = View.GONE
-                    }
-
-                    var friendsListItems = FriendsListItems()
-
-                    if (!fromId.isNullOrEmpty()){
-
-                        friendsListData.forEach {
-                            if (it.id?.lowercase() == fromId?.lowercase()){
-                                friendsListItems = it
-                            }
-                        }
-
-                        val intent = Intent(requireActivity(), ChatActivity::class.java)
-                        val jsonItem = Gson().toJson(friendsListItems)
-                        intent.putExtra("friendsList", jsonItem)
-                        requireActivity().startActivity(intent)
-                        fromId = ""
-
-                    }
+                    groupsListAdapter = GroupsListAdapter(requireActivity(), groupsListData, this, false)
+                    binding.groupRecyclerview.adapter = groupsListAdapter
 
                 }
 
@@ -219,10 +154,10 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
             }
 
             if (filteredList.isEmpty()) {
-                friendsListAdapter?.filterList(filteredList)
+                groupsListAdapter?.filterList(filteredList)
                 Toast.makeText(context, "No User Found..", Toast.LENGTH_SHORT).show()
             } else {
-                friendsListAdapter?.filterList(filteredList)
+                groupsListAdapter?.filterList(filteredList)
             }
 
         }
@@ -232,38 +167,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
     @SuppressLint("NotifyDataSetChanged")
     fun getMessage() {
 
-        SocketManager.mSocket?.on("userConnected") { args ->
-
-            val data = args[0] as JSONObject
-
-            AppPreferencesDelegates.get().onLineUser =
-                data.optJSONObject("onlineUsers")?.toString() ?: ""
-
-            activity?.runOnUiThread {
-
-                val jsonObject = args[0] as JSONObject
-                val mOnlineUsers = jsonObject.optJSONObject("onlineUsers")
-                friendsListAdapter?.updateOnline(mOnlineUsers)
-
-            }
-
-            Log.e("TAG", "getUserStatus:$data")
-
-        }?.on("offline") { args ->
-
-            val data = args[0] as JSONObject
-            Log.e("TAG", "offline:$data")
-
-            AppPreferencesDelegates.get().onLineUser =
-                data.optJSONObject("onlineUsers")?.toString() ?: ""
-
-            activity?.runOnUiThread {
-                val jsonObject = args[0] as JSONObject
-                val mOnlineUsers = jsonObject.optString("userId")
-                friendsListAdapter?.updateOffline(mOnlineUsers)
-            }
-
-        }?.on("endCall") { args ->
+        SocketManager.mSocket?.on("endCall") { args ->
 
             try {
                 val data = args[0] as JSONObject
@@ -273,17 +177,6 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
             }
 
         }
-
-//        val jsonObj = JSONObject()
-//        jsonObj.put("channelID", AppPreferencesDelegates.get().channelId)
-//        SocketManager.mSocket?.emit("init", jsonObj)?.on(
-//            "onIncomingChat"
-//        ) { args ->
-//
-//            val jsonObject = args[0] as JSONObject
-//
-//        }
-
 
         SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId) { args ->
 
@@ -307,13 +200,10 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
                             if (isGroupMessage){
                                 if (groupId != null) {
-                                    friendsListAdapter?.updateGroupItem(data,groupId)
-                                    binding.chatRecyclerview.scrollToPosition(0)
+                                    groupsListAdapter?.updateGroupItem(data,groupId)
+                                    binding.groupRecyclerview.scrollToPosition(0)
                                 }
 
-                            }else{
-                                friendsListAdapter?.updateItem(data)
-                                binding.chatRecyclerview.scrollToPosition(0)
                             }
 
                         }
@@ -367,17 +257,6 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
     override fun setPin(friendItem: FriendsListItems) {}
 
 
-    fun setOnPin(itemData: FriendsListItems?, pinSet: Boolean) {
-
-        friendsListAdapter?.updatePin(itemData, pinSet)
-
-    }
-
-    fun pinNotSelected(itemData: FriendsListItems?) {
-
-        friendsListAdapter?.pinNotSelected(itemData)
-
-    }
 
     private fun upComingCallView(
         upComingCallUser: FriendsListItems?,

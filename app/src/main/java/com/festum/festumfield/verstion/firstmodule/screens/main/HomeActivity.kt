@@ -42,6 +42,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionD
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.CallHistoryFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
@@ -376,6 +377,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 }else{
                     pushFragment(FriendsListFragment(this,""))
                 }
+
+            R.id.group -> {
+
+                pushFragment(GroupsListFragment(this,""))
+
+            }
 
             R.id.location ->
                 if (AppPreferencesDelegates.get().userName.isBlank()) {

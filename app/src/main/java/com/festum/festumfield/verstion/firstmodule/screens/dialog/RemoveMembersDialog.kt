@@ -7,13 +7,16 @@ import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.RemoveMemberItemBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseDialogFragment
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupMembersInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RemoveMembersDialog(private val membersList: FriendsListItems,
-                          private val onClick : GroupInterface) :
+class RemoveMembersDialog(private val membersList: GroupMembersListItems,
+                          private val onClick : GroupMembersInterface) :
     BaseDialogFragment<FriendsListViewModel>(),
     GroupInterface {
 

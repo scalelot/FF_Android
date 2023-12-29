@@ -13,11 +13,13 @@ import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfilePictureResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProfileResponse
 import com.google.gson.Gson
@@ -39,13 +41,14 @@ class FriendsListViewModel @Inject constructor(
 
     var friendsListData = MutableLiveData<ArrayList<FriendsListItems>?>()
     var groupsListData = MutableLiveData<ArrayList<GroupListItems>?>()
+    var groupsOneData = MutableLiveData<GroupListItems?>()
     var profileData = MutableLiveData<ProfileResponse?>()
     var findFriendsData = MutableLiveData<ArrayList<ProfileResponse?>?>()
     var sendRequestData = MutableLiveData<ApiBody?>()
     var groupProfilePictureData = MutableLiveData<ProfilePictureResponse?>()
     var createGroupData = MutableLiveData<GroupListItems?>()
-    var addMembersData = MutableLiveData<GroupListItems?>()
-    var removeMembersData = MutableLiveData<GroupListItems?>()
+    var addMembersData = MutableLiveData<GroupMembersListItems?>()
+    var removeMembersData = MutableLiveData<GroupMembersListItems?>()
 
     fun friendsList(friendListBody: FriendListBody){
         api.getFriendsList(friendListBody).subscribeOn(Schedulers.io())
@@ -187,6 +190,18 @@ class FriendsListViewModel @Inject constructor(
             }, {
                 Log.e("TAG", "addMembersData: " + it.localizedMessage )
                 removeMembersData.value = null
+            })
+    }
+
+    fun getGroup(groupBody: GroupOneBody){
+        api.getGroup(groupBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+
+                groupsOneData.value = resp.Data as GroupListItems
+            }, {
+
+                groupsOneData.value = null
             })
     }
 

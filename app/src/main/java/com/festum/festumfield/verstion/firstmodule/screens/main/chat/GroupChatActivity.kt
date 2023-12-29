@@ -69,14 +69,14 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("SimpleDateFormat")
 @AndroidEntryPoint
-class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendImageInterface {
+class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendImageInterface {
 
     private lateinit var binding: ChatActivityBinding
 
     private lateinit var receiverUserId: String
     private lateinit var receiverUserName: String
     private lateinit var receiverUserImage: String
-    private var friendsItem: FriendsListItems? = null
+    private var friendsItem: GroupMembersListItems? = null
 
     private lateinit var upComingCallBinding: ActivityVideoCallBinding
     private var upComingCallDialog: Dialog? = null
@@ -128,7 +128,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         val banner = intent?.getString("banner")
 
 
-        friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
+        friendsItem = Gson().fromJson(jsonList, GroupMembersListItems::class.java)
         receiverUserName = friendsItem?.fullName.toString()
         receiverUserImage = friendsItem?.profileimage.toString()
         receiverUserId = friendsItem?.id.toString()
@@ -150,7 +150,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         if (receiverUserImage.isNotEmpty()) {
 
-            Glide.with(this@ChatActivity).load(Constans.Display_Image_URL + receiverUserImage)
+            Glide.with(this@GroupChatActivity).load(Constans.Display_Image_URL + receiverUserImage)
                 .placeholder(R.drawable.ic_user_img).into(binding.imgUser)
 
         }
@@ -181,7 +181,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (friendsItem?.members?.isNotEmpty() == true) {
 
-                val intent = Intent(this@ChatActivity, GroupDetailsActivity::class.java)
+                val intent = Intent(this@GroupChatActivity, GroupDetailsActivity::class.java)
                 val jsonItem = Gson().toJson(friendsItem)
                 intent.putExtra("groupMembersList", jsonItem)
                 startActivity(intent)
@@ -207,16 +207,16 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             binding.relReplay.visibility = View.GONE
 
-            DeviceUtils.hideKeyboard(this@ChatActivity)
+            DeviceUtils.hideKeyboard(this@GroupChatActivity)
 
         }
 
         /* Photos */
         binding.imgGallery.setOnClickListener {
             if (IntentUtil.readPermission(
-                    this@ChatActivity
+                    this@GroupChatActivity
                 ) && IntentUtil.writePermission(
-                    this@ChatActivity
+                    this@GroupChatActivity
                 )
             ) {
                 openIntent(binding.imgGallery.id)
@@ -227,7 +227,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         /* Camera */
         binding.imgCamera.setOnClickListener {
-            if (IntentUtil.cameraPermission(this@ChatActivity)
+            if (IntentUtil.cameraPermission(this@GroupChatActivity)
             ) {
                 openIntent(binding.imgCamera.id)
             } else
@@ -303,7 +303,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             chatList?.reverse()
 
             chatMessageAdapter = ChatMessageAdapter(
-                this@ChatActivity,
+                this@GroupChatActivity,
                 chatList as ArrayList<ListItem>,
                 receiverUserId
             )
@@ -311,19 +311,19 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             var prevCode = ""
             val now = DateTimeUtils.getNowSeconds()
-            val today = DateTimeUtils.getChatDate(now, this@ChatActivity, true)
+            val today = DateTimeUtils.getChatDate(now, this@GroupChatActivity, true)
             chatList.forEach {
                 if (it.createdAt != null) {
                     val date =
                         format.parse(
                             it.createdAt
                         )
-                    val code = DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
+                    val code = DateTimeUtils.getChatDate(date.time, this@GroupChatActivity, true)
 
                     if (code != prevCode) {
                         val titleItem =
-                            DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
-                        val day = DateTimeUtils.getChatDate(date.time, this@ChatActivity, true)
+                            DateTimeUtils.getChatDate(date.time, this@GroupChatActivity, true)
+                        val day = DateTimeUtils.getChatDate(date.time, this@GroupChatActivity, true)
                         val isToday = day == today
                         val listSection =
                             ListSection(titleItem, code, isToday, !isToday && date.time < now)
@@ -385,7 +385,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                     DateTimeUtils.getChatDate(
                         it1,
-                        this@ChatActivity,
+                        this@GroupChatActivity,
                         true
                     )
 
@@ -400,16 +400,16 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     //chat has today section
                     val now = DateTimeUtils.getNowSeconds()
                     val today =
-                        DateTimeUtils.getChatDate(now, this@ChatActivity, true)
+                        DateTimeUtils.getChatDate(now, this@GroupChatActivity, true)
                     val titleItem =
                         DateTimeUtils.getChatDate(
                             date.time,
-                            this@ChatActivity,
+                            this@GroupChatActivity,
                             true
                         )
                     val day = DateTimeUtils.getChatDate(
                         date.time,
-                        this@ChatActivity,
+                        this@GroupChatActivity,
                         true
                     )
                     val isToday = day == today
@@ -671,7 +671,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             Log.e("TAG", "webrtcMessage:---+++++-- $data")
 
             if (isVideoCalling) {
-                val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)
+                val i = Intent(this@GroupChatActivity, AppVideoCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem?.fullName)
@@ -686,7 +686,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (isAudioCalling) {
 
-                val i = Intent(this@ChatActivity, WebAudioCallingActivity::class.java)
+                val i = Intent(this@GroupChatActivity, WebAudioCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem?.fullName)
@@ -701,7 +701,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (isVideoGroupCalling){
 
-                val intent = Intent(this@ChatActivity, AppGroupVideoCallingActivity::class.java)
+                val intent = Intent(this@GroupChatActivity, AppGroupVideoCallingActivity::class.java)
                 val jsonItem = Gson().toJson(friendsItem)
                 intent.putExtra("groupList", jsonItem)
                 intent.putExtra("callId", callId)
@@ -749,7 +749,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             }
 
             R.id.img_camera -> {
-                IntentUtil.getCaptureImageVideoIntent(this@ChatActivity).let {
+                IntentUtil.getCaptureImageVideoIntent(this@GroupChatActivity).let {
                     startActivityForResult(
                         it,
                         IntentUtil.PICK_IMAGE_VIDEO_CHOOSER_REQUEST_CODE
@@ -761,7 +761,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
     private fun onCameraPermission(actionID: Int) {
 
-        Dexter.withContext(this@ChatActivity)
+        Dexter.withContext(this@GroupChatActivity)
             .withPermissions(
                 Manifest.permission.CAMERA
             )
@@ -771,7 +771,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                         openIntent(actionID)
                     } else {
                         AppPermissionDialog.showPermission(
-                            this@ChatActivity,
+                            this@GroupChatActivity,
                             getString(R.string.media_permission),
                             getString(R.string.media_permission_title)
                         )
@@ -793,7 +793,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
     private fun onMediaPermission(actionID: Int) {
 
-        Dexter.withContext(this@ChatActivity)
+        Dexter.withContext(this@GroupChatActivity)
             .withPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -804,7 +804,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                         openIntent(actionID)
                     } else {
                         AppPermissionDialog.showPermission(
-                            this@ChatActivity,
+                            this@GroupChatActivity,
                             getString(R.string.media_permission),
                             getString(R.string.media_permission_title)
                         )
@@ -831,7 +831,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             if (uri != null) {
                 val mImageFile = uri.let { it ->
-                    FileUtil.getPath(Uri.parse(it.toString()), this@ChatActivity)
+                    FileUtil.getPath(Uri.parse(it.toString()), this@GroupChatActivity)
                         ?.let { File(it) }
                 }
                 val file = File(mImageFile.toString())
@@ -852,7 +852,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
             if (uri != null) {
 
                 val mImageFile = uri.let { it ->
-                    FileUtil.getPath(Uri.parse(it.toString()), this@ChatActivity)
+                    FileUtil.getPath(Uri.parse(it.toString()), this@GroupChatActivity)
                         ?.let { File(it) }
                 }
                 val file = File(mImageFile.toString())
@@ -896,7 +896,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             DateTimeUtils.getChatDate(
                 it1,
-                this@ChatActivity,
+                this@GroupChatActivity,
                 true
             )
 
@@ -910,16 +910,16 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 //chat has today section
                 val now = DateTimeUtils.getNowSeconds()
                 val today =
-                    DateTimeUtils.getChatDate(now, this@ChatActivity, true)
+                    DateTimeUtils.getChatDate(now, this@GroupChatActivity, true)
                 val titleItem =
                     DateTimeUtils.getChatDate(
                         date?.time ?: 0,
-                        this@ChatActivity,
+                        this@GroupChatActivity,
                         true
                     )
                 val day = DateTimeUtils.getChatDate(
                     date?.time ?: 0,
-                    this@ChatActivity,
+                    this@GroupChatActivity,
                     true
                 )
                 val isToday = day == today
@@ -970,7 +970,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         binding.ivProImage.clipToOutline = true
 
         val product = item.images?.get(0)
-        Glide.with(this@ChatActivity)
+        Glide.with(this@GroupChatActivity)
             .load(product)
             .apply(
                 options.centerCrop()
@@ -1012,7 +1012,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     }
 
     private fun upComingCallView(
-        upComingCallUser: FriendsListItems?,
+        upComingCallUser: GroupMembersListItems?,
     ) {
 
         upComingCallBinding = ActivityVideoCallBinding.inflate(layoutInflater)
@@ -1020,7 +1020,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         upComingCallDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         upComingCallDialog?.setContentView(upComingCallBinding.root)
 
-        Glide.with(this@ChatActivity)
+        Glide.with(this@GroupChatActivity)
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
             .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.videocallImage)
 
@@ -1042,7 +1042,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
     }
     private fun upComingGroupCallView(
-        upComingCallUser: FriendsListItems?,
+        upComingCallUser: GroupMembersListItems?,
     ) {
 
         upComingCallBinding = ActivityVideoCallBinding.inflate(layoutInflater)
@@ -1050,7 +1050,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         upComingCallDialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         upComingCallDialog?.setContentView(upComingCallBinding.root)
 
-        Glide.with(this@ChatActivity)
+        Glide.with(this@GroupChatActivity)
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
             .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.videocallImage)
 
@@ -1077,7 +1077,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private fun onVideoCallPermission(isTiramisu: Boolean) {
 
         if (isTiramisu){
-            Dexter.withContext(this@ChatActivity)
+            Dexter.withContext(this@GroupChatActivity)
                 .withPermissions(
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
@@ -1095,7 +1095,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                         } else {
                             AppPermissionDialog.showPermission(
-                                this@ChatActivity,
+                                this@GroupChatActivity,
                                 getString(R.string.request_camera_mic_permissions_text),
                                 getString(R.string.media_permission_title)
                             )
@@ -1113,7 +1113,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 }).withErrorListener {}
                 .check()
         } else {
-            Dexter.withContext(this@ChatActivity)
+            Dexter.withContext(this@GroupChatActivity)
                 .withPermissions(
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.CAMERA)
@@ -1129,7 +1129,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                         } else {
                             AppPermissionDialog.showPermission(
-                                this@ChatActivity,
+                                this@GroupChatActivity,
                                 getString(R.string.request_camera_mic_permissions_text),
                                 getString(R.string.media_permission_title)
                             )
@@ -1156,7 +1156,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         if (isTiramisu){
 
-            Dexter.withContext(this@ChatActivity)
+            Dexter.withContext(this@GroupChatActivity)
                 .withPermissions(
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
@@ -1191,7 +1191,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                         } else {
                             AppPermissionDialog.showPermission(
-                                this@ChatActivity,
+                                this@GroupChatActivity,
                                 getString(R.string.request_mic_permissions_text),
                                 getString(R.string.media_permission_title)
                             )
@@ -1211,7 +1211,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         } else {
 
-            Dexter.withContext(this@ChatActivity)
+            Dexter.withContext(this@GroupChatActivity)
                 .withPermissions(Manifest.permission.RECORD_AUDIO)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
@@ -1243,7 +1243,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                         } else {
                             AppPermissionDialog.showPermission(
-                                this@ChatActivity,
+                                this@GroupChatActivity,
                                 getString(R.string.request_mic_permissions_text),
                                 getString(R.string.media_permission_title)
                             )
@@ -1269,7 +1269,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onGroupVideoCallPermission() {
 
-        Dexter.withContext(this@ChatActivity)
+        Dexter.withContext(this@GroupChatActivity)
             .withPermissions(
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
@@ -1301,7 +1301,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
                     } else {
                         AppPermissionDialog.showPermission(
-                            this@ChatActivity,
+                            this@GroupChatActivity,
                             getString(R.string.request_camera_mic_permissions_text),
                             getString(R.string.media_permission_title)
                         )

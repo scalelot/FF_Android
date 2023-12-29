@@ -12,6 +12,7 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.UserChatListBinding
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupMembersInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import java.time.OffsetDateTime
@@ -21,13 +22,14 @@ import java.util.*
 
 class EditGroupMembersListAdapter(
     private val context: Context,
-    private var friendsList: ArrayList<FriendsListItems>,
-    private val onAddMemberClick: GroupInterface
+    private var friendsList: ArrayList<GroupMembersListItems>,
+    private val onAddMemberClick: GroupMembersInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var checkedPosition = -1
     val memberList = arrayListOf<FriendsListItems>()
     private var isEnable = false
+
 
 
 
@@ -84,41 +86,29 @@ class EditGroupMembersListAdapter(
             binding.rlChatLayout.setOnClickListener {
 
                 onAddMemberClick.onRemoveMemberClick(item,position)
+
             }
 
         }
 
     }
 
-    fun updateOffline(receiverChannelId: String?) {
+    fun updateOffline(friendsListItems: GroupMembersListItems?){
 
-        var friendsListItems: FriendsListItems? = null
+        val currentItemIndex = friendsList.indexOf(friendsListItems)
+        notifyItemRemoved(currentItemIndex)
+        friendsList.remove(friendsListItems)
 
-        friendsList.forEach {
-            if (receiverChannelId.toString().lowercase() == it.id) {
-                friendsListItems = it
-            }
-        }
-
-        if (friendsListItems != null){
-
-            val currentItemIndex = friendsList.indexOf(friendsListItems)
-            notifyItemRemoved(currentItemIndex)
-            friendsList.remove(friendsListItems)
-
-            onAddMemberClick.onMembersList(friendsList.size)
-
-        }
+        onAddMemberClick.onMembersList(friendsList.size)
 
     }
-
 
     override fun getItemCount(): Int = friendsList.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun filterList(filterItems: ArrayList<FriendsListItems>) {
-        friendsList = filterItems
-        notifyDataSetChanged()
+       /* friendsList = filterItems
+        notifyDataSetChanged()*/
     }
 
     fun getTimeInMillis(smsTimeInMillis: Long): String {

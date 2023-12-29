@@ -13,6 +13,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreatePro
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
@@ -94,12 +95,12 @@ interface FestumFieldApi {
     @POST("group/addmembers")
     fun addMembersInGroup(
         @Body createGroupBody : CreateGroupBody
-    ) : Observable<ApiResponse<GroupListItems>>
+    ) : Observable<ApiResponse<GroupMembersListItems>>
 
     @POST("group/removemembers")
     fun removeMembersInGroup(
         @Body createGroupBody : CreateGroupBody
-    ) : Observable<ApiResponse<GroupListItems>>
+    ) : Observable<ApiResponse<GroupMembersListItems>>
 
     @POST("chatstatus/delivered")
     fun messageDelivered(
@@ -130,5 +131,10 @@ interface FestumFieldApi {
     fun getGroupsList(
         @Body body: FriendListBody
     ): Observable<ApiResponse<ArrayList<GroupListItems>>>
+
+    @POST("group/getone")
+    fun getGroup(
+        @Body body: GroupOneBody
+    ): Observable<ApiResponse<GroupListItems>>
 
 }
