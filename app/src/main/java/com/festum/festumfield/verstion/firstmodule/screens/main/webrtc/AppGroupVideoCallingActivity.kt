@@ -149,7 +149,15 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         runOnUiThread {
 
-            val webRtcMessage = JSONObject().apply {
+            SocketManager.mSocket?.emit("join room",remoteId)?.on("all users"){ args ->
+
+                val data = args[0] as JSONObject
+
+                Log.e("TAG", "setupUi:--------$data")
+
+            }
+
+            /*val webRtcMessage = JSONObject().apply {
 
                 put("displayName", AppPreferencesDelegates.get().userName)
                 put("uuid", AppPreferencesDelegates.get().channelId)
@@ -166,7 +174,11 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
             Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
             Log.e("TAG", "remoteId:--- $remoteId")
 
-            SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)?.on("webrtcMessage") { args ->
+            SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)*/
+
+
+
+                /*?.on("webrtcMessage") { args ->
 
                 val receiverData = args[0] as JSONObject
 
@@ -220,7 +232,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     stop()
                 }
 
-            }
+            }*/
 
         }
 
@@ -371,7 +383,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         startStreamingVideo()
 
         if (callReceive == false){
-            doCall()
+           /* doCall()*/
         }
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)

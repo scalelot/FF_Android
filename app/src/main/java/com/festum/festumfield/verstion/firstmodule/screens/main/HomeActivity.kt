@@ -365,14 +365,14 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         when (item.itemId) {
             R.id.chat ->
 
-                if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrEmpty() && callId == null){
+                if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrBlank()){
                     Handler(Looper.getMainLooper()).postDelayed({
 
                         pushFragment(FriendsListFragment(this,fromId))
                         fromId = ""
                         toId = ""
 
-                    }, 500)
+                    }, 700)
                 }else{
                     pushFragment(FriendsListFragment(this,""))
                 }

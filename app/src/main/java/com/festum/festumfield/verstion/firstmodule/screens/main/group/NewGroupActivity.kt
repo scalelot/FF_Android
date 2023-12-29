@@ -45,7 +45,7 @@ class NewGroupActivity : BaseActivity<FriendsListViewModel>() , GroupInterface{
 
         }
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
 
         binding.recyclerviewSelectedList.visibility = View.GONE

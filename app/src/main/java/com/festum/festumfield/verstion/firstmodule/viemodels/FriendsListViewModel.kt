@@ -38,6 +38,7 @@ class FriendsListViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var friendsListData = MutableLiveData<ArrayList<FriendsListItems>?>()
+    var groupsListData = MutableLiveData<ArrayList<GroupListItems>?>()
     var profileData = MutableLiveData<ProfileResponse?>()
     var findFriendsData = MutableLiveData<ArrayList<ProfileResponse?>?>()
     var sendRequestData = MutableLiveData<ApiBody?>()
@@ -53,6 +54,18 @@ class FriendsListViewModel @Inject constructor(
                 friendsListData.value = resp.Data
             }, {
                 friendsListData.value = null
+                Log.e("TAG", "friendsList:--- " + it.message )
+            })
+    }
+
+    fun groupsList(friendListBody: FriendListBody){
+        api.getGroupsList(friendListBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                groupsListData.value = resp.Data
+                Log.e("TAG", "groupsListData:--- " + resp.Data.toString() )
+            }, {
+                groupsListData.value = null
                 Log.e("TAG", "friendsList:--- " + it.message )
             })
     }

@@ -184,10 +184,22 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/chat_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_5"
                     android:clipToPadding="false"
                     android:paddingBottom="@dimen/sp_60"
+                    android:layout_weight="1"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/user_chat_list"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/group_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/sp_60"
+                    android:layout_weight="1"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/user_chat_list"/>
 

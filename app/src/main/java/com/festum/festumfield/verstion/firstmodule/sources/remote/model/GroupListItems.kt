@@ -30,8 +30,8 @@ data class GroupListItems(
     @field:SerializedName("emailId")
     val emailId: String? = null,
 
-    @field:SerializedName("last_message")
-    val lastMessage: LastMessageItem? = null,
+    @field:SerializedName("lastchatmessage")
+    val lastMessage: GroupMessageItem? = null,
 
     @field:SerializedName("userName")
     val userName: String? = null,
@@ -89,6 +89,9 @@ data class GroupListItems(
     var online: Boolean? = null,
 
     @field:SerializedName("members")
-    var members : ArrayList<GroupMembersList>? = null,
+    var members : ArrayList<MembersList>? = null,
+
+    @field:SerializedName("unreadmessage_count")
+    var unreadMessageCount : Int? = null,
 
 ) : Serializable

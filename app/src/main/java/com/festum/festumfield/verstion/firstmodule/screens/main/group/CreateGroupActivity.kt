@@ -69,6 +69,11 @@ class CreateGroupActivity : BaseActivity<FriendsListViewModel>(), GroupInterface
         addMemberAdapter = AddGroupMembersAdapter(this@CreateGroupActivity, membersList, this)
         binding.recySelectedList.adapter = addMemberAdapter
 
+        binding.icBack.setOnClickListener {
+
+            finish()
+
+        }
         binding.cirGroupImage.setOnClickListener {
             if (AppPreferencesDelegates.get().userName.isBlank()) {
 

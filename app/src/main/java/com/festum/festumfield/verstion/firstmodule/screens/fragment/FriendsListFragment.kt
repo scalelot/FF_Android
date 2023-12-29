@@ -20,6 +20,7 @@ import com.festum.festumfield.databinding.FragmentFriendsListBinding
 import com.festum.festumfield.databinding.UpcomingCallBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
+import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupsListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
@@ -43,6 +44,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
     private lateinit var binding: FragmentFriendsListBinding
 
     private var friendsListAdapter: FriendsListAdapter? = null
+    private var groupsListAdapter: GroupsListAdapter? = null
     private lateinit var upComingCallBinding: UpcomingCallBinding
     var dialog : Dialog? = null
 
@@ -80,8 +82,11 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
         getMessage()
 
-        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
+        val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
+
+        val groupListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        viewModel.groupsList(groupListBody)
 
         binding.edtSearchText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -189,6 +194,23 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
                         fromId = ""
 
                     }
+
+                }
+
+                binding.idPBLoading.visibility = View.GONE
+
+            }
+
+        }
+
+        viewModel.groupsListData.observe(this) { groupsListData ->
+
+            if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
+
+                if (groupsListData != null) {
+
+                    groupsListAdapter = GroupsListAdapter(requireActivity(), groupsListData, this, false)
+                    binding.groupRecyclerview.adapter = groupsListAdapter
 
                 }
 
@@ -323,7 +345,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
                         activity?.runOnUiThread {
 
-                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
+                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
                             viewModel.friendsList(friendListBody)
                             Log.e("TAG", "getMessage:--- $data")
 
@@ -336,7 +358,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
                         activity?.runOnUiThread {
 
-                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1, isGroup = true)
+                            val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
                             viewModel.friendsList(friendListBody)
                             Log.e("TAG", "getMessage:--- $data")
 

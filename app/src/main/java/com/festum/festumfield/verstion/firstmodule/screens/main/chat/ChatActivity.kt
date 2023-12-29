@@ -491,7 +491,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             AppPreferencesDelegates.get().isCallId = callId.toString()
 
-            Handler(Looper.getMainLooper()).postDelayed({
+            /*Handler(Looper.getMainLooper()).postDelayed({
 
                 if (!isCallAccpeted){
 
@@ -502,12 +502,12 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     AppPreferencesDelegates.get().isVideoCalling = true
                     AppPreferencesDelegates.get().isAudioCalling = true
 
-                    /* Call End */
+                    *//* Call End *//*
                     viewModel.callEnd(callId)
 
                 }
 
-            }, 30000)
+            }, 30000)*/
 //
 
         }
@@ -668,7 +668,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             val data = args[0] as JSONObject
 
-            Log.e("TAG", "getUserStatus:----- $data")
+            Log.e("TAG", "webrtcMessage:---+++++-- $data")
 
             if (isVideoCalling) {
                 val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)

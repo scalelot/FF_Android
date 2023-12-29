@@ -148,6 +148,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             }
 
+            Log.e("TAG", "webrtcMessage:---+++----++-- $webRtcMessage")
             Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
             Log.e("TAG", "remoteId:--- $remoteId")
 
@@ -166,12 +167,9 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
                 val usernameFragment = iceCandidate?.optString("usernameFragment")
 
-
-
                 if (type.equals("offer")) {
 
                     Log.e("TAG", "offer:----------$receiverData")
-
 
                     handleRemoteVideoOffer(sdpOffer)
 
@@ -185,7 +183,6 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 }
 
-
                 if (iceCandidate != null) {
 
                     addRemoteIceCandidate(iceCandidate)
@@ -196,6 +193,7 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
 
                 try {
+
                     val data = args[0] as JSONObject
                     Log.e("TAG", "setupUi: -----endCall---$data")
                     AppPreferencesDelegates.get().isVideoCalling = true
@@ -204,7 +202,9 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     finish()
 
                 } catch (e: Exception) {
+
                     stop()
+
                 }
 
             }
