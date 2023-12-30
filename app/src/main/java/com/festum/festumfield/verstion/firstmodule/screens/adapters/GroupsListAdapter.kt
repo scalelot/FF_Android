@@ -289,7 +289,7 @@ class GroupsListAdapter(
     override fun getItemCount(): Int = friendsList.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun filterList(filterItems: ArrayList<FriendsListItems>) {
+    fun filterList(filterItems: ArrayList<GroupListItems>) {
 //        friendsList = filterItems
         notifyDataSetChanged()
     }

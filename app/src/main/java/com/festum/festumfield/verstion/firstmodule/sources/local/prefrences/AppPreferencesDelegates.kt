@@ -16,6 +16,7 @@ class AppPreferencesDelegates private constructor() {
     var isNightModeOn by IsNightModeDelegate()
     var isFirstStart by IsFirstStartDelegate()
     var isCallId by CallIdDelegate()
+    var isSocketId by SocketDelegate()
 
     companion object {
         private var INSTANCE: AppPreferencesDelegates? = null

@@ -127,6 +127,11 @@ interface FestumFieldApi {
         @Body callEndBody: CallEndBody
     ) : Observable<ApiResponse<CallResponse>>
 
+    @POST("call/accept")
+    fun callAccept(
+        @Body callEndBody: CallEndBody
+    ) : Observable<ApiResponse<CallResponse>>
+
     @POST("friends/mygroups")
     fun getGroupsList(
         @Body body: FriendListBody

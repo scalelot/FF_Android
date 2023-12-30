@@ -17,6 +17,9 @@ data class CallStartBody (
 	@field:SerializedName("isGroupCall")
 	val isGroupCall: Boolean? = null,
 
+	@field:SerializedName("isAudioCall")
+	val isAudioCall: Boolean? = null,
+
 	@field:SerializedName("status")
 	val status: String? = null
 

@@ -43,6 +43,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.CallHistoryF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment.Companion.groupsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
@@ -57,6 +58,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppP
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -79,6 +81,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var friendsFragment: FriendsListFragment? = null
     private var itemData: FriendsListItems? = null
     private var upComingCallUser: FriendsListItems? = null
+    private var upComingGroupCallUser: GroupListItems? = null
     var dialog: Dialog? = null
 
     var callId: String? = null
@@ -89,6 +92,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     var banner:String? = null
 
     private var audioFileName: String = "skype"
+    private var groupId: String = ""
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
 
@@ -534,13 +538,24 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 //                val isVideoCall = data.optBoolean("channelID")
                 val isVideoCall = data.optBoolean("isVideoCall")
                 val isCallingFromApp = data.optBoolean("isCallingFromApp")
-                val isGroupCalling = data.optBoolean("isGroupCalling")
+                val isGroupCalling = data.optBoolean("isGroupCall")
 
 
                 friendsListItems?.forEach {
 
                     if (it.id?.contains(from.toString().lowercase()) == true) {
                         upComingCallUser = it
+                    }
+
+                }
+
+                groupsListItems?.forEach{
+
+
+
+                    if (it.id?.contains(from.toString().lowercase()) == true) {
+                        upComingGroupCallUser = it
+                        groupId = it.id.toString()
                     }
 
                 }
@@ -555,7 +570,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         if (isGroupCalling) {
 
                             upComingGroupCallView(
-                                upComingCallUser,
+                                upComingGroupCallUser,
                                 from.toString().lowercase(),
                                 name,
                                 isVideoCall,
@@ -665,7 +680,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         name,
                         true,
                         isGroupCalling,
-                        upComingCallUser
+                        upComingCallUser,
+                        upComingGroupCallUser,
+                        groupId
                     )
                 } else {
 
@@ -675,7 +692,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         name,
                         false,
                         isGroupCalling,
-                        upComingCallUser
+                        upComingCallUser,
+                        upComingGroupCallUser,
+                        groupId
                     )
                 }
 
@@ -709,7 +728,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun upComingGroupCallView(
-        upComingCallUser: FriendsListItems?,
+        upComingCallUser: GroupListItems?,
         signal: String,
         name: String,
         isVideoCall: Boolean,
@@ -744,7 +763,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         name,
                         true,
                         isGroupCalling,
-                        upComingCallUser
+                        FriendsListItems(),
+                        upComingGroupCallUser,
+                        groupId
                     )
                 } else {
                     onCameraPermission(
@@ -753,7 +774,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         name,
                         false,
                         isGroupCalling,
-                        upComingCallUser
+                        FriendsListItems(),
+                        upComingGroupCallUser,
+                        groupId
                     )
                 }
 
@@ -863,8 +886,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         isTiramisu: Boolean,
         isGroupCalling: Boolean,
         upComingCallUser: FriendsListItems?,
-
-        ) {
+        upComingGroupCallUser: GroupListItems?,
+        groupId: String) {
 
         if (isTiramisu) {
             Dexter.withContext(this@HomeActivity)
@@ -884,8 +907,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 if (isGroupCalling){
 
                                     val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
-                                    val jsonItem = Gson().toJson(upComingCallUser)
+                                    val jsonItem = Gson().toJson(upComingGroupCallUser)
                                     intent.putExtra("groupList", jsonItem)
+                                    intent.putExtra("groupId", groupId)
                                     startActivity(intent)
                                     stopAudio()
                                     dialog?.dismiss()

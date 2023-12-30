@@ -144,9 +144,6 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             }
 
-            Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
-            Log.e("TAG", "remoteId:--- $remoteId")
-
             SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)?.on("webrtcMessage") { args ->
 
                 val receiverData = args[0] as JSONObject

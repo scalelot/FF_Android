@@ -28,6 +28,9 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppP
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersMessageItem
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.gson.Gson
@@ -46,14 +49,14 @@ class GroupsListFragment(private val chatPinInterface: ChatPinInterface?, privat
     private lateinit var upComingCallBinding: UpcomingCallBinding
     var dialog : Dialog? = null
 
-    private var upComingCallUser: FriendsListItems? = null
+    private var upComingCallUser: GroupListItems? = null
 
     private var audioFileName: String = "skype"
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
     companion object {
 
-        var friendsListItems: ArrayList<FriendsListItems>? = null
+        var groupsListItems: ArrayList<GroupListItems>? = null
 
     }
 
@@ -124,6 +127,8 @@ class GroupsListFragment(private val chatPinInterface: ChatPinInterface?, privat
 
             if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
 
+                groupsListItems = groupsListData
+
                 if (groupsListData != null) {
 
                     groupsListAdapter = GroupsListAdapter(requireActivity(), groupsListData, this, false)
@@ -141,11 +146,11 @@ class GroupsListFragment(private val chatPinInterface: ChatPinInterface?, privat
 
     private fun filter(text: String) {
 
-        val filteredList = ArrayList<FriendsListItems>()
+        val filteredList = ArrayList<GroupListItems>()
 
-        if (friendsListItems?.isNotEmpty() == true) {
+        if (groupsListItems?.isNotEmpty() == true) {
 
-            friendsListItems?.forEach { item ->
+            groupsListItems?.forEach { item ->
                 if (item.fullName?.lowercase(Locale.getDefault())
                         ?.contains(text.lowercase(Locale.getDefault())) == true
                 ) {

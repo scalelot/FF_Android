@@ -993,8 +993,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
         /* ProductDetailsDialog */
         Log.e("TAG", "chatProduct: $item")
 
-        val dialog =
-            item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
+        val dialog = item.id?.let { ProductDetailDialog(productId = it, chatProduct = this, item = item) }
         dialog?.show(supportFragmentManager, "productDetails")
 
     }
@@ -1087,11 +1086,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if(friendsItem?.members == null){
-                                onIndividualVideoCall()
-                            }else{
-                                onIndividualGroupVideoCall()
-                            }
+                            onIndividualGroupVideoCall()
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -1121,11 +1116,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if(friendsItem?.members == null){
-                                onIndividualVideoCall()
-                            }else{
-                                onIndividualGroupVideoCall()
-                            }
+                            onIndividualGroupVideoCall()
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -1173,9 +1164,10 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                                 put("memberIds", jsonArray)
                                 put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
                                 put("name", AppPreferencesDelegates.get().userName)
+                                put("groupId", friendsItem?.id)
                                 put("isVideoCall", false)
                                 put("isCallingFromApp", true)
-                                put("isGroupCalling", false)
+                                put("isGroupCall", true)
 
                             }
 
@@ -1226,8 +1218,9 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                                 put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
                                 put("name", AppPreferencesDelegates.get().userName)
                                 put("isVideoCall", false)
+                                put("groupId", friendsItem?.id)
                                 put("isCallingFromApp", true)
-                                put("isGroupCalling", false)
+                                put("isGroupCall", false)
 
                             }
 
@@ -1288,8 +1281,9 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                             put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
                             put("name", AppPreferencesDelegates.get().userName)
                             put("isVideoCall", true)
+                            put("groupId", friendsItem?.id)
                             put("isCallingFromApp", true)
-                            put("isGroupCalling", false)
+                            put("isGroupCall", false)
 
                         }
 
@@ -1340,8 +1334,9 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
             put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
             put("name", AppPreferencesDelegates.get().userName)
             put("isVideoCall", true)
+            put("groupId", friendsItem?.id)
             put("isCallingFromApp", true)
-            put("isGroupCalling", false)
+            put("isGroupCall", false)
 
         }
 
@@ -1372,11 +1367,12 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                 }
             }
             put("memberIds", jsonArray)
-            put("fromId", friendsItem?.id?.lowercase())
+            put("fromId", AppPreferencesDelegates.get().channelId.lowercase())
             put("name", friendsItem?.name)
             put("isVideoCall", true)
+            put("groupId", friendsItem?.id?.lowercase())
             put("isCallingFromApp", true)
-            put("isGroupCalling", true)
+            put("isGroupCall", true)
 
         }
 

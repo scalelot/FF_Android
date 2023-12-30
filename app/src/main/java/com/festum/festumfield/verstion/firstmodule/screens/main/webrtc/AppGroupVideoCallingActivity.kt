@@ -33,6 +33,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import io.socket.emitter.Emitter
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -133,6 +134,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         val intent = intent.extras
 
         val jsonList = intent?.getString("groupList")
+        val groupId = intent?.getString("groupId")
 
         friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
         val jsonArray = JSONArray()
@@ -149,15 +151,17 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         runOnUiThread {
 
-            SocketManager.mSocket?.emit("join room",remoteId)?.on("all users"){ args ->
+            SocketManager.mSocket?.on(AppPreferencesDelegates.get().channelId, onIncomingChatListener)
 
-                val data = args[0] as JSONObject
+//            SocketManager.mSocket?.emit(AppPreferencesDelegates.get().channelId)?.on("all users"){ args ->
+//
+//                val data = args[0] as JSONObject
+//
+//                Log.e("TAG", "setupUi:--------$data")
+//
+//            }
 
-                Log.e("TAG", "setupUi:--------$data")
-
-            }
-
-            /*val webRtcMessage = JSONObject().apply {
+            val webRtcMessage = JSONObject().apply {
 
                 put("displayName", AppPreferencesDelegates.get().userName)
                 put("uuid", AppPreferencesDelegates.get().channelId)
@@ -174,11 +178,11 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
             Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
             Log.e("TAG", "remoteId:--- $remoteId")
 
-            SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)*/
+            SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
 
 
-                /*?.on("webrtcMessage") { args ->
+                ?.on("webrtcMessage") { args ->
 
                 val receiverData = args[0] as JSONObject
 
@@ -232,7 +236,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     stop()
                 }
 
-            }*/
+            }
 
         }
 
@@ -835,6 +839,52 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
         binding.durationText.visibility = View.INVISIBLE
+    }
+
+    private val onIncomingChatListener = Emitter.Listener { args ->
+
+        val message = args[0] as JSONObject
+
+        Log.e("TAG", "getMessage: -----$message")
+
+        val data = message.optJSONObject("data")
+
+        when (message.optString("event").toString()) {
+
+            "onIncomingChat" -> {
+                Log.e("TAG", "onIncomingChat---: $data")
+            }
+
+            "onGroupCallStarted" -> {
+                Log.e("TAG", "onGroupCallStarted---: $data")
+            }
+
+            "onCallStarted" -> {
+
+                val callId = data?.optString("callid")
+
+                AppPreferencesDelegates.get().isCallId = callId ?: ""
+
+                Log.e("TAG", "onCallStarted:-- " + data.toString() )
+
+            }
+
+            "onCallAccepted" -> {
+
+                Log.e("TAG", "onCallAccepted:-- " + data.toString() )
+
+
+            }
+
+            "onGroupUpdate" -> {
+                Log.e("TAG", "onGroupUpdate---: $data")
+            }
+
+            "onGroupCreation" -> {
+                Log.e("TAG", "onGroupCreation---: $data")
+            }
+
+        }
     }
 
 }

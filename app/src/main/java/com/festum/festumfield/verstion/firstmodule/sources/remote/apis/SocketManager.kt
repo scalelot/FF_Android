@@ -37,9 +37,9 @@ object SocketManager {
         }
     }
 
-    private var onConnect: Emitter.Listener = Emitter.Listener {
+    private var onConnect: Emitter.Listener = Emitter.Listener { args ->
 
-        Log.e("mSocket", "Socket Connected!")
+        AppPreferencesDelegates.get().isSocketId = mSocket?.id().toString()
 
         try {
 
