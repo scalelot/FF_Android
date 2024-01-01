@@ -147,7 +147,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     true,
                     false,
                     banner,
-                    ""
+                    groupId
                 )
 
             }
@@ -557,7 +557,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                         upComingGroupCallUser = it
 
-                        Log.e("TAG", "getUpComingCall:--- "  + it.id )
+
                     }else{
                         Log.e("TAG", "getUpComingCall:-------- "  + it.id )
                     }
@@ -907,7 +907,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                        if (permission?.areAllPermissionsGranted() == true) {
+                        /*if (permission?.areAllPermissionsGranted() == true) {
 
 
                             if (isCallingFromApp) {
@@ -956,6 +956,53 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 getString(R.string.request_camera_mic_permissions_text),
                                 getString(R.string.media_permission_title)
                             )
+                        }*/
+
+                        if (permission?.areAllPermissionsGranted() == true) {
+
+                            if (isCallingFromApp && isGroupCalling) {
+
+                                val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
+                                val jsonItem = Gson().toJson(upComingGroupCallUser)
+                                intent.putExtra("groupList", jsonItem)
+                                intent.putExtra("groupId", groupId)
+                                startActivity(intent)
+                                stopAudio()
+                                dialog?.dismiss()
+
+                                Log.e("TAG", "onPermissionsCheckedModel:---- $jsonItem")
+                                Log.e("TAG", "onPermissionsCheckedGroupId:---- $groupId")
+
+                            } else {
+                                if (isCallingFromApp) {
+                                    val intent =
+                                        Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                    intent.putExtra("remoteChannelId", remoteChannelId)
+                                    intent.putExtra("remoteUser", name)
+                                    intent.putExtra("callReceive", true)
+                                    startActivity(intent)
+                                    stopAudio()
+                                    dialog?.dismiss()
+                                } else {
+
+                                    val intent =
+                                        Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                    intent.putExtra("remoteChannelId", remoteChannelId)
+                                    intent.putExtra("remoteUser", name)
+                                    intent.putExtra("callReceive", true)
+                                    startActivity(intent)
+                                    stopAudio()
+                                    dialog?.dismiss()
+                                }
+
+                            }
+
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@HomeActivity,
+                                getString(R.string.request_camera_mic_permissions_text),
+                                getString(R.string.media_permission_title)
+                            )
                         }
 
                     }
@@ -982,11 +1029,16 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                             if (isCallingFromApp && isGroupCalling) {
 
                                 val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
-                                val jsonItem = Gson().toJson(upComingCallUser)
+                                val jsonItem = Gson().toJson(upComingGroupCallUser)
                                 intent.putExtra("groupList", jsonItem)
+                                intent.putExtra("groupId", groupId)
                                 startActivity(intent)
                                 stopAudio()
                                 dialog?.dismiss()
+
+                                Log.e("TAG", "onPermissionsCheckedModel:---- $jsonItem")
+                                Log.e("TAG", "onPermissionsCheckedGroupId:---- $groupId")
+
                             } else {
                                 if (isCallingFromApp) {
                                     val intent =

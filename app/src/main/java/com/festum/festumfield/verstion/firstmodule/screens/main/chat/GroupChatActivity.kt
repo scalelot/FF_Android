@@ -702,7 +702,39 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
             if (isVideoGroupCalling){
 
                 val intent = Intent(this@GroupChatActivity, AppGroupVideoCallingActivity::class.java)
-                val jsonItem = Gson().toJson(friendsItem)
+                val addMemberList = GroupListItems(
+                    aboutUs= friendsItem?.aboutUs,
+                    isSender=friendsItem?.isSender,
+                    isPinned=friendsItem?.isPinned,
+                    gender=friendsItem?.gender,
+                    nickName=friendsItem?.nickName,
+                    fullName=friendsItem?.fullName,
+                    name=friendsItem?.name,
+                    emailId=friendsItem?.emailId,
+                    userName=friendsItem?.userName,
+                    profileimage=friendsItem?.profileimage,
+                    businessprofile = friendsItem?.businessprofile,
+                    areaRange = friendsItem?.areaRange,
+                    createdAt=friendsItem?.createdAt,
+                    isBusinessProfileCreated=friendsItem?.isBusinessProfileCreated,
+                    hobbies = friendsItem?.hobbies,
+                    contactNo=friendsItem?.contactNo,
+                    dob=friendsItem?.dob,
+                    description=friendsItem?.description,
+                    socialMediaLinks =friendsItem?.socialMediaLinks,
+                    id=friendsItem?.id,
+                    interestedin=friendsItem?.interestedin,
+                    status=friendsItem?.status,
+                    updatedAt=friendsItem?.updatedAt,
+                    timestamp=friendsItem?.timestamp,
+                    isNewMessage=friendsItem?.isNewMessage,
+                    messageSize=friendsItem?.messageSize,
+                    channelID=friendsItem?.channelID,
+                    online=friendsItem?.online,
+                    members  =friendsItem?.members ,
+                    unreadMessageCount =friendsItem?.unreadMessageCount,
+                )
+                val jsonItem = Gson().toJson(addMemberList)
                 intent.putExtra("groupList", jsonItem)
                 intent.putExtra("callId", callId)
                 startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
@@ -720,6 +752,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
         }?.on("endCall") { args ->
 
             try {
+
                 val data = args[0] as JSONObject
                 upComingCallDialog?.dismiss()
                 AppPreferencesDelegates.get().isVideoCalling = true

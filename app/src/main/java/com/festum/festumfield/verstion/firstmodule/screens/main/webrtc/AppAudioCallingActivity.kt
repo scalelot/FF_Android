@@ -664,11 +664,7 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
         }
     }
 
-    private fun onCallReceive(){
-
-
-
-    }
+    private fun onCallReceive(){}
 
     private fun extractUsernameFragment(sdp: String): String {
         val lines = sdp.split("\r\n")
