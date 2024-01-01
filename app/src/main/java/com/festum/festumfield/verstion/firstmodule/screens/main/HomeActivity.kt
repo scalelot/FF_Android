@@ -42,8 +42,8 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionD
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.CallHistoryFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.groupsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment
-import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment.Companion.groupsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
@@ -146,7 +146,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     true,
                     true,
                     false,
-                    banner
+                    banner,
+                    ""
                 )
 
             }
@@ -539,6 +540,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 val isVideoCall = data.optBoolean("isVideoCall")
                 val isCallingFromApp = data.optBoolean("isCallingFromApp")
                 val isGroupCalling = data.optBoolean("isGroupCall")
+                val groupId = data.optString("groupId")
 
 
                 friendsListItems?.forEach {
@@ -551,11 +553,13 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 groupsListItems?.forEach{
 
+                    if (it.id?.contains(groupId.lowercase()) == true) {
 
-
-                    if (it.id?.contains(from.toString().lowercase()) == true) {
                         upComingGroupCallUser = it
-                        groupId = it.id.toString()
+
+                        Log.e("TAG", "getUpComingCall:--- "  + it.id )
+                    }else{
+                        Log.e("TAG", "getUpComingCall:-------- "  + it.id )
                     }
 
                 }
@@ -575,7 +579,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 name,
                                 isVideoCall,
                                 isCallingFromApp,
-                                true
+                                true,
+                                groupId
                             )
 
                         } else {
@@ -586,7 +591,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 isVideoCall,
                                 isCallingFromApp,
                                 false,
-                                ""
+                                "",
+                                groupId
                             )
                         }
 
@@ -644,7 +650,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         isVideoCall: Boolean,
         isCallingFromApp: Boolean,
         isGroupCalling: Boolean,
-        banner: String?
+        banner: String?,
+        groupId: String?
     ) {
 
         if (banner != null && !banner.isNullOrEmpty()){
@@ -733,7 +740,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         name: String,
         isVideoCall: Boolean,
         isCallingFromApp: Boolean,
-        isGroupCalling: Boolean
+        isGroupCalling: Boolean,
+        groupId: String,
     ) {
 
         Glide.with(this@HomeActivity)
@@ -887,7 +895,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         isGroupCalling: Boolean,
         upComingCallUser: FriendsListItems?,
         upComingGroupCallUser: GroupListItems?,
-        groupId: String) {
+        groupId: String?) {
 
         if (isTiramisu) {
             Dexter.withContext(this@HomeActivity)
@@ -913,11 +921,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                     startActivity(intent)
                                     stopAudio()
                                     dialog?.dismiss()
+                                    Log.e("TAG", "onPermissionsChecked:---- " + jsonItem )
+                                    Log.e("TAG", "onPermissionsChecked:------- " + groupId )
 
                                 }else{
 
-                                    val intent =
-                                        Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                    val intent = Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
                                     intent.putExtra("remoteChannelId", remoteChannelId)
                                     intent.putExtra("remoteUser", name)
                                     intent.putExtra("callReceive", true)

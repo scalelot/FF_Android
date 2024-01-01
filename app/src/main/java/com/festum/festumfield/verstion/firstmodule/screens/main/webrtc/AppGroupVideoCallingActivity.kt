@@ -23,6 +23,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionD
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
 import com.google.gson.Gson
@@ -73,6 +74,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var remoteId: String? = null
     private lateinit var friendsItem: FriendsListItems
+    private lateinit var groupListItem: GroupListItems
     private var callReceive: Boolean? = null
 
     private var frontCameraID = 1
@@ -134,12 +136,12 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         val intent = intent.extras
 
         val jsonList = intent?.getString("groupList")
-        val groupId = intent?.getString("groupId")
+        val remoteId = intent?.getString("groupId")
 
-        friendsItem = Gson().fromJson(jsonList, FriendsListItems::class.java)
+        groupListItem = Gson().fromJson(jsonList, GroupListItems::class.java)
         val jsonArray = JSONArray()
 
-        friendsItem.members?.forEach {
+        groupListItem.members?.forEach {
             jsonArray.put(it.membersList?.id)
         }
 
@@ -147,7 +149,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         ActivityCompat.requestPermissions(this@AppGroupVideoCallingActivity, permissions(), 1)
 
         binding.fromText.text = AppPreferencesDelegates.get().userName
-        binding.toText.text = friendsItem.name
+        binding.toText.text = groupListItem.name
 
         runOnUiThread {
 
@@ -165,6 +167,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 put("displayName", AppPreferencesDelegates.get().userName)
                 put("uuid", AppPreferencesDelegates.get().channelId)
+                put("dest", remoteId?.lowercase())
                 put("isGroupCall", true)
                 put("memberIds", jsonArray)
 

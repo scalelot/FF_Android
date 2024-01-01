@@ -274,7 +274,6 @@ class WebAudioCallingActivity : BaseActivity<ChatViewModel>() {
 
     fun init(){
 
-        Toast.makeText(this@WebAudioCallingActivity, "WebAudioCallingActivity", Toast.LENGTH_SHORT).show()
 
         val cameraCount = Camera.getNumberOfCameras()
 

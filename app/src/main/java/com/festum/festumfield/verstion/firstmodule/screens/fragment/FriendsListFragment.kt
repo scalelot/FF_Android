@@ -29,6 +29,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppP
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
 import com.google.gson.Gson
@@ -55,6 +56,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
     companion object {
 
         var friendsListItems: ArrayList<FriendsListItems>? = null
+        var groupsListItems: ArrayList<GroupListItems>? = null
 
     }
 
@@ -85,6 +87,9 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
         val friendListBody = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
         viewModel.friendsList(friendListBody)
+
+        val groupListItems = FriendListBody(search = "", limit = Int.MAX_VALUE, page = 1)
+        viewModel.groupsList(groupListItems)
 
 
         binding.edtSearchText.addTextChangedListener(object : TextWatcher {
@@ -199,6 +204,12 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
                 binding.idPBLoading.visibility = View.GONE
 
             }
+
+        }
+
+        viewModel.groupsListData.observe(this) { groupListData ->
+
+            groupsListItems = groupListData
 
         }
 

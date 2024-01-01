@@ -53,12 +53,8 @@ class GroupsListFragment(private val chatPinInterface: ChatPinInterface?, privat
 
     private var audioFileName: String = "skype"
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
+    private var groupsListItems: ArrayList<GroupListItems>? = null
 
-    companion object {
-
-        var groupsListItems: ArrayList<GroupListItems>? = null
-
-    }
 
     override fun getContentView(): View {
         binding = FragmentFriendsListBinding.inflate(layoutInflater)
