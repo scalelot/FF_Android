@@ -215,7 +215,7 @@ public class ChangeNumberActivity extends BaseActivity {
         dialog.setContentView(view);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-        InsetDrawable insetDrawable = new InsetDrawable(back, 80);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 30);
         dialog.getWindow().setBackgroundDrawable(insetDrawable);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -263,7 +263,7 @@ public class ChangeNumberActivity extends BaseActivity {
         InsetDrawable insetDrawable = new InsetDrawable(back, 50);
         dialog.getWindow().setBackgroundDrawable(insetDrawable);
 
-        Button btn_verify = dialog.findViewById(R.id.btn_verify);
+        AppCompatButton btn_verify = dialog.findViewById(R.id.btn_verify);
         TextView txt_error_msg = dialog.findViewById(R.id.txt_error_msg);
         ImageView img_close = dialog.findViewById(R.id.img_close);
         OtpTextView otpTextView = dialog.findViewById(R.id.otpTextView);

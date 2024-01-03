@@ -147,7 +147,7 @@ class GroupsListFragment(private val chatPinInterface: ChatPinInterface?, privat
         if (groupsListItems?.isNotEmpty() == true) {
 
             groupsListItems?.forEach { item ->
-                if (item.fullName?.lowercase(Locale.getDefault())
+                if (item.name?.lowercase(Locale.getDefault())
                         ?.contains(text.lowercase(Locale.getDefault())) == true
                 ) {
                     filteredList.add(item)

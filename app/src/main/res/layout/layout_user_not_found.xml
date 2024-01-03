@@ -31,5 +31,7 @@
             android:textColor="@color/app_color"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
+
     </LinearLayout>
+
 </RelativeLayout>

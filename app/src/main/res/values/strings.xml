@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">FestumField</string>
     <string name="google_maps_key">AIzaSyDnyBX5ozUcrXEQcrFo6HRb0wEUnTAa0EI</string>
     <string name="google_maps_key_new_one">AIzaSyAy1EmmZYXtEjbDPvV7gIW0Qs2oD6WKi2o</string>
@@ -209,6 +209,11 @@
 
     <!--BlockedContatctsActivity-->
     <string name="unblock">UNBLOCK</string>
+
+    //Internet
+    <string name="network_text1" tools:ignore="MissingTranslation">Oops! Network is disconnected</string>
+    <string name="network_text2" translatable="false">Please check your internet problem and try again</string>
+    <string name="network_retry" translatable="false">Retry</string>
 
     <!--ChangeNumber-->
     <string name="ch_number_dis">Changing your phone number, There are many variations of passages of Lorem Ipsum.</string>

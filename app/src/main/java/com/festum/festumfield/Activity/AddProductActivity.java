@@ -280,6 +280,7 @@ public class AddProductActivity extends BaseActivity {
             AndroidNetworking.upload(Constans.set_product_image).addMultipartFile("file", file).addHeaders("authorization", AppPreferencesDelegates.Companion.get().getToken()).setTag("uploadTest").setPriority(Priority.HIGH).build().setUploadProgressListener(new UploadProgressListener() {
                 @Override
                 public void onProgress(long bytesUploaded, long totalBytes) {
+
                 }
             }).getAsJSONObject(new JSONObjectRequestListener() {
                 @Override

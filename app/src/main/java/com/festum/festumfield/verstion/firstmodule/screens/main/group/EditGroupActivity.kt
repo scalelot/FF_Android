@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,6 +22,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGro
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
 import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.FriendsListViewModel
@@ -44,6 +46,7 @@ class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
 
     private lateinit var binding: ActivityEditGroupBinding
     private lateinit var membersList: GroupListItems
+    private lateinit var groupMembersList: GroupMembersListItems
     private var friendsListAdapter: GroupMembersListAdapter? = null
     private val groupMembers = arrayListOf<FriendsListItems>()
     private var profileKey: String = ""
@@ -59,13 +62,13 @@ class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
 
         val jsonList = intent?.getString("MembersList")
 
-        membersList = Gson().fromJson(jsonList, GroupListItems::class.java)
+        groupMembersList = Gson().fromJson(jsonList, GroupMembersListItems::class.java)
 
-        val profileImage = Constans.Display_Image_URL + membersList.profileimage
+        val profileImage = Constans.Display_Image_URL + groupMembersList.profileimage
 
-        binding.txtTitle.text = membersList.name
-        binding.edtName.setText(membersList.name)
-        binding.edtDescription.setText(membersList.description)
+        binding.txtTitle.text = groupMembersList.name
+        binding.edtName.setText(groupMembersList.name)
+        binding.edtDescription.setText(groupMembersList.description)
 
         Glide.with(this@EditGroupActivity)
             .load(profileImage)
@@ -97,11 +100,11 @@ class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
         binding.btnSave.setOnClickListener {
 
             val membersIds = arrayListOf<String>()
-            membersList.members?.forEach {
+            groupMembersList.members?.forEach {
                 it.membersList?.id?.let { it1 -> membersIds.add(it1) }
             }
             val createGroupBody = CreateGroupBody(
-                groupid = membersList.id,
+                groupid = groupMembersList.id,
                 members = membersIds,
                 name = binding.edtName.text.toString(),
                 description = binding.edtDescription.text.toString(),
@@ -175,35 +178,72 @@ class EditGroupActivity : BaseActivity<FriendsListViewModel>() {
 
     private fun onMediaPermission() {
 
-        Dexter.withContext(this@EditGroupActivity)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
-                        openIntent()
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@EditGroupActivity,
-                            getString(R.string.media_permission),
-                            getString(R.string.media_permission_title)
-                        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            Dexter.withContext(this@EditGroupActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent()
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@EditGroupActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
 
-            }).withErrorListener {}
+                .check()
 
-            .check()
+        } else {
+
+            Dexter.withContext(this@EditGroupActivity)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent()
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@EditGroupActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+
+                .check()
+
+        }
     }
 
 

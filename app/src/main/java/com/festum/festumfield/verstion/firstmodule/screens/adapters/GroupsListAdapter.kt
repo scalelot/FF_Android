@@ -290,7 +290,7 @@ class GroupsListAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun filterList(filterItems: ArrayList<GroupListItems>) {
-//        friendsList = filterItems
+        friendsList = filterItems
         notifyDataSetChanged()
     }
 

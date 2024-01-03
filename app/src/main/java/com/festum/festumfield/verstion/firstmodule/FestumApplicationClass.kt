@@ -3,6 +3,8 @@ package com.festum.festumfield.verstion.firstmodule
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex

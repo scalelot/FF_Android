@@ -133,7 +133,7 @@
         android:textColor="@color/app_color"
         android:textSize="@dimen/text_16" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_verify"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_50"

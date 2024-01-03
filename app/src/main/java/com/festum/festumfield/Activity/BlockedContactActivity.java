@@ -46,7 +46,6 @@ public class BlockedContactActivity extends BaseActivity {
     NestedScrollView nestedScroll;
     RelativeLayout emptyLay;
     ProgressBar idPBLoading;
-    static ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
     int page = 1, limit = 10;
     String searchData = "";
 
@@ -126,6 +125,8 @@ public class BlockedContactActivity extends BaseActivity {
 
                         JSONArray data_array = dataJsonObject.getJSONArray("docs");
 
+                        ArrayList<BlockedFriendRegisterModel> blockedFriendRegisterModels = new ArrayList<>();
+
                         for (int i = 0; i < data_array.length(); i++) {
                             JSONObject jsonObject = data_array.getJSONObject(i);
 
@@ -171,7 +172,7 @@ public class BlockedContactActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(BlockedContactActivity.this, SettingActivity.class));
+        super.onBackPressed();
         finish();
     }
 }

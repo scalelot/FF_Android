@@ -793,33 +793,72 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
     private fun onMediaPermission(actionID: Int) {
 
-        Dexter.withContext(this@ChatActivity)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
-                        openIntent(actionID)
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@ChatActivity,
-                            getString(R.string.media_permission),
-                            getString(R.string.media_permission_title)
-                        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            Dexter.withContext(this@ChatActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent(actionID)
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@ChatActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
 
-            }).withErrorListener {}.check()
+                .check()
+
+        } else {
+
+            Dexter.withContext(this@ChatActivity)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent(actionID)
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@ChatActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+
+                .check()
+
+        }
 
     }
 

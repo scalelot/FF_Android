@@ -54,4 +54,6 @@
             android:textSize="@dimen/text_16" />
     </RelativeLayout>
 
+    <include layout="@layout/layout_empty" />
+
 </RelativeLayout>

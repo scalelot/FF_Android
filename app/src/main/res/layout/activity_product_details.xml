@@ -99,7 +99,7 @@
                     app:selectedDotColor="@color/app_color"
                     app:dotsSize="10dp"
                     app:stiffness="300"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

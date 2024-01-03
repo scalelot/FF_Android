@@ -125,6 +125,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     lateinit var permission: Array<String>
 
+    val jsonArray = JSONArray()
+    var channelId : String = "657211f1a2eb6d18801c3ee4"
+
     override fun getContentView(): View {
         binding = ActivityVideoGroupCallingBinding.inflate(layoutInflater)
         return binding.root
@@ -136,13 +139,16 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         val intent = intent.extras
 
         val jsonList = intent?.getString("groupList")
-        val remoteId = intent?.getString("groupId")
+        remoteId = intent?.getString("groupId")
 
         groupListItem = Gson().fromJson(jsonList, GroupListItems::class.java)
-        val jsonArray = JSONArray()
+
+
+
 
         groupListItem.members?.forEach {
             jsonArray.put(it.membersList?.id)
+
         }
 
         callReceive = true
@@ -167,27 +173,30 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 put("displayName", AppPreferencesDelegates.get().userName)
                 put("uuid", AppPreferencesDelegates.get().channelId)
-                put("dest", remoteId?.lowercase())
+                put("dest", channelId)
+                put("channelID", channelId)
                 put("isGroupCall", true)
                 put("memberIds", jsonArray)
 
             }
 
-            Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
+           /* Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
             Log.e("TAG", "remoteId:--- $remoteId")
 
 
-            Log.e("TAG", "onIndividualGroupVideoCall:------$webRtcMessage")
+
             Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
-            Log.e("TAG", "remoteId:--- $remoteId")
+            Log.e("TAG", "remoteId:--- $remoteId")*/
 
             SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
-
-
                 ?.on("webrtcMessage") { args ->
 
+
                 val receiverData = args[0] as JSONObject
+
+                    Log.e("TAG", "onIndividualGroupVideoCall:------$receiverData")
+                    Log.e("TAG", "onIndividualGroupVideoCall:------$channelId")
 
                 val sdpResponse = receiverData.optJSONObject("sdp")
                 val type = sdpResponse?.optString("type")
@@ -200,15 +209,11 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
                 val usernameFragment = iceCandidate?.optString("usernameFragment")
 
-
-
                 if (type.equals("offer")) {
 
                     Log.e("TAG", "offer:----------$receiverData")
 
-
                     handleRemoteVideoOffer(sdpOffer)
-
 
                 }
                 if (type.equals("answer")) {
@@ -218,7 +223,6 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     createAnswerFromRemoteOffer(sdpOffer)
 
                 }
-
 
                 if (iceCandidate != null) {
 
@@ -385,15 +389,10 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         createVideoTrackFromCameraAndShowIt()
 
-        initializePeerConnections()
+        if (callReceive == false)
+        doCall()
 
-        startStreamingVideo()
-
-        if (callReceive == false){
-           /* doCall()*/
-        }
-
-        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
+//        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
     }
 
@@ -439,29 +438,25 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         videoSource = factory?.createVideoSource(videoCapture?.isScreencast == true)
         videoCapture?.initialize(surfaceTextureHelper, this, videoSource?.capturerObserver)
 
-        videoTrackFromCamera = factory?.createVideoTrack("localVideoTrack", videoSource)
+       val  videoTrackFromCamera = factory?.createVideoTrack("localVideoTrack", videoSource)
         videoTrackFromCamera?.setEnabled(true)
 
         videoCapture?.startCapture(1024, 720, 30)
         videoTrackFromCamera?.addSink(binding.surfaceView)
 
         //create an AudioSource instance
-        audioSource = factory?.createAudioSource(audioConstraints)
-        localAudioTrack = factory?.createAudioTrack("audio101", audioSource)
+        val audioSource = factory?.createAudioSource(audioConstraints)
+        val localAudioTrack = factory?.createAudioTrack("audio101", audioSource)
 
-    }
-
-    private fun initializePeerConnections() {
         peerConnection = createPeerConnection(factory)
-    }
 
-    private fun startStreamingVideo() {
         val mediaStream = factory?.createLocalMediaStream("ARDAMS")
         mediaStream?.addTrack(videoTrackFromCamera)
         mediaStream?.addTrack(localAudioTrack)
         peerConnection?.addStream(mediaStream)
 
     }
+
 
     private fun createVideoCapture(): VideoCapturer? {
 
@@ -554,7 +549,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                         put("ice", candidate)
                         put("uuid", AppPreferencesDelegates.get().channelId)
                         put("dest", remoteId)
-                        put("channelID", remoteId)
+                        put("channelID", channelId)
+                        put("isGroupCall", true)
+                        put("memberIds", jsonArray)
 
                     }
 
@@ -569,15 +566,15 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
             override fun onAddStream(mediaStream: MediaStream) {
                 Log.e("TAG", "onAddStream: " + mediaStream.videoTracks.size)
                 val remoteVideoTrack = mediaStream.videoTracks[0]
-                val remoteVideoTrack3 = mediaStream.videoTracks[1]
+//                val remoteVideoTrack3 = mediaStream.videoTracks[1]
                 val remoteAudioTrack = mediaStream.audioTracks[0]
-                val remoteAudioTrack3 = mediaStream.audioTracks[1]
+//                val remoteAudioTrack3 = mediaStream.audioTracks[1]
                 remoteAudioTrack.setEnabled(true)
                 remoteVideoTrack.setEnabled(true)
                 remoteVideoTrack.addSink(binding.surfaceView2)
-                remoteAudioTrack3.setEnabled(true)
+                /*remoteAudioTrack3.setEnabled(true)
                 remoteVideoTrack3.setEnabled(true)
-                remoteVideoTrack3.addSink(binding.surfaceView3)
+                remoteVideoTrack3.addSink(binding.surfaceView3)*/
                 startCallDurationTimer()
                 binding.durationText.visibility = View.VISIBLE
             }
@@ -616,14 +613,16 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 signalDataJson.put("type", sessionDescription.type.canonicalForm())
                 signalDataJson.put("sdp", sessionDescription.description)
 
-                Log.e("TAG", "peerConnection---$signalDataJson")
+                Log.e("TAG", "peerConnection------$signalDataJson")
 
                 val webRtcMessage = JSONObject().apply {
 
                     put("sdp", signalDataJson)
                     put("uuid", AppPreferencesDelegates.get().channelId)
                     put("dest", remoteId)
-                    put("channelID", remoteId)
+                    put("channelID", channelId)
+                    put("isGroupCall", true)
+                    put("memberIds", jsonArray)
 
                 }
 
@@ -657,7 +656,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     put("sdp", signalDataJson)
                     put("uuid", AppPreferencesDelegates.get().channelId)
                     put("dest", remoteId)
-                    put("channelID", remoteId)
+                    put("channelID", channelId)
+                    put("isGroupCall", true)
+                    put("memberIds", jsonArray)
 
                 }
 

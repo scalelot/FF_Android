@@ -9,12 +9,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.festum.festumfield.verstion.firstmodule.navigation.UiEvent
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.InternetBottomSheetDialog
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
 import com.festum.festumfield.verstion.firstmodule.utils.DeviceUtils
 import java.lang.reflect.ParameterizedType
 
@@ -27,7 +30,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
         var profileLogoListener: OnProfileLogoChangeListener? = null
         var isFragmentVisible = false
         var sManager: FragmentManager? = null
-//        var fragment = InternetBottomSheetDialog()
+        var fragment = InternetBottomSheetDialog()
     }
 
     interface OnProfileLogoChangeListener {
@@ -119,19 +122,24 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
             val status = intent?.getStringExtra("STATUS")
             if (status.equals("OFF")) {
                 if (!isFragmentVisible) {
-//                    try {
-//                        sManager?.let { fragment.show(it, "no_internet") }
-//                        isFragmentVisible = true
-//                    } catch (e: Exception) {
-//                    }
+                    try {
+                        sManager?.let { fragment.show(it, "no_internet") }
+                        isFragmentVisible = true
+                    } catch (e: Exception) {
+                    }
                 }
             } else {
                 if (isFragmentVisible) {
-//                    fragment.dismiss()
+                    val message = Message()
+                    message.what = 21
+                    HomeActivity.internetHandler?.sendMessage(message)
+                    fragment.dismiss()
                     isFragmentVisible = false
                 }
             }
         }
 
     }
+
+
 }

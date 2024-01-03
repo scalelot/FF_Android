@@ -45,7 +45,6 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.groupsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
-import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity
@@ -95,6 +94,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var groupId: String = ""
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
+    companion object{
+
+        var internetHandler : Handler? = null
+
+    }
 
     override fun getContentView(): View {
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -116,6 +120,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 //        if (extras != null) {
 //            messageId = extras.getString("messageid", "");
         val intent = intent
+
         val extras = intent.extras
 
 
@@ -154,6 +159,23 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
 
         }, 800)
+
+        internetHandler = Handler(Looper.getMainLooper()) { message ->
+            val code = message.what
+            if (code == 21) {
+                try {
+                    overridePendingTransition(0, 0)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    startActivity(intent)
+                } catch (e: java.lang.Exception) {
+                    //                        Log.e("Error",e.getMessage());
+                }
+            }
+            false
+        }
+
 
         Log.e("TAG", "banner:------ $banner")
         Log.e("TAG", "callId:------ $callId")
@@ -1212,6 +1234,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
     }
+
+
 
     private fun changeToNightMode() {
 

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,18 +90,23 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         String gen = receiveFriendsRequestModels.get(position).getGender();
 
         String strTime = String.valueOf(receiveFriendsRequestModels.get(position).getTimestamp());
-        long timestamp = Long.parseLong(strTime) * 1000L;
+
+        long smsTimeInMillis = System.currentTimeMillis();
+
+        holder.recive_text_time.setText(getTimeInMillis(receiveFriendsRequestModels.get(position).getTimestamp()));
+
+        /*long timestamp = Long.parseLong(strTime) * 1000L;
         if (String.valueOf(timestamp) != null) {
             String time = getFormattedDate(timestamp);
             holder.recive_text_time.setText(time);
-        }
+        }*/
 
         holder.btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 freindsIds = receiveFriendsRequestModels.get(position).getRequestId();
                 acceptDialog(freindsIds, fName, num, email, dob, gen);
-                removeAt(holder.getAdapterPosition());
+                /*removeAt(holder.getAdapterPosition());*/
 
             }
         });
@@ -110,7 +116,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             public void onClick(View view) {
                 freindsIds = receiveFriendsRequestModels.get(position).getRequestId();
                 rejectDialog(freindsIds);
-                removeAt(holder.getAdapterPosition());
+                /*removeAt(holder.getAdapterPosition());*/
             }
         });
     }
@@ -172,7 +178,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         acceptdialog.setContentView(view);
         acceptdialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-        InsetDrawable insetDrawable = new InsetDrawable(back, 50);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 30);
         acceptdialog.getWindow().setBackgroundDrawable(insetDrawable);
         acceptdialog.setCanceledOnTouchOutside(true);
 
@@ -239,7 +245,7 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
         rejectdialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         ColorDrawable back = new ColorDrawable(Color.TRANSPARENT);
-        InsetDrawable insetDrawable = new InsetDrawable(back, 50);
+        InsetDrawable insetDrawable = new InsetDrawable(back, 30);
         rejectdialog.getWindow().setBackgroundDrawable(insetDrawable);
 
         ImageView dialog_close = rejectdialog.findViewById(R.id.dialog_close);
@@ -387,5 +393,34 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
             e.printStackTrace();
             FileUtils.DismissLoading(fragment.getContext());
         }
+    }
+
+    public static String getTimeInMillis(long smsTimeInMillis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMillis);
+        Calendar now = Calendar.getInstance();
+        String timeFormatString = "hh:mm aa";
+        String dateTimeFormatString = "dd/MM/yyyy";
+        String dayFormatString = "EEEE";
+
+        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
+            return "" + DateFormat.format(timeFormatString, smsTime);
+        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
+            return "Yesterday";
+        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) >= 2
+                || now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) <= 6) {
+            return "" + DateFormat.format(dayFormatString, smsTime);
+        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
+            return DateFormat.format(dateTimeFormatString, smsTime).toString();
+        } else {
+            return DateFormat.format("MM-dd-yyyy", smsTime).toString();
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example usage:
+        long smsTimeInMillis = System.currentTimeMillis(); // Replace with actual timestamp
+        String formattedTime = getTimeInMillis(smsTimeInMillis);
+        System.out.println("Formatted Time: " + formattedTime);
     }
 }

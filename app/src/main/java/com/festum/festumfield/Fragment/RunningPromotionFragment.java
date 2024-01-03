@@ -161,12 +161,14 @@ public class RunningPromotionFragment extends Fragment {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        emptyLay.setVisibility(View.VISIBLE);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("FetchNotificationError=>", error.toString());
+                    emptyLay.setVisibility(View.VISIBLE);
                 }
             }) {
                 @Override

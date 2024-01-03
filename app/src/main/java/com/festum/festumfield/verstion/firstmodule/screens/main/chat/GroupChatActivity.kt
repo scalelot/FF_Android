@@ -393,7 +393,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
                 val listItem = listItems.find { it.sectionName == code }
 
-                binding.edtChating.setText("")
+
                 binding.edtChating.setText("")
 
                 if (listItem == null) {
@@ -432,13 +432,14 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                     //There is no today section
                 }
 
-                chatMessageAdapter?.addItem(newItem)
+//                chatMessageAdapter?.addItem(newItem)
                 chatMessageAdapter?.itemCount?.let { it1 ->
                     binding.msgRV.smoothScrollToPosition(
                         it1
                     )
                 }
             }, 500)
+
 
             if (sendData != null){
                 viewModel.getMessageDeliver(sendData.mainId.toString())
@@ -826,33 +827,74 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
     private fun onMediaPermission(actionID: Int) {
 
-        Dexter.withContext(this@GroupChatActivity)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
-                        openIntent(actionID)
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@GroupChatActivity,
-                            getString(R.string.media_permission),
-                            getString(R.string.media_permission_title)
-                        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            Dexter.withContext(this@GroupChatActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent(actionID)
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@GroupChatActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
 
-            }).withErrorListener {}.check()
+                .check()
+
+        } else {
+
+            Dexter.withContext(this@GroupChatActivity)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent(actionID)
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@GroupChatActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+
+                .check()
+
+        }
+
 
     }
 

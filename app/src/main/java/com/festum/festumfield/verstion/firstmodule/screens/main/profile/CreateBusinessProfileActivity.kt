@@ -8,6 +8,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.OpenableColumns
@@ -339,35 +340,73 @@ class CreateBusinessProfileActivity : BaseActivity<ProfileViewModel>(),
 
     private fun onMediaPermission(id: Int) {
 
-        Dexter.withContext(this@CreateBusinessProfileActivity)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
-                        openIntent(id)
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@CreateBusinessProfileActivity,
-                            getString(R.string.media_permission),
-                            getString(R.string.media_permission_title)
-                        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            Dexter.withContext(this@CreateBusinessProfileActivity)
+                .withPermissions(
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent(id)
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@CreateBusinessProfileActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
                     }
 
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                }).withErrorListener {}
 
-            }).withErrorListener {}
+                .check()
 
-            .check()
+        } else {
+
+            Dexter.withContext(this@CreateBusinessProfileActivity)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                        if (permission?.areAllPermissionsGranted() == true) {
+                            openIntent(id)
+                        } else {
+                            AppPermissionDialog.showPermission(
+                                this@CreateBusinessProfileActivity,
+                                getString(R.string.media_permission),
+                                getString(R.string.media_permission_title)
+                            )
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                }).withErrorListener {}
+
+                .check()
+
+        }
+
     }
 
     @SuppressLint("Range", "Recycle")

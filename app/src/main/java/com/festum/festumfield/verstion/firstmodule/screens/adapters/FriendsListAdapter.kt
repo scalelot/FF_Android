@@ -28,7 +28,7 @@ class FriendsListAdapter(
     private val context: Context,
     private var friendsList: ArrayList<FriendsListItems>,
     private val pinInterface: ChatPinInterface,
-    private var isLongClick : Boolean
+    private var isLongClick: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var checkedPosition = -1
@@ -61,17 +61,17 @@ class FriendsListAdapter(
 
             binding.txtUserName.text = item.fullName
 
-            if (item.fullName == null){
+            if (item.fullName == null) {
                 binding.txtUserName.text = item.name
             }
 
-            if (item.fullName == null && item.name == null){
+            if (item.fullName == null && item.name == null) {
                 binding.txtUserName.text = item.contactNo
             }
 
-            if (item.isPinned == true){
+            if (item.isPinned == true) {
                 binding.chatPin.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.chatPin.visibility = View.INVISIBLE
             }
 
@@ -85,16 +85,16 @@ class FriendsListAdapter(
                 binding.txtChatCount.visibility = View.VISIBLE
                 binding.txtChatCount.text = item.unreadMessageCount.toString()
 
-                if (item.isPinned == true){
+                if (item.isPinned == true) {
                     binding.chatPin.visibility = View.INVISIBLE
                 }
 
             } else {
                 binding.txtMessage.setTextColor(ContextCompat.getColor(context, R.color.grey));
 
-                if (item.unreadMessageCount == 0){
+                if (item.unreadMessageCount == 0) {
                     binding.txtChatCount.visibility = View.GONE
-                }else{
+                } else {
                     binding.txtChatCount.text = item.unreadMessageCount.toString()
                     binding.txtMessage.setTextColor(
                         ContextCompat.getColor(
@@ -108,9 +108,9 @@ class FriendsListAdapter(
             }
 
 
-            if (item.online == true){
+            if (item.online == true) {
                 binding.ivTypeImg.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.ivTypeImg.visibility = View.INVISIBLE
             }
 
@@ -156,14 +156,16 @@ class FriendsListAdapter(
 
             binding.chatUserTime.text = item.lastMessage?.timestamp?.let { getTimeInMillis(it) }
 
-            if (item.members?.isNotEmpty() == true){
-                binding.chatUserTime.text = item.lastChatMessage?.timestamp?.let { getTimeInMillis(it) }
+            if (item.members?.isNotEmpty() == true) {
+                binding.chatUserTime.text =
+                    item.lastChatMessage?.timestamp?.let { getTimeInMillis(it) }
 
                 if (item.lastChatMessage != null) {
 
                     when (item.lastChatMessage?.message?.contentType) {
                         "text" -> {
-                            binding.txtMessage.text = item.lastChatMessage?.message?.content?.text?.message
+                            binding.txtMessage.text =
+                                item.lastChatMessage?.message?.content?.text?.message
                             binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
                                 null,
                                 null,
@@ -206,10 +208,12 @@ class FriendsListAdapter(
                 -1 -> {
                     binding.ivSelect.visibility = View.GONE
                 }
+
                 else -> when (checkedPosition) {
                     absoluteAdapterPosition -> {
                         binding.ivSelect.visibility = View.VISIBLE
                     }
+
                     else -> {
                         binding.ivSelect.visibility = View.GONE
                     }
@@ -230,7 +234,7 @@ class FriendsListAdapter(
 
                     pinInterface.checkItemPin(friendsList[absoluteAdapterPosition])
 
-                } else  {
+                } else {
                     val intent = Intent(context, ChatActivity::class.java)
                     val jsonItem = Gson().toJson(item)
                     intent.putExtra("friendsList", jsonItem)
@@ -367,11 +371,14 @@ class FriendsListAdapter(
             contentType = data.optString("contentType")
         )
 
-        val groupLastMessage = GroupMessageItem(LastMessageItem(
-            timestamp = data.optLong("timestamp"),
-            content = Content(text = text, media = media, product = productItem),
-            contentType = data.optString("contentType")),
-            timestamp = data.optLong("timestamp"))
+        val groupLastMessage = GroupMessageItem(
+            LastMessageItem(
+                timestamp = data.optLong("timestamp"),
+                content = Content(text = text, media = media, product = productItem),
+                contentType = data.optString("contentType")
+            ),
+            timestamp = data.optLong("timestamp")
+        )
 
 
         val friendsListItem = FriendsListItems(
@@ -389,13 +396,16 @@ class FriendsListAdapter(
             lastChatMessage = groupLastMessage
         )
 
+
         val currentItemIndex = friendsList.indexOf(friendsListItems)
         friendsList.removeAt(currentItemIndex)
         friendsListItem.let { friendsList.add(0, it) }
         notifyItemMoved(currentItemIndex, 0)
         notifyItemChanged(0)
 
+
     }
+
     fun updateOnline(data: JSONObject?) {
 
         val onlineUserChannelId = data?.keys()
@@ -423,7 +433,7 @@ class FriendsListAdapter(
             unreadMessageCount = friendsListItems?.unreadMessageCount
         )
 
-        if (friendsListItems != null){
+        if (friendsListItems != null) {
 
             val currentItemIndex = friendsList.indexOf(friendsListItems)
 
@@ -457,7 +467,7 @@ class FriendsListAdapter(
             unreadMessageCount = friendsListItems?.unreadMessageCount
         )
 
-        if (friendsListItems != null){
+        if (friendsListItems != null) {
 
             val currentItemIndex = friendsList.indexOf(friendsListItems)
             friendsList.removeAt(currentItemIndex)
@@ -468,7 +478,7 @@ class FriendsListAdapter(
 
     }
 
-    fun updatePin(friendData: FriendsListItems?, pinSet: Boolean){
+    fun updatePin(friendData: FriendsListItems?, pinSet: Boolean) {
 
         val userId = friendData?.id
 
@@ -488,9 +498,9 @@ class FriendsListAdapter(
             members = friendsListItems?.members
         )
 
-        if (friendsListItems != null){
+        if (friendsListItems != null) {
 
-            if (pinSet){
+            if (pinSet) {
                 val currentItemIndex = friendsList.indexOf(friendsListItems)
                 friendsList.removeAt(currentItemIndex)
                 friendsList.add(0, friendsListItem)
@@ -531,7 +541,7 @@ class FriendsListAdapter(
             members = friendsListItems?.members
         )
 
-        if (friendsListItems != null){
+        if (friendsListItems != null) {
 
             checkedPosition = -1
             val currentItemIndex = friendsList.indexOf(friendsListItems)

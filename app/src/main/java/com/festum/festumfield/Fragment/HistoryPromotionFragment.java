@@ -81,7 +81,7 @@ public class HistoryPromotionFragment extends Fragment {
 
             @Override
             public void onChildViewDetachedFromWindow(@NonNull View view) {
-                emptyLay.setVisibility(View.VISIBLE);
+//                emptyLay.setVisibility(View.VISIBLE);
             }
         });
 

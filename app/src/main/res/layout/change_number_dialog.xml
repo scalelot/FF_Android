@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_bg"
-    android:padding="@dimen/margin_20">
+    android:padding="@dimen/_5sdp">
 
     <ImageView
         android:id="@+id/close"
@@ -56,6 +56,7 @@
         android:layout_below="@+id/dis_txt"
         android:layout_marginTop="@dimen/margin_30"
         android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:gravity="center"
         android:orientation="horizontal">
 

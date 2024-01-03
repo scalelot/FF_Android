@@ -311,21 +311,8 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
                         if (data != null) {
 
-                            val isGroupMessage = data.optBoolean("isGroupMessage")
-                            val groupModel = data.optJSONObject("groupId")
-
-                            val groupId = groupModel?.optString("_id")
-
-                            if (isGroupMessage){
-                                if (groupId != null) {
-                                    friendsListAdapter?.updateGroupItem(data,groupId)
-                                    binding.chatRecyclerview.scrollToPosition(0)
-                                }
-
-                            }else{
-                                friendsListAdapter?.updateItem(data)
-                                binding.chatRecyclerview.scrollToPosition(0)
-                            }
+                            friendsListAdapter?.updateItem(data)
+                            binding.chatRecyclerview.scrollToPosition(0)
 
                         }
 

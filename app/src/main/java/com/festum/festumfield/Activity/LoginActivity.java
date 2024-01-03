@@ -1,5 +1,6 @@
 package com.festum.festumfield.Activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -71,6 +72,9 @@ public class LoginActivity extends BaseActivity {
         });
 
         countycode = ccp.getDefaultCountryCode();
+
+
+
 
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
@@ -189,6 +193,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         finishAffinity();
     }
 }
