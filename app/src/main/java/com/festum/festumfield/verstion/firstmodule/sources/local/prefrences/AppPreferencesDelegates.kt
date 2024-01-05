@@ -17,6 +17,8 @@ class AppPreferencesDelegates private constructor() {
     var isFirstStart by IsFirstStartDelegate()
     var isCallId by CallIdDelegate()
     var isSocketId by SocketDelegate()
+    var phoneNumber by PhoneNumberDelegate()
+    var emailAddress by EmailAddressDelegate()
 
     companion object {
         private var INSTANCE: AppPreferencesDelegates? = null

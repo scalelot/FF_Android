@@ -71,7 +71,7 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:checked="true"
+                
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
@@ -125,7 +125,7 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:checked="true"
+                
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
@@ -232,7 +232,6 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:checked="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
@@ -286,7 +285,7 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:checked="true"
+                
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
@@ -340,7 +339,7 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:checked="true"
+                
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"
@@ -394,7 +393,7 @@
                 android:layout_width="@dimen/sp_50"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:checked="true"
+                
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_10"
                 app:kswBackDrawable="@drawable/switch_back_drawable"

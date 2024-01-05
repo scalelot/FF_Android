@@ -4,8 +4,12 @@
     package="com.festum.festumfield">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:remove="android:maxSdkVersion" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:remove="android:maxSdkVersion" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        tools:remove="android:maxSdkVersion" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:remove="android:maxSdkVersion" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -32,6 +36,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="true" />
@@ -47,8 +52,11 @@
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <uses-feature android:name="android.hardware.camera.front" />
+
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
 
     <queries>
@@ -71,103 +79,103 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".verstion.firstmodule.screens.main.chat.ChatUserActivity"
+            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.GroupChatActivity"
-            android:exported="false"
-            android:configChanges="uiMode" />
-
+            android:configChanges="uiMode"
+            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.ApplicationPermissionActivity"
-            android:exported="false"
-            android:configChanges="uiMode" />
+            android:configChanges="uiMode"
+            android:exported="false" />
         <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.AppGroupVideoCallingActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.WebVideoCallingActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.EditGroupActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.GroupDetailsActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.CreateGroupActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.group.NewGroupActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:screenOrientation="portrait"
             android:configChanges="uiMode"
+            android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".verstion.firstmodule.screens.main.profile.CreateBusinessProfileActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.profile.CreatePersonProfileActivity"
-            android:exported="true"
             android:configChanges="uiMode"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.HomeActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.profile.ProfilePreviewActivity"
-            android:exported="true"
             android:configChanges="uiMode"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.ChatActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:label="@string/title_activity_chat"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.ChatProductSelectActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.DisplayProductImageActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
@@ -175,108 +183,108 @@
         </activity>
         <activity
             android:name=".Activity.MessageInfoActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ReelsPerviewActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.CreateReelsActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ReelsActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.EditGroupDetalisActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.GroupProfileDetalisActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.MarketingNotificationActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PromotionBillDetailActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PaymentSuccessfulActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PaymentActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ApplyCouponActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PromotionBillActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PublishDateTimeActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ChooseUserPromotionActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PromotionPlanActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.CreateNotificationActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PromotionActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ConversationActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.DisplayAllProductActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.CreateGroupTitleActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.CreateNewGroupActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -285,8 +293,8 @@
 
         <activity
             android:name=".Activity.LikeAndCommentActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -295,130 +303,129 @@
 
         <activity
             android:name=".Activity.VideoCallActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.UpcomingCallActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ChattingAudioCallActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.PromotionDetailsActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.SelectUserActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.SelectUserPackageActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.RequestActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ChatUserProfileActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ChatingActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.HelpActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.Contact_Us_Activity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ChangeNumberActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.BlockedContactActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.SettingActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
             android:configChanges="uiMode"
-            />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ProductDetailsActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.UserProfileActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.MapsLocationActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.AddProductActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".Activity.ProductActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <uses-library android:name="com.google.android.maps" />
 
         <activity
             android:name=".Activity.ProfileActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.BusinessProfileActivity"
-            android:exported="false"
             android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.LoginVerifyActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.LoginActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
-            android:configChanges="uiMode"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.SplashActivity"
-            android:exported="true"
             android:configChanges="uiMode"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -428,9 +435,9 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:configChanges="uiMode"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <provider
@@ -466,7 +473,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

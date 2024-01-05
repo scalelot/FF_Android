@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".verstion.firstmodule.screens.main.chat.ChatUserActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_color">
+
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_width="@dimen/sp_35"
+            android:layout_height="@dimen/sp_35"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:padding="@dimen/margin_6"
+            android:src="@drawable/backarrow"
+            app:tint="@color/white" />
+
+        <RelativeLayout
+            android:id="@+id/u_image"
+            android:layout_width="@dimen/sp_120"
+            android:layout_height="@dimen/sp_120"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_16"
+            android:background="@drawable/ellipse_bodar">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_profile_image"
+                android:layout_width="@dimen/sp_120"
+                android:layout_height="@dimen/sp_120"
+                android:src="@drawable/ic_user"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/sp_3"
+                app:civ_circle_background_color="@color/bg_grey" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/chat_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/u_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_15"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/caroline_case"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_18" />
+
+        <TextView
+            android:id="@+id/u_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chat_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_5"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/caroline"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16" />
+
+        <LinearLayout
+            android:id="@+id/ll_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/u_nickname"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="@dimen/sp_40"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_video"
+                    android:layout_width="@dimen/sp_40"
+                    android:layout_height="@dimen/sp_40"
+                    android:background="@drawable/icon_bg"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/sp_24"
+                        android:layout_height="@dimen/sp_24"
+                        android:src="@drawable/ic_video_call_icon"
+                        app:tint="@color/app_color" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sp_5"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/video"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_12" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/sp_40"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_audio"
+                    android:layout_width="@dimen/sp_40"
+                    android:layout_height="@dimen/sp_40"
+                    android:background="@drawable/icon_bg"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/sp_24"
+                        android:layout_height="@dimen/sp_24"
+                        android:src="@drawable/ic_audio_call"
+                        app:tint="@color/app_color" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sp_5"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/audio"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_12" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/l_product"
+                android:layout_width="@dimen/sp_50"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/ll_product"
+                    android:layout_width="@dimen/sp_40"
+                    android:layout_height="@dimen/sp_40"
+                    android:background="@drawable/icon_bg"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/sp_24"
+                        android:layout_height="@dimen/sp_24"
+                        android:src="@drawable/ic_business_acimg"
+                        app:tint="@color/app_color" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sp_5"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/products"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_12" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_edit"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/ic_fb"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:visibility="gone"
+                android:src="@drawable/ic_fb_icon" />
+
+            <ImageView
+                android:id="@+id/ic_insta"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:visibility="gone"
+                android:src="@drawable/ic_insta_icon" />
+
+            <ImageView
+                android:id="@+id/ic_twitter"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:visibility="gone"
+                android:src="@drawable/ic_twitter_icon" />
+
+            <ImageView
+                android:id="@+id/ic_linkdin"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:visibility="gone"
+
+                android:src="@drawable/ic_linkedin_icon" />
+
+            <ImageView
+                android:id="@+id/ic_pinterest"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:src="@drawable/ic_pintrest_icon"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/ic_youtube"
+                android:layout_width="@dimen/sp_35"
+                android:layout_height="@dimen/sp_35"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:src="@drawable/ic_youtube_icon"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/chat_tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@drawable/rectangle_8"
+            app:tabIndicatorHeight="@dimen/sp_0"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/app_color"
+            app:tabTextAppearance="@style/MyCustomTextAppearance"
+            app:tabTextColor="@color/grey">
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sp_1"
+            android:layout_below="@+id/tabLayout"
+            android:background="@color/bg_grey_color" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/view" />
+    </LinearLayout>
+
+</RelativeLayout>

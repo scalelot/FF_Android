@@ -10,13 +10,19 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.verstion.firstmodule.screens.BaseViewModel
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallEndBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallStartBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatUserBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFriendsBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupPermissionBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.CallResponse
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ChatUserResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupListItems
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
@@ -42,13 +48,17 @@ class FriendsListViewModel @Inject constructor(
     var friendsListData = MutableLiveData<ArrayList<FriendsListItems>?>()
     var groupsListData = MutableLiveData<ArrayList<GroupListItems>?>()
     var groupsOneData = MutableLiveData<GroupListItems?>()
+    var groupPermissionData = MutableLiveData<GroupListItems?>()
     var profileData = MutableLiveData<ProfileResponse?>()
     var findFriendsData = MutableLiveData<ArrayList<ProfileResponse?>?>()
     var sendRequestData = MutableLiveData<ApiBody?>()
     var groupProfilePictureData = MutableLiveData<ProfilePictureResponse?>()
-    var createGroupData = MutableLiveData<GroupListItems?>()
+    var createGroupData = MutableLiveData<GroupMembersListItems?>()
     var addMembersData = MutableLiveData<GroupMembersListItems?>()
     var removeMembersData = MutableLiveData<GroupMembersListItems?>()
+    var getFriendData = MutableLiveData<ChatUserResponse?>()
+    var callStartData = MutableLiveData<CallResponse?>()
+    var callEndData = MutableLiveData<CallResponse?>()
 
     fun friendsList(friendListBody: FriendListBody){
         api.getFriendsList(friendListBody).subscribeOn(Schedulers.io())
@@ -203,6 +213,58 @@ class FriendsListViewModel @Inject constructor(
 
                 groupsOneData.value = null
             })
+    }
+
+    fun setGroupPermission(groupBody: GroupPermissionBody){
+        api.setGroupPermission(groupBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+
+                groupPermissionData.value = resp.Data as GroupListItems
+            }, {
+
+                groupPermissionData.value = null
+            })
+    }
+
+    fun getOneFriend(friendBody : ChatUserBody){
+        api.getOneFriend(friendBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+
+                getFriendData.value = resp.Data
+            }, {
+
+                getFriendData.value = null
+            })
+    }
+
+    fun callStart(from : String?, to : String?, isVideoCall : Boolean, isGroupCall : Boolean, status : String){
+
+        val callStartBody = CallStartBody(from = from, to = to, isVideoCall = isVideoCall, isGroupCall = isGroupCall, status = status)
+
+        api.callStart(callStartBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                callStartData.value = resp.Data
+            }, {
+                callStartData.value = null
+            })
+
+    }
+
+    fun callEnd(callId : String?){
+
+        val callEndBody = CallEndBody(callId = callId)
+
+        api.callEnd(callEndBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                callEndData.value = resp.Data
+            }, {
+                callEndData.value = null
+            })
+
     }
 
 }

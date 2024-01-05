@@ -7,6 +7,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallHisto
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallStartBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatPinBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatUserBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateBusinessProfileModel
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateProfileModel
@@ -14,6 +15,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.FindFrien
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupPermissionBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
@@ -90,7 +92,7 @@ interface FestumFieldApi {
     @POST("group")
     fun createGroup(
         @Body createGroupBody : CreateGroupBody
-    ) : Observable<ApiResponse<GroupListItems>>
+    ) : Observable<ApiResponse<GroupMembersListItems>>
 
     @POST("group/addmembers")
     fun addMembersInGroup(
@@ -141,5 +143,15 @@ interface FestumFieldApi {
     fun getGroup(
         @Body body: GroupOneBody
     ): Observable<ApiResponse<GroupListItems>>
+
+    @POST("group/setpermissions")
+    fun setGroupPermission(
+        @Body body: GroupPermissionBody
+    ): Observable<ApiResponse<GroupListItems>>
+
+    @POST("friends/getone")
+    fun getOneFriend(
+        @Body body: ChatUserBody
+    ): Observable<ApiResponse<ChatUserResponse>>
 
 }

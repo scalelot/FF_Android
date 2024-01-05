@@ -312,6 +312,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 get().channelId = profileData.channelID.toString()
                 get().businessProfile = profileData.isBusinessProfileCreated == true
                 get().userName = profileData.fullName.toString()
+                get().phoneNumber = profileData.contactNo.toString()
+                get().emailAddress = profileData.emailId.toString()
                 get().personalProfile = true
 
 

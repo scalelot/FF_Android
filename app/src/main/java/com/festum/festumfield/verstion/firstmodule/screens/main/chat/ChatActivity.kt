@@ -179,16 +179,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         binding.rlUser.setOnClickListener {
 
-            if (friendsItem?.members?.isNotEmpty() == true) {
-
-                val intent = Intent(this@ChatActivity, GroupDetailsActivity::class.java)
-                val jsonItem = Gson().toJson(friendsItem)
-                intent.putExtra("groupMembersList", jsonItem)
-                startActivity(intent)
-
-            } else {
-                return@setOnClickListener
-            }
+            val i = Intent(this@ChatActivity, ChatUserActivity::class.java)
+            val jsonItem = Gson().toJson(friendsItem)
+            i.putExtra("friendList", jsonItem)
+            startActivity(i)
 
         }
 

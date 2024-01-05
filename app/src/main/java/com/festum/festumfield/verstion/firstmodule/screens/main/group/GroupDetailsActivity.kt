@@ -3,14 +3,22 @@ package com.festum.festumfield.verstion.firstmodule.screens.main.group
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.InsetDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
@@ -25,6 +33,8 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.RemoveMembersD
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CreateGroupBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupPermissionBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.Permissions
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.GroupMembersInterface
@@ -46,6 +56,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.kyleduo.switchbutton.SwitchButton
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageActivity
 import com.theartofdev.edmodo.cropper.CropImageOptions
@@ -65,6 +76,15 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
     private var removeMembersList = arrayListOf<String>()
     private var profileKey: String = ""
     private var removeUserID: String = ""
+
+    /* For Permission */
+    var name: Boolean? = null
+    var number:  Boolean? = null
+    var email:  Boolean? = null
+    var media:  Boolean? = null
+    var video:  Boolean? = null
+    var audio:  Boolean? = null
+    var notification:  Boolean? = null
 
     override fun getContentView(): View {
         binding = ActivityGroupDetailsBinding.inflate(layoutInflater)
@@ -123,8 +143,14 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         binding.llAddUser.setOnClickListener {
 
-            val dialog = AddMembersDialog(addMemberList, this,  removeMembersList)
+            val dialog = AddMembersDialog(addMemberList, this, removeMembersList)
             dialog.show(supportFragmentManager, "AddMembersDialog")
+
+        }
+
+        binding.rlPermission.setOnClickListener {
+
+            authorizedDialog()
 
         }
 
@@ -164,15 +190,16 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         }
 
-        viewModel.removeMembersData.observe(this){
+        viewModel.removeMembersData.observe(this) {
 
-            if (it != null){
+            if (it != null) {
 
                 friendsListAdapter?.updateOffline(it)
 
-            }else{
+            } else {
 
-                Toast.makeText(this@GroupDetailsActivity, "Something get wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GroupDetailsActivity, "Something get wrong", Toast.LENGTH_SHORT)
+                    .show()
             }
 
         }
@@ -186,40 +213,40 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
                 if (groupsOneData != null) {
 
                     addMemberList = GroupMembersListItems(
-                      aboutUs= groupsOneData.aboutUs,
-                      isSender=groupsOneData.isSender,
-                      isPinned=groupsOneData.isPinned,
-                      gender=groupsOneData.gender,
-                      nickName=groupsOneData.nickName,
-                      fullName=groupsOneData.fullName,
-                      name=groupsOneData.name,
-                      emailId=groupsOneData.emailId,
-                      lastMessage=GroupMembersMessageItem(
-                          message = groupsOneData.lastMessage?.message?.id,
-                          timestamp = groupsOneData.timestamp
-                      ),
-                      userName=groupsOneData.userName,
-                      profileimage=groupsOneData.profileimage,
-                      businessprofile = groupsOneData.businessprofile,
-                      areaRange = groupsOneData.areaRange,
-                      createdAt=groupsOneData.createdAt,
-                      isBusinessProfileCreated=groupsOneData.isBusinessProfileCreated,
-                      hobbies = groupsOneData.hobbies,
-                      contactNo=groupsOneData.contactNo,
-                      dob=groupsOneData.dob,
-                      description=groupsOneData.description,
-                      socialMediaLinks =groupsOneData.socialMediaLinks,
-                      id=groupsOneData.id,
-                      interestedin=groupsOneData.interestedin,
-                      status=groupsOneData.status,
-                      updatedAt=groupsOneData.updatedAt,
-                      timestamp=groupsOneData.timestamp,
-                      isNewMessage=groupsOneData.isNewMessage,
-                      messageSize=groupsOneData.messageSize,
-                      channelID=groupsOneData.channelID,
-                      online=groupsOneData.online,
-                      members  =groupsOneData.members ,
-                      unreadMessageCount =groupsOneData.unreadMessageCount,
+                        aboutUs = groupsOneData.aboutUs,
+                        isSender = groupsOneData.isSender,
+                        isPinned = groupsOneData.isPinned,
+                        gender = groupsOneData.gender,
+                        nickName = groupsOneData.nickName,
+                        fullName = groupsOneData.fullName,
+                        name = groupsOneData.name,
+                        emailId = groupsOneData.emailId,
+                        lastMessage = GroupMembersMessageItem(
+                            message = groupsOneData.lastMessage?.message?.id,
+                            timestamp = groupsOneData.timestamp
+                        ),
+                        userName = groupsOneData.userName,
+                        profileimage = groupsOneData.profileimage,
+                        businessprofile = groupsOneData.businessprofile,
+                        areaRange = groupsOneData.areaRange,
+                        createdAt = groupsOneData.createdAt,
+                        isBusinessProfileCreated = groupsOneData.isBusinessProfileCreated,
+                        hobbies = groupsOneData.hobbies,
+                        contactNo = groupsOneData.contactNo,
+                        dob = groupsOneData.dob,
+                        description = groupsOneData.description,
+                        socialMediaLinks = groupsOneData.socialMediaLinks,
+                        id = groupsOneData.id,
+                        interestedin = groupsOneData.interestedin,
+                        status = groupsOneData.status,
+                        updatedAt = groupsOneData.updatedAt,
+                        timestamp = groupsOneData.timestamp,
+                        isNewMessage = groupsOneData.isNewMessage,
+                        messageSize = groupsOneData.messageSize,
+                        channelID = groupsOneData.channelID,
+                        online = groupsOneData.online,
+                        members = groupsOneData.members,
+                        unreadMessageCount = groupsOneData.unreadMessageCount,
                     )
 
                     groupsOneData.members?.forEach {
@@ -241,10 +268,14 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
                     binding.txtPeople.text = groupsOneData.members?.size.toString() + " peoples"
 
                     Handler(Looper.getMainLooper()).postDelayed({
-                        friendsListAdapter = EditGroupMembersListAdapter(this@GroupDetailsActivity, addGroupMembers, this)
+                        friendsListAdapter = EditGroupMembersListAdapter(
+                            this@GroupDetailsActivity,
+                            addGroupMembers,
+                            this
+                        )
                         binding.recyclerGroup.adapter = friendsListAdapter
 
-                    },100)
+                    }, 100)
 
                 }
 
@@ -409,9 +440,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
     }
 
-
-
-
     @SuppressLint("SetTextI18n")
     override fun onMembersList(position: Int) {
 
@@ -461,4 +489,85 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
         dialog.show(supportFragmentManager, "RemoveMembersDialog")
 
     }
+
+    private fun authorizedDialog() {
+
+        val dialog = Dialog(this@GroupDetailsActivity)
+        val view = LayoutInflater.from(this@GroupDetailsActivity)
+            .inflate(R.layout.access_permission_dialog, null)
+        dialog.setContentView(view)
+
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        val colorDrawable = ColorDrawable(Color.TRANSPARENT)
+        val insetDrawable = InsetDrawable(colorDrawable, 50)
+        dialog.window?.setBackgroundDrawable(insetDrawable)
+
+        val btnClose: ImageView = dialog.findViewById(R.id.btn_close)
+
+        val txtUser: TextView = dialog.findViewById(R.id.txt_user)
+        val txtPhMo: TextView = dialog.findViewById(R.id.txt_ph_mo)
+        val txtEmail: TextView = dialog.findViewById(R.id.txt_email)
+        val txtAudio: TextView = dialog.findViewById(R.id.txt_audio)
+
+        txtUser.text = AppPreferencesDelegates.get().userName
+        txtPhMo.text = AppPreferencesDelegates.get().phoneNumber
+        txtEmail.text = AppPreferencesDelegates.get().emailAddress
+        txtAudio.text = AppPreferencesDelegates.get().phoneNumber
+
+        val nameSwitch: SwitchButton = dialog.findViewById(R.id.name_switch)
+        val numberSwitch: SwitchButton = dialog.findViewById(R.id.number_switch)
+        val emailSwitch: SwitchButton = dialog.findViewById(R.id.email_switch)
+        val mediaSwitch: SwitchButton = dialog.findViewById(R.id.media_switch)
+        val videoSwitch: SwitchButton = dialog.findViewById(R.id.video_switch)
+        val audioSwitch: SwitchButton = dialog.findViewById(R.id.audio_switch)
+        val notificationSwitch: SwitchButton = dialog.findViewById(R.id.mute_switch)
+
+        nameSwitch.isChecked = name ?: false
+        numberSwitch.isChecked = number ?: false
+        emailSwitch.isChecked = email ?: false
+        mediaSwitch.isChecked = media ?: false
+        videoSwitch.isChecked = video ?: false
+        audioSwitch.isChecked = audio ?: false
+        notificationSwitch.isChecked = notification ?: false
+
+        btnClose.setOnClickListener {
+
+            name = nameSwitch.isChecked
+            number = numberSwitch.isChecked
+            email = emailSwitch.isChecked
+            media = mediaSwitch.isChecked
+            video = videoSwitch.isChecked
+            audio = audioSwitch.isChecked
+            notification = notificationSwitch.isChecked
+
+            val groupPermission = GroupPermissionBody(
+                groupid = groupOneItem.id,
+                permissions = Permissions(
+                    fullname = name,
+                    contactnumber = number,
+                    email = email,
+                    socialmedia = media,
+                    videocall = video,
+                    audiocall = audio,
+                    gender = true,
+                    dob = true
+                )
+            )
+
+            viewModel.setGroupPermission(groupPermission)
+
+            dialog.dismiss()
+
+            Log.e("TAG", "authorizedDialog:--+++-- $groupPermission")
+
+
+        }
+
+        dialog.show()
+
+    }
+
 }
