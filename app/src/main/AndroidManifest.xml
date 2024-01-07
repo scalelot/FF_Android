@@ -36,7 +36,14 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!--
+<uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
 
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REMOVED"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_ADDED" />
+    -->
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="true" />
@@ -79,6 +86,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".verstion.firstmodule.screens.main.chat.IncomingCallActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.ChatUserActivity"
             android:configChanges="uiMode"

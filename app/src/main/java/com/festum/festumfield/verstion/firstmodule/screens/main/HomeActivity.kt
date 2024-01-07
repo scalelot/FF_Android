@@ -143,7 +143,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         toUserName = if (extras != null) extras.getString("toUserName", "") else ""
 
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        /*Handler(Looper.getMainLooper()).postDelayed({
 
             if (callId != null && callId?.isNotEmpty() == true) {
 
@@ -169,7 +169,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             }
 
 
-        }, 800)
+        }, 800)*/
 
         internetHandler = Handler(Looper.getMainLooper()) { message ->
             val code = message.what
@@ -574,7 +574,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun getUpComingCall() {
 
-        SocketManager.mSocket?.on("incomingCall") { args ->
+        /*SocketManager.mSocket?.on("incomingCall") { args ->
 
             val data = args[0] as JSONObject
 
@@ -675,8 +675,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 }, 500)
 
-                /* Call End */
-                /*viewModel.callEnd(callId)*/
+                *//* Call End *//*
+                *//*viewModel.callEnd(callId)*//*
 
             } catch (e: Exception) {
 
@@ -686,7 +686,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
             }
 
-        }
+        }*/
 
     }
 

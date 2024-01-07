@@ -1,19 +1,22 @@
 package com.festum.festumfield.verstion.firstmodule
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import com.festum.festumfield.verstion.firstmodule.helper.MyBroadcastReceiver
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.Companion.get
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
 import com.pixplicity.easyprefs.library.Prefs
 import dagger.hilt.android.HiltAndroidApp
 import io.socket.client.Socket
+import org.json.JSONObject
 
 
 @HiltAndroidApp
@@ -21,6 +24,7 @@ class FestumApplicationClass : MultiDexApplication() {
 
     companion object {
         lateinit var appInstance: Application
+        var isAppInForeground = false
 //        init {
 //            System.loadLibrary("jingle_peerconnection")
 //        }
@@ -61,9 +65,35 @@ class FestumApplicationClass : MultiDexApplication() {
             }
         }
 
+        registerBroadcastReceiver()
+
+
+        SocketManager.mSocket?.on("incomingCall") { args ->
+
+            val data = args[0] as JSONObject
+
+            MyBroadcastReceiver.isOpen = false
+
+            val jsonString = data.toString()
+
+            val intent = Intent("com.festumfield.BROADCAST_ACTION")
+            intent.putExtra("jsonData",jsonString)
+            sendBroadcast(intent)
+
+
+        }
+
         /*initializeSocket()*/
 
     }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private fun registerBroadcastReceiver() {
+        val filter = IntentFilter("com.festumfield.BROADCAST_ACTION")
+        registerReceiver(MyBroadcastReceiver(), filter)
+    }
+
+
 
     /*fun getMSocket(): Socket? {
         return mSocket

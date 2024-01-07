@@ -12,6 +12,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -487,12 +488,14 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             AppPreferencesDelegates.get().isCallId = callId.toString()
 
+            Toast.makeText(this@ChatActivity, "" + callId, Toast.LENGTH_SHORT).show()
+
             Handler(Looper.getMainLooper()).postDelayed({
 
                 if (!isCallAccpeted){
 
                     val jsonObj = JSONObject()
-                    jsonObj.put("id", receiverUserId)
+                    jsonObj.put("id", receiverUserId.lowercase())
                     SocketManager.mSocket?.emit("endCall", jsonObj)
                     upComingCallDialog?.dismiss()
                     AppPreferencesDelegates.get().isVideoCalling = true
@@ -526,7 +529,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             val message = args[0] as JSONObject
 
-            Log.e("TAG", "getMessage: -----" + message )
+            Log.e("TAG", "getMessage: -----$message")
 
             val data = message.optJSONObject("data")
 
