@@ -47,6 +47,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListF
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.groupsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
+import com.festum.festumfield.verstion.firstmodule.screens.fragment.PhoneContactFragment
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.NewGroupActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.ProfilePreviewActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity
@@ -440,7 +441,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 pushFragment(CallHistoryFragment())
 
             R.id.contact ->
-                pushFragment(ContactFragment())
+                pushFragment(PhoneContactFragment())
 
 
         }

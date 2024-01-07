@@ -19,6 +19,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatListB
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriendProduct
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.PhonebookBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.FestumFieldApi
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
@@ -47,8 +48,10 @@ class ChatViewModel @Inject constructor(
     var callStartData = MutableLiveData<CallResponse?>()
     var callEndData = MutableLiveData<CallResponse?>()
     var callHistoryData = MutableLiveData<ArrayList<CallHistoryItem>?>()
+    var phonebookData = MutableLiveData<ArrayList<PhonebookResponse>?>()
     var messageDeliverData = MutableLiveData<ApiBody?>()
     var messageSeenData = MutableLiveData<ApiBody?>()
+
 
     fun getChatMessageHistory(receiverId: String, page: Int, limit: Int) {
 
@@ -251,6 +254,20 @@ class ChatViewModel @Inject constructor(
                 callEndData.value = resp.Data
             }, {
                 callEndData.value = null
+            })
+
+    }
+
+    fun getPhonebook(phonebookBody : ArrayList<String?>){
+
+        val callEndBody = PhonebookBody(contactNumbers = phonebookBody)
+
+        api.getPhonebook(callEndBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                phonebookData.value = resp.Data
+            }, {
+                phonebookData.value = null
             })
 
     }

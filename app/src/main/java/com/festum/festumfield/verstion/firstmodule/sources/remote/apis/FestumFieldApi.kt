@@ -17,6 +17,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.GetFriend
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupPermissionBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.PhonebookBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
@@ -153,5 +154,10 @@ interface FestumFieldApi {
     fun getOneFriend(
         @Body body: ChatUserBody
     ): Observable<ApiResponse<ChatUserResponse>>
+
+    @POST("phonebook")
+    fun getPhonebook(
+        @Body body: PhonebookBody
+    ): Observable<ApiResponse<ArrayList<PhonebookResponse>>>
 
 }
