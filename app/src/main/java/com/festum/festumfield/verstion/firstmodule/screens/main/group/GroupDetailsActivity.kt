@@ -79,19 +79,19 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
     /* For Permission */
     var name: Boolean? = null
-    var number:  Boolean? = null
-    var email:  Boolean? = null
-    var media:  Boolean? = null
-    var video:  Boolean? = null
-    var audio:  Boolean? = null
-    var notification:  Boolean? = null
+    var number: Boolean? = null
+    var email: Boolean? = null
+    var media: Boolean? = null
+    var video: Boolean? = null
+    var audio: Boolean? = null
+    var notification: Boolean? = null
 
     override fun getContentView(): View {
         binding = ActivityGroupDetailsBinding.inflate(layoutInflater)
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun setupUi() {
 
         val intent = intent.extras
@@ -151,6 +151,13 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
         binding.rlPermission.setOnClickListener {
 
             authorizedDialog()
+
+        }
+
+        binding.txtShow.setOnClickListener {
+
+            friendsListAdapter?.toggleExpansion()
+            updateButtonText()
 
         }
 
@@ -277,6 +284,10 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
                     }, 100)
 
+                    if (addGroupMembers.size < 5){
+                        binding.txtShow.visibility = View.GONE
+                    }
+
                 }
 
             }
@@ -356,7 +367,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
 
     }
-
 
     private fun openIntent() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -467,7 +477,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
     }
 
-
     override fun onAddMemberClick(
         items: GroupMembersListItems,
         b: Boolean,
@@ -568,6 +577,15 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         dialog.show()
 
+    }
+
+    private fun updateButtonText(){
+        val buttonText = if (friendsListAdapter?.isExpanded == true) {
+            getString(R.string.show_less)
+        } else {
+            getString(R.string.show_all)
+        }
+        binding.txtShow.text = buttonText
     }
 
 }

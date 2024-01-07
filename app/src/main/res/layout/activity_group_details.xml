@@ -364,6 +364,7 @@
                     android:fontFamily="@font/roboto_medium"
                     android:padding="@dimen/margin_10"
                     android:text="@string/show_less"
+                    android:visibility="gone"
                     android:textColor="@color/app_color"
                     android:textSize="@dimen/text_14" />
 

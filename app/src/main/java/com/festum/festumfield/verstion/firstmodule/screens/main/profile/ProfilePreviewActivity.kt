@@ -28,6 +28,7 @@ import com.festum.festumfield.verstion.firstmodule.utils.FileUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil.Companion.IS_EDIT_PROFILE
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
+import com.festum.festumfield.verstion.firstmodule.view.Progressbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -51,6 +52,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
     private lateinit var binding: ProfileActivityBinding
     private var businessProfile: Boolean? = null
     private var profileResponse: ProfileResponse? = null
+    var progressbar: Progressbar? = null
 
     override fun getContentView(): View {
         binding = ProfileActivityBinding.inflate(layoutInflater)
@@ -58,6 +60,8 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
     }
 
     override fun setupUi() {
+
+        progressbar = Progressbar(this@ProfilePreviewActivity)
 
         /* Get Profile */
         viewModel.getProfile()

@@ -26,12 +26,14 @@ class EditGroupMembersListAdapter(
     private val onAddMemberClick: GroupMembersInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var checkedPosition = -1
-    val memberList = arrayListOf<FriendsListItems>()
-    private var isEnable = false
 
+    var isExpanded = false
 
-
+    @SuppressLint("NotifyDataSetChanged")
+    fun toggleExpansion() {
+        isExpanded = !isExpanded
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(UserChatListBinding.inflate(LayoutInflater.from(parent.context)))
@@ -39,8 +41,10 @@ class EditGroupMembersListAdapter(
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
 
-        val holder = viewHolder as ViewHolder
-        holder.bind(position)
+        if (position != RecyclerView.NO_POSITION && position < friendsList.size) {
+            val holder = viewHolder as ViewHolder
+            holder.bind(position)
+        }
 
     }
 
@@ -103,7 +107,11 @@ class EditGroupMembersListAdapter(
 
     }
 
-    override fun getItemCount(): Int = friendsList.size
+    override fun getItemCount(): Int = if (isExpanded || friendsList.size <= MIN_ITEMS_TO_SHOW) {
+        friendsList.size
+    } else {
+        MIN_ITEMS_TO_SHOW
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun filterList(filterItems: ArrayList<FriendsListItems>) {
@@ -136,6 +144,10 @@ class EditGroupMembersListAdapter(
         val nowInUtc = OffsetDateTime.now(ZoneOffset.UTC)
         nowInUtc.format(DateTimeFormatter.ofPattern(DateTimeUtils.FORMAT_API_DATETIME))
         return nowInUtc.toString()
+    }
+
+    companion object {
+        private const val MIN_ITEMS_TO_SHOW = 5
     }
 
 }

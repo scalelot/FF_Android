@@ -444,6 +444,7 @@
     <string name="add_members">Add Members</string>
     <string name="search_city">Search city</string>
     <string name="enter_a_location">Enter a location</string>
+    <string name="select_country">Select Country</string>
 
     <string name="app_permission">Application Permissions</string>
 
@@ -456,5 +457,6 @@
 
     <string name="gps_enable">GPS Enable</string>
     <string name="turn_on_your_location">Turn on your location. \nFestum Field is not find your location, we highly recommend turning on your device\'s location services.</string>
+    <string name="country_code">+91</string>
 
 </resources>

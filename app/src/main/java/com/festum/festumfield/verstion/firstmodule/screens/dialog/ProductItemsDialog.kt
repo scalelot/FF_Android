@@ -64,6 +64,10 @@ class ProductItemsDialog(private val receiverUserId : String,
 
                 binding.idPBLoading.visibility = View.GONE
 
+            } else {
+
+                binding.idPBLoading.visibility = View.GONE
+
             }
 
         }

@@ -195,6 +195,7 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
                     Log.e("TAG", "setupUi:--- $data")
                     AppPreferencesDelegates.get().isVideoCalling = true
                     AppPreferencesDelegates.get().isAudioCalling = true
+                    viewModel.callEnd(AppPreferencesDelegates.get().isCallId)
                     stop()
                     finish()
 

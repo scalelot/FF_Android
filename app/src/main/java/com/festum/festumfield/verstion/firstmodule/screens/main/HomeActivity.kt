@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.media.MediaPlayer
@@ -26,6 +27,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -85,18 +87,23 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     var callId: String? = null
     var messageId: String? = null
-    var fromId:String? = null
-    var toId:String? = null
-    var toUserName:String? = null
-    var banner:String? = null
+    var fromId: String? = null
+    var toId: String? = null
+    var toUserName: String? = null
+    var banner: String? = null
 
     private var audioFileName: String = "skype"
     private var groupId: String = ""
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
-    companion object{
+    private var isLocationChecked = false
+    private var isLocationItemChecked = false
 
-        var internetHandler : Handler? = null
+    private var previousItemName = ""
+
+    companion object {
+
+        var internetHandler: Handler? = null
 
     }
 
@@ -116,6 +123,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     override fun setupUi() {
 
 
+        val applicationClass: FestumApplicationClass = application as FestumApplicationClass
+        applicationClass.onCreate()
+
 //        Bundle extras = getIntent().getExtras();
 //        if (extras != null) {
 //            messageId = extras.getString("messageid", "");
@@ -124,17 +134,17 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         val extras = intent.extras
 
 
-         banner = if (extras != null) extras.getString("banner", "") else ""
+        banner = if (extras != null) extras.getString("banner", "") else ""
         callId = if (extras != null) extras.getString("callId", "") else ""
-         messageId = if (extras != null) extras.getString("messageId", "") else ""
-         fromId = if (extras != null) extras.getString("fromId", "") else ""
-         toId = if (extras != null) extras.getString("toId", "") else ""
+        messageId = if (extras != null) extras.getString("messageId", "") else ""
+        fromId = if (extras != null) extras.getString("fromId", "") else ""
+        toId = if (extras != null) extras.getString("toId", "") else ""
         toUserName = if (extras != null) extras.getString("toUserName", "") else ""
 
 
         Handler(Looper.getMainLooper()).postDelayed({
 
-            if (callId != null && callId?.isNotEmpty() == true){
+            if (callId != null && callId?.isNotEmpty() == true) {
 
                 friendsListItems?.forEach {
 
@@ -230,9 +240,14 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         }
 
+        /*val previousItemId = binding.bottomNavigationView.selectedItemId
+
+        // Set the item ID programmatically without triggering the listener
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener(null)*/
 
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+
             selectFragment(item)
             true
         }
@@ -299,6 +314,9 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
             viewModel.setPin(itemData, false)
         }
 
+        val menu: Menu = binding.bottomNavigationView.menu
+        selectFragment(menu.getItem(0))
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -316,12 +334,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 get().emailAddress = profileData.emailId.toString()
                 get().personalProfile = true
 
-
-                val applicationClass: FestumApplicationClass = application as FestumApplicationClass
-                applicationClass.onCreate()
-
-                val menu: Menu = binding.bottomNavigationView.menu
-                selectFragment(menu.getItem(0))
 
                 if (profileData.fullName.isNullOrEmpty()) {
                     binding.userName.text = "+" + profileData.contactNo
@@ -392,41 +404,53 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
     private fun selectFragment(item: MenuItem) {
         item.isChecked = true
+
         when (item.itemId) {
             R.id.chat ->
 
-                if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrBlank()){
+                if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrBlank()) {
                     Handler(Looper.getMainLooper()).postDelayed({
 
-                        pushFragment(FriendsListFragment(this,fromId))
+                        pushFragment(FriendsListFragment(this, fromId))
                         fromId = ""
                         toId = ""
 
                     }, 700)
-                }else{
-                    pushFragment(FriendsListFragment(this,""))
+                } else {
+                    pushFragment(FriendsListFragment(this, ""))
                 }
 
             R.id.group -> {
-
-                pushFragment(GroupsListFragment(this,""))
-
+                pushFragment(GroupsListFragment(this, ""))
             }
 
-            R.id.location ->
-                if (AppPreferencesDelegates.get().userName.isBlank()) {
+            R.id.location -> {
+
+                if (get().userName.isBlank()) {
                     /* For create profile */
                     createProfileDialog()
                 } else {
                     onLocationCheck()
+
                 }
+
+            }
 
             R.id.call ->
                 pushFragment(CallHistoryFragment())
 
             R.id.contact ->
                 pushFragment(ContactFragment())
+
+
         }
+
+        if (item.itemId != R.id.location){
+
+            previousItemName = item.title.toString()
+
+        }
+
     }
 
     private fun pushFragment(fragment: Fragment) {
@@ -575,15 +599,15 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                 }
 
-                groupsListItems?.forEach{
+                groupsListItems?.forEach {
 
                     if (it.id?.contains(groupId.lowercase()) == true) {
 
                         upComingGroupCallUser = it
 
 
-                    }else{
-                        Log.e("TAG", "getUpComingCall:-------- "  + it.id )
+                    } else {
+                        Log.e("TAG", "getUpComingCall:-------- " + it.id)
                     }
 
                 }
@@ -635,31 +659,31 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
         }?.on("endCall") { args ->
 
-                try {
+            try {
 
-                    val data = args[0] as JSONObject
+                val data = args[0] as JSONObject
 
-                    Log.e("TAG", "callUser:---- $data")
+                Log.e("TAG", "callUser:---- $data")
 
 
 
-                    Handler(Looper.getMainLooper()).postDelayed({
-
-                        stopAudio()
-                        dialog?.dismiss()
-
-                    }, 500)
-
-                    /* Call End */
-                    /*viewModel.callEnd(callId)*/
-
-                } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).postDelayed({
 
                     stopAudio()
-
                     dialog?.dismiss()
 
-                }
+                }, 500)
+
+                /* Call End */
+                /*viewModel.callEnd(callId)*/
+
+            } catch (e: Exception) {
+
+                stopAudio()
+
+                dialog?.dismiss()
+
+            }
 
         }
 
@@ -678,11 +702,11 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         groupId: String?
     ) {
 
-        if (banner != null && !banner.isNullOrEmpty()){
+        if (banner != null && !banner.isNullOrEmpty()) {
             Glide.with(this@HomeActivity)
                 .load(Constans.Display_Image_URL + banner)
                 .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
-        }else{
+        } else {
             Glide.with(this@HomeActivity)
                 .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
                 .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.upcomingcallUserImg)
@@ -919,7 +943,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         isGroupCalling: Boolean,
         upComingCallUser: FriendsListItems?,
         upComingGroupCallUser: GroupListItems?,
-        groupId: String?) {
+        groupId: String?
+    ) {
 
         if (isTiramisu) {
             Dexter.withContext(this@HomeActivity)
@@ -986,7 +1011,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                             if (isCallingFromApp && isGroupCalling) {
 
-                                val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
+                                val intent = Intent(
+                                    this@HomeActivity,
+                                    AppGroupVideoCallingActivity::class.java
+                                )
                                 val jsonItem = Gson().toJson(upComingGroupCallUser)
                                 intent.putExtra("groupList", jsonItem)
                                 intent.putExtra("groupId", groupId)
@@ -1000,7 +1028,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                             } else {
                                 if (isCallingFromApp) {
                                     val intent =
-                                        Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                        Intent(
+                                            this@HomeActivity,
+                                            AppVideoCallingActivity::class.java
+                                        )
                                     intent.putExtra("remoteChannelId", remoteChannelId)
                                     intent.putExtra("remoteUser", name)
                                     intent.putExtra("callReceive", true)
@@ -1010,7 +1041,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 } else {
 
                                     val intent =
-                                        Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                        Intent(
+                                            this@HomeActivity,
+                                            WebVideoCallingActivity::class.java
+                                        )
                                     intent.putExtra("remoteChannelId", remoteChannelId)
                                     intent.putExtra("remoteUser", name)
                                     intent.putExtra("callReceive", true)
@@ -1052,7 +1086,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
 
                             if (isCallingFromApp && isGroupCalling) {
 
-                                val intent = Intent(this@HomeActivity, AppGroupVideoCallingActivity::class.java)
+                                val intent = Intent(
+                                    this@HomeActivity,
+                                    AppGroupVideoCallingActivity::class.java
+                                )
                                 val jsonItem = Gson().toJson(upComingGroupCallUser)
                                 intent.putExtra("groupList", jsonItem)
                                 intent.putExtra("groupId", groupId)
@@ -1066,7 +1103,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                             } else {
                                 if (isCallingFromApp) {
                                     val intent =
-                                        Intent(this@HomeActivity, AppVideoCallingActivity::class.java)
+                                        Intent(
+                                            this@HomeActivity,
+                                            AppVideoCallingActivity::class.java
+                                        )
                                     intent.putExtra("remoteChannelId", remoteChannelId)
                                     intent.putExtra("remoteUser", name)
                                     intent.putExtra("callReceive", true)
@@ -1076,7 +1116,10 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                                 } else {
 
                                     val intent =
-                                        Intent(this@HomeActivity, WebVideoCallingActivity::class.java)
+                                        Intent(
+                                            this@HomeActivity,
+                                            WebVideoCallingActivity::class.java
+                                        )
                                     intent.putExtra("remoteChannelId", remoteChannelId)
                                     intent.putExtra("remoteUser", name)
                                     intent.putExtra("callReceive", true)
@@ -1238,7 +1281,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     }
 
 
-
     private fun changeToNightMode() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -1270,6 +1312,24 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 .setTitle(getString(R.string.gps_enable))
                 .setMessage(getString(R.string.turn_on_your_location))
                 .setPositiveButton("OK") { dialogInterface, i ->
+
+                    when(previousItemName){
+
+                        "Chats" -> {
+                            binding.bottomNavigationView.selectedItemId = R.id.chat
+                        }
+                        "Groups" -> {
+                            binding.bottomNavigationView.selectedItemId = R.id.group
+                        }
+                        "Calls" -> {
+                            binding.bottomNavigationView.selectedItemId = R.id.call
+                        }
+                        "Contact List" -> {
+                            binding.bottomNavigationView.selectedItemId = R.id.contact
+                        }
+
+                    }
+
                     dialogInterface.dismiss()
 
                 }

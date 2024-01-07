@@ -21,6 +21,8 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ChatUserViewPagerAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.ProfileViewPagerAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.CreateBusinessProfileActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.profile.CreatePersonProfileActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppGroupVideoCallingActivity
@@ -29,8 +31,10 @@ import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioC
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ChatUserBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ChatUserResponse
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
+import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsProducts
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.GroupMembersListItems
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil
 import com.festum.festumfield.verstion.firstmodule.viemodels.ChatViewModel
@@ -47,7 +51,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @AndroidEntryPoint
-class ChatUserActivity : BaseActivity<FriendsListViewModel>() {
+class ChatUserActivity : BaseActivity<FriendsListViewModel>(), ProductItemInterface {
 
     private lateinit var binding: ActivityChatUserBinding
 
@@ -61,6 +65,12 @@ class ChatUserActivity : BaseActivity<FriendsListViewModel>() {
     private var isCallAccpeted = false
 
     private var callId: String? = null
+
+    companion object{
+
+        var callingHandler : Handler? = null
+
+    }
 
     override fun getContentView(): View {
 
@@ -147,6 +157,23 @@ class ChatUserActivity : BaseActivity<FriendsListViewModel>() {
             }
 
         }
+
+        binding.llProduct.setOnClickListener {
+
+            val dialog = ProductItemsDialog(friendsItem?.id.toString(), this)
+            dialog.show(supportFragmentManager, "product")
+
+        }
+
+        /*callingHandler = Handler(Looper.getMainLooper()) { message ->
+            val code = message.what
+            if (code == 21) {
+
+            }
+            false
+        }*/
+
+        getMessage()
 
     }
 
@@ -529,6 +556,14 @@ class ChatUserActivity : BaseActivity<FriendsListViewModel>() {
 
         }
         
+    }
+
+    override fun singleProduct(item: FriendsProducts, productId: String, sendProduct: Boolean) {
+
+    }
+
+    override fun chatProduct(item: FriendsProducts) {
+
     }
 
 }

@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -26,6 +27,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionD
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductDetailDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.ProductItemsDialog
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.SendImageDialog
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppGroupVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
@@ -661,6 +663,10 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         }?.on("webrtcMessage") { args ->
 
             val data = args[0] as JSONObject
+
+            /*val message = Message()
+            message.what = 21
+            ChatUserActivity.callingHandler?.sendMessage(message)*/
 
             Log.e("TAG", "webrtcMessage:---+++++-- $data")
 

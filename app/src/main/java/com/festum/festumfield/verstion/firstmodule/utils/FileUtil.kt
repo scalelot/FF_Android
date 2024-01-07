@@ -14,8 +14,10 @@ import android.util.Base64
 import com.festum.festumfield.BuildConfig.DEBUG
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.nio.charset.StandardCharsets
 
 class FileUtil {
     companion object {
@@ -240,5 +242,23 @@ class FileUtil {
             }
             return absolutePath
         }
+
+        fun loadJSONFromAsset(context: Context): String? {
+            var json: String? = null
+            json = try {
+                val `is`: InputStream = context.assets.open("countryCode.json")
+                val size = `is`.available()
+                val buffer = ByteArray(size)
+                `is`.read(buffer)
+                `is`.close()
+                String(buffer, StandardCharsets.UTF_8)
+            } catch (ex: IOException) {
+                ex.printStackTrace()
+                return null
+            }
+            return json
+        }
     }
+
+
 }

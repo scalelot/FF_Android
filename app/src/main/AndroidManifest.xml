@@ -81,15 +81,19 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.ChatUserActivity"
-            android:exported="false" />
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.GroupChatActivity"
             android:configChanges="uiMode"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.ApplicationPermissionActivity"
             android:configChanges="uiMode"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.webrtc.AppAudioCallingActivity"
             android:configChanges="uiMode"

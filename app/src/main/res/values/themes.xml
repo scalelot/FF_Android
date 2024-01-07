@@ -145,5 +145,12 @@
         <item name="colorPrimary">@color/colorAccent</item>
     </style>
 
+    <style name="ThemeOverlay.SearchView" parent="Widget.AppCompat.Light.SearchView">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+        <item name="android:editTextColor">@color/edt_dark</item>
+        <item name="android:textColorHint">@color/edt_hint</item>
+    </style>
+
 
 </resources>

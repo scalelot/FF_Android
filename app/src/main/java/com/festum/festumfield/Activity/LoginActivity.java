@@ -1,5 +1,6 @@
 package com.festum.festumfield.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,37 +29,55 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.screens.dialog.CodeDialog;
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.PhoneCodeModel;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
+import com.festum.festumfield.verstion.firstmodule.utils.CountryCityUtils;
+import com.festum.festumfield.verstion.firstmodule.utils.FileUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.hbb20.CountryCodePicker;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import io.michaelrocks.libphonenumber.android.Phonenumber;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements CodeDialog.CountyPickerItems {
 
     CountryCodePicker ccp;
     EditText edtPhone;
     AppCompatButton btn_continue;
     String countycode;
 
+    TextView codeFlag,countryCode;
+
+    LinearLayout linearLayout;
+
+    PhoneCodeModel selectedPhoneModel = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ccp = findViewById(R.id.ccp);
+        /*ccp = findViewById(R.id.ccp);*/
         edtPhone = findViewById(R.id.edtPhone);
         btn_continue = findViewById(R.id.btn_continue);
+        codeFlag = findViewById(R.id.codeFlag);
+        countryCode = findViewById(R.id.countryCode);
+        linearLayout = findViewById(R.id.linear);
 
         //Firebase GetToken
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
@@ -71,7 +92,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        countycode = ccp.getDefaultCountryCode();
+        /*countycode = ccp.getDefaultCountryCode();
 
 
 
@@ -80,8 +101,16 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onCountrySelected() {
                 countycode = ccp.getSelectedCountryCode();
+
             }
-        });
+        });*/
+
+        try {
+            getCountryCode();
+        } catch (JSONException e) {
+            Log.e("TAG", "onCreate:--+-- " + e.getLocalizedMessage() );
+            throw new RuntimeException(e);
+        }
 
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +120,7 @@ public class LoginActivity extends BaseActivity {
                     String newToken = AppPreferencesDelegates.Companion.get().getFcmToken();
                     String phoneNumber = edtPhone.getText().toString().trim();
 
+                    Log.e("TAG", "onClick:--- " + countycode );
                     if (phoneNumber.isEmpty()) {
                         edtPhone.setError("Enter Mobile Number");
                     } else {
@@ -196,4 +226,60 @@ public class LoginActivity extends BaseActivity {
         super.onBackPressed();
         finishAffinity();
     }
+
+    @SuppressLint("SetTextI18n")
+    public void getCountryCode() throws JSONException {
+        ArrayList<PhoneCodeModel> phoneModelList = new ArrayList<>();
+        JSONObject obj = new JSONObject(Objects.requireNonNull(FileUtil.Companion.loadJSONFromAsset(this)));
+
+        Iterator<String> keys = obj.keys();
+        while (keys.hasNext()) {
+            String keyStr = keys.next();
+            try {
+                String keyValue = obj.getString(keyStr);
+                PhoneCodeModel code = new PhoneCodeModel(keyStr, keyValue);
+                phoneModelList.add(code);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (selectedPhoneModel == null) {
+            selectedPhoneModel = phoneModelList.get(86);
+        }
+
+        countryCode.setText("+ " + selectedPhoneModel.getValue());
+        countryCode.setText(countryCode.getText().toString());
+        countycode = selectedPhoneModel.getValue();
+
+        codeFlag.setText(CountryCityUtils.Companion.getFlagId(CountryCityUtils.Companion.firstTwo(
+                Objects.requireNonNull(selectedPhoneModel.getKey()).toLowerCase(Locale.getDefault())
+        )));
+
+        CodeDialog phoneCodeDialog = new CodeDialog(this, phoneModelList, this);
+
+        linearLayout.setOnClickListener(view -> {
+            if (!phoneCodeDialog.isAdded()) {
+                phoneCodeDialog.show(getSupportFragmentManager(), null);
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void pickCountry(@NonNull PhoneCodeModel countries) {
+
+        selectedPhoneModel = countries;
+        countryCode.setText("+ " + countries.getValue());
+        countycode = countries.getValue();
+        codeFlag.setText(
+                CountryCityUtils.Companion.getFlagId(
+                        CountryCityUtils.Companion.firstTwo(
+                                Objects.requireNonNull(countries.getKey()).toLowerCase(Locale.getDefault())
+                        )
+                )
+        );
+
+    }
+
 }

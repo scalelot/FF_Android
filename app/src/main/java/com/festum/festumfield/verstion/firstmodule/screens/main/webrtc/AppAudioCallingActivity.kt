@@ -199,13 +199,16 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
             }?.on("endCall") { args ->
 
                 try {
-                    val data = args[0] as JSONObject
 
+                    val data = args[0] as JSONObject
+                    Log.e("TAG", "setupUi: -----endCall---$data")
                     stop()
                     finish()
 
                 } catch (e: Exception) {
+
                     stop()
+
                 }
 
             }
@@ -297,12 +300,16 @@ class AppAudioCallingActivity : BaseActivity<ChatViewModel>() {
             try {
 
                 val jsonObj = JSONObject()
-                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+                jsonObj.put("id", remoteId)
                 SocketManager.mSocket?.emit("endCall", jsonObj)
+                stop()
                 finish()
 
-            }catch (e : Exception){
-                Log.e("TAG", "error:" + e.message )
+                viewModel.callEnd(AppPreferencesDelegates.get().isCallId)
+
+
+            } catch (e: Exception) {
+                Log.e("TAG", "error:" + e.message)
             }
 
         }
