@@ -45,7 +45,7 @@ class ContactListAdapter(
 
                 displayBinding.btnInvite.visibility = View.GONE
 
-            }else{
+            } else {
 
                 displayBinding.btnInvite.visibility = View.VISIBLE
 

@@ -148,7 +148,7 @@ interface FestumFieldApi {
     @POST("group/setpermissions")
     fun setGroupPermission(
         @Body body: GroupPermissionBody
-    ): Observable<ApiResponse<GroupListItems>>
+    ): Observable<ApiResponse<GroupMembersListItems>>
 
     @POST("friends/getone")
     fun getOneFriend(

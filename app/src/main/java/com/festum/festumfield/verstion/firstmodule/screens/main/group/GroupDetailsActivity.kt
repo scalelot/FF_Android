@@ -294,6 +294,53 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         }
 
+        viewModel.groupPermissionData.observe(this) { groupPermissionData ->
+
+
+            if (lifecycle.currentState == Lifecycle.State.RESUMED) {
+
+                if (groupPermissionData != null) {
+
+                    addMemberList = groupPermissionData
+
+                    groupPermissionData.members?.forEach {
+
+                        val members = GroupMembersListItems(
+                            profileimage = it.membersList?.profileimage,
+                            fullName = it.membersList?.fullName,
+                            aboutUs = it.membersList?.aboutUs,
+                            id = it.membersList?.id
+                        )
+
+                        it.membersList?.id?.let { it1 -> removeMembersList.add(it1) }
+                        addGroupMembers.add(members)
+
+                    }
+
+                    binding.groupName.text = groupPermissionData.name
+
+                    binding.txtPeople.text = groupPermissionData.members?.size.toString() + " peoples"
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        friendsListAdapter = EditGroupMembersListAdapter(
+                            this@GroupDetailsActivity,
+                            addGroupMembers,
+                            this
+                        )
+                        binding.recyclerGroup.adapter = friendsListAdapter
+
+                    }, 100)
+
+                    if (addGroupMembers.size < 5){
+                        binding.txtShow.visibility = View.GONE
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     private fun onMediaPermission() {
@@ -463,8 +510,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         membersIds.add(items.id.toString())
 
-        Log.e("TAG", "onRemoveMember:---- $items")
-
         val removeMembers = CreateGroupBody(
             groupid = groupOneItem.id,
             members = membersIds
@@ -534,13 +579,25 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
         val audioSwitch: SwitchButton = dialog.findViewById(R.id.audio_switch)
         val notificationSwitch: SwitchButton = dialog.findViewById(R.id.mute_switch)
 
-        nameSwitch.isChecked = name ?: false
-        numberSwitch.isChecked = number ?: false
-        emailSwitch.isChecked = email ?: false
-        mediaSwitch.isChecked = media ?: false
-        videoSwitch.isChecked = video ?: false
-        audioSwitch.isChecked = audio ?: false
-        notificationSwitch.isChecked = notification ?: false
+        addMemberList.members?.forEach {
+
+            if (AppPreferencesDelegates.get().channelId == it.membersList?.channelID){
+
+                nameSwitch.isChecked = it.permissions?.fullname ?: false
+                numberSwitch.isChecked = it.permissions?.contactnumber ?: false
+                emailSwitch.isChecked = it.permissions?.email ?: false
+                mediaSwitch.isChecked = it.permissions?.socialmedia ?: false
+                videoSwitch.isChecked = it.permissions?.videocall ?: false
+                audioSwitch.isChecked = it.permissions?.audiocall ?: false
+                notificationSwitch.isChecked = it.permissions?.gender ?: false
+
+                Log.e("TAG", "authorizedDialog:-+++-- " + it.membersList.fullName )
+                Log.e("TAG", "authorizedDialog:--+++- " + it.permissions.toString() )
+
+
+            }
+
+        }
 
         btnClose.setOnClickListener {
 
@@ -569,8 +626,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
             viewModel.setGroupPermission(groupPermission)
 
             dialog.dismiss()
-
-            Log.e("TAG", "authorizedDialog:--+++-- $groupPermission")
 
 
         }

@@ -48,7 +48,7 @@ class FriendsListViewModel @Inject constructor(
     var friendsListData = MutableLiveData<ArrayList<FriendsListItems>?>()
     var groupsListData = MutableLiveData<ArrayList<GroupListItems>?>()
     var groupsOneData = MutableLiveData<GroupListItems?>()
-    var groupPermissionData = MutableLiveData<GroupListItems?>()
+    var groupPermissionData = MutableLiveData<GroupMembersListItems?>()
     var profileData = MutableLiveData<ProfileResponse?>()
     var findFriendsData = MutableLiveData<ArrayList<ProfileResponse?>?>()
     var sendRequestData = MutableLiveData<ApiBody?>()
@@ -220,9 +220,11 @@ class FriendsListViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
 
-                groupPermissionData.value = resp.Data as GroupListItems
-            }, {
+                groupPermissionData.value = resp.Data
 
+                Log.e("TAG", "setGroupPermission:---++-- " + resp.Data.toString() )
+            }, {
+                Log.e("TAG", "setGroupPermission:--++--- " + it.localizedMessage )
                 groupPermissionData.value = null
             })
     }
