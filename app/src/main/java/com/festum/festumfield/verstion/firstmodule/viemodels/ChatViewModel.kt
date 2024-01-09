@@ -47,6 +47,7 @@ class ChatViewModel @Inject constructor(
     var productData = MutableLiveData<ProductResponse?>()
     var callStartData = MutableLiveData<CallResponse?>()
     var callEndData = MutableLiveData<CallResponse?>()
+    var callAcceptData = MutableLiveData<CallResponse?>()
     var callHistoryData = MutableLiveData<ArrayList<CallHistoryItem>?>()
     var phonebookData = MutableLiveData<ArrayList<PhonebookResponse>?>()
     var messageDeliverData = MutableLiveData<ApiBody?>()
@@ -254,6 +255,20 @@ class ChatViewModel @Inject constructor(
                 callEndData.value = resp.Data
             }, {
                 callEndData.value = null
+            })
+
+    }
+
+    fun callAccept(callId : String?){
+
+        val callEndBody = CallEndBody(callId = callId)
+
+        api.callAccept(callEndBody).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ resp ->
+                callAcceptData.value = resp.Data
+            }, {
+                callAcceptData.value = null
             })
 
     }

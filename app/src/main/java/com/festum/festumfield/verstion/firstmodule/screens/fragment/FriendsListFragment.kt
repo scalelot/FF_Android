@@ -66,10 +66,10 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
     }
 
 
-    override fun setArguments(args: Bundle?) {
+    /*override fun setArguments(args: Bundle?) {
         super.setArguments(args)
         Toast.makeText(activity, args?.getString("text"), Toast.LENGTH_SHORT).show()
-    }
+    }*/
 
     override fun initUi() {
 

@@ -176,6 +176,8 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
             }
 
+            viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
+
         }
 
         SocketManager.mSocket?.on("endCall") { args ->

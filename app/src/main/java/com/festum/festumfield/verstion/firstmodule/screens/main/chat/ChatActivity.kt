@@ -488,7 +488,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             AppPreferencesDelegates.get().isCallId = callId.toString()
 
-            Toast.makeText(this@ChatActivity, "" + callId, Toast.LENGTH_SHORT).show()
+           /* Toast.makeText(this@ChatActivity, "" + callId, Toast.LENGTH_SHORT).show()*/
 
             Handler(Looper.getMainLooper()).postDelayed({
 
