@@ -39,6 +39,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
+import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -186,12 +187,12 @@ public class SettingActivity extends BaseActivity {
                     /*Toast.makeText(SettingActivity.this, e.toString(), Toast.LENGTH_SHORT).show();*/
                 }
 
-                /*runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        socket.disconnect();
+                        SocketManager.INSTANCE.disconnectSocket();
                     }
-                });*/
+                });
 
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                 startActivity(intent);

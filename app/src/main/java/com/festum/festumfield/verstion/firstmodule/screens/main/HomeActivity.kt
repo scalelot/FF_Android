@@ -123,10 +123,6 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun setupUi() {
 
-
-        val applicationClass: FestumApplicationClass = application as FestumApplicationClass
-        applicationClass.onCreate()
-
 //        Bundle extras = getIntent().getExtras();
 //        if (extras != null) {
 //            messageId = extras.getString("messageid", "");
@@ -335,6 +331,8 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 get().emailAddress = profileData.emailId.toString()
                 get().personalProfile = true
 
+                val applicationClass: FestumApplicationClass = application as FestumApplicationClass
+                applicationClass.onCreate()
 
                 if (profileData.fullName.isNullOrEmpty()) {
                     binding.userName.text = "+" + profileData.contactNo
