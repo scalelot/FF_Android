@@ -175,7 +175,7 @@ class ProfilePreviewActivity : BaseActivity<ProfileViewModel>() {
             finish()
         }
 
-        if (AppPreferencesDelegates.get().userName.isNotEmpty()) {
+        if (AppPreferencesDelegates.get().personalProfile) {
             binding.editImg.visibility = View.VISIBLE
             binding.btnEditProfile.visibility = View.VISIBLE
         } else {

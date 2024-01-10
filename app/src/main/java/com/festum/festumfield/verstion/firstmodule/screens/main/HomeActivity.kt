@@ -877,49 +877,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
-    }
 
-    private fun setupSocketListeners() {
-
-        SocketManager.mSocket?.on(get().channelId, onIncomingChatListener)
-
-    }
-
-    private val onIncomingChatListener = Emitter.Listener { args ->
-
-        val message = args[0] as JSONObject
-
-        Log.e("TAG", "getMessage: -----$message")
-
-        val data = message.optJSONObject("data")
-
-        when (message.optString("event").toString()) {
-
-            "onIncomingChat" -> {
-                Log.e("TAG", "onIncomingChat---: $data")
-            }
-
-            "onGroupCallStarted" -> {
-                Log.e("TAG", "onGroupCallStarted---: $data")
-            }
-
-            "onCallStarted" -> {
-
-                val callId = data?.optString("callid")
-
-                get().isCallId = callId ?: ""
-
-            }
-
-            "onGroupUpdate" -> {
-                Log.e("TAG", "onGroupUpdate---: $data")
-            }
-
-            "onGroupCreation" -> {
-                Log.e("TAG", "onGroupCreation---: $data")
-            }
-
-        }
     }
 
     private fun stopAudio() {

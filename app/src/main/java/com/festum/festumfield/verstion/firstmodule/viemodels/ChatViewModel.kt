@@ -267,8 +267,10 @@ class ChatViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
                 callAcceptData.value = resp.Data
+                Log.e("TAG", "callAcceptData:---- " + callAcceptData.value )
             }, {
                 callAcceptData.value = null
+                Log.e("TAG", "callAcceptData:---- " + it.localizedMessage )
             })
 
     }

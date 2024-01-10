@@ -319,8 +319,17 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
                     }
 
-                    "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
-                    "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
+                    "onGroupCallStarted" -> {
+                        Log.e("TAG", "onGroupCallStarted---: $data")
+
+                        val callId = data?.optString("callid")
+                        AppPreferencesDelegates.get().isCallId = callId.toString()}
+
+                    "onCallStarted" -> {
+                        Log.e("TAG", "onCallStarted---: $data")
+                        val callId = data?.optString("callid")
+                        AppPreferencesDelegates.get().isCallId = callId.toString()}
+
                     "onGroupUpdate" -> {
 
                         activity?.runOnUiThread {

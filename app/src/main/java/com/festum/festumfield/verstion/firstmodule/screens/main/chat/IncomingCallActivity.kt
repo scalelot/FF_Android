@@ -89,7 +89,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
             Glide.with(this@IncomingCallActivity)
                 .load(Constans.Display_Image_URL + upComingGroupCallUser?.profileimage)
-                .placeholder(R.drawable.ic_user_img).into(binding.upcomingcallUserImg)
+                .placeholder(R.drawable.ic_user).into(binding.upcomingcallUserImg)
 
             binding.upcomingUsername.text = name
 
@@ -105,13 +105,11 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
             Glide.with(this@IncomingCallActivity)
                 .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
-                .placeholder(R.drawable.ic_user_img).into(binding.upcomingcallUserImg)
+                .placeholder(R.drawable.ic_user).into(binding.upcomingcallUserImg)
 
             binding.upcomingUsername.text = name
 
         }
-
-
 
         playAudio(this@IncomingCallActivity, "skype")
 
@@ -175,6 +173,8 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                 }
 
             }
+
+            Log.e("TAG", "setupUi:------- " + AppPreferencesDelegates.get().isCallId )
 
             viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
 
@@ -528,7 +528,6 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                 .check()
 
         }
-
 
     }
 

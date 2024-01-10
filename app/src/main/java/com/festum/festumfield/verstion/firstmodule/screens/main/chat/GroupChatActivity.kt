@@ -576,8 +576,19 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
                 }
 
-                "onGroupCallStarted" -> {  Log.e("TAG", "onGroupCallStarted---: $data")  }
-                "onCallStarted" -> {  Log.e("TAG", "onCallStarted---: $data")  }
+                "onGroupCallStarted" -> {
+
+                    val callId = data?.optString("callid")
+                    AppPreferencesDelegates.get().isCallId = callId.toString()
+
+                }
+                "onCallStarted" -> {
+
+                    val callId = data?.optString("callid")
+                    AppPreferencesDelegates.get().isCallId = callId.toString()
+                    Log.e("TAG", "onCallStarted---: $data")
+
+                }
                 "onGroupUpdate" -> {  Log.e("TAG", "onGroupUpdate---: $data")  }
                 "onGroupCreation" -> {  Log.e("TAG", "onGroupCreation---: $data")  }
 
@@ -594,6 +605,56 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                     /*if (messageId != null) {
                         viewModel.getMessageSeen(messageId)
                     }*/
+
+                }
+
+                "onCallAccepted" -> {
+
+                    if (isVideoGroupCalling){
+
+                        val intent = Intent(this@GroupChatActivity, AppGroupVideoCallingActivity::class.java)
+                        val addMemberList = GroupListItems(
+                            aboutUs= friendsItem?.aboutUs,
+                            isSender=friendsItem?.isSender,
+                            isPinned=friendsItem?.isPinned,
+                            gender=friendsItem?.gender,
+                            nickName=friendsItem?.nickName,
+                            fullName=friendsItem?.fullName,
+                            name=friendsItem?.name,
+                            emailId=friendsItem?.emailId,
+                            userName=friendsItem?.userName,
+                            profileimage=friendsItem?.profileimage,
+                            businessprofile = friendsItem?.businessprofile,
+                            areaRange = friendsItem?.areaRange,
+                            createdAt=friendsItem?.createdAt,
+                            isBusinessProfileCreated=friendsItem?.isBusinessProfileCreated,
+                            hobbies = friendsItem?.hobbies,
+                            contactNo=friendsItem?.contactNo,
+                            dob=friendsItem?.dob,
+                            description=friendsItem?.description,
+                            socialMediaLinks =friendsItem?.socialMediaLinks,
+                            id=friendsItem?.id,
+                            interestedin=friendsItem?.interestedin,
+                            status=friendsItem?.status,
+                            updatedAt=friendsItem?.updatedAt,
+                            timestamp=friendsItem?.timestamp,
+                            isNewMessage=friendsItem?.isNewMessage,
+                            messageSize=friendsItem?.messageSize,
+                            channelID=friendsItem?.channelID,
+                            online=friendsItem?.online,
+                            members  =friendsItem?.members ,
+                            unreadMessageCount =friendsItem?.unreadMessageCount,
+                        )
+                        val jsonItem = Gson().toJson(addMemberList)
+                        intent.putExtra("groupList", jsonItem)
+                        intent.putExtra("callId", callId)
+                        startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
+                        isVideoGroupCalling = false
+                        isCallAccpeted = true
+
+                        Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
+
+                    }
 
                 }
 
@@ -700,55 +761,6 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
             }
 
-            if (isVideoGroupCalling){
-
-                val intent = Intent(this@GroupChatActivity, AppGroupVideoCallingActivity::class.java)
-                val addMemberList = GroupListItems(
-                    aboutUs= friendsItem?.aboutUs,
-                    isSender=friendsItem?.isSender,
-                    isPinned=friendsItem?.isPinned,
-                    gender=friendsItem?.gender,
-                    nickName=friendsItem?.nickName,
-                    fullName=friendsItem?.fullName,
-                    name=friendsItem?.name,
-                    emailId=friendsItem?.emailId,
-                    userName=friendsItem?.userName,
-                    profileimage=friendsItem?.profileimage,
-                    businessprofile = friendsItem?.businessprofile,
-                    areaRange = friendsItem?.areaRange,
-                    createdAt=friendsItem?.createdAt,
-                    isBusinessProfileCreated=friendsItem?.isBusinessProfileCreated,
-                    hobbies = friendsItem?.hobbies,
-                    contactNo=friendsItem?.contactNo,
-                    dob=friendsItem?.dob,
-                    description=friendsItem?.description,
-                    socialMediaLinks =friendsItem?.socialMediaLinks,
-                    id=friendsItem?.id,
-                    interestedin=friendsItem?.interestedin,
-                    status=friendsItem?.status,
-                    updatedAt=friendsItem?.updatedAt,
-                    timestamp=friendsItem?.timestamp,
-                    isNewMessage=friendsItem?.isNewMessage,
-                    messageSize=friendsItem?.messageSize,
-                    channelID=friendsItem?.channelID,
-                    online=friendsItem?.online,
-                    members  =friendsItem?.members ,
-                    unreadMessageCount =friendsItem?.unreadMessageCount,
-                )
-                val jsonItem = Gson().toJson(addMemberList)
-                intent.putExtra("groupList", jsonItem)
-                intent.putExtra("callId", callId)
-                startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
-                isVideoGroupCalling = false
-                isCallAccpeted = true
-
-                Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
-
-            }
-
-            if (isAudioGroupCalling){
-
-            }
 
         }?.on("endCall") { args ->
 
@@ -1096,7 +1108,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
         Glide.with(this@GroupChatActivity)
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
-            .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.videocallImage)
+            .placeholder(R.drawable.ic_user).into(upComingCallBinding.videocallImage)
 
         upComingCallBinding.llVideoCall.visibility = View.GONE
         upComingCallBinding.llMute.visibility = View.GONE
@@ -1126,7 +1138,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
         Glide.with(this@GroupChatActivity)
             .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
-            .placeholder(R.drawable.ic_user_img).into(upComingCallBinding.videocallImage)
+            .placeholder(R.drawable.ic_user).into(upComingCallBinding.videocallImage)
 
         upComingCallBinding.llVideoCall.visibility = View.GONE
         upComingCallBinding.llMute.visibility = View.GONE
