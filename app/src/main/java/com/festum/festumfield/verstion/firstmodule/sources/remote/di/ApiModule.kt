@@ -21,8 +21,10 @@ import javax.inject.Singleton
 class ApiModule {
 
     companion object {
-        var BASE_URL_RESOURCES = "https://api.festumfield.com/apis/v1/"
-        var BASE_URL_SOCKET = "https://api.festumfield.com"
+        /*var BASE_URL_RESOURCES = "https://api.festumfield.com/apis/v1/"
+        var BASE_URL_SOCKET = "https://api.festumfield.com"*/
+        var BASE_URL_RESOURCES = "https://api.fefield.com/apis/v1/"
+        var BASE_URL_SOCKET = "https://api.fefield.com"
     }
 
     /*

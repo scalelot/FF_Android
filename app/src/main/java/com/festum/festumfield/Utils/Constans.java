@@ -8,7 +8,7 @@ public class Constans {
 
     public static String Display_Image_URL = "https://festumfield.s3.ap-south-1.amazonaws.com/";
 
-    public static String BASE_URL = "https://api.festumfield.com/apis/v1/";
+    public static String BASE_URL = "https://api.fefield.com/apis/v1/";
 
     //Login
     public static String send_otp = BASE_URL + "register/sendotp";
