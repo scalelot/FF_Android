@@ -26,5 +26,6 @@ public class Const {
     public static ArrayList<String> taglist = new ArrayList<>();
     public static String tag_str = null;
 
+    public static Boolean isUpdate = false;
 
 }

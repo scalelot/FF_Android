@@ -459,4 +459,9 @@
     <string name="turn_on_your_location">Turn on your location. \nFestum Field is not find your location, we highly recommend turning on your device\'s location services.</string>
     <string name="country_code">+91</string>
 
+    <string name="application_permission_message">We hope you\'re enjoying the seamless experience with our app. To make the most of your Festum Field App, we require access to your permissions, some features may be limited, and you won\'t be able to fully explore the app\'s potential.</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="attention">Attention</string>
+    <string name="festum_user">Festum User</string>
+
 </resources>

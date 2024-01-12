@@ -30,6 +30,7 @@ import com.festum.festumfield.Adapter.PromotionNotificationAdapter;
 import com.festum.festumfield.Model.Notification.NotificationDetailsModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
+import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.gson.Gson;
@@ -74,7 +75,6 @@ public class RunningPromotionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CreateNotificationActivity.class));
-                getActivity().finish();
             }
         });
 
@@ -184,6 +184,16 @@ public class RunningPromotionFragment extends Fragment {
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Const.isUpdate){
+            arraylist.clear();
+            getNotificationItem(page, limit, searchData, "", "title", 1);
+            Const.isUpdate = false;
         }
     }
 }

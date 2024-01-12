@@ -19,6 +19,9 @@ public class RequestActivity extends BaseActivity {
     TextView friend_request, send_request, select;
     ColorStateList def;
 
+    Boolean isFriendRequest = false;
+    Boolean  isSendRequest = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,21 +46,33 @@ public class RequestActivity extends BaseActivity {
         friend_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                friend_request.setTextColor(getResources().getColor(R.color.app_color));
-                send_request.setTextColor(def);
-                select.animate().x(0).setDuration(100);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new FriendRequestFragment()).commit();
+
+                if (!isFriendRequest){
+                    friend_request.setTextColor(getResources().getColor(R.color.app_color));
+                    send_request.setTextColor(def);
+                    select.animate().x(0).setDuration(100);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new FriendRequestFragment()).commit();
+                    isFriendRequest = true;
+                    isSendRequest = false;
+                }
+
             }
         });
 
         send_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                friend_request.setTextColor(def);
-                send_request.setTextColor(getResources().getColor(R.color.app_color));
-                int size = send_request.getWidth();
-                select.animate().x(size).setDuration(100);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new SendRequestFragment()).commit();
+
+                if (!isSendRequest){
+                    friend_request.setTextColor(def);
+                    send_request.setTextColor(getResources().getColor(R.color.app_color));
+                    int size = send_request.getWidth();
+                    select.animate().x(size).setDuration(100);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fram_layout, new SendRequestFragment()).commit();
+                    isFriendRequest = false;
+                    isSendRequest = true;
+                }
+
             }
         });
     }
@@ -65,6 +80,7 @@ public class RequestActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         /*startActivity(new Intent(RequestActivity.this, MainActivity.class));*/
+        super.onBackPressed();
         finish();
     }
 }

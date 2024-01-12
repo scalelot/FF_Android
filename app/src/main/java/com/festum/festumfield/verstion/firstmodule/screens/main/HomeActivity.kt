@@ -97,8 +97,12 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
     private var groupId: String = ""
     private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
-    private var isLocationChecked = false
-    private var isLocationItemChecked = false
+
+    private var isChat = false
+    private var isGroup = false
+    private var isFindFriend = false
+    private var isCall = false
+    private var isContact = false
 
     private var previousItemName = ""
 
@@ -407,44 +411,96 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
         when (item.itemId) {
             R.id.chat ->
 
-                if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrBlank()) {
-                    Handler(Looper.getMainLooper()).postDelayed({
+                if (!isChat) {
 
-                        pushFragment(FriendsListFragment(this, fromId))
-                        fromId = ""
-                        toId = ""
+                    if (fromId != null && fromId?.isNotEmpty() == true && toId != null && toId?.isNotEmpty() == true && callId.isNullOrBlank()) {
+                        Handler(Looper.getMainLooper()).postDelayed({
 
-                    }, 700)
-                } else {
-                    pushFragment(FriendsListFragment(this, ""))
+                            pushFragment(FriendsListFragment(this, fromId))
+                            fromId = ""
+                            toId = ""
+
+                        }, 700)
+                    } else {
+                        pushFragment(FriendsListFragment(this, ""))
+                    }
+
+                    isChat = true
+                    isGroup = false
+                    isFindFriend = false
+                    isCall = false
+                    isContact = false
                 }
 
             R.id.group -> {
-                pushFragment(GroupsListFragment(this, ""))
+
+                if (!isGroup) {
+
+                    pushFragment(GroupsListFragment(this, ""))
+
+                    isChat = false
+                    isGroup = true
+                    isFindFriend = false
+                    isCall = false
+                    isContact = false
+
+                }
+
             }
 
             R.id.location -> {
 
-                if (get().userName.isBlank()) {
-                    /* For create profile */
-                    createProfileDialog()
-                } else {
-                    onLocationCheck()
+                if (!isFindFriend) {
+
+                    if (get().userName.isBlank()) {
+                        /* For create profile */
+                        createProfileDialog()
+                    } else {
+                        onLocationCheck()
+                    }
+
+                    isChat = false
+                    isGroup = false
+                    isFindFriend = true
+                    isCall = false
+                    isContact = false
 
                 }
 
             }
 
             R.id.call ->
-                pushFragment(CallHistoryFragment())
+
+                if (!isCall) {
+
+                    pushFragment(CallHistoryFragment())
+
+                    isChat = false
+                    isGroup = false
+                    isFindFriend = false
+                    isCall = true
+                    isContact = false
+
+                }
+
 
             R.id.contact ->
-                pushFragment(PhoneContactFragment())
 
+                if (!isContact) {
+
+                    pushFragment(PhoneContactFragment())
+
+                    isChat = false
+                    isGroup = false
+                    isFindFriend = false
+                    isCall = false
+                    isContact = true
+
+                }
 
         }
 
-        if (item.itemId != R.id.location){
+        if (item.itemId != R.id.location) {
 
             previousItemName = item.title.toString()
 
@@ -1270,17 +1326,20 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                 .setMessage(getString(R.string.turn_on_your_location))
                 .setPositiveButton("OK") { dialogInterface, i ->
 
-                    when(previousItemName){
+                    when (previousItemName) {
 
                         "Chats" -> {
                             binding.bottomNavigationView.selectedItemId = R.id.chat
                         }
+
                         "Groups" -> {
                             binding.bottomNavigationView.selectedItemId = R.id.group
                         }
+
                         "Calls" -> {
                             binding.bottomNavigationView.selectedItemId = R.id.call
                         }
+
                         "Contact List" -> {
                             binding.bottomNavigationView.selectedItemId = R.id.contact
                         }

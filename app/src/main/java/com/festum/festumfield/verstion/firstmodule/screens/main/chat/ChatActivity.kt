@@ -158,27 +158,18 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
         }
 
-        if (receiverUserName.isNotEmpty() && receiverUserId.isNotEmpty()) {
+        if (friendsItem?.fullName.isNullOrEmpty()){
+            binding.userName.text = getString(R.string.festum_user)
+        }else{
             binding.userName.text = receiverUserName
+        }
+
+        if ( receiverUserId.isNotEmpty()) {
+
             viewModel.getChatMessageHistory(receiverUserId, 1, Int.MAX_VALUE)
         }
 
-        if (friendsItem?.members != null) {
 
-            val groupMembers = friendsItem?.members as? List<MembersList>
-
-            if (groupMembers != null) {
-
-                binding.userName.text = friendsItem?.name
-
-                for (i in groupMembers.indices) {
-                    val userNamesList = groupMembers.mapNotNull { it.membersList?.fullName }
-                    val commaSeparatedUserNames = userNamesList.joinToString(", ")
-                    binding.textOnline.text = commaSeparatedUserNames
-                }
-            }
-
-        }
 
         binding.rlUser.setOnClickListener {
 
@@ -1077,7 +1068,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         upComingCallBinding.llVideoCall.visibility = View.GONE
         upComingCallBinding.llMute.visibility = View.GONE
 
-        upComingCallBinding.videocallUsername.text = upComingCallUser?.fullName
+        upComingCallBinding.videocallUsername.text = upComingCallUser?.fullName ?: getString(R.string.festum_user)
 
         upComingCallBinding.llCallCut.setOnClickListener {
 

@@ -1,5 +1,7 @@
 package com.festum.festumfield.verstion.firstmodule.screens.fragment
 
+import android.R.attr
+import android.R.attr.phoneNumber
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
@@ -26,6 +28,7 @@ class PhoneContactFragment : BaseFragment<ChatViewModel>() {
 
     private val contactArrayList = arrayListOf<PhoneContactList?>()
     private val phonebookList = arrayListOf<PhoneContactList?>()
+    private val removeDuplicatesList = arrayListOf<PhoneContactList?>()
 
     private val nameList = arrayListOf<String>()
     private val isFFUser = arrayListOf<Boolean>()
@@ -104,17 +107,22 @@ class PhoneContactFragment : BaseFragment<ChatViewModel>() {
 
                 phonebookList.addAll(reorderedList)
 
+
+
             }, 500)
 
 
             Handler(Looper.getMainLooper()).postDelayed({
 
-            contactListAdapter = ContactListAdapter(requireActivity(), phonebookList)
-            binding.recyclerviewContact.adapter = contactListAdapter
+                contactListAdapter = ContactListAdapter(requireActivity(), phonebookList )
 
-            binding.idPBLoading.visibility = View.GONE
+                binding.recyclerviewContact.adapter = contactListAdapter
+
+                binding.idPBLoading.visibility = View.GONE
 
             }, 1000)
+
+
 
         }
 
@@ -122,7 +130,10 @@ class PhoneContactFragment : BaseFragment<ChatViewModel>() {
 
     @SuppressLint("Range")
     private fun getContacts(): ArrayList<PhoneContactList?> {
+
         val contactsList = ArrayList<PhoneContactList?>()
+        val mobileNoSet = HashSet<String>()
+
         val projection = arrayOf(
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER
@@ -143,9 +154,13 @@ class PhoneContactFragment : BaseFragment<ChatViewModel>() {
                 val number =
                     it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
-                val contact = PhoneContactList(name = name, number = number)
-                contactsList.add(contact)
-                nameList.add(name)
+                if (!mobileNoSet.contains(name)) {
+
+                    contactsList.add(PhoneContactList(name = name, number = number))
+                    mobileNoSet.add(name)
+                    nameList.add(name)
+
+                }
 
 
             }
@@ -179,5 +194,11 @@ class PhoneContactFragment : BaseFragment<ChatViewModel>() {
         }
 
     }
+
+    /*private fun removeDuplicateContacts(contactsList: ArrayList<PhoneContactList?>): ArrayList<PhoneContactList?> {
+        return contactsList
+            .distinctBy { it?.name to it?.number }
+            .toArrayList()
+    }*/
 
 }

@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
@@ -18,6 +19,7 @@ import com.festum.festumfield.R
 import com.festum.festumfield.databinding.ActivityApplicationPermissionBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.Permissions
 import com.festum.festumfield.verstion.firstmodule.utils.LocationUtils
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -72,7 +74,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
         binding.btnVerify.setOnClickListener {
 
-            ActivityCompat.requestPermissions(this@ApplicationPermissionActivity, permissions(), 1)
+            dexterPermission()
 
         }
 
@@ -178,4 +180,117 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
             }
             .show()
     }
+
+    private fun dexterPermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            Dexter.withActivity(this)
+                .withPermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(multiplePermissionsReport: MultiplePermissionsReport) {
+
+                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+
+                            startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
+
+                        }  else {
+                            onPermissionDialog()
+                        }
+
+                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
+                            onPermissionDialog()
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                        p1: PermissionToken
+                    ) {
+                        p1.continuePermissionRequest()
+                    }
+
+                }).withErrorListener { error ->
+                    // we are displaying a toast message for error message.
+                    Toast.makeText(applicationContext, "Error occurred! ", Toast.LENGTH_SHORT)
+                        .show()
+                } // below line is use to run the permissions on same thread and to check the permissions
+                .onSameThread().check()
+        } else {
+            Dexter.withActivity(this)
+                .withPermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(multiplePermissionsReport: MultiplePermissionsReport) {
+
+                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+
+                            startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
+
+                        } else {
+
+                            onPermissionDialog()
+
+                        }
+
+                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
+                            onPermissionDialog()
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                        p1: PermissionToken
+                    ) {
+                        p1.continuePermissionRequest()
+                    }
+
+                }).withErrorListener { error ->
+                    // we are displaying a toast message for error message.
+                    Log.e("TAG", "dexterPermission:------ "  + error.name )
+                } // below line is use to run the permissions on same thread and to check the permissions
+                .onSameThread().check()
+        }
+
+    }
+
+    private fun onPermissionDialog() {
+
+        MaterialAlertDialogBuilder(this, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+            .setMessage(getString(R.string.application_permission_message))
+            .setPositiveButton(getString(R.string.go_to_settings)) { dialog: DialogInterface, which: Int ->
+
+                dialog.dismiss()
+
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface, which: Int -> dialog.dismiss() }.show()
+
+
+    }
+
 }

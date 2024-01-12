@@ -91,7 +91,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                 .load(Constans.Display_Image_URL + upComingGroupCallUser?.profileimage)
                 .placeholder(R.drawable.ic_user).into(binding.upcomingcallUserImg)
 
-            binding.upcomingUsername.text = name
+            binding.upcomingUsername.text = name ?: getString(R.string.festum_user)
 
         } else{
 
@@ -107,7 +107,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                 .load(Constans.Display_Image_URL + upComingCallUser?.profileimage)
                 .placeholder(R.drawable.ic_user).into(binding.upcomingcallUserImg)
 
-            binding.upcomingUsername.text = name
+            binding.upcomingUsername.text = name ?: getString(R.string.festum_user)
 
         }
 

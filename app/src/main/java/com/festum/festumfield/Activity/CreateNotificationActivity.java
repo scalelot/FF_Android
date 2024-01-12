@@ -39,6 +39,7 @@ import com.festum.festumfield.Model.Product.ProductImagesModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.RealPathUtil;
+import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
@@ -250,6 +251,7 @@ public class CreateNotificationActivity extends BaseActivity {
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
                     Toast.makeText(CreateNotificationActivity.this, "Data add successfully", Toast.LENGTH_SHORT).show();
 
+                    Const.isUpdate = true;
                     onBackPressed();
 
                 }
@@ -302,7 +304,7 @@ public class CreateNotificationActivity extends BaseActivity {
                     CreateNotificationModel createNotificationModel = new Gson().fromJson(response.toString(), CreateNotificationModel.class);
 
                     startActivity(new Intent(CreateNotificationActivity.this, PromotionActivity.class));
-                    finish();
+
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
@@ -378,7 +380,7 @@ public class CreateNotificationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(CreateNotificationActivity.this, PromotionActivity.class));
+
         finish();
     }
 }

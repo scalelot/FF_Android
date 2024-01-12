@@ -68,7 +68,6 @@ public class PromotionNotificationAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
                     v.getContext().startActivity(new Intent(activity, PromotionPlanActivity.class));
-                    activity.finish();
                 }
             });
 

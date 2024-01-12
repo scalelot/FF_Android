@@ -188,7 +188,7 @@ class ChatUserActivity : BaseActivity<FriendsListViewModel>(), ProductItemInterf
                     .placeholder(R.drawable.ic_user)
                     .into(binding.userProfileImage)
 
-                binding.chatName.text = getFriendData.fullName ?: ""
+                binding.chatName.text = getFriendData.fullName ?: getString(R.string.festum_user)
                 binding.uNickname.text = getFriendData.nickName ?: ""
 
                 if (getFriendData.socialMediaLinks != null) {

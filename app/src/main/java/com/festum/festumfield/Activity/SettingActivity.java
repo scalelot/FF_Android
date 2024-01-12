@@ -111,6 +111,13 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
+        noti_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+               
+            }
+        });
+
         chat_backup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,6 +250,7 @@ public class SettingActivity extends BaseActivity {
         ll_sample_txt = dialog.findViewById(R.id.ll_sample_txt);
         txt_email_id = dialog.findViewById(R.id.txt_email_id);
         AppCompatButton dialog_no = dialog.findViewById(R.id.dialog_no);
+        AppCompatButton dialogYes = dialog.findViewById(R.id.dialog_yes);
 
         btn_select_file.setOnClickListener(new View.OnClickListener() {
             @Override
