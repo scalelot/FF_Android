@@ -1,5 +1,6 @@
 package com.festum.festumfield.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.Adapter.FriendsRequestAdapter;
+import com.festum.festumfield.Model.Interface.FriendsRequestInterface;
 import com.festum.festumfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
@@ -50,6 +52,7 @@ public class FriendRequestFragment extends Fragment {
     ProgressBar idPBLoading;
     ArrayList<ReceiveFriendsRegisterModel> receivefriendrequestsModelArrayList = new ArrayList<>();
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_request, container, false);
@@ -87,6 +90,8 @@ public class FriendRequestFragment extends Fragment {
             }
         });
 
+
+
         return view;
     }
 
@@ -108,6 +113,7 @@ public class FriendRequestFragment extends Fragment {
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.all_recived_friend_request, jsonObject, new Response.Listener<JSONObject>() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onResponse(JSONObject response) {
                     idPBLoading.setVisibility(View.GONE);
@@ -132,7 +138,18 @@ public class FriendRequestFragment extends Fragment {
                             nestedScrollView.setVisibility(View.GONE);
                         }
 
-                        friendsRequestAdapter = new FriendsRequestAdapter(FriendRequestFragment.this, receivefriendrequestsModelArrayList);
+                        friendsRequestAdapter = new FriendsRequestAdapter(FriendRequestFragment.this, receivefriendrequestsModelArrayList, new FriendsRequestInterface() {
+                            @Override
+                            public void setIsResponse(boolean isResponse) {
+
+                                if (isResponse){
+                                    receivefriendrequestsModelArrayList.clear();
+                                    getFriendsRequest(page, limit, searchData);
+                                }
+
+                            }
+                        });
+
                         recycle_request.setAdapter(friendsRequestAdapter);
                         friendsRequestAdapter.notifyDataSetChanged();
 
@@ -164,4 +181,6 @@ public class FriendRequestFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+
 }

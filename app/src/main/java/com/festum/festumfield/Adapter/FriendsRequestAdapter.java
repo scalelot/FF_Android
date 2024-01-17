@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.festum.festumfield.Fragment.FriendRequestFragment;
+import com.festum.festumfield.Model.Interface.FriendsRequestInterface;
 import com.festum.festumfield.Model.ReceiveFriendsList.ReceiveFriendsRegisterModel;
 import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
@@ -55,6 +56,8 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
 
     Fragment fragment;
     ArrayList<ReceiveFriendsRegisterModel> receiveFriendsRequestModels;
+
+    FriendsRequestInterface requestInterface;
     LayoutInflater inflater;
     String freindsIds;
     String status;
@@ -62,9 +65,12 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
     boolean nameData, numData, emailData, dobData, genderData, mediaData, videoData, audioData;
     SwitchButton name_switch, number_switch, email_switch, dob_switch, gender_switch, media_switch, video_switch, audio_switch;
 
-    public FriendsRequestAdapter(FriendRequestFragment friendRequestFragment, ArrayList<ReceiveFriendsRegisterModel> receivefriendrequestsModelArrayList) {
+
+
+    public FriendsRequestAdapter(FriendRequestFragment friendRequestFragment, ArrayList<ReceiveFriendsRegisterModel> receivefriendrequestsModelArrayList, FriendsRequestInterface requestInterface) {
         this.fragment = friendRequestFragment;
         this.receiveFriendsRequestModels = receivefriendrequestsModelArrayList;
+        this.requestInterface = requestInterface;
         inflater = LayoutInflater.from(fragment.getContext());
     }
 
@@ -364,12 +370,19 @@ public class FriendsRequestAdapter extends RecyclerView.Adapter<FriendsRequestAd
         JsonObjectRequest jsonObjectRequest = null;
         try {
             jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constans.response_friend_request, js, new Response.Listener<JSONObject>() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(fragment.getContext());
                     Log.e("SetFriendRequest=>", response.toString());
 
-                    FriendsRequestAdapter.this.notifyDataSetChanged();
+                    try {
+                        boolean IsSuccess = response.getBoolean("IsSuccess");
+                        requestInterface.setIsResponse(IsSuccess);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
 
                 }
             }, new Response.ErrorListener() {

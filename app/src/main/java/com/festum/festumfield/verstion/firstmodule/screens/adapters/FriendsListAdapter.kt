@@ -75,6 +75,19 @@ class FriendsListAdapter(
                 binding.chatPin.visibility = View.INVISIBLE
             }
 
+            if (item.unreadMessageCount == 0) {
+                binding.txtChatCount.visibility = View.GONE
+            } else {
+                binding.txtChatCount.text = item.unreadMessageCount.toString()
+                binding.txtMessage.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.colorAccent
+                    )
+                )
+                binding.txtChatCount.visibility = View.VISIBLE
+            }
+
             if (item.isNewMessage == true) {
                 binding.txtMessage.setTextColor(
                     ContextCompat.getColor(
@@ -85,27 +98,13 @@ class FriendsListAdapter(
                 binding.txtChatCount.visibility = View.VISIBLE
                 binding.txtChatCount.text = item.unreadMessageCount.toString()
 
-                if (item.isPinned == true) {
-                    binding.chatPin.visibility = View.INVISIBLE
-                }
-
             } else {
+
                 binding.txtMessage.setTextColor(ContextCompat.getColor(context, R.color.grey));
 
-                if (item.unreadMessageCount == 0) {
-                    binding.txtChatCount.visibility = View.GONE
-                } else {
-                    binding.txtChatCount.text = item.unreadMessageCount.toString()
-                    binding.txtMessage.setTextColor(
-                        ContextCompat.getColor(
-                            context,
-                            R.color.colorAccent
-                        )
-                    )
-                    binding.txtChatCount.visibility = View.VISIBLE
-                }
-
             }
+
+
 
 
             if (item.online == true) {
@@ -227,7 +226,7 @@ class FriendsListAdapter(
                     binding.ivSelect.visibility = View.VISIBLE
                     if (checkedPosition != absoluteAdapterPosition) {
 
-                        notifyItemChanged(checkedPosition)
+                        notifyItemChanged(checkedPosition,item)
                         checkedPosition = absoluteAdapterPosition
 
                     }
@@ -495,7 +494,8 @@ class FriendsListAdapter(
             profileimage = friendsListItems?.profileimage,
             id = friendsListItems?.id,
             isPinned = pinSet,
-            members = friendsListItems?.members
+            members = friendsListItems?.members,
+            unreadMessageCount = friendsListItems?.unreadMessageCount
         )
 
         if (friendsListItems != null) {
