@@ -28,6 +28,7 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseService extends FirebaseMessagingService {
 
     String channelId;
+    boolean isNotificationOn;
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -39,39 +40,52 @@ public class MyFirebaseService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
         try {
-            channelId = AppPreferencesDelegates.Companion.get().getChannelId();
+
             Log.e("onMessageReceived:=", message.getData().toString());
-            if (message.getNotification().getTitle() != null) {
-                String title = message.getNotification().getTitle();
-                String txtMessage = message.getData().get("text");
-                String imageUri = message.getData().get("media_path");
-                String productName = message.getData().get("product_name");
-                String productImg = message.getData().get("product_image");
 
-                NotificationChannel channel = new NotificationChannel(channelId, "Message Notification", NotificationManager.IMPORTANCE_HIGH);
-                channel.enableLights(true);
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.createNotificationChannel(channel);
+            if (AppPreferencesDelegates.Companion.get().isNotificationOn()) {
 
-                NotificationCompat.Builder notification = null;
-                if (!productImg.isEmpty()) {
-                    NotificationCompat.BigPictureStyle pictureStyle1 = new NotificationCompat.BigPictureStyle();
-                    pictureStyle1.setBigContentTitle(title);
-                    pictureStyle1.bigPicture(Glide.with(this).asBitmap().load(Constans.Display_Image_URL + productImg).submit().get());
+                if (message.getNotification().getTitle() != null) {
+                    String title = message.getNotification().getTitle();
+                    String txtMessage = message.getData().get("text");
+                    String imageUri = message.getData().get("media_path");
+                    String productName = message.getData().get("product_name");
+                    String productImg = message.getData().get("product_image");
 
-                    notification = new NotificationCompat.Builder(this, channelId).setContentTitle(productName).setContentText(txtMessage).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true).setStyle(pictureStyle1);
-                } else if (!imageUri.isEmpty()) {
-                    NotificationCompat.BigPictureStyle pictureStyle = new NotificationCompat.BigPictureStyle();
-                    pictureStyle.setBigContentTitle(title);
-                    pictureStyle.bigPicture(Glide.with(this).asBitmap().load(imageUri).submit().get());
+                    NotificationChannel channel = new NotificationChannel(channelId, "Message Notification", NotificationManager.IMPORTANCE_HIGH);
+                    channel.enableLights(true);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.createNotificationChannel(channel);
 
-                    notification = new NotificationCompat.Builder(this, channelId).setContentTitle(title).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true).setStyle(pictureStyle);
-                } else {
-                    notification = new NotificationCompat.Builder(this, channelId).setContentTitle(title).setContentText(txtMessage).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true);
+                    NotificationCompat.Builder notification = null;
+                    if (!productImg.isEmpty()) {
+                        NotificationCompat.BigPictureStyle pictureStyle1 = new NotificationCompat.BigPictureStyle();
+                        pictureStyle1.setBigContentTitle(title);
+                        pictureStyle1.bigPicture(Glide.with(this).asBitmap().load(Constans.Display_Image_URL + productImg).submit().get());
+
+                        notification = new NotificationCompat.Builder(this, channelId).setContentTitle(productName).setContentText(txtMessage).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true).setStyle(pictureStyle1);
+                    } else if (!imageUri.isEmpty()) {
+                        NotificationCompat.BigPictureStyle pictureStyle = new NotificationCompat.BigPictureStyle();
+                        pictureStyle.setBigContentTitle(title);
+                        pictureStyle.bigPicture(Glide.with(this).asBitmap().load(imageUri).submit().get());
+
+                        notification = new NotificationCompat.Builder(this, channelId).setContentTitle(title).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true).setStyle(pictureStyle);
+                    } else {
+                        notification = new NotificationCompat.Builder(this, channelId).setContentTitle(title).setContentText(txtMessage).setSmallIcon(R.drawable.noti_icon).setAutoCancel(true);
+                    }
+
+
+                    manager.notify(1, notification.build());
+
+                    Log.e("onMessageReceived:====", "Notification Allowed");
+
+                }else {
+
+                    Log.e("onMessageReceived:====", "Notification Not Show");
+
                 }
 
-                manager.notify(1, notification.build());
-                Log.e("onMessageReceived:====", "Error Notification Show");
+
             } else {
                 Log.e("onMessageReceived:=", "Error Notification Show");
             }

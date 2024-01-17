@@ -111,10 +111,12 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
+        noti_switch.setChecked(AppPreferencesDelegates.Companion.get().isNotificationOn());
+
         noti_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-               
+                AppPreferencesDelegates.Companion.get().setNotificationOn(compoundButton.isChecked());
             }
         });
 

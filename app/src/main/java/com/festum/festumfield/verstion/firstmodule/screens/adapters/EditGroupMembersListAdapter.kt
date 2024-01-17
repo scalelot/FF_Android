@@ -97,7 +97,7 @@ class EditGroupMembersListAdapter(
 
     }
 
-    fun updateOffline(friendsListItems: GroupMembersListItems?){
+    fun removeMember(friendsListItems: GroupMembersListItems?){
 
         val currentItemIndex = friendsList.indexOf(friendsListItems)
         notifyItemRemoved(currentItemIndex)

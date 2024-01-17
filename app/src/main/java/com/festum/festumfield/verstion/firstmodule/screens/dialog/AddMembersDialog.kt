@@ -206,12 +206,11 @@ class AddMembersDialog(
 
         val filteredList = ArrayList<FriendsListItems>()
 
-        if (membersListItems.isNotEmpty()) {
+        if (addMembersListItems.isNotEmpty()) {
 
-            membersListItems.forEach { item ->
+            addMembersListItems.forEach { item ->
                 if (item.fullName?.lowercase(Locale.getDefault())
-                        ?.contains(text.lowercase(Locale.getDefault())) == true
-                ) {
+                        ?.contains(text.lowercase(Locale.getDefault())) == true) {
                     filteredList.add(item)
                 }
             }

@@ -19,6 +19,7 @@ class AppPreferencesDelegates private constructor() {
     var isSocketId by SocketDelegate()
     var phoneNumber by PhoneNumberDelegate()
     var emailAddress by EmailAddressDelegate()
+    var isNotificationOn by IsNotificationOnDelegate()
 
     companion object {
         private var INSTANCE: AppPreferencesDelegates? = null

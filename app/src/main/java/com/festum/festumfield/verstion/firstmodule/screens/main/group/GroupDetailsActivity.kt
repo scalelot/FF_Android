@@ -70,6 +70,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
     private lateinit var binding: ActivityGroupDetailsBinding
     private lateinit var groupOneItem: GroupMembersListItems
     private lateinit var addMemberList: GroupMembersListItems
+    private lateinit var removeMemberItem: GroupMembersListItems
     private var friendsListAdapter: EditGroupMembersListAdapter? = null
     private val groupMembers = arrayListOf<FriendsListItems>()
     private val addGroupMembers = arrayListOf<GroupMembersListItems>()
@@ -197,27 +198,12 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         }
 
-        viewModel.removeMembersData.observe(this) {
-
-            if (it != null) {
-
-                friendsListAdapter?.updateOffline(it)
-
-            } else {
-
-                Toast.makeText(this@GroupDetailsActivity, "Something get wrong", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-        }
-
 
         viewModel.groupsOneData.observe(this) { groupsOneData ->
 
-
-            if (lifecycle.currentState == Lifecycle.State.RESUMED) {
-
                 if (groupsOneData != null) {
+
+                    addGroupMembers.clear()
 
                     addMemberList = GroupMembersListItems(
                         aboutUs = groupsOneData.aboutUs,
@@ -286,9 +272,11 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
                     if (addGroupMembers.size < 5){
                         binding.txtShow.visibility = View.GONE
+                    }else{
+                        binding.txtShow.visibility = View.VISIBLE
                     }
 
-                }
+
 
             }
 
@@ -296,8 +284,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
 
         viewModel.groupPermissionData.observe(this) { groupPermissionData ->
 
-
-            if (lifecycle.currentState == Lifecycle.State.RESUMED) {
 
                 if (groupPermissionData != null) {
 
@@ -335,8 +321,26 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
                         binding.txtShow.visibility = View.GONE
                     }
 
+
+
+            }
+
+        }
+
+        viewModel.removeMembersData.observe(this) {
+
+            if (it != null) {
+
+                friendsListAdapter?.removeMember(removeMemberItem)
+                if (addGroupMembers.size < 5){
+                    binding.txtShow.visibility = View.GONE
+                }else{
+                    binding.txtShow.visibility = View.VISIBLE
                 }
 
+            } else {
+
+                Toast.makeText(this@GroupDetailsActivity, "Something get wrong", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -518,6 +522,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
         removeMembersList.remove(items.id)
         removeUserID = items.id.toString()
 
+        removeMemberItem = items
         viewModel.removeMembers(removeMembers)
 
     }
@@ -528,7 +533,7 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
         addMembersList: ArrayList<String>
     ) {
 
-        addGroupMembers.clear()
+        /*addGroupMembers.add()*/
         removeMembersList.clear()
 
         removeMembersList.addAll(addMembersList)
