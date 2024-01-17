@@ -666,17 +666,13 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
 
             val data = args[0] as JSONObject
 
-            /*val message = Message()
-            message.what = 21
-            ChatUserActivity.callingHandler?.sendMessage(message)*/
-
-            Log.e("TAG", "webrtcMessage:---+++++-- $data")
-
             if (isVideoCalling) {
+
                 val i = Intent(this@ChatActivity, AppVideoCallingActivity::class.java)
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem?.fullName)
+                i.putExtra("profileImage", friendsItem?.profileimage)
                 i.putExtra("callId", callId)
                 startActivityForResult(i, IS_VIDEO_CALLING)
                 isVideoCalling = false
@@ -692,6 +688,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteChannelId", friendsItem?.id?.lowercase())
                 i.putExtra("remoteUser", friendsItem?.fullName)
+                i.putExtra("profileImage", friendsItem?.profileimage)
                 i.putExtra("callId", callId)
                 startActivityForResult(i, IS_AUDIO_CALLING)
                 isAudioCalling = false
@@ -1128,11 +1125,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if(friendsItem?.members == null){
-                                onIndividualVideoCall()
-                            }else{
-                                onIndividualGroupVideoCall()
-                            }
+                            onIndividualVideoCall()
 
                         } else {
                             AppPermissionDialog.showPermission(
@@ -1162,11 +1155,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
                     override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                         if (permission?.areAllPermissionsGranted() == true) {
 
-                            if(friendsItem?.members == null){
-                                onIndividualVideoCall()
-                            }else{
-                                onIndividualGroupVideoCall()
-                            }
+                            onIndividualVideoCall()
 
                         } else {
                             AppPermissionDialog.showPermission(

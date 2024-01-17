@@ -276,8 +276,6 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
                         binding.txtShow.visibility = View.VISIBLE
                     }
 
-
-
             }
 
         }
@@ -285,7 +283,10 @@ class GroupDetailsActivity : BaseActivity<FriendsListViewModel>(), GroupMembersI
         viewModel.groupPermissionData.observe(this) { groupPermissionData ->
 
 
+
                 if (groupPermissionData != null) {
+
+                    addGroupMembers.clear()
 
                     addMemberList = groupPermissionData
 

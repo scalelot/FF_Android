@@ -19,7 +19,7 @@
         android:layout_height="@dimen/sp_120"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/sp_136"
-        android:src="@drawable/ic_user_img" />
+        android:src="@drawable/ic_user" />
 
     <TextView
         android:id="@+id/videocall_username"
