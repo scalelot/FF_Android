@@ -40,5 +40,8 @@ data class DocsItem(
     val status: String? = null,
 
     @field:SerializedName("updatedAt")
-    val updatedAt: String? = null
+    val updatedAt: String? = null,
+
+    @field:SerializedName("callid")
+    val callId: CallId? = null
 ) : Serializable ,ListItem(null)

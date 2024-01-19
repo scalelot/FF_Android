@@ -2,55 +2,41 @@ package com.festum.festumfield.verstion.firstmodule.screens.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
-import com.bumptech.glide.request.RequestOptions
-import com.festum.festumfield.MyApplication
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
+import com.festum.festumfield.databinding.ItemSendCallBinding
 import com.festum.festumfield.databinding.ItemSendProductBinding
 import com.festum.festumfield.databinding.ItemSentImageBinding
 import com.festum.festumfield.databinding.ItemSentMessageBinding
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Content
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.DocsItem
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.FriendsListItems
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.LastMessageItem
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Media
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Product
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.ProductItem
-import com.festum.festumfield.verstion.firstmodule.sources.remote.model.Text
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
-import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
 class ChatMessageAdapter(
     private val context: Context,
     private var listItems: ArrayList<ListItem>,
-    private var receiverUserId : String
+    private var receiverUserId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val MONTHHEADER = 0
     private val DATAVIEW = 1
     private val IMAGEVIEW = 2
     private val VIDEOVIEW = 3
+    private val CALLVIEW = 4
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -60,19 +46,29 @@ class ChatMessageAdapter(
                 ViewHolder1(ItemSentMessageBinding.inflate(LayoutInflater.from(parent.context)))
 
             }
+
             IMAGEVIEW -> {
 
                 ViewHolder2(ItemSentImageBinding.inflate(LayoutInflater.from(parent.context)))
 
             }
+
             VIDEOVIEW -> {
 
                 ViewHolder3(ItemSendProductBinding.inflate(LayoutInflater.from(parent.context)))
+
+            }
+
+            CALLVIEW -> {
+
+                ViewHolder4(ItemSendCallBinding.inflate(LayoutInflater.from(parent.context)))
+
             }
 
             else -> {
 
-                val view: View = LayoutInflater.from(parent.context).inflate(R.layout.chat_date_item_layout, parent, false)
+                val view: View = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.chat_date_item_layout, parent, false)
                 ViewHolder(view)
 
             }
@@ -86,14 +82,22 @@ class ChatMessageAdapter(
                 val holder = viewHolder as ViewHolder1
                 holder.bind(position)
             }
+
             IMAGEVIEW -> {
                 val holder = viewHolder as ViewHolder2
                 holder.bind(position)
             }
+
             VIDEOVIEW -> {
                 val holder = viewHolder as ViewHolder3
                 holder.bind(position)
             }
+
+            CALLVIEW -> {
+                val holder = viewHolder as ViewHolder4
+                holder.bind(position)
+            }
+
             else -> {
                 val holder = viewHolder as ViewHolder
                 holder.bind(position)
@@ -112,20 +116,22 @@ class ChatMessageAdapter(
         }
 
     }
-    inner class ViewHolder1(private val messageBinding: ItemSentMessageBinding) : RecyclerView.ViewHolder(messageBinding.root) {
+
+    inner class ViewHolder1(private val messageBinding: ItemSentMessageBinding) :
+        RecyclerView.ViewHolder(messageBinding.root) {
 
         fun bind(position: Int) {
 
             val item = listItems[position] as DocsItem
 
 
-            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId) {
 
                 messageBinding.sendTxt.text = item.content?.text?.message
                 messageBinding.sendTxtTime.text = item.createdAt?.convertToFormattedTime()
-                if (item.status.equals("sent")){
+                if (item.status.equals("sent")) {
                     messageBinding.sendTxtSeen.setImageResource(R.drawable.ic_unseen)
-                }else{
+                } else {
                     messageBinding.sendTxtSeen.setImageResource(R.drawable.ic_seen)
                 }
                 messageBinding.rlLeft.visibility = View.GONE
@@ -147,7 +153,9 @@ class ChatMessageAdapter(
         }
 
     }
-    inner class ViewHolder2(private val imageBinding: ItemSentImageBinding) : RecyclerView.ViewHolder(imageBinding.root) {
+
+    inner class ViewHolder2(private val imageBinding: ItemSentImageBinding) :
+        RecyclerView.ViewHolder(imageBinding.root) {
 
 
         fun bind(position: Int) {
@@ -155,7 +163,7 @@ class ChatMessageAdapter(
             val item = listItems[position] as DocsItem
 
 
-            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId) {
 
                 imageBinding.relativeLeft.visibility = View.GONE
                 imageBinding.relativeRight.visibility = View.VISIBLE
@@ -166,14 +174,14 @@ class ChatMessageAdapter(
 
                 imageBinding.sendImage.setLargeImagePath(image)
 
-                if (item.status.equals("sent")){
+                if (item.status.equals("sent")) {
                     imageBinding.sendImgSeen.setImageResource(R.drawable.ic_unseen)
-                }else{
+                } else {
                     imageBinding.sendImgSeen.setImageResource(R.drawable.ic_seen)
                 }
 
 
-                if (item.content?.text?.message.isNullOrEmpty()){
+                if (item.content?.text?.message.isNullOrEmpty()) {
                     imageBinding.sendMessageText.visibility = View.GONE
                 }
 
@@ -183,7 +191,6 @@ class ChatMessageAdapter(
                     .load(image)
                     .placeholder(R.mipmap.ic_app_logo)
                     .into(imageBinding.sendImage)
-
 
 
             } else {
@@ -198,7 +205,7 @@ class ChatMessageAdapter(
 
                 imageBinding.reciveImg.setLargeImagePath(image)
 
-                if (item.content?.text?.message.isNullOrEmpty()){
+                if (item.content?.text?.message.isNullOrEmpty()) {
                     imageBinding.reciveMessageText.visibility = View.GONE
                 }
 
@@ -220,14 +227,16 @@ class ChatMessageAdapter(
         }
 
     }
-    inner class ViewHolder3(private val productBinding: ItemSendProductBinding) : RecyclerView.ViewHolder(productBinding.root) {
+
+    inner class ViewHolder3(private val productBinding: ItemSendProductBinding) :
+        RecyclerView.ViewHolder(productBinding.root) {
 
         @SuppressLint("SetTextI18n")
         fun bind(position: Int) {
 
             val item = listItems[position] as DocsItem
 
-            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId){
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId) {
 
                 productBinding.sendRelative.visibility = View.VISIBLE
                 productBinding.reciveRelative.visibility = View.GONE
@@ -235,17 +244,18 @@ class ChatMessageAdapter(
                 productBinding.sendProname.text = item.content?.product?.productid?.name
                 productBinding.sendProdes.text = item.content?.product?.productid?.description
                 productBinding.sendMessage.text = item.content?.text?.message
-                productBinding.sendProprice.text = "$ "+item.content?.product?.productid?.price.toString()
+                productBinding.sendProprice.text =
+                    "$ " + item.content?.product?.productid?.price.toString()
 
                 productBinding.sendProtime.text = item.createdAt?.convertToFormattedTime()
 
-                if (item.status.equals("sent")){
+                if (item.status.equals("sent")) {
                     productBinding.sendProseen.setImageResource(R.drawable.ic_unseen)
-                }else{
+                } else {
                     productBinding.sendProseen.setImageResource(R.drawable.ic_seen)
                 }
 
-                if (item.content?.product?.productid?.images?.isNotEmpty() == true){
+                if (item.content?.product?.productid?.images?.isNotEmpty() == true) {
 
                     val image = item.content.product.productid.images[0]
 
@@ -256,7 +266,7 @@ class ChatMessageAdapter(
 
                 }
 
-            } else{
+            } else {
 
                 productBinding.sendRelative.visibility = View.GONE;
                 productBinding.reciveRelative.visibility = View.VISIBLE;
@@ -265,11 +275,12 @@ class ChatMessageAdapter(
                 productBinding.recviceProName.text = item.content?.product?.productid?.name
                 productBinding.recviceDes.text = item.content?.product?.productid?.description
                 productBinding.recviceMessage.text = item.content?.text?.message
-                productBinding.recviceMessage.text = "$ "+item.content?.product?.productid?.price.toString()
+                productBinding.recviceMessage.text =
+                    "$ " + item.content?.product?.productid?.price.toString()
 
                 productBinding.recviceProTime.text = item.createdAt?.convertToFormattedTime()
 
-                if (item.content?.product?.productid?.images?.isNotEmpty() == true){
+                if (item.content?.product?.productid?.images?.isNotEmpty() == true) {
 
                     val image = item.content.product.productid.images[0]
 
@@ -283,6 +294,196 @@ class ChatMessageAdapter(
                         .placeholder(R.drawable.ic_user)
                         .into(productBinding.recviceProfilePic)
                 }
+
+            }
+
+        }
+
+    }
+
+    inner class ViewHolder4(private val callBinding: ItemSendCallBinding) :
+        RecyclerView.ViewHolder(callBinding.root) {
+
+        @SuppressLint("SetTextI18n")
+        fun bind(position: Int) {
+
+            val item = listItems[position] as DocsItem
+
+            if (item.from?.id.toString().uppercase() == AppPreferencesDelegates.get().channelId) {
+
+                callBinding.sendRelative.visibility = View.VISIBLE
+                callBinding.reciveRelative.visibility = View.GONE
+
+                /*if (item.callId?.isVideoCall == true){
+                    callBinding.sendProname.text = "Video Call"
+                    callBinding.sendCallImage.setImageResource(R.drawable.ic_video_calling);
+                }else{
+                    callBinding.sendProname.text = "Audio Call"
+                    callBinding.sendCallImage.setImageResource(R.drawable.ic_audio_calling);
+                }*/
+
+                item.callId?.members?.forEach {
+
+                    if (it?.memberid != AppPreferencesDelegates.get().channelId.lowercase()) {
+
+                        when (it?.status) {
+
+                            "initiated" -> {
+
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.sendProname.text = "Video Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_video_calling);
+                                    callBinding.sendProprice.text = "No Answer"
+                                } else {
+                                    callBinding.sendProname.text = "Voice Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_audio_calling);
+                                    callBinding.sendProprice.text = "No Answer"
+                                }
+
+                            }
+
+                            "ringing" -> {
+
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.sendProname.text = "Video Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_video_calling);
+                                    callBinding.sendProprice.text = "No Answer"
+                                } else {
+                                    callBinding.sendProname.text = "Voice Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_audio_calling);
+                                    callBinding.sendProprice.text = "No Answer"
+                                }
+
+                            }
+
+                            "accepted" -> {
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.sendProname.text = "Video Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_video_calling);
+
+                                    if (it.startedAt != null && it.endAt != null){
+                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                        callBinding.sendProprice.text = duration
+                                    } else{
+                                        callBinding.sendProprice.text = "No Answer"
+                                    }
+
+
+
+                                } else {
+                                    callBinding.sendProname.text = "Voice Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_audio_calling);
+
+                                    if (it.startedAt != null && it.endAt != null){
+                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                        callBinding.sendProprice.text = duration
+                                    } else{
+                                        callBinding.sendProprice.text = "No Answer"
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                    } else {
+
+
+                    }
+
+                }
+
+                callBinding.sendProtime.text = item.createdAt?.convertToFormattedTime()
+
+                if (item.status.equals("sent")) {
+                    callBinding.sendProseen.setImageResource(R.drawable.ic_unseen)
+                } else {
+                    callBinding.sendProseen.setImageResource(R.drawable.ic_seen)
+                }
+
+
+            } else {
+
+                callBinding.sendRelative.visibility = View.GONE;
+                callBinding.reciveRelative.visibility = View.VISIBLE;
+
+                /*callBinding.recviceProUserName.text = item.from?.fullName
+                callBinding.recviceProName.text = item.content?.product?.productid?.name
+                callBinding.recviceProTime.text = item.content?.product?.productid?.description*/
+
+                callBinding.recviceProTime.text = item.createdAt?.convertToFormattedTime()
+
+                item.callId?.members?.forEach {
+
+                    if (it?.memberid != AppPreferencesDelegates.get().channelId) {
+
+                        when (it?.status) {
+
+                            "initiated" -> {
+
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.recviceProName.text = "Video Call"
+                                    callBinding.receiveCallImage.setImageResource(R.drawable.ic_video_calling);
+
+                                } else {
+                                    callBinding.recviceProName.text = "Voice Call"
+                                    callBinding.receiveCallImage.setImageResource(R.drawable.ic_audio_calling);
+                                }
+
+                            }
+
+                            "ringing" -> {
+
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.recviceProName.text = "Missed Video Call"
+                                    callBinding.receiveCallImage.setImageResource(R.drawable.ic_video_calling);
+                                    callBinding.recvicePrice.text = "Tap to call back"
+                                } else {
+                                    callBinding.recviceProName.text = "Missed Voice Call"
+                                    callBinding.receiveCallImage.setImageResource(R.drawable.ic_audio_calling);
+                                    callBinding.recvicePrice.text = "Tap to call back"
+                                }
+
+                            }
+
+                            "accepted" -> {
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.recviceProName.text = "Video Call"
+                                    callBinding.receiveCallImage.setImageResource(R.drawable.ic_video_calling);
+
+                                    if (it.startedAt != null && it.endAt != null){
+                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                        callBinding.recvicePrice.text = duration
+                                    } else{
+                                        callBinding.recvicePrice.text = "No Answer"
+                                    }
+
+                                } else {
+                                    callBinding.recviceProName.text = "Voice Call"
+                                    callBinding.receiveCallImage.setImageResource(R.drawable.ic_audio_calling);
+
+                                    if (it.startedAt != null && it.endAt != null){
+                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                        callBinding.recvicePrice.text = duration
+                                    } else{
+                                        callBinding.recvicePrice.text = "No Answer"
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                    }else{
+
+                    }
+
+                }
+
+                Glide.with(context)
+                    .load(Constans.Display_Image_URL + item.from?.profileimage)
+                    .placeholder(R.drawable.ic_user)
+                    .into(callBinding.recviceProfilePic)
 
             }
 
@@ -306,6 +507,7 @@ class ChatMessageAdapter(
                 "text" -> DATAVIEW
                 "media" -> IMAGEVIEW
                 "product" -> VIDEOVIEW
+                "call" -> CALLVIEW
                 else -> {
                     DATAVIEW
                 }
@@ -343,8 +545,19 @@ class ChatMessageAdapter(
         /* Check user */
         val userId = data.optString("messageid").lowercase()
 
-        Toast.makeText(context, "--+--" + userId, Toast.LENGTH_SHORT).show()
 
+    }
+
+    fun calculateDuration(startedAt: Long, endAt: Long): String {
+        // Calculate the duration in milliseconds
+        val durationInMillis = endAt - startedAt
+
+        // Convert milliseconds to seconds and minutes
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(durationInMillis) % 60
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(durationInMillis)
+
+        // Format the duration as a string
+        return String.format("%02d:%02d", minutes, seconds)
     }
 
 }

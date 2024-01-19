@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/productRelative"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_5"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/sendRelative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_20"
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/sendRl"
+            android:layout_width="@dimen/sp_250"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/chat_txt_right_bg"
+            android:padding="@dimen/margin_10">
+
+            <RelativeLayout
+                android:id="@+id/send_pro"
+                android:layout_width="@dimen/sp_250"
+                android:layout_height="wrap_content"
+                android:background="@drawable/notification_bg"
+                android:backgroundTint="@color/white">
+
+                <RelativeLayout
+                    android:id="@+id/circle"
+                    android:layout_width="@dimen/sp_60"
+                    android:layout_height="@dimen/sp_60">
+
+                    <ImageView
+                        android:id="@+id/sendCallImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_video_call_icon"
+                        app:tint="@color/app_color" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_toEndOf="@id/circle"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/sendProname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:singleLine="true"
+                        android:text="@string/cup_cake"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/sendProprice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:singleLine="true"
+                        android:text="@string/some_id"
+                        android:textColor="@color/app_color"
+                        android:textSize="@dimen/text_12" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendRl"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/margin_5">
+
+            <TextView
+                android:id="@+id/sendProtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/sp_10" />
+
+            <ImageView
+                android:id="@+id/sendProseen"
+                android:layout_width="@dimen/sp_16"
+                android:layout_height="@dimen/sp_16"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_toRightOf="@id/sendProtime"
+                android:src="@drawable/ic_unseen" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reciveRelative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:paddingTop="@dimen/sp_6"
+        android:paddingBottom="@dimen/sp_6"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/recvice_name"
+            android:layout_width="@dimen/margin_250"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:visibility="visible">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/recvice_profile_pic"
+                android:layout_width="@dimen/sp_20"
+                android:layout_height="@dimen/sp_20"
+                android:layout_centerVertical="true"
+                android:src="@drawable/girl_image" />
+
+            <TextView
+                android:id="@+id/recviceProUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_toRightOf="@id/recvice_profile_pic"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/name"
+                android:textColor="@color/app_color"
+                android:textSize="@dimen/text_12"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl"
+            android:layout_width="@dimen/sp_250"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recvice_name"
+            android:layout_marginTop="@dimen/sp_5"
+            android:background="@drawable/chat_txt_left_bg"
+            android:padding="@dimen/margin_10">
+
+            <RelativeLayout
+                android:id="@+id/rl_pro"
+                android:layout_width="@dimen/sp_250"
+                android:layout_height="wrap_content"
+                android:background="@drawable/notification_bg"
+                android:backgroundTint="@color/white">
+
+                <RelativeLayout
+                    android:id="@+id/receiveCallRelative"
+                    android:layout_width="@dimen/sp_60"
+                    android:layout_height="@dimen/sp_60">
+
+                    <ImageView
+                        android:id="@+id/receiveCallImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_video_call_icon"
+                        app:tint="@color/app_color" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:layout_toEndOf="@id/receiveCallRelative"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/recviceProName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:singleLine="true"
+                        android:text="@string/cup_cake"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/recvicePrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:singleLine="true"
+                        android:text="@string/some_id"
+                        android:textColor="@color/app_color"
+                        android:textSize="@dimen/text_12" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl"
+            android:layout_marginTop="@dimen/margin_5">
+
+            <TextView
+                android:id="@+id/recviceProTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/sp_10" />
+
+            <ImageView
+                android:id="@+id/recviceProSeen"
+                android:layout_width="@dimen/sp_16"
+                android:layout_height="@dimen/sp_16"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_toRightOf="@id/recviceProTime"
+                android:src="@drawable/ic_unseen" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

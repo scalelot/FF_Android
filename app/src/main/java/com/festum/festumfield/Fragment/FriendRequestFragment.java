@@ -148,6 +148,7 @@ public class FriendRequestFragment extends Fragment {
                                 }
 
                             }
+
                         });
 
                         recycle_request.setAdapter(friendsRequestAdapter);
