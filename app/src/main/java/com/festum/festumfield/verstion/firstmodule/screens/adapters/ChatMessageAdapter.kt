@@ -17,6 +17,7 @@ import com.festum.festumfield.databinding.ItemSentMessageBinding
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.CallInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.DocsItem
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
 import org.json.JSONObject
@@ -29,7 +30,8 @@ import kotlin.collections.ArrayList
 class ChatMessageAdapter(
     private val context: Context,
     private var listItems: ArrayList<ListItem>,
-    private var receiverUserId: String
+    private var receiverUserId: String,
+    private var callInterface : CallInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val MONTHHEADER = 0
@@ -369,13 +371,12 @@ class ChatMessageAdapter(
                                     }
 
 
-
                                 } else {
                                     callBinding.sendProname.text = "Voice Call"
                                     callBinding.sendCallImage.setImageResource(R.drawable.ic_audio_calling);
 
-                                    if (it.startedAt != null && it.endAt != null){
-                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                    if (it.startedAt?.toInt() != 0 && it.endAt?.toInt() != 0){
+                                        val duration = calculateDuration(it.startedAt ?: 0, it.endAt ?: 0)
                                         callBinding.sendProprice.text = duration
                                     } else{
                                         callBinding.sendProprice.text = "No Answer"
@@ -391,7 +392,43 @@ class ChatMessageAdapter(
 
                     }
 
+                    /*if (it?.memberid == item.callId.initiatedBy ){
+
+                        when (it?.status) {
+                            "accepted" -> {
+                                if (item.callId.isVideoCall == true) {
+                                    callBinding.sendProname.text = "Video Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_video_calling);
+
+                                    if (it.startedAt != null && it.endAt != null){
+                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                        callBinding.sendProprice.text = duration
+                                    } else{
+                                        callBinding.sendProprice.text = "No Answer"
+                                    }
+
+
+                                } else {
+                                    callBinding.sendProname.text = "Voice Call"
+                                    callBinding.sendCallImage.setImageResource(R.drawable.ic_audio_calling);
+
+                                    if (it.startedAt != null && it.endAt != null){
+                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                        callBinding.sendProprice.text = duration
+                                    } else{
+                                        callBinding.sendProprice.text = "No Answer"
+                                    }
+
+                                }
+                            }
+                        }
+
+
+                    }*/
+
                 }
+
+
 
                 callBinding.sendProtime.text = item.createdAt?.convertToFormattedTime()
 
@@ -406,10 +443,6 @@ class ChatMessageAdapter(
 
                 callBinding.sendRelative.visibility = View.GONE;
                 callBinding.reciveRelative.visibility = View.VISIBLE;
-
-                /*callBinding.recviceProUserName.text = item.from?.fullName
-                callBinding.recviceProName.text = item.content?.product?.productid?.name
-                callBinding.recviceProTime.text = item.content?.product?.productid?.description*/
 
                 callBinding.recviceProTime.text = item.createdAt?.convertToFormattedTime()
 
@@ -451,8 +484,8 @@ class ChatMessageAdapter(
                                     callBinding.recviceProName.text = "Video Call"
                                     callBinding.receiveCallImage.setImageResource(R.drawable.ic_video_calling);
 
-                                    if (it.startedAt != null && it.endAt != null){
-                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                    if (it.startedAt?.toInt() != 0 && it.endAt?.toInt() != 0){
+                                        val duration = calculateDuration(it.startedAt ?: 0, it.endAt ?: 0)
                                         callBinding.recvicePrice.text = duration
                                     } else{
                                         callBinding.recvicePrice.text = "No Answer"
@@ -476,7 +509,47 @@ class ChatMessageAdapter(
 
                     }else{
 
+
                     }
+
+
+
+                      /*  if (it?.memberid == item.callId.initiatedBy ){
+
+                            when (it?.status) {
+
+                                "accepted" -> {
+                                    if (item.callId.isVideoCall == true) {
+                                        callBinding.recviceProName.text = "Video Call"
+                                        callBinding.receiveCallImage.setImageResource(R.drawable.ic_video_calling);
+
+                                        if (it.startedAt != null && it.endAt != null){
+                                            val duration = calculateDuration(it.startedAt, it.endAt)
+                                            callBinding.recvicePrice.text = duration
+                                        } else{
+                                            callBinding.recvicePrice.text = "No Answer"
+                                        }
+
+                                    } else {
+                                        callBinding.recviceProName.text = "Voice Call"
+                                        callBinding.receiveCallImage.setImageResource(R.drawable.ic_audio_calling);
+
+                                        if (it.startedAt != null && it.endAt != null){
+                                            val duration = calculateDuration(it.startedAt, it.endAt)
+                                            callBinding.recvicePrice.text = duration
+                                        } else{
+                                            callBinding.recvicePrice.text = "No Answer"
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }*/
+
+
 
                 }
 
@@ -484,6 +557,20 @@ class ChatMessageAdapter(
                     .load(Constans.Display_Image_URL + item.from?.profileimage)
                     .placeholder(R.drawable.ic_user)
                     .into(callBinding.recviceProfilePic)
+
+
+
+            }
+
+            callBinding.sendRl.setOnClickListener {
+
+                callInterface.onCallClick(item)
+
+            }
+
+            callBinding.rl.setOnClickListener {
+
+                callInterface.onCallClick(item)
 
             }
 

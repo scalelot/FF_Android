@@ -34,6 +34,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListItem
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.ListSection
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager
+import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.CallInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ProductItemInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.SendImageInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
@@ -69,7 +70,7 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("SimpleDateFormat")
 @AndroidEntryPoint
-class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendImageInterface {
+class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendImageInterface, CallInterface {
 
     private lateinit var binding: ChatActivityBinding
 
@@ -305,7 +306,7 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
             chatMessageAdapter = ChatMessageAdapter(
                 this@GroupChatActivity,
                 chatList as ArrayList<ListItem>,
-                receiverUserId
+                receiverUserId,this
             )
             binding.msgRV.adapter = chatMessageAdapter
 
@@ -1484,6 +1485,32 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
             }
 
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onCallClick(item: DocsItem) {
+
+        Log.e("TAG", "onCallClick:--- " + item.callId?.isVideoCall )
+        Log.e("TAG", "isGroupCall:--+++- " + item.callId?.isGroupCall )
+
+        if (item.callId?.isVideoCall == true && item.callId.isGroupCall == true){
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                onVideoCallPermission(true)
+            } else {
+                onVideoCallPermission(false)
+            }
+
+        } else {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                onAudioCallPermission(true)
+            } else {
+                onAudioCallPermission(false)
+            }
+
+        }
+
     }
 
 }
