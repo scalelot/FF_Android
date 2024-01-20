@@ -363,8 +363,8 @@ class ChatMessageAdapter(
                                     callBinding.sendProname.text = "Video Call"
                                     callBinding.sendCallImage.setImageResource(R.drawable.ic_video_calling);
 
-                                    if (it.startedAt != null && it.endAt != null){
-                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                    if (it.startedAt?.toInt() != 0 && it.endAt?.toInt() != 0){
+                                        val duration = calculateDuration(it.startedAt ?:  0, it.endAt ?: 0)
                                         callBinding.sendProprice.text = duration
                                     } else{
                                         callBinding.sendProprice.text = "No Answer"
@@ -495,8 +495,8 @@ class ChatMessageAdapter(
                                     callBinding.recviceProName.text = "Voice Call"
                                     callBinding.receiveCallImage.setImageResource(R.drawable.ic_audio_calling);
 
-                                    if (it.startedAt != null && it.endAt != null){
-                                        val duration = calculateDuration(it.startedAt, it.endAt)
+                                    if (it.startedAt?.toInt() != 0 && it.endAt?.toInt() != 0){
+                                        val duration = calculateDuration(it.startedAt ?:  0, it.endAt ?: 0)
                                         callBinding.recvicePrice.text = duration
                                     } else{
                                         callBinding.recvicePrice.text = "No Answer"
