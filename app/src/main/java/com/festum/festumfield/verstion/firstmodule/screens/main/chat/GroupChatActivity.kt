@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -611,6 +612,15 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
 
                 "onCallAccepted" -> {
 
+                    Log.e("TAG", "onCallAccepted---: $data")
+
+                    val title = data?.optString("title")
+                    val messageItem = data?.optString("message")
+                    val acceptedMemberId = data?.optString("acceptedmemberId")
+                    val acceptedMemberName = data?.optString("acceptedmemberName")
+                    val callid = data?.optString("callid")
+                    val type = data?.optString("type")
+
                     if (isVideoGroupCalling){
 
                         val intent = Intent(this@GroupChatActivity, AppGroupVideoCallingActivity::class.java)
@@ -649,11 +659,14 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                         val jsonItem = Gson().toJson(addMemberList)
                         intent.putExtra("groupList", jsonItem)
                         intent.putExtra("callId", callId)
+                        intent.putExtra("acceptedMemberId", acceptedMemberId)
+                        intent.putExtra("acceptedMemberName", acceptedMemberName)
                         startActivityForResult(intent, IS_VIDEO_GROUP_CALLING)
                         isVideoGroupCalling = false
                         isCallAccpeted = true
 
                         Handler(Looper.getMainLooper()).postDelayed({ upComingCallDialog?.dismiss() }, 1000)
+
 
                     }
 
