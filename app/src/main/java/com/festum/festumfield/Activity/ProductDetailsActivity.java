@@ -35,6 +35,7 @@ import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.festum.festumfield.verstion.firstmodule.utils.IntentUtil;
 import com.google.gson.Gson;
@@ -203,7 +204,7 @@ public class ProductDetailsActivity extends BaseActivity {
                     btn_inquiry_message.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(), ChatingActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                             intent.putExtra("productId", productModel.getProductDetailsModel().getId());
                             startActivityForResult(intent, IntentUtil.Companion.getPRODUCT_REQUEST_CODE());
                         }

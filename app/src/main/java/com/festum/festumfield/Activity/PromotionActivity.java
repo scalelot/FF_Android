@@ -2,18 +2,15 @@ package com.festum.festumfield.Activity;
 
 import androidx.core.app.NotificationManagerCompat;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Fragment.HistoryPromotionFragment;
 import com.festum.festumfield.Fragment.RunningPromotionFragment;
-import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.R;
 
 public class PromotionActivity extends BaseActivity {

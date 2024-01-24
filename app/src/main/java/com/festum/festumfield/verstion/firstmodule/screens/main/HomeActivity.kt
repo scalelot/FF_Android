@@ -287,7 +287,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                     }
 
                     R.id.new_broadcast -> {
-                        startActivity(Intent(this@HomeActivity, CreateNewGroupActivity::class.java))
+                        startActivity(Intent(this@HomeActivity, NewGroupActivity::class.java))
                         return@OnMenuItemClickListener true
                     }
 

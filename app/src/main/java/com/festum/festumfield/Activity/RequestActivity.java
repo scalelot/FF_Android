@@ -1,6 +1,5 @@
 package com.festum.festumfield.Activity;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 import com.festum.festumfield.BaseActivity;
 import com.festum.festumfield.Fragment.FriendRequestFragment;
 import com.festum.festumfield.Fragment.SendRequestFragment;
-import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.R;
 
 public class RequestActivity extends BaseActivity {

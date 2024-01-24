@@ -184,11 +184,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.ChatProductSelectActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activity.DisplayProductImageActivity"
             android:configChanges="uiMode"
             android:exported="false"
@@ -197,11 +192,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".Activity.MessageInfoActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity.ReelsPerviewActivity"
             android:configChanges="uiMode"
@@ -217,16 +208,7 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.EditGroupDetalisActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.GroupProfileDetalisActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity.MarketingNotificationActivity"
             android:configChanges="uiMode"
@@ -297,11 +279,6 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.CreateNewGroupActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -318,20 +295,11 @@
             android:value="@string/google_maps_key_new_one" />
 
         <activity
-            android:name=".Activity.VideoCallActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activity.UpcomingCallActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.ChattingAudioCallActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity.PromotionDetailsActivity"
             android:configChanges="uiMode"
@@ -352,16 +320,7 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.ChatUserProfileActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.ChatingActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity.HelpActivity"
             android:configChanges="uiMode"
@@ -392,11 +351,7 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.UserProfileActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity.MapsLocationActivity"
             android:configChanges="uiMode"
@@ -416,11 +371,6 @@
 
         <uses-library android:name="com.google.android.maps" />
 
-        <activity
-            android:name=".Activity.ProfileActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.BusinessProfileActivity"
             android:configChanges="uiMode"
@@ -449,12 +399,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

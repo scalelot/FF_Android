@@ -1,8 +1,6 @@
 package com.festum.festumfield.Activity;
 
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,17 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.festum.festumfield.BaseActivity;
-import com.festum.festumfield.MainActivity;
-import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.verstion.firstmodule.screens.main.ApplicationPermissionActivity;
 import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
@@ -29,8 +22,6 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppP
 
 import java.util.ArrayList;
 import java.util.List;
-
-import dagger.hilt.android.AndroidEntryPoint;
 
 
 @SuppressLint("CustomSplashScreen")

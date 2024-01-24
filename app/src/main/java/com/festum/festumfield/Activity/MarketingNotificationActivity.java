@@ -11,8 +11,8 @@ import android.widget.ImageView;
 
 import com.festum.festumfield.Adapter.NotificationAdapter;
 import com.festum.festumfield.BaseActivity;
-import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.R;
+import com.festum.festumfield.verstion.firstmodule.screens.main.group.GroupDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -63,7 +63,7 @@ public class MarketingNotificationActivity extends BaseActivity {
         img_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MarketingNotificationActivity.this, GroupProfileDetalisActivity.class));
+                startActivity(new Intent(MarketingNotificationActivity.this, GroupDetailsActivity.class));
                 finish();
             }
         });
@@ -77,7 +77,8 @@ public class MarketingNotificationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(MarketingNotificationActivity.this, MainActivity.class));
+        super.onBackPressed();
+        /*startActivity(new Intent(MarketingNotificationActivity.this, MainActivity.class));*/
         finish();
     }
 }

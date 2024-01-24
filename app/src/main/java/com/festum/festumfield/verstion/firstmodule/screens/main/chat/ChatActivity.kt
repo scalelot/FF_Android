@@ -101,7 +101,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     private var isCallAccpeted = false
 
     //    private var isVideoCall : Boolean ?= null
-    private var isVideoCall: String? = "isVideoCall"
+    private var isVideoCall : String? = "isVideoCall"
 
 
     private var chatMessageAdapter: ChatMessageAdapter? = null

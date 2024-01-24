@@ -29,16 +29,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.Adapter.TagAdapter;
-import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.AllMyFriends.AllFriendsRegisterModel;
-import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
-import com.festum.festumfield.Utils.Const;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.Utils.FileUtils;
+import com.festum.festumfield.verstion.firstmodule.screens.main.HomeActivity;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
 import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -337,7 +334,7 @@ public class ChatPersnoalInfoFragment extends Fragment {
                 public void onResponse(JSONObject response) {
                     FileUtils.DismissLoading(ChatPersnoalInfoFragment.this.getContext());
                     Log.e("BlockFriends:--", response.toString());
-                    startActivity(new Intent(ChatPersnoalInfoFragment.this.getContext(), MainActivity.class));
+                    startActivity(new Intent(ChatPersnoalInfoFragment.this.getContext(), HomeActivity.class));
                     getActivity().finish();
                     Toast.makeText(getContext(), "Block Successfully!!!", Toast.LENGTH_SHORT).show();
                 }

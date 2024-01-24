@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,8 +19,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,8 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.festum.festumfield.BaseActivity;
-import com.festum.festumfield.MainActivity;
-import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;

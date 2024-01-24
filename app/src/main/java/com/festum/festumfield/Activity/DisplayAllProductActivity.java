@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,9 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.festum.festumfield.Adapter.DisplayAllProductAdapter;
 import com.festum.festumfield.BaseActivity;
-import com.festum.festumfield.MainActivity;
 import com.festum.festumfield.Model.Product.ProductDetailsModel;
-import com.festum.festumfield.MyApplication;
 import com.festum.festumfield.R;
 import com.festum.festumfield.Utils.Constans;
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates;
