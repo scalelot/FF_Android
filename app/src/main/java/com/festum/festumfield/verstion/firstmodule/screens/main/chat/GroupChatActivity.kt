@@ -621,6 +621,8 @@ class GroupChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, S
                     val callid = data?.optString("callid")
                     val type = data?.optString("type")
 
+                    AppPreferencesDelegates.get().callAcceptIdDelegate = acceptedMemberId.toString()
+
                     if (isVideoGroupCalling){
 
                         val intent = Intent(this@GroupChatActivity, AppGroupVideoCallingActivity::class.java)

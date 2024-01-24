@@ -111,8 +111,10 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var localAudioTrack: AudioTrack? = null
 
-    var storge_permissions = arrayOf(Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO)
+    var storge_permissions = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO
+    )
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     var storge_permissions_33 = arrayOf(
@@ -123,7 +125,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     )
 
     var userFragment = ""
-    var remoteOffer : String = ""
+    var remoteOffer: String = ""
 
     private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
     private var isSpeakerMode = true
@@ -136,7 +138,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     lateinit var permission: Array<String>
 
     val jsonArray = JSONArray()
-    var channelId : String = ""
+    var channelId: String = ""
 
     override fun getContentView(): View {
         binding = ActivityVideoGroupCallingBinding.inflate(layoutInflater)
@@ -162,8 +164,10 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
             jsonArray.put(it.membersList?.id)
         }
 
+        Log.e("TAG", "remoteId:--- $remoteId")
+
         /*remoteId = intent?.getString("remoteChannelId")*/
-        
+
         ActivityCompat.requestPermissions(this@AppGroupVideoCallingActivity, permissions(), 1)
 
         binding.fromText.text = AppPreferencesDelegates.get().userName
@@ -181,52 +185,51 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             }
 
-           /* Log.e("TAG", "webrtcMessage:---+++----++-- $webRtcMessage")
-            Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
-            Log.e("TAG", "remoteId:--- $remoteId")*/
+            /* Log.e("TAG", "webrtcMessage:---+++----++-- $webRtcMessage")
+             Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
+             Log.e("TAG", "remoteId:--- $remoteId")*/
 
             SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)?.on("webrtcMessage") { args ->
 
-                val receiverData = args[0] as JSONObject
+                    val receiverData = args[0] as JSONObject
 
-                Log.e("TAG", "webrtcMessage:---+++----++-- $receiverData")
-                Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
-                Log.e("TAG", "remoteId:--- $remoteId")
+                    Log.e("TAG", "webrtcMessage:---+++----++-- $receiverData")
+                    Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId)
 
-                val sdpResponse = receiverData.optJSONObject("sdp")
-                val type = sdpResponse?.optString("type")
-                val sdpOffer = sdpResponse?.optString("sdp")
+                    val sdpResponse = receiverData.optJSONObject("sdp")
+                    val type = sdpResponse?.optString("type")
+                    val sdpOffer = sdpResponse?.optString("sdp")
 
-                val iceCandidate = receiverData.optJSONObject("ice")
+                    val iceCandidate = receiverData.optJSONObject("ice")
 
-                val candidate = iceCandidate?.optString("candidate")
-                val sdpMid = iceCandidate?.optString("sdpMid")
-                val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
-                val usernameFragment = iceCandidate?.optString("usernameFragment")
+                    val candidate = iceCandidate?.optString("candidate")
+                    val sdpMid = iceCandidate?.optString("sdpMid")
+                    val sdpMLineIndex = iceCandidate?.optString("sdpMLineIndex")
+                    val usernameFragment = iceCandidate?.optString("usernameFragment")
 
-                if (type.equals("offer")) {
+                    if (type.equals("offer")) {
 
-                    Log.e("TAG", "offer:----------$receiverData")
+                        Log.e("TAG", "offer:----------$receiverData")
 
-                    handleRemoteVideoOffer(sdpOffer)
+                        handleRemoteVideoOffer(sdpOffer)
 
 
-                }
-                if (type.equals("answer")) {
+                    }
+                    if (type.equals("answer")) {
 
-                    Log.e("TAG", "answer:----------$receiverData")
+                        Log.e("TAG", "answer:----------$receiverData")
 
-                    createAnswerFromRemoteOffer(sdpOffer)
+                        createAnswerFromRemoteOffer(sdpOffer)
 
-                }
+                    }
 
-                if (iceCandidate != null) {
+                    if (iceCandidate != null) {
 
-                    addRemoteIceCandidate(iceCandidate)
+                        addRemoteIceCandidate(iceCandidate)
 
-                }
+                    }
 
-            }?.on("endCall") { args ->
+                }?.on("endCall") { args ->
 
 
                 try {
@@ -312,312 +315,312 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-   /* @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun onCameraPermission() {
+    /* @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+     private fun onCameraPermission() {
 
-        Dexter.withContext(this@AppGroupVideoCallingActivity)
-            .withPermissions(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.CAMERA)
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
-
-                        init()
+         Dexter.withContext(this@AppGroupVideoCallingActivity)
+             .withPermissions(
+                 Manifest.permission.READ_MEDIA_IMAGES,
+                 Manifest.permission.READ_MEDIA_VIDEO,
+                 Manifest.permission.READ_MEDIA_AUDIO,
+                 Manifest.permission.CAMERA)
+             .withListener(object : MultiplePermissionsListener {
+                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
+                     if (permission?.areAllPermissionsGranted() == true) {
+
+                         init()
 
-                    } else {
-                        AppPermissionDialog.showPermission(
-                            this@AppGroupVideoCallingActivity,
-                            getString(R.string.request_camera_mic_permissions_text),
-                            getString(R.string.media_permission_title)
-                        )
-                    }
+                     } else {
+                         AppPermissionDialog.showPermission(
+                             this@AppGroupVideoCallingActivity,
+                             getString(R.string.request_camera_mic_permissions_text),
+                             getString(R.string.media_permission_title)
+                         )
+                     }
 
-                }
+                 }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                 override fun onPermissionRationaleShouldBeShown(
+                     p0: MutableList<PermissionRequest>?,
+                     token: PermissionToken?
+                 ) {
+                     token?.continuePermissionRequest()
+                 }
 
-            }).withErrorListener {}
-            .check()
+             }).withErrorListener {}
+             .check()
 
-    }
+     }
 
-    @SuppressLint("SuspiciousIndentation")
-    fun init() {
+     @SuppressLint("SuspiciousIndentation")
+     fun init() {
 
 
-        binding.llSwitchCamera.setOnClickListener {
+         binding.llSwitchCamera.setOnClickListener {
 
-            if (isCameraRotation){
-                isCameraRotation = false
-                binding.surfaceView.setMirror(true)
-            }else{
-                isCameraRotation = true
-                binding.surfaceView.setMirror(false)
-            }
+             if (isCameraRotation){
+                 isCameraRotation = false
+                 binding.surfaceView.setMirror(true)
+             }else{
+                 isCameraRotation = true
+                 binding.surfaceView.setMirror(false)
+             }
 
-            switchCamera()
+             switchCamera()
 
-        }
+         }
 
-        binding.llVideoCallCut.setOnClickListener {
+         binding.llVideoCallCut.setOnClickListener {
 
-            try {
-
-                val jsonObj = JSONObject()
-                jsonObj.put("id", AppPreferencesDelegates.get().channelId)
-                SocketManager.mSocket?.emit("endCall", jsonObj)
-                AppPreferencesDelegates.get().isVideoCalling = true
-                AppPreferencesDelegates.get().isAudioCalling = true
-                finish()
-
+             try {
+
+                 val jsonObj = JSONObject()
+                 jsonObj.put("id", AppPreferencesDelegates.get().channelId)
+                 SocketManager.mSocket?.emit("endCall", jsonObj)
+                 AppPreferencesDelegates.get().isVideoCalling = true
+                 AppPreferencesDelegates.get().isAudioCalling = true
+                 finish()
+
 
-            } catch (e: Exception) {
-                Log.e("TAG", "error:" + e.message)
-            }
-
-        }
+             } catch (e: Exception) {
+                 Log.e("TAG", "error:" + e.message)
+             }
+
+         }
 
-        binding.llVideoCall.setOnClickListener {
-            if (isCameraPause){
-                isCameraPause = false
-                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_24)
-                videoTrackFromCamera?.setEnabled(true)
-            }else{
-                isCameraPause = true
-                binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
-                videoTrackFromCamera?.setEnabled(false)
-            }
+         binding.llVideoCall.setOnClickListener {
+             if (isCameraPause){
+                 isCameraPause = false
+                 binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_24)
+                 videoTrackFromCamera?.setEnabled(true)
+             }else{
+                 isCameraPause = true
+                 binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
+                 videoTrackFromCamera?.setEnabled(false)
+             }
 
-        }
+         }
 
-        binding.llMessage.setOnClickListener {
+         binding.llMessage.setOnClickListener {
 
-            if (isSpeakerMode){
-                isSpeakerMode = false
-                binding.speaker.setImageResource(R.drawable.ic_baseline_hearing_24)
-                rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
-            }else{
-                isSpeakerMode = true
-                binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
-                rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
+             if (isSpeakerMode){
+                 isSpeakerMode = false
+                 binding.speaker.setImageResource(R.drawable.ic_baseline_hearing_24)
+                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
+             }else{
+                 isSpeakerMode = true
+                 binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
+                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
-            }
+             }
 
-        }
+         }
 
-        binding.llMute.setOnClickListener {
+         binding.llMute.setOnClickListener {
 
-            if (isMute){
-                isMute = false
-                binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
-                localAudioTrack?.setEnabled(true)
-            }else{
-                isMute = true
-                binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
-                localAudioTrack?.setEnabled(false)
-            }
+             if (isMute){
+                 isMute = false
+                 binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
+                 localAudioTrack?.setEnabled(true)
+             }else{
+                 isMute = true
+                 binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
+                 localAudioTrack?.setEnabled(false)
+             }
 
 
-        }
+         }
 
-        initializeSurfaceViews()
+         initializeSurfaceViews()
 
-        initializePeerConnectionFactory()
+         initializePeerConnectionFactory()
 
-        createVideoTrackFromCameraAndShowIt()
+         createVideoTrackFromCameraAndShowIt()
 
-        if (callReceive == false)
-        doCall()
+         if (callReceive == false)
+         doCall()
 
-//        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
+ //        rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
-    }
+     }
 
-    private fun initializeSurfaceViews() {
+     private fun initializeSurfaceViews() {
 
-        rootEglBase = EglBase.create()
-        binding.surfaceView.init(rootEglBase?.eglBaseContext, null)
-        binding.surfaceView.setEnableHardwareScaler(true)
-        binding.surfaceView.setMirror(true)
-        binding.surfaceView2.init(rootEglBase?.eglBaseContext, null)
-        binding.surfaceView2.setEnableHardwareScaler(true)
-        binding.surfaceView2.setMirror(true)
-        binding.surfaceView3.init(rootEglBase?.eglBaseContext, null)
-        binding.surfaceView3.setEnableHardwareScaler(true)
-        binding.surfaceView3.setMirror(true)
-
-    }
+         rootEglBase = EglBase.create()
+         binding.surfaceView.init(rootEglBase?.eglBaseContext, null)
+         binding.surfaceView.setEnableHardwareScaler(true)
+         binding.surfaceView.setMirror(true)
+         binding.surfaceView2.init(rootEglBase?.eglBaseContext, null)
+         binding.surfaceView2.setEnableHardwareScaler(true)
+         binding.surfaceView2.setMirror(true)
+         binding.surfaceView3.init(rootEglBase?.eglBaseContext, null)
+         binding.surfaceView3.setEnableHardwareScaler(true)
+         binding.surfaceView3.setMirror(true)
+
+     }
 
-    private fun initializePeerConnectionFactory() {
-        val initializationOptions =
-            PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true)
-                .createInitializationOptions()
-        PeerConnectionFactory.initialize(initializationOptions)
-        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(
-            DefaultVideoEncoderFactory(
-                rootEglBase?.eglBaseContext,
-                true,
-                true
-            )
-        )
-            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext))
-            .createPeerConnectionFactory()
-    }
-
-    private fun createVideoTrackFromCameraAndShowIt() {
-
-        val audioConstraints = MediaConstraints()
-        val videoCapture: VideoCapturer? = createVideoCapture()
-        var videoSource: VideoSource? = null
-
-        val surfaceTextureHelper =
-            SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
-        videoSource = factory?.createVideoSource(videoCapture?.isScreencast == true)
-        videoCapture?.initialize(surfaceTextureHelper, this, videoSource?.capturerObserver)
-
-       val  videoTrackFromCamera = factory?.createVideoTrack("localVideoTrack", videoSource)
-        videoTrackFromCamera?.setEnabled(true)
-
-        videoCapture?.startCapture(1024, 720, 30)
-        videoTrackFromCamera?.addSink(binding.surfaceView)
-
-        //create an AudioSource instance
-        val audioSource = factory?.createAudioSource(audioConstraints)
-        val localAudioTrack = factory?.createAudioTrack("audio101", audioSource)
+     private fun initializePeerConnectionFactory() {
+         val initializationOptions =
+             PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true)
+                 .createInitializationOptions()
+         PeerConnectionFactory.initialize(initializationOptions)
+         factory = PeerConnectionFactory.builder().setVideoEncoderFactory(
+             DefaultVideoEncoderFactory(
+                 rootEglBase?.eglBaseContext,
+                 true,
+                 true
+             )
+         )
+             .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext))
+             .createPeerConnectionFactory()
+     }
+
+     private fun createVideoTrackFromCameraAndShowIt() {
+
+         val audioConstraints = MediaConstraints()
+         val videoCapture: VideoCapturer? = createVideoCapture()
+         var videoSource: VideoSource? = null
+
+         val surfaceTextureHelper =
+             SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
+         videoSource = factory?.createVideoSource(videoCapture?.isScreencast == true)
+         videoCapture?.initialize(surfaceTextureHelper, this, videoSource?.capturerObserver)
+
+        val  videoTrackFromCamera = factory?.createVideoTrack("localVideoTrack", videoSource)
+         videoTrackFromCamera?.setEnabled(true)
+
+         videoCapture?.startCapture(1024, 720, 30)
+         videoTrackFromCamera?.addSink(binding.surfaceView)
+
+         //create an AudioSource instance
+         val audioSource = factory?.createAudioSource(audioConstraints)
+         val localAudioTrack = factory?.createAudioTrack("audio101", audioSource)
 
-        peerConnection = createPeerConnection(factory)
+         peerConnection = createPeerConnection(factory)
 
-        val mediaStream = factory?.createLocalMediaStream("ARDAMS")
-        mediaStream?.addTrack(videoTrackFromCamera)
-        mediaStream?.addTrack(localAudioTrack)
-        peerConnection?.addStream(mediaStream)
+         val mediaStream = factory?.createLocalMediaStream("ARDAMS")
+         mediaStream?.addTrack(videoTrackFromCamera)
+         mediaStream?.addTrack(localAudioTrack)
+         peerConnection?.addStream(mediaStream)
 
-    }
+     }
 
 
-    private fun createVideoCapture(): VideoCapturer? {
+     private fun createVideoCapture(): VideoCapturer? {
 
-        val cameraFacing = CameraCharacteristics.LENS_FACING_FRONT
+         val cameraFacing = CameraCharacteristics.LENS_FACING_FRONT
 
-        videoCapture = if (useCamera2()) {
-            createCameraCapture(Camera2Enumerator(this),cameraFacing)
-        } else {
-            createCameraCapture(Camera1Enumerator(true),cameraFacing)
-        }
-        return videoCapture
+         videoCapture = if (useCamera2()) {
+             createCameraCapture(Camera2Enumerator(this),cameraFacing)
+         } else {
+             createCameraCapture(Camera1Enumerator(true),cameraFacing)
+         }
+         return videoCapture
 
-    }
+     }
 
-    private fun useCamera2(): Boolean {
-        return Camera2Enumerator.isSupported(this)
-    }
+     private fun useCamera2(): Boolean {
+         return Camera2Enumerator.isSupported(this)
+     }
 
-    private fun switchCamera() {
+     private fun switchCamera() {
 
-        if (videoCapture is CameraVideoCapturer) {
-            val cameraVideoCapture = videoCapture as CameraVideoCapturer
-            cameraVideoCapture.switchCamera(null)
-        }
+         if (videoCapture is CameraVideoCapturer) {
+             val cameraVideoCapture = videoCapture as CameraVideoCapturer
+             cameraVideoCapture.switchCamera(null)
+         }
 
-    }
+     }
 
-    private fun createCameraCapture(enumerator: CameraEnumerator, cameraFacing : Int): VideoCapturer? {
+     private fun createCameraCapture(enumerator: CameraEnumerator, cameraFacing : Int): VideoCapturer? {
 
-        val deviceNames = enumerator.deviceNames
-        for (deviceName in deviceNames) {
-            if (enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
-                enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK
-            ) {
-                val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
-                if (videoCapture != null) {
-                    return videoCapture
-                }
-            }
-        }
-        for (deviceName in deviceNames) {
-            if (!enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
-                !enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
-                val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
-                if (videoCapture != null) {
-                    return videoCapture
-                }
-            }
-        }
+         val deviceNames = enumerator.deviceNames
+         for (deviceName in deviceNames) {
+             if (enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
+                 enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK
+             ) {
+                 val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
+                 if (videoCapture != null) {
+                     return videoCapture
+                 }
+             }
+         }
+         for (deviceName in deviceNames) {
+             if (!enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
+                 !enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                 val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
+                 if (videoCapture != null) {
+                     return videoCapture
+                 }
+             }
+         }
 
-        return null
+         return null
 
-    }
+     }
 
-    private fun createPeerConnection(factory: PeerConnectionFactory?): PeerConnection? {
-        val iceServers = ArrayList<IceServer>()
-        val url = "stun:stun.stunprotocol.org:3478"
-        val url2 = "stun:stun.l.google.com:19302"
-        iceServers.add(IceServer(url))
-        iceServers.add(IceServer(url2))
-        val rtcConfig = RTCConfiguration(iceServers)
-        val pcConstraints = MediaConstraints()
-        val pcObserver: PeerConnection.Observer = object : PeerConnection.Observer {
-            override fun onSignalingChange(signalingState: SignalingState) {
-                Log.e("TAG", "onSignalingChange: ")
-            }
+     private fun createPeerConnection(factory: PeerConnectionFactory?): PeerConnection? {
+         val iceServers = ArrayList<IceServer>()
+         val url = "stun:stun.stunprotocol.org:3478"
+         val url2 = "stun:stun.l.google.com:19302"
+         iceServers.add(IceServer(url))
+         iceServers.add(IceServer(url2))
+         val rtcConfig = RTCConfiguration(iceServers)
+         val pcConstraints = MediaConstraints()
+         val pcObserver: PeerConnection.Observer = object : PeerConnection.Observer {
+             override fun onSignalingChange(signalingState: SignalingState) {
+                 Log.e("TAG", "onSignalingChange: ")
+             }
 
-            override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
-                Log.e("TAG", "onIceConnectionChange: ")
-            }
+             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
+                 Log.e("TAG", "onIceConnectionChange: ")
+             }
 
-            override fun onIceConnectionReceivingChange(b: Boolean) {
-                Log.e("TAG", "onIceConnectionReceivingChange: ")
-            }
+             override fun onIceConnectionReceivingChange(b: Boolean) {
+                 Log.e("TAG", "onIceConnectionReceivingChange: ")
+             }
 
-            override fun onIceGatheringChange(iceGatheringState: IceGatheringState) {
-                Log.e("TAG", "onIceGatheringChange: " + iceGatheringState.name)
-            }
+             override fun onIceGatheringChange(iceGatheringState: IceGatheringState) {
+                 Log.e("TAG", "onIceGatheringChange: " + iceGatheringState.name)
+             }
 
-            override fun onIceCandidate(iceCandidate: IceCandidate) {
+             override fun onIceCandidate(iceCandidate: IceCandidate) {
 
-                val candidate = JSONObject()
+                 val candidate = JSONObject()
 
-                candidate.put("candidate", iceCandidate.sdp)
-                candidate.put("sdpMid", iceCandidate.sdpMid)
-                candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
+                 candidate.put("candidate", iceCandidate.sdp)
+                 candidate.put("sdpMid", iceCandidate.sdpMid)
+                 candidate.put("sdpMLineIndex", iceCandidate.sdpMLineIndex)
 
 
-                val webRtcMessage = JSONObject().apply {
+                 val webRtcMessage = JSONObject().apply {
 
-                    put("ice",candidate)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId)
-                    put("channelID",remoteId)
+                     put("ice",candidate)
+                     put("uuid",AppPreferencesDelegates.get().channelId)
+                     put("dest",remoteId)
+                     put("channelID",remoteId)
 
-                }
+                 }
 
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+                 SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
 
 
-            }
+             }
 
-            override fun onIceCandidatesRemoved(iceCandidates: Array<IceCandidate>) {
-                Log.e("TAG", "onIceCandidatesRemoved: ")
-            }
+             override fun onIceCandidatesRemoved(iceCandidates: Array<IceCandidate>) {
+                 Log.e("TAG", "onIceCandidatesRemoved: ")
+             }
 
-            override fun onAddStream(mediaStream: MediaStream) {
-                Log.e("TAG", "onAddStream: " + mediaStream.videoTracks.size)
-                val remoteVideoTrack = mediaStream.videoTracks[0]
-//                val remoteVideoTrack3 = mediaStream.videoTracks[1]
-                val remoteAudioTrack = mediaStream.audioTracks[0]
-//                val remoteAudioTrack3 = mediaStream.audioTracks[1]
-                remoteAudioTrack.setEnabled(true)
-                remoteVideoTrack.setEnabled(true)
-                remoteVideoTrack.addSink(binding.surfaceView2)
-                *//*remoteAudioTrack3.setEnabled(true)
+             override fun onAddStream(mediaStream: MediaStream) {
+                 Log.e("TAG", "onAddStream: " + mediaStream.videoTracks.size)
+                 val remoteVideoTrack = mediaStream.videoTracks[0]
+ //                val remoteVideoTrack3 = mediaStream.videoTracks[1]
+                 val remoteAudioTrack = mediaStream.audioTracks[0]
+ //                val remoteAudioTrack3 = mediaStream.audioTracks[1]
+                 remoteAudioTrack.setEnabled(true)
+                 remoteVideoTrack.setEnabled(true)
+                 remoteVideoTrack.addSink(binding.surfaceView2)
+                 *//*remoteAudioTrack3.setEnabled(true)
                 remoteVideoTrack3.setEnabled(true)
                 remoteVideoTrack3.addSink(binding.surfaceView3)*//*
                 startCallDurationTimer()
@@ -874,19 +877,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     }*/
 
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun requestCameraAndMicAccess() {
-        if (IntentUtil.cameraPermission(this@AppGroupVideoCallingActivity)
-            && IntentUtil.readAudioPermission(this@AppGroupVideoCallingActivity)
-            && IntentUtil.readVideoPermission(this@AppGroupVideoCallingActivity)
-            && IntentUtil.readImagesPermission(this@AppGroupVideoCallingActivity))
-        {
-            init()
-        } else{
 
-        }
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onCameraPermission() {
@@ -896,7 +887,8 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
                 Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.CAMERA)
+                Manifest.permission.CAMERA
+            )
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
                     if (permission?.areAllPermissionsGranted() == true) {
@@ -925,7 +917,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    fun init(){
+    fun init() {
 
         val cameraCount = Camera.getNumberOfCameras()
 
@@ -968,11 +960,11 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llVideoCall.setOnClickListener {
 
-            if (isSpeakerMode){
+            if (isSpeakerMode) {
                 isSpeakerMode = false
                 binding.speaker.setImageResource(R.drawable.ic_baseline_hearing_24)
                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
-            }else{
+            } else {
                 isSpeakerMode = true
                 binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
@@ -982,11 +974,11 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llMute.setOnClickListener {
 
-            if (isMute){
+            if (isMute) {
                 isMute = false
                 binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
                 localAudioTrack?.setEnabled(true)
-            }else{
+            } else {
                 isMute = true
                 binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
                 localAudioTrack?.setEnabled(false)
@@ -1004,7 +996,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         startStreamingVideo()
 
-        if (callReceive == false){
+        if (callReceive == false) {
             doCall()
         }
 
@@ -1014,21 +1006,34 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         startStreamingVideo()*/
 
 
-
     }
 
     private fun initializeSurfaceViews() {
 
         rootEglBase = EglBase.create()
-
+        binding.surfaceView.init(rootEglBase?.eglBaseContext, null)
+        binding.surfaceView.setEnableHardwareScaler(true)
+        binding.surfaceView.setMirror(true)
+        binding.surfaceView2.init(rootEglBase?.eglBaseContext, null)
+        binding.surfaceView2.setEnableHardwareScaler(true)
+        binding.surfaceView2.setMirror(true)
 
     }
 
     private fun initializePeerConnectionFactory() {
-        val initializationOptions = PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true).createInitializationOptions()
+        val initializationOptions =
+            PeerConnectionFactory.InitializationOptions.builder(this).setEnableInternalTracer(true)
+                .createInitializationOptions()
         PeerConnectionFactory.initialize(initializationOptions)
-        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(DefaultVideoEncoderFactory(rootEglBase?.eglBaseContext, true, true))
-            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext)).createPeerConnectionFactory()
+        factory = PeerConnectionFactory.builder().setVideoEncoderFactory(
+            DefaultVideoEncoderFactory(
+                rootEglBase?.eglBaseContext,
+                true,
+                true
+            )
+        )
+            .setVideoDecoderFactory(DefaultVideoDecoderFactory(rootEglBase?.eglBaseContext))
+            .createPeerConnectionFactory()
     }
 
     private fun createVideoTrackFromCameraAndShowIt() {
@@ -1037,7 +1042,8 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         val videoCapture: VideoCapturer? = createVideoCapture()
         var videoSource: VideoSource? = null
 
-        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
+        val surfaceTextureHelper =
+            SurfaceTextureHelper.create("CaptureThread", rootEglBase?.eglBaseContext)
         videoSource = factory?.createVideoSource(videoCapture?.isScreencast == true)
         videoCapture?.initialize(surfaceTextureHelper, this, videoSource?.capturerObserver)
 
@@ -1067,10 +1073,12 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private fun createVideoCapture(): VideoCapturer? {
 
+        val cameraFacing = CameraCharacteristics.LENS_FACING_FRONT
+
         videoCapture = if (useCamera2()) {
-            createCameraCapture(Camera2Enumerator(this))
+            createCameraCapture(Camera2Enumerator(this),cameraFacing)
         } else {
-            createCameraCapture(Camera1Enumerator(true))
+            createCameraCapture(Camera1Enumerator(true),cameraFacing)
         }
         return videoCapture
 
@@ -1078,6 +1086,15 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private fun useCamera2(): Boolean {
         return Camera2Enumerator.isSupported(this)
+    }
+
+    private fun switchCamera() {
+
+        if (videoCapture is CameraVideoCapturer) {
+            val cameraVideoCapture = videoCapture as CameraVideoCapturer
+            cameraVideoCapture.switchCamera(null)
+        }
+
     }
 
     private fun switchCamera(cameraID: Int) {
@@ -1089,11 +1106,13 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    private fun createCameraCapture(enumerator: CameraEnumerator): VideoCapturer? {
+    private fun createCameraCapture(enumerator: CameraEnumerator,cameraFacing : Int): VideoCapturer? {
 
         val deviceNames = enumerator.deviceNames
         for (deviceName in deviceNames) {
-            if (enumerator.isFrontFacing(deviceName)) {
+            if (enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
+                enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK
+            ) {
                 val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
                 if (videoCapture != null) {
                     return videoCapture
@@ -1101,7 +1120,8 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
         }
         for (deviceName in deviceNames) {
-            if (!enumerator.isFrontFacing(deviceName)) {
+            if (!enumerator.isFrontFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_FRONT ||
+                !enumerator.isBackFacing(deviceName) && cameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
                 val videoCapture: VideoCapturer? = enumerator.createCapturer(deviceName, null)
                 if (videoCapture != null) {
                     return videoCapture
@@ -1129,7 +1149,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
 
-                if (iceConnectionState.name == "DISCONNECTED"){
+                if (iceConnectionState.name == "DISCONNECTED") {
                     finish()
                 }
 
@@ -1155,14 +1175,14 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
                 val webRtcMessage = JSONObject().apply {
 
-                    put("ice",candidate)
-                    put("uuid",AppPreferencesDelegates.get().channelId)
-                    put("dest",remoteId)
-                    put("channelID",remoteId)
+                    put("ice", candidate)
+                    put("uuid", AppPreferencesDelegates.get().channelId)
+                    put("dest", remoteId)
+                    put("channelID", remoteId)
 
                 }
 
-                SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+                SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)
 
             }
 
@@ -1206,8 +1226,18 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     private fun doCall() {
 
         val sdpMediaConstraints = MediaConstraints()
-        sdpMediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToCreateVideo", "true"))
-        sdpMediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToCreateAudio", "true"))
+        sdpMediaConstraints.mandatory.add(
+            MediaConstraints.KeyValuePair(
+                "OfferToCreateVideo",
+                "true"
+            )
+        )
+        sdpMediaConstraints.mandatory.add(
+            MediaConstraints.KeyValuePair(
+                "OfferToCreateAudio",
+                "true"
+            )
+        )
 
         peerConnection?.createOffer(object : CustomSdpObserver() {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
@@ -1242,7 +1272,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         }, sdpMediaConstraints)
     }
 
-    private fun handleRemoteVideoOffer(offer : String?) {
+    private fun handleRemoteVideoOffer(offer: String?) {
 
         val observer: SdpObserver = object : SdpObserver {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
@@ -1320,15 +1350,15 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            /*if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 init()
             } else {
                 onCameraPermission()
-            }
+            }*/
         }
     }
 
-    private fun onCallReceive(){}
+    private fun onCallReceive() {}
 
     private fun extractUsernameFragment(sdp: String): String {
         val lines = sdp.split("\r\n")
@@ -1344,7 +1374,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         val observer: SdpObserver = object : SdpObserver {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
-                peerConnection?.setLocalDescription(this,sessionDescription)
+                peerConnection?.setLocalDescription(this, sessionDescription)
                 Log.e("TAG", "Local answer created")
             }
 
@@ -1398,7 +1428,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
             localAudioTrack = null
         }
 
-        if (localAudioTrack != null){
+        if (localAudioTrack != null) {
             localAudioTrack = null
         }
 
@@ -1438,8 +1468,6 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
     }
-
-
 
 
 }

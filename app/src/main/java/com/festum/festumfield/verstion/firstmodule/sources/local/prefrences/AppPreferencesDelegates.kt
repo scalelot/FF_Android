@@ -20,6 +20,7 @@ class AppPreferencesDelegates private constructor() {
     var phoneNumber by PhoneNumberDelegate()
     var emailAddress by EmailAddressDelegate()
     var isNotificationOn by IsNotificationOnDelegate()
+    var callAcceptIdDelegate by CallAcceptIdDelegate()
 
     companion object {
         private var INSTANCE: AppPreferencesDelegates? = null

@@ -41,6 +41,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+
 @AndroidEntryPoint
 class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
@@ -75,14 +76,14 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
         val isGroupCalling = jsonObject.optBoolean("isGroupCall")
         val groupId = jsonObject.optString("groupId")
 
-        if (isGroupCalling){
+        if (isGroupCalling) {
 
             groupsListItems?.forEach {
 
                 if (it.id?.contains(groupId.lowercase()) == true) {
                     upComingGroupCallUser = it
-                } else{
-                    Log.e("TAG", "setupUi:--- " + "Open" )
+                } else {
+                    Log.e("TAG", "setupUi:--- " + "Open")
                 }
 
             }
@@ -93,7 +94,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
             binding.upcomingUsername.text = name ?: getString(R.string.festum_user)
 
-        } else{
+        } else {
 
             friendsListItems?.forEach {
 
@@ -174,9 +175,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
             }
 
-            Log.e("TAG", "setupUi:------- " + AppPreferencesDelegates.get().isCallId )
-
-            viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
+            Log.e("TAG", "setupUi:------- " + AppPreferencesDelegates.get().isCallId)
 
         }
 
@@ -212,6 +211,32 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
     override fun setupObservers() {
 
+        viewModel.callAcceptData.observe(this) { callAcceptData ->
+
+            Log.e("TAG", "callAcceptIdDelegate:----  " + callAcceptData?.toString())
+
+            if (callAcceptData?.isGroupCall == true){
+
+                Log.e("TAG", "callAcceptIdDelegate:----  " + callAcceptData.to.toString())
+                Log.e("TAG", "onPermissionsCheckedModel:----  " + AppPreferencesDelegates.get().callAcceptIdDelegate)
+                Log.e("TAG", "onPermissionsCheckedGroupId:---- $groupId")
+
+                val intent = Intent(
+                    this@IncomingCallActivity,
+                    AppGroupVideoCallingActivity::class.java
+                )
+                val jsonItem = Gson().toJson(upComingGroupCallUser)
+                intent.putExtra("groupList", jsonItem)
+                intent.putExtra("groupId", groupId)
+                intent.putExtra("acceptedMemberId", callAcceptData.to.toString())
+                intent.putExtra("callReceive", true)
+                startActivity(intent)
+                stopAudio()
+                finish()
+
+            }
+
+        }
     }
 
     @SuppressLint("DiscouragedApi")
@@ -268,23 +293,25 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
                             if (isCallingFromApp && isGroupCalling) {
 
-                                val intent = Intent(
-                                    this@IncomingCallActivity,
-                                    AppGroupVideoCallingActivity::class.java
-                                )
+                                viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
+
+                                /*val intent = Intent(this@IncomingCallActivity, AppGroupVideoCallingActivity::class.java)
                                 val jsonItem = Gson().toJson(upComingGroupCallUser)
                                 intent.putExtra("groupList", jsonItem)
                                 intent.putExtra("groupId", groupId)
+                                intent.putExtra("acceptedMemberId", AppPreferencesDelegates.get().callAcceptIdDelegate)
                                 intent.putExtra("callReceive", true)
                                 startActivity(intent)
                                 stopAudio()
                                 finish()
 
                                 Log.e("TAG", "onPermissionsCheckedModel:---- $jsonItem")
-                                Log.e("TAG", "onPermissionsCheckedGroupId:---- $groupId")
+                                Log.e("TAG", "onPermissionsCheckedGroupId:---- $groupId")*/
 
                             } else {
                                 if (isCallingFromApp) {
+
+                                    viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                     val intent =
                                         Intent(
                                             this@IncomingCallActivity,
@@ -298,6 +325,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                                     finish()
                                 } else {
 
+                                    viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                     val intent =
                                         Intent(
                                             this@IncomingCallActivity,
@@ -344,23 +372,12 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
                             if (isCallingFromApp && isGroupCalling) {
 
-                                val intent = Intent(
-                                    this@IncomingCallActivity,
-                                    AppGroupVideoCallingActivity::class.java
-                                )
-                                val jsonItem = Gson().toJson(upComingGroupCallUser)
-                                intent.putExtra("groupList", jsonItem)
-                                intent.putExtra("groupId", groupId)
-                                intent.putExtra("callReceive", true)
-                                startActivity(intent)
-                                stopAudio()
-                                finish()
-
-                                Log.e("TAG", "onPermissionsCheckedModel:---- $jsonItem")
-                                Log.e("TAG", "onPermissionsCheckedGroupId:---- $groupId")
+                                viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
 
                             } else {
                                 if (isCallingFromApp) {
+
+                                    viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                     val intent =
                                         Intent(
                                             this@IncomingCallActivity,
@@ -374,6 +391,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                                     finish()
                                 } else {
 
+                                    viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                     val intent =
                                         Intent(
                                             this@IncomingCallActivity,
@@ -434,8 +452,13 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                         if (permission?.areAllPermissionsGranted() == true) {
 
                             if (isCallingFromApp) {
+
+                                viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                 val intent =
-                                    Intent(this@IncomingCallActivity, AppAudioCallingActivity::class.java)
+                                    Intent(
+                                        this@IncomingCallActivity,
+                                        AppAudioCallingActivity::class.java
+                                    )
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -444,8 +467,13 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                                 stopAudio()
                                 finish()
                             } else {
+
+                                viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                 val intent =
-                                    Intent(this@IncomingCallActivity, WebAudioCallingActivity::class.java)
+                                    Intent(
+                                        this@IncomingCallActivity,
+                                        WebAudioCallingActivity::class.java
+                                    )
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -485,8 +513,13 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                         if (permission?.areAllPermissionsGranted() == true) {
 
                             if (isCallingFromApp) {
+
+                                viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                 val intent =
-                                    Intent(this@IncomingCallActivity, AppAudioCallingActivity::class.java)
+                                    Intent(
+                                        this@IncomingCallActivity,
+                                        AppAudioCallingActivity::class.java
+                                    )
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)
@@ -497,8 +530,13 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                             } else {
 
                                 Toast.makeText(this@IncomingCallActivity, "", Toast.LENGTH_SHORT).show()
+
+                                viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                 val intent =
-                                    Intent(this@IncomingCallActivity, WebAudioCallingActivity::class.java)
+                                    Intent(
+                                        this@IncomingCallActivity,
+                                        WebAudioCallingActivity::class.java
+                                    )
                                 intent.putExtra("remoteChannelId", remoteChannelId)
                                 intent.putExtra("remoteUser", name)
                                 intent.putExtra("callReceive", true)

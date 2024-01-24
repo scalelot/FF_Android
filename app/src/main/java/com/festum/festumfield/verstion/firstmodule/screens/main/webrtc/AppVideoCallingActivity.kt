@@ -419,7 +419,8 @@ class AppVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    private fun initializePeerConnections() {
+    private fun initializePeerConnections()
+    {
         peerConnection = createPeerConnection(factory)
     }
 
