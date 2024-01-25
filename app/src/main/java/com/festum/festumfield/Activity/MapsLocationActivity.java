@@ -84,7 +84,6 @@ public class MapsLocationActivity extends FragmentActivity implements OnMapReady
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 

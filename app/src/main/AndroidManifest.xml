@@ -87,10 +87,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".verstion.firstmodule.screens.main.chat.IncomingCallActivity"
+            android:name=".verstion.firstmodule.screens.main.SettingsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".verstion.firstmodule.screens.main.chat.IncomingCallActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.ChatUserActivity"
             android:configChanges="uiMode"
@@ -192,7 +197,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".Activity.ReelsPerviewActivity"
             android:configChanges="uiMode"
@@ -208,7 +212,6 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Activity.MarketingNotificationActivity"
             android:configChanges="uiMode"
@@ -295,12 +298,6 @@
             android:value="@string/google_maps_key_new_one" />
 
         <activity
-            android:name=".Activity.UpcomingCallActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".Activity.PromotionDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
@@ -320,7 +317,6 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Activity.HelpActivity"
             android:configChanges="uiMode"
@@ -341,17 +337,16 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
+       <!-- <activity
             android:name=".Activity.SettingActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activity.ProductDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Activity.MapsLocationActivity"
             android:configChanges="uiMode"
@@ -371,11 +366,12 @@
 
         <uses-library android:name="com.google.android.maps" />
 
-        <activity
+        <!--<activity
             android:name=".Activity.BusinessProfileActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
+
         <activity
             android:name=".Activity.LoginVerifyActivity"
             android:configChanges="uiMode"

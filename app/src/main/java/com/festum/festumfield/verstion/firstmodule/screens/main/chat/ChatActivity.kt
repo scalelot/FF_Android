@@ -103,6 +103,12 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
     //    private var isVideoCall : Boolean ?= null
     private var isVideoCall : String? = "isVideoCall"
 
+    companion object {
+
+        var friendMessageSeen : String ?= null
+
+    }
+
 
     private var chatMessageAdapter: ChatMessageAdapter? = null
 //    private var productListAdapter: ProductListAdapter? = null
@@ -137,6 +143,7 @@ class ChatActivity : BaseActivity<ChatViewModel>(), ProductItemInterface, SendIm
         receiverUserImage = friendsItem?.profileimage.toString()
         receiverUserId = friendsItem?.id.toString()
         productId = intent?.getString("productId").toString()
+        friendMessageSeen = friendsItem?.id.toString()
 
         Log.e("TAG", "setupUi: $receiverUserId")
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.UserChatListBinding
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
+import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates
 import com.festum.festumfield.verstion.firstmodule.sources.remote.interfaces.ChatPinInterface
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import com.festum.festumfield.verstion.firstmodule.utils.DateTimeUtils
@@ -104,9 +106,6 @@ class FriendsListAdapter(
 
             }
 
-
-
-
             if (item.online == true) {
                 binding.ivTypeImg.visibility = View.VISIBLE
             } else {
@@ -146,9 +145,93 @@ class FriendsListAdapter(
                         )
                     }
 
-                    "" -> {
-                        binding.txtMessage.text = ""
+                    "call" -> {
+
+                        item.lastMessage.callId?.members?.forEach {
+
+                            if (it?.memberid != AppPreferencesDelegates.get().channelId) {
+
+                                when (it?.status) {
+
+                                    "initiated" -> {
+
+                                        if (item.lastMessage.callId.isVideoCall == true) {
+                                            binding.txtMessage.text = "Video Call"
+                                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                context.resources.getDrawable(R.drawable.ic_friend_video_calling),
+                                                null,
+                                                null,
+                                                null
+                                            )
+
+                                        } else {
+                                            binding.txtMessage.text = "Voice Call"
+                                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                context.resources.getDrawable(R.drawable.ic_friend_audio_calling),
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        }
+
+                                    }
+
+                                    "ringing" -> {
+
+                                        if (item.lastMessage.callId.isVideoCall == true) {
+                                            binding.txtMessage.text = "Missed Video Call"
+                                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                context.resources.getDrawable(R.drawable.ic_friend_video_calling),
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        } else {
+                                            binding.txtMessage.text = "Missed Voice Call"
+                                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                context.resources.getDrawable(R.drawable.ic_friend_audio_calling),
+                                                null,
+                                                null,
+                                                null
+                                            )
+                                        }
+
+                                    }
+
+                                    "accepted" -> {
+                                        if (item.lastMessage.callId.isVideoCall == true) {
+                                            binding.txtMessage.text = "Video Call"
+                                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                context.resources.getDrawable(R.drawable.ic_friend_video_calling),
+                                                null,
+                                                null,
+                                                null
+                                            )
+
+                                        } else {
+                                            binding.txtMessage.text = "Voice Call"
+                                            binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                context.resources.getDrawable(R.drawable.ic_friend_audio_calling),
+                                                null,
+                                                null,
+                                                null
+                                            )
+
+                                        }
+                                    }
+
+                                }
+
+                            } else {
+
+                                Log.e("TAG", "call user: " + "Something get wrong" )
+
+                            }
+
+                        }
+
                     }
+
                 }
 
             }
@@ -193,8 +276,91 @@ class FriendsListAdapter(
                             )
                         }
 
-                        "" -> {
-                            binding.txtMessage.text = ""
+                        "call" -> {
+
+                            item.lastMessage?.callId?.members?.forEach {
+
+                                if (it?.memberid != AppPreferencesDelegates.get().channelId) {
+
+                                    when (it?.status) {
+
+                                        "initiated" -> {
+
+                                            if (item.lastMessage.callId.isVideoCall == true) {
+                                                binding.txtMessage.text = "Video Call"
+                                                binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                    context.resources.getDrawable(R.drawable.ic_friend_video_calling),
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+
+                                            } else {
+                                                binding.txtMessage.text = "Voice Call"
+                                                binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                    context.resources.getDrawable(R.drawable.ic_friend_audio_calling),
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            }
+
+                                        }
+
+                                        "ringing" -> {
+
+                                            if (item.lastMessage.callId.isVideoCall == true) {
+                                                binding.txtMessage.text = "Missed Video Call"
+                                                binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                    context.resources.getDrawable(R.drawable.ic_friend_video_calling),
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            } else {
+                                                binding.txtMessage.text = "Missed Voice Call"
+                                                binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                    context.resources.getDrawable(R.drawable.ic_friend_audio_calling),
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+                                            }
+
+                                        }
+
+                                        "accepted" -> {
+                                            if (item.lastMessage.callId.isVideoCall == true) {
+                                                binding.txtMessage.text = "Video Call"
+                                                binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                    context.resources.getDrawable(R.drawable.ic_friend_video_calling),
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+
+                                            } else {
+                                                binding.txtMessage.text = "Voice Call"
+                                                binding.txtMessage.setCompoundDrawablesWithIntrinsicBounds(
+                                                    context.resources.getDrawable(R.drawable.ic_friend_audio_calling),
+                                                    null,
+                                                    null,
+                                                    null
+                                                )
+
+                                            }
+                                        }
+
+                                    }
+
+                                } else {
+
+                                    Log.e("TAG", "call user: " + "Something get wrong" )
+
+                                }
+
+                            }
+
                         }
                     }
 
@@ -558,6 +724,52 @@ class FriendsListAdapter(
         val nowInUtc = OffsetDateTime.now(ZoneOffset.UTC)
         nowInUtc.format(DateTimeFormatter.ofPattern(DateTimeUtils.FORMAT_API_DATETIME))
         return nowInUtc.toString()
+    }
+
+    fun updateItemMessageSeen(userId: String) {
+
+        var friendsListItems: FriendsListItems? = null
+        friendsList.forEach {
+            if (userId == it.id) {
+                friendsListItems = it
+            }
+        }
+
+        val lastMessageItemList = LastMessageItem(
+            createdAt = friendsListItems?.lastMessage?.createdAt,
+            v = friendsListItems?.lastMessage?.v,
+            context = friendsListItems?.lastMessage?.context,
+            from = friendsListItems?.lastMessage?.from,
+            id = friendsListItems?.lastMessage?.id,
+            to = friendsListItems?.lastMessage?.to,
+            status = friendsListItems?.lastMessage?.status,
+            updatedAt = friendsListItems?.lastMessage?.updatedAt,
+            callId = friendsListItems?.lastMessage?.callId,
+            timestamp = friendsListItems?.lastMessage?.timestamp,
+            content = friendsListItems?.lastMessage?.content,
+            contentType = friendsListItems?.lastMessage?.contentType
+        )
+
+        val friendsListItem = FriendsListItems(
+            fullName = friendsListItems?.fullName,
+            lastMessage = lastMessageItemList,
+            profileimage = friendsListItems?.profileimage,
+            id = friendsListItems?.id,
+            createdAt = getCurrentUTCTime(),
+            isPinned = friendsListItems?.isPinned,
+            isNewMessage = friendsListItems?.isNewMessage,
+            unreadMessageCount = 0,
+            online = friendsListItems?.online,
+            name = friendsListItems?.name,
+            timestamp = friendsListItems?.timestamp
+        )
+
+        val currentItemIndex = friendsList.indexOf(friendsListItems)
+        friendsList.removeAt(currentItemIndex)
+        friendsListItem.let { friendsList.add(0, it) }
+        notifyItemMoved(currentItemIndex, 0)
+        notifyItemChanged(0)
+
     }
 
 }

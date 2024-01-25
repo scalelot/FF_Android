@@ -183,7 +183,8 @@ public class Contact_Us_Activity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(Contact_Us_Activity.this, SettingActivity.class));
+        /*startActivity(new Intent(Contact_Us_Activity.this, SettingActivity.class));*/
+        super.onBackPressed();
         finish();
     }
 

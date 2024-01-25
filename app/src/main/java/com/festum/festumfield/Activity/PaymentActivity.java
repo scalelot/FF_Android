@@ -40,6 +40,7 @@ public class PaymentActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         startActivity(new Intent(PaymentActivity.this, PromotionBillActivity.class));
         finish();
     }

@@ -350,7 +350,8 @@ public class ChangeNumberActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ChangeNumberActivity.this, SettingActivity.class));
+        /*startActivity(new Intent(ChangeNumberActivity.this, SettingActivity.class));*/
+        super.onBackPressed();
         finish();
     }
 }

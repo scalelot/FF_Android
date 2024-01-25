@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.media.MediaPlayer
@@ -27,13 +26,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.festum.festumfield.Activity.*
-import com.festum.festumfield.Fragment.ContactFragment
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityHomeBinding
@@ -43,8 +40,6 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.CallHistoryFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment
-import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
-import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.groupsListItems
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.GroupsListFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.MapFragment
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.PhoneContactFragment
@@ -71,7 +66,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
-import io.socket.emitter.Emitter
 import org.json.JSONObject
 
 
@@ -280,7 +274,7 @@ class HomeActivity : BaseActivity<ProfileViewModel>(), ChatPinInterface {
                         this.startActivityForResult(
                             Intent(
                                 this@HomeActivity,
-                                SettingActivity::class.java
+                                SettingsActivity::class.java
                             ), 1
                         )
                         return@OnMenuItemClickListener true

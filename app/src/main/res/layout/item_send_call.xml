@@ -61,7 +61,7 @@
                         android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="@string/cup_cake"
-                        android:textColor="@color/black"
+                        android:textColor="@color/callText"
                         android:layout_marginBottom="@dimen/_3sdp"
                         android:textSize="@dimen/sp_14" />
 
@@ -187,7 +187,7 @@
                         android:fontFamily="@font/roboto_medium"
                         android:singleLine="true"
                         android:text="@string/cup_cake"
-                        android:textColor="@color/black"
+                        android:textColor="@color/callText"
                         android:layout_marginBottom="@dimen/_3sdp"
                         android:textSize="@dimen/sp_14" />
 

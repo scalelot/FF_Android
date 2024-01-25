@@ -22,6 +22,7 @@ import com.festum.festumfield.verstion.firstmodule.screens.BaseFragment
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.FriendsListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.adapters.GroupsListAdapter
 import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.chat.ChatActivity.Companion.friendMessageSeen
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.AppVideoCallingActivity
 import com.festum.festumfield.verstion.firstmodule.screens.main.webrtc.WebAudioCallingActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.FriendListBody
@@ -240,7 +241,7 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "DetachAndAttachSameFragment")
     fun getMessage() {
 
         SocketManager.mSocket?.on("userConnected") { args ->
@@ -354,6 +355,25 @@ class FriendsListFragment(private val chatPinInterface: ChatPinInterface?,privat
                         }
 
                         Log.e("TAG", "onGroupUpdate----: $data")
+
+                    }
+
+                    "messageSeen" -> {
+
+                        if (data != null) {
+
+                            if (friendMessageSeen?.isNotEmpty() == true){
+                                friendsListAdapter?.updateItemMessageSeen(friendMessageSeen.toString())
+                                binding.chatRecyclerview.scrollToPosition(0)
+                                friendMessageSeen = ""
+                            } else {
+                                Log.e("TAG", "friendMessageSeen:--$message")
+                            }
+
+
+                        }
+
+                        /*requireActivity().recreate()*/
 
                     }
 

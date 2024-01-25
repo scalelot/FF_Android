@@ -55,7 +55,8 @@ public class HelpActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(HelpActivity.this, SettingActivity.class));
+        /*startActivity(new Intent(HelpActivity.this, SettingActivity.class));*/
+        super.onBackPressed();
         finish();
     }
 }
