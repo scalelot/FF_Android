@@ -1,4 +1,4 @@
-package com.app.easyday.app.sources
+package com.festum.festumfield.verstion.firstmodule.sources.remote
 
 import java.io.Serializable
 

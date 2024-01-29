@@ -51,9 +51,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import in.aabhasjindal.otptextview.OTPListener;
 import in.aabhasjindal.otptextview.OtpTextView;
 
+@AndroidEntryPoint
 public class LoginVerifyActivity extends BaseActivity {
     ImageView iv_back;
     LinearLayout ll_linear;

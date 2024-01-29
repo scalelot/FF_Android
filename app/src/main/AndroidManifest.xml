@@ -86,11 +86,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".verstion.firstmodule.screens.main.SettingsActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".verstion.firstmodule.screens.main.chat.IncomingCallActivity"
             android:configChanges="uiMode"
@@ -337,11 +338,13 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
-       <!-- <activity
+        <!--
+ <activity
             android:name=".Activity.SettingActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait" />-->
+            android:screenOrientation="portrait" />
+        -->
         <activity
             android:name=".Activity.ProductDetailsActivity"
             android:configChanges="uiMode"
@@ -365,27 +368,27 @@
             android:screenOrientation="portrait" />
 
         <uses-library android:name="com.google.android.maps" />
-
-        <!--<activity
+        <!--
+<activity
             android:name=".Activity.BusinessProfileActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait" />-->
-
+            android:screenOrientation="portrait" />
+        -->
         <activity
-            android:name=".Activity.LoginVerifyActivity"
+            android:name=".verstion.firstmodule.screens.main.authorization.LoginVerifyActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".verstion.firstmodule.screens.main.authorization.LoginActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.SplashActivity"
+            android:name=".verstion.firstmodule.screens.main.splash.SplashActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait">

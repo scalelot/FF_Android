@@ -1,6 +1,6 @@
 package com.festum.festumfield.verstion.firstmodule.sources.remote.apis
 
-import com.app.easyday.app.sources.ApiResponse
+import com.festum.festumfield.verstion.firstmodule.sources.remote.ApiResponse
 import com.festum.festumfield.verstion.firstmodule.sources.ApiBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallEndBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.CallHistoryBody
@@ -18,7 +18,7 @@ import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupOneB
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.GroupPermissionBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.MessageStatusBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.PhonebookBody
-import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendMessage
+import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendOtpBody
 import com.festum.festumfield.verstion.firstmodule.sources.local.model.SendRequestBody
 import com.festum.festumfield.verstion.firstmodule.sources.remote.model.*
 import okhttp3.MultipartBody
@@ -26,9 +26,13 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 import rx.Observable
-import java.io.File
 
 interface FestumFieldApi {
+
+    @POST("register/sendotp")
+    fun sendOtp(
+        @Body body: SendOtpBody
+    ): Observable<ApiResponse<SendOtpResponse>>
 
     @POST("chats")
     fun chatList(

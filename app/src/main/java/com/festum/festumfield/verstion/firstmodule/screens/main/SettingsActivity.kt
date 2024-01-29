@@ -26,12 +26,12 @@ import com.festum.festumfield.Activity.ChangeNumberActivity
 import com.festum.festumfield.Activity.Contact_Us_Activity
 import com.festum.festumfield.Activity.ConversationActivity
 import com.festum.festumfield.Activity.HelpActivity
-import com.festum.festumfield.Activity.LoginActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.databinding.ActivitySettingsBinding
 import com.festum.festumfield.databinding.ChatBackupDialogBinding
 import com.festum.festumfield.databinding.UploadExcelDialogBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
+import com.festum.festumfield.verstion.firstmodule.screens.main.authorization.LoginActivity
 import com.festum.festumfield.verstion.firstmodule.sources.local.prefrences.AppPreferencesDelegates.Companion.get
 import com.festum.festumfield.verstion.firstmodule.sources.remote.apis.SocketManager.disconnectSocket
 import com.festum.festumfield.verstion.firstmodule.viemodels.ProfileViewModel

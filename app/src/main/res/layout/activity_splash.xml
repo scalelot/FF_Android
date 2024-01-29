@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    tools:context="com.festum.festumfield.Activity.SplashActivity">
+    tools:context=".verstion.firstmodule.screens.main.splash.SplashActivity">
 
     <ImageView
         android:layout_width="@dimen/sp_150"
