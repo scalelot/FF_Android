@@ -35,7 +35,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
     private lateinit var binding: ActivityApplicationPermissionBinding
-    var storge_permissions = arrayOf(
+
+    /*var storge_permissions = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO,
         Manifest.permission.READ_PHONE_STATE,
@@ -59,7 +60,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.POST_NOTIFICATIONS
-    )
+    )*/
 
     lateinit var permission: Array<String>
 
@@ -84,19 +85,6 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
     }
 
-    fun permissions(): Array<String> {
-        try {
-            permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                storge_permissions_33
-            } else {
-                storge_permissions
-            }
-        } catch (e: Exception) {
-            Log.e("Permission:", e.toString())
-        }
-        return permission
-    }
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -109,7 +97,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
                 startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
 
-            } else {
+            } else  {
                 onPermission()
             }
         }
@@ -118,70 +106,6 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onPermission() {
 
-        Dexter.withContext(this@ApplicationPermissionActivity)
-            .withPermissions(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_CONTACTS,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.POST_NOTIFICATIONS
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(permission: MultiplePermissionsReport?) {
-                    if (permission?.areAllPermissionsGranted() == true) {
-
-                        startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
-
-                    } else {
-
-                        showLocationDisclosure()
-
-                    }
-
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
-
-            }).withErrorListener {}
-            .check()
-
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
-    }
-
-    private fun showLocationDisclosure() {
-        MaterialAlertDialogBuilder(this, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-            .setMessage(getString(R.string.permission_check))
-            .setPositiveButton(R.string.location_disclosure_dialog_positive_button) { dialog, which ->
-                val i = Intent()
-                i.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                i.addCategory(Intent.CATEGORY_DEFAULT)
-                i.data = Uri.parse("package:$packageName")
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                startActivity(i)
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun dexterPermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
@@ -193,26 +117,23 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
                     Manifest.permission.READ_MEDIA_AUDIO,
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.READ_CONTACTS,
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.POST_NOTIFICATIONS
                 )
                 .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(multiplePermissionsReport: MultiplePermissionsReport) {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport) {
 
-                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                        if (permission.areAllPermissionsGranted()) {
 
                             startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
 
-                        }  else {
-                            onPermissionDialog()
-                        }
+                        } else {
 
-                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
-                            onPermissionDialog()
+                            Toast.makeText(this@ApplicationPermissionActivity, "Permission Grated", Toast.LENGTH_SHORT).show()
+                            showLocationDisclosure()
+
                         }
                     }
 
@@ -242,6 +163,119 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
                 .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(permission: MultiplePermissionsReport) {
+
+                        if (permission.areAllPermissionsGranted()) {
+
+                            startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
+
+                        } else {
+
+                            showLocationDisclosure()
+
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                        p1: PermissionToken
+                    ) {
+                        p1.continuePermissionRequest()
+                    }
+
+                }).withErrorListener { error ->
+                    // we are displaying a toast message for error message.
+                    Log.e("TAG", "dexterPermission:------ "  + error.name )
+                } // below line is use to run the permissions on same thread and to check the permissions
+                .onSameThread().check()
+        }
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
+    private fun showLocationDisclosure() {
+        MaterialAlertDialogBuilder(this, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+            .setMessage(getString(R.string.permission_check))
+            .setPositiveButton(R.string.location_disclosure_dialog_positive_button) { dialog, which ->
+                val i = Intent()
+                i.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                i.addCategory(Intent.CATEGORY_DEFAULT)
+                i.data = Uri.parse("package:$packageName")
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                startActivity(i)
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun dexterPermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            Dexter.withContext(this)
+                .withPermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(multiplePermissionsReport: MultiplePermissionsReport) {
+
+                        if (multiplePermissionsReport.areAllPermissionsGranted()) {
+
+                            startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))
+
+                        }  else {
+
+                            onPermissionDialog()
+
+                        }
+
+                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
+                            onPermissionDialog()
+                            /*startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))*/
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                        p1: PermissionToken
+                    ) {
+                        p1.continuePermissionRequest()
+                    }
+
+                }).withErrorListener { error ->
+                    // we are displaying a toast message for error message.
+                    Toast.makeText(applicationContext, "Error occurred! ", Toast.LENGTH_SHORT)
+                        .show()
+                } // below line is use to run the permissions on same thread and to check the permissions
+                .onSameThread().check()
+        } else {
+            Dexter.withActivity(this)
+                .withPermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(multiplePermissionsReport: MultiplePermissionsReport) {
 
                         if (multiplePermissionsReport.areAllPermissionsGranted()) {
@@ -256,6 +290,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
                         if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
                             onPermissionDialog()
+                            /*startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))*/
                         }
                     }
 
