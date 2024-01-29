@@ -289,6 +289,10 @@ public class SplashActivity extends BaseActivity {
                                 intent.putExtra("toId", toId);
                                 startActivity(intent);
 
+                            } else {
+
+                                startActivity(new Intent(SplashActivity.this, ApplicationPermissionActivity.class));
+
                             }
 
                             if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied()) {
@@ -334,6 +338,10 @@ public class SplashActivity extends BaseActivity {
                                 intent.putExtra("toId", toId);
                                 intent.putExtra("toId", toId);
                                 startActivity(intent);
+
+                             }else {
+
+                                startActivity(new Intent(SplashActivity.this, ApplicationPermissionActivity.class));
 
                             }
 
