@@ -174,7 +174,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         binding.toText.text = groupListItem.name
 
 
-        runOnUiThread {
+        /*runOnUiThread {
 
             val webRtcMessage = JSONObject().apply {
 
@@ -185,9 +185,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             }
 
-            /* Log.e("TAG", "webrtcMessage:---+++----++-- $webRtcMessage")
+            *//* Log.e("TAG", "webrtcMessage:---+++----++-- $webRtcMessage")
              Log.e("TAG", "uuid:--- " + AppPreferencesDelegates.get().channelId )
-             Log.e("TAG", "remoteId:--- $remoteId")*/
+             Log.e("TAG", "remoteId:--- $remoteId")*//*
 
             SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)?.on("webrtcMessage") { args ->
 
@@ -249,9 +249,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             }
 
-        }
+        }*/
 
-        /*runOnUiThread {
+        runOnUiThread {
 
             val joinRoom = JSONObject().apply {
 
@@ -307,7 +307,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
             }
 
-        }*/
+        }
 
     }
 
@@ -315,7 +315,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     }
 
-    /* @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
      private fun onCameraPermission() {
 
          Dexter.withContext(this@AppGroupVideoCallingActivity)
@@ -620,9 +620,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
                  remoteAudioTrack.setEnabled(true)
                  remoteVideoTrack.setEnabled(true)
                  remoteVideoTrack.addSink(binding.surfaceView2)
-                 *//*remoteAudioTrack3.setEnabled(true)
+                /* remoteAudioTrack3.setEnabled(true)
                 remoteVideoTrack3.setEnabled(true)
-                remoteVideoTrack3.addSink(binding.surfaceView3)*//*
+                remoteVideoTrack3.addSink(binding.surfaceView3)*/
                 startCallDurationTimer()
                 binding.durationText.visibility = View.VISIBLE
             }
@@ -874,12 +874,12 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
         binding.durationText.visibility = View.INVISIBLE
-    }*/
+    }
 
 
 
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    /*@RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onCameraPermission() {
 
         Dexter.withContext(this@AppGroupVideoCallingActivity)
@@ -1001,9 +1001,9 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
         }
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
-        /*initializePeerConnections()
+        *//*initializePeerConnections()
 
-        startStreamingVideo()*/
+        startStreamingVideo()*//*
 
 
     }
@@ -1350,11 +1350,11 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
-            /*if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            *//*if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 init()
             } else {
                 onCameraPermission()
-            }*/
+            }*//*
         }
     }
 
@@ -1467,7 +1467,7 @@ class AppGroupVideoCallingActivity : BaseActivity<ChatViewModel>() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
-    }
+    }*/
 
 
 }

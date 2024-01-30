@@ -2,9 +2,11 @@ package com.festum.festumfield.verstion.firstmodule.screens.main
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -15,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
+import com.festum.festumfield.Activity.MapsLocationActivity
 import com.festum.festumfield.R
 import com.festum.festumfield.databinding.ActivityApplicationPermissionBinding
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
@@ -29,6 +32,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.security.Permission
 
 
 @AndroidEntryPoint
@@ -109,7 +113,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-            Dexter.withActivity(this)
+            Dexter.withContext(this)
                 .withPermissions(
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_MEDIA_IMAGES,
@@ -151,7 +155,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
                 } // below line is use to run the permissions on same thread and to check the permissions
                 .onSameThread().check()
         } else {
-            Dexter.withActivity(this)
+            Dexter.withContext(this)
                 .withPermissions(
                     Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO,
@@ -218,8 +222,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-            Dexter.withContext(this)
-                .withPermissions(
+            Dexter.withContext(this).withPermissions(
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
@@ -240,14 +243,14 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
                         }  else {
 
-                            onPermissionDialog()
+                            onLocationCheck(multiplePermissionsReport)
 
                         }
 
-                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
+                        /*if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
                             onPermissionDialog()
-                            /*startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))*/
-                        }
+                            *//*startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))*//*
+                        }*/
                     }
 
                     override fun onPermissionRationaleShouldBeShown(
@@ -264,7 +267,7 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
                 } // below line is use to run the permissions on same thread and to check the permissions
                 .onSameThread().check()
         } else {
-            Dexter.withActivity(this)
+            Dexter.withContext(this)
                 .withPermissions(
                     Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO,
@@ -284,14 +287,15 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
 
                         } else {
 
-                            onPermissionDialog()
+                            onLocationCheck(multiplePermissionsReport)
 
                         }
 
-                        if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
+                        /*if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied) {
+
                             onPermissionDialog()
-                            /*startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))*/
-                        }
+                            *//*startActivity(Intent(this@ApplicationPermissionActivity, HomeActivity::class.java))*//*
+                        }*/
                     }
 
                     override fun onPermissionRationaleShouldBeShown(
@@ -325,6 +329,49 @@ class ApplicationPermissionActivity : BaseActivity<ProfileViewModel>() {
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface, which: Int -> dialog.dismiss() }.show()
 
+
+    }
+
+    private fun onLocationCheck(multiplePermissionsReport : MultiplePermissionsReport){
+        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var gps_enabled = false
+        var network_enabled = false
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (_: Exception) {
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        } catch (_: Exception) {
+        }
+
+        if (!gps_enabled && !network_enabled) {
+
+            MaterialAlertDialogBuilder(
+                this,
+                R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog
+            )
+                .setTitle(getString(R.string.gps_enable))
+                .setMessage(getString(R.string.turn_on_your_location))
+                .setPositiveButton("OK") { dialogInterface, i ->
+                    dialogInterface.dismiss()
+
+                }
+                .show()
+        } else if (multiplePermissionsReport.isAnyPermissionPermanentlyDenied){
+
+            onPermissionDialog()
+
+        } else {
+            startActivity(
+                Intent(
+                    this@ApplicationPermissionActivity,
+                    HomeActivity::class.java
+                ).putExtra("isProfileLocation", true)
+            )
+        }
 
     }
 

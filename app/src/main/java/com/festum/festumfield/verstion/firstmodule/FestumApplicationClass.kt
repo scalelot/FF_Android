@@ -89,8 +89,16 @@ class FestumApplicationClass : MultiDexApplication() {
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private fun registerBroadcastReceiver() {
+
+        /*registerReceiver(MyBroadcastReceiver(), filter)*/
+
         val filter = IntentFilter("com.festumfield.BROADCAST_ACTION")
-        registerReceiver(MyBroadcastReceiver(), filter)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(MyBroadcastReceiver(), filter, RECEIVER_EXPORTED)
+        }else {
+            registerReceiver(MyBroadcastReceiver(), filter)
+        }
     }
 
 
