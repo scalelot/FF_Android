@@ -86,11 +86,7 @@ class LoginActivity : BaseActivity<AuthViewModel>(), CodeDialog.CountyPickerItem
                             )
                             viewModel.sendOtp(sendOtpBody)
 
-                            val intent = Intent(this@LoginActivity, LoginVerifyActivity::class.java)
-                               /* .putExtra("otpToken", sendOtpData.token)*/
-                                .putExtra("countryCode", countycode)
-                                .putExtra("phoneNumber", binding.edtPhone.text.toString())
-                            startActivity(intent)
+
 
                             FileUtils.DisplayLoading(this@LoginActivity)
 
@@ -114,24 +110,26 @@ class LoginActivity : BaseActivity<AuthViewModel>(), CodeDialog.CountyPickerItem
 
         viewModel.sendOtpData.observe(this){ sendOtpData ->
 
-            if (sendOtpData != null){
+            sendOtpData?.let { otpData ->
+                Log.e("TAG", "setupObservers: ---" + otpData.token )
 
-                /*startActivity(
-                    Intent(this@LoginActivity, LoginVerifyActivity::class.java)
-                        .putExtra("otpToken", sendOtpData.token)
+                // Check if context is valid
+                val context = this@LoginActivity
+                run {
+                    val intent = Intent(context, LoginVerifyActivity::class.java)
+                        .putExtra("otpToken", otpData.token)
                         .putExtra("countryCode", countycode)
                         .putExtra("phoneNumber", binding.edtPhone.text.toString())
-                )*/
-                /*runOnUiThread{
-
-                    val intent = Intent(this@LoginActivity, LoginVerifyActivity::class.java)
-                        .putExtra("otpToken", sendOtpData.token)
-                        .putExtra("countryCode", countycode)
-                        .putExtra("phoneNumber", binding.edtPhone.text.toString())
-                    startActivity(intent)
-
-                }*/
-
+                    FileUtils.DismissLoading(context)
+                    try {
+                        // Start the activity
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Log.e("TAG", "Error starting activity: ${e.message}")
+                    }
+                }
+            } ?: run {
+                Log.e("TAG", "sendOtpData is null")
             }
 
         }

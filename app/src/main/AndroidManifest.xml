@@ -376,7 +376,7 @@
             android:screenOrientation="portrait" />
         -->
         <activity
-            android:name=".verstion.firstmodule.screens.main.authorization.LoginVerifyActivity"
+            android:name=".Activity.LoginVerifyActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"

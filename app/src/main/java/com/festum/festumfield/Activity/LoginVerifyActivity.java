@@ -116,9 +116,9 @@ public class LoginVerifyActivity extends BaseActivity {
 
         otpTextView = findViewById(R.id.otpTextView);
 
-        csrfToken = getIntent().getStringExtra("csrfToken");
-        c_code = getIntent().getStringExtra("Country_code");
-        MobileNo = getIntent().getStringExtra("ph_number");
+        csrfToken = getIntent().getStringExtra("otpToken");
+        c_code = getIntent().getStringExtra("countryCode");
+        MobileNo = getIntent().getStringExtra("phoneNumber");
 
         txt_phone_number.setText(" +" + c_code + " " + MobileNo);
 
