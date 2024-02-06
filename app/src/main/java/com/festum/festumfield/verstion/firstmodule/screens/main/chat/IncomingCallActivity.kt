@@ -529,7 +529,6 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                                 finish()
                             } else {
 
-                                Toast.makeText(this@IncomingCallActivity, "", Toast.LENGTH_SHORT).show()
 
                                 viewModel.callAccept(AppPreferencesDelegates.get().isCallId)
                                 val intent =

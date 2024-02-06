@@ -76,7 +76,7 @@ class FestumApplicationClass : MultiDexApplication() {
 
             val jsonString = data.toString()
 
-            val intent = Intent("com.festumfield.BROADCAST_ACTION")
+            val intent = Intent("com.fefield.BROADCAST_ACTION")
             intent.putExtra("jsonData",jsonString)
             sendBroadcast(intent)
 
@@ -92,7 +92,7 @@ class FestumApplicationClass : MultiDexApplication() {
 
         /*registerReceiver(MyBroadcastReceiver(), filter)*/
 
-        val filter = IntentFilter("com.festumfield.BROADCAST_ACTION")
+        val filter = IntentFilter("com.fefield.BROADCAST_ACTION")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(MyBroadcastReceiver(), filter, RECEIVER_EXPORTED)

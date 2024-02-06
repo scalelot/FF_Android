@@ -90,8 +90,10 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
     private var localAudioTrack: AudioTrack? = null
 
-    var storge_permissions = arrayOf(Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO)
+    var storge_permissions = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO
+    )
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     var storge_permissions_33 = arrayOf(
@@ -102,10 +104,8 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
     )
 
 
-
-
     var userFragment = ""
-    var remoteOffer : String = ""
+    var remoteOffer: String = ""
 
     private val rtcAudioManager by lazy { RTCAudioManager.create(this) }
     private var isSpeakerMode = true
@@ -135,16 +135,9 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         runOnUiThread {
 
-            val webRtcMessage = JSONObject().apply {
 
-                put("displayName", AppPreferencesDelegates.get().userName)
-                put("uuid", AppPreferencesDelegates.get().channelId)
-                put("dest", remoteId)
-                put("channelID", remoteId)
 
-            }
-
-            SocketManager.mSocket?.emit("webrtcMessage", webRtcMessage)?.on("webrtcMessage") { args ->
+            SocketManager.mSocket?.on("webrtcMessage") { args ->
 
                 val receiverData = args[0] as JSONObject
 
@@ -163,6 +156,23 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 val uuid = receiverData.optString("uuid")
                 val dest = receiverData.optString("dest")
                 val channelID = receiverData.optString("channelID")
+
+                if (dest.equals("all")) {
+
+                    val webRtcMessage = JSONObject().apply {
+
+                        put("displayName", AppPreferencesDelegates.get().userName)
+                        put("uuid", AppPreferencesDelegates.get().channelId)
+                        put("dest", remoteId)
+                        put("channelID", remoteId)
+
+                    }
+
+                    SocketManager.mSocket?.emit("webrtcMessage",webRtcMessage)
+
+                    doCall()
+
+                }
 
                 if (type.equals("offer")) {
 
@@ -204,20 +214,6 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
                 }
 
             }
-
-        }
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun requestCameraAndMicAccess() {
-        if (IntentUtil.cameraPermission(this@WebVideoCallingActivity)
-            && IntentUtil.readAudioPermission(this@WebVideoCallingActivity)
-            && IntentUtil.readVideoPermission(this@WebVideoCallingActivity)
-            && IntentUtil.readImagesPermission(this@WebVideoCallingActivity)
-        ) {
-            init()
-        } else {
 
         }
 
@@ -269,10 +265,10 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llSwitchCamera.setOnClickListener {
 
-            if (isCameraRotation){
+            if (isCameraRotation) {
                 isCameraRotation = false
                 binding.surfaceView.setMirror(true)
-            }else{
+            } else {
                 isCameraRotation = true
                 binding.surfaceView.setMirror(false)
             }
@@ -304,11 +300,11 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         }
 
         binding.llVideoCall.setOnClickListener {
-            if (isCameraPause){
+            if (isCameraPause) {
                 isCameraPause = false
                 binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_24)
                 videoTrackFromCamera?.setEnabled(true)
-            }else{
+            } else {
                 isCameraPause = true
                 binding.videoCall.setImageResource(R.drawable.ic_baseline_videocam_off_24)
                 videoTrackFromCamera?.setEnabled(false)
@@ -318,11 +314,11 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llMessage.setOnClickListener {
 
-            if (isSpeakerMode){
+            if (isSpeakerMode) {
                 isSpeakerMode = false
                 binding.speaker.setImageResource(R.drawable.ic_baseline_hearing_24)
                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.EARPIECE)
-            }else{
+            } else {
                 isSpeakerMode = true
                 binding.speaker.setImageResource(R.drawable.ic_baseline_speaker_up_24)
                 rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
@@ -333,11 +329,11 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
 
         binding.llMute.setOnClickListener {
 
-            if (isMute){
+            if (isMute) {
                 isMute = false
                 binding.mute.setImageResource(R.drawable.ic_baseline_mic_24)
                 localAudioTrack?.setEnabled(true)
-            }else{
+            } else {
                 isMute = true
                 binding.mute.setImageResource(R.drawable.ic_baseline_mic_off_24)
                 localAudioTrack?.setEnabled(false)
@@ -354,8 +350,6 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         initializePeerConnections()
 
         startStreamingVideo()
-
-        doCall()
 
         rtcAudioManager.setDefaultAudioDevice(RTCAudioManager.AudioDevice.SPEAKER_PHONE)
 
@@ -486,7 +480,7 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
             }
 
             override fun onIceConnectionChange(iceConnectionState: IceConnectionState) {
-                if (iceConnectionState.name == "DISCONNECTED"){
+                if (iceConnectionState.name == "DISCONNECTED") {
                     finish()
                 }
             }
@@ -558,8 +552,18 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
     private fun doCall() {
 
         val sdpMediaConstraints = MediaConstraints()
-        sdpMediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToCreateVideo", "true"))
-        sdpMediaConstraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToCreateAudio", "true"))
+        sdpMediaConstraints.mandatory.add(
+            MediaConstraints.KeyValuePair(
+                "OfferToCreateVideo",
+                "true"
+            )
+        )
+        sdpMediaConstraints.mandatory.add(
+            MediaConstraints.KeyValuePair(
+                "OfferToCreateAudio",
+                "true"
+            )
+        )
 
         peerConnection?.createOffer(object : CustomSdpObserver() {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
@@ -594,7 +598,7 @@ class WebVideoCallingActivity : BaseActivity<ChatViewModel>() {
         }, sdpMediaConstraints)
     }
 
-    private fun handleRemoteVideoOffer(offer : String?) {
+    private fun handleRemoteVideoOffer(offer: String?) {
 
         val observer: SdpObserver = object : SdpObserver {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {

@@ -38,7 +38,7 @@ class MyBroadcastReceiver: BroadcastReceiver() {
     private fun Context.isContextValid(): Boolean {
         if (this is ContextWrapper) {
             val baseContext = this.baseContext
-            return !(baseContext is Activity && (baseContext.isFinishing || Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && baseContext.isDestroyed))
+            return !(baseContext is Activity && (baseContext.isFinishing || baseContext.isDestroyed))
         }
         return false
     }
