@@ -7,6 +7,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
@@ -25,6 +26,7 @@ class FestumApplicationClass : MultiDexApplication() {
     companion object {
         lateinit var appInstance: Application
         var isAppInForeground = false
+        var hasReceivedIncomingCall = false
 //        init {
 //            System.loadLibrary("jingle_peerconnection")
 //        }
@@ -70,15 +72,16 @@ class FestumApplicationClass : MultiDexApplication() {
 
         SocketManager.mSocket?.on("incomingCall") { args ->
 
-            val data = args[0] as JSONObject
+            if (!hasReceivedIncomingCall) {
+                hasReceivedIncomingCall = true
+                val data = args[0] as JSONObject
+                MyBroadcastReceiver.isOpen = false
+                val jsonString = data.toString()
+                val intent = Intent("com.fefield.BROADCAST_ACTION")
+                intent.putExtra("jsonData", jsonString)
+                sendBroadcast(intent)
 
-            MyBroadcastReceiver.isOpen = false
-
-            val jsonString = data.toString()
-
-            val intent = Intent("com.fefield.BROADCAST_ACTION")
-            intent.putExtra("jsonData",jsonString)
-            sendBroadcast(intent)
+            }
 
 
         }
@@ -100,6 +103,7 @@ class FestumApplicationClass : MultiDexApplication() {
             registerReceiver(MyBroadcastReceiver(), filter)
         }
     }
+
 
 
 

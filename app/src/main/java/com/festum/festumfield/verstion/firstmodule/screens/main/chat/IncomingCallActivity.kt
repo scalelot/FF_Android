@@ -4,21 +4,20 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.festum.festumfield.R
 import com.festum.festumfield.Utils.Constans
 import com.festum.festumfield.databinding.ActivityIncomingCallBinding
-import com.festum.festumfield.databinding.ChatActivityBinding
+import com.festum.festumfield.verstion.firstmodule.FestumApplicationClass
+import com.festum.festumfield.verstion.firstmodule.helper.MyBroadcastReceiver
 import com.festum.festumfield.verstion.firstmodule.screens.BaseActivity
 import com.festum.festumfield.verstion.firstmodule.screens.dialog.AppPermissionDialog
 import com.festum.festumfield.verstion.firstmodule.screens.fragment.FriendsListFragment.Companion.friendsListItems
@@ -59,6 +58,7 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun setupUi() {
 
@@ -116,6 +116,8 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
 
         binding.llCallCut.setOnClickListener {
 
+            FestumApplicationClass.hasReceivedIncomingCall = false
+
             val jsonObj = JSONObject()
             jsonObj.put("id", from.lowercase())
             SocketManager.mSocket?.emit("endCall", jsonObj)
@@ -125,6 +127,8 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
         }
 
         binding.llCallRecive.setOnClickListener {
+
+            FestumApplicationClass.hasReceivedIncomingCall = false
 
             if (isVideoCall) {
 
@@ -567,6 +571,11 @@ class IncomingCallActivity : BaseActivity<ChatViewModel>() {
                 .check()
 
         }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
 
     }
 
